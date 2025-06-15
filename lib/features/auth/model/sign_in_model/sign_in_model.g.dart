@@ -1,0 +1,34 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'sign_in_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+SignInModel _$SignInModelFromJson(Map<String, dynamic> json) => SignInModel(
+  id: (json['id'] as num).toInt(),
+  email: json['email'] as String,
+  token: json['token'] as String,
+  name: json['name'] as String,
+  phone: json['phone'] as String,
+  role: UserRoleEnum.fromJson(json['role'] as String),
+);
+
+Map<String, dynamic> _$SignInModelToJson(SignInModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'email': instance.email,
+      'token': instance.token,
+      'name': instance.name,
+      'phone': instance.phone,
+      'role': _$UserRoleEnumEnumMap[instance.role]!,
+    };
+
+const _$UserRoleEnumEnumMap = {
+  UserRoleEnum.admin: 'admin',
+  UserRoleEnum.user: 'user',
+  UserRoleEnum.doctor: 'doctor',
+  UserRoleEnum.coach: 'coach',
+  UserRoleEnum.nutritionist: 'nutritionist',
+};

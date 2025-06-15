@@ -1,0 +1,85 @@
+import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:injectable/injectable.dart';
+import 'package:meta/meta.dart';
+import 'package:wellnesstrackerapp/features/items/model/add_item_model/add_item_model.dart';
+import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
+import 'package:wellnesstrackerapp/features/items/service/items_service.dart';
+import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
+
+part 'states/items_state.dart';
+part 'states/general_items_state.dart';
+part 'states/add_item_state.dart';
+
+@injectable
+class ItemsCubit extends Cubit<GeneralItemsState> {
+  ItemsCubit(this.itemService) : super(GeneralItemsInitial());
+
+  final ItemService itemService;
+  AddItemModel addItemModel = const AddItemModel();
+  XFile? image;
+
+  void setNameAr(String? name) {
+    addItemModel = addItemModel.copyWith(nameAr: () => name);
+  }
+
+  void setNameEn(String? name) {
+    addItemModel = addItemModel.copyWith(nameEn: () => name);
+  }
+
+  void setPrice(String? price) {
+    addItemModel = addItemModel.copyWith(price: () => price);
+  }
+
+  void setDescriptionEn(String? desc) {
+    addItemModel = addItemModel.copyWith(descriptionEn: () => desc);
+  }
+
+  void setDescriptionAr(String? desc) {
+    addItemModel = addItemModel.copyWith(descriptionAr: () => desc);
+  }
+
+  void setImage(XFile? image) {
+    this.image = image;
+  }
+
+  void resetModel() {
+    image = null;
+    addItemModel = const AddItemModel();
+  }
+
+  Future<void> getItems({int perPage = 10, required int page}) async {
+    emit(ItemsLoading());
+    try {
+      final items = await itemService.getItems(page: page, perPage: perPage);
+      if (items.data.isEmpty) {
+        emit(ItemsEmpty("no_items".tr()));
+      } else {
+        emit(ItemsSuccess(items));
+      }
+    } catch (e) {
+      emit(ItemsFail(e.toString()));
+    }
+  }
+
+  Future<void> addItem({required bool isAdd, int? itemId}) async {
+    if (isAdd && image == null) {
+      emit(AddItemFail("image_required".tr()));
+      return;
+    }
+    emit(AddItemLoading());
+    try {
+      final item = await itemService.addItem(
+        addItemModel,
+        image: image,
+        isAdd: isAdd,
+        itemId: itemId,
+      );
+      final message = isAdd ? "item_added".tr() : "item_updated".tr();
+      emit(AddItemSuccess(item, message));
+    } catch (e) {
+      emit(AddItemFail(e.toString()));
+    }
+  }
+}
