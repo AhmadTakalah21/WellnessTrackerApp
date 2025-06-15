@@ -33,7 +33,7 @@ class UsersCubit extends Cubit<GeneralUsersState> {
     addUserModel = addUserModel.copyWith(phone: () => phone);
   }
 
-  void setIsActive(bool isActive) {
+  void setIsActive(bool? isActive) {
     addUserModel = addUserModel.copyWith(isActive: () => isActive);
   }
 
