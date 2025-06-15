@@ -433,12 +433,16 @@ class _SignInPageState extends State<SignInPage>
                           const SizedBox(height: 20),
                           FadeTransition(
                             opacity: _fadeAnimation,
-                            child: const Row(
+                            child: Row(
                               children: [
                                 Expanded(
                                   child: AnotherWaySignInButton(
                                     image: 'assets/images/icons8-facebook-48.png',
                                     text: 'Facebook',
+                                    onPressed: () {
+                                      // TODO: استدعِ loginWithFacebook هنا
+                                      print('Facebook login');
+                                    },
                                   ),
                                 ),
                                 SizedBox(width: 12),
@@ -446,10 +450,14 @@ class _SignInPageState extends State<SignInPage>
                                   child: AnotherWaySignInButton(
                                     image: 'assets/images/icons8-google-48.png',
                                     text: 'Google',
+                                    onPressed: () {
+                                      // TODO: استدعِ loginWithGoogle هنا
+                                      print('Google login');
+                                    },
                                   ),
                                 ),
                               ],
-                            )
+                            ),
                           ),
                           const SizedBox(height: 20),
                           Row(

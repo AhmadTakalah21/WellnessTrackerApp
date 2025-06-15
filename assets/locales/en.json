@@ -74,5 +74,17 @@
     "inactive": "Inactive",
     "users" : "Users",
     "employees" : "Employees",
-    "of" : "Of"
+    "of" : "Of",
+    "add": "Add",
+    "status_required": "Status required",
+    "invalid_email": "Invalid email",
+    "too_short": "Too short",
+    "required": "Required",
+    "select_status":"Select status",
+    "edit_user": "Edit user",
+    "add_user": "Add user ",
+    "select_role": "Select role"
+
+
+
 }

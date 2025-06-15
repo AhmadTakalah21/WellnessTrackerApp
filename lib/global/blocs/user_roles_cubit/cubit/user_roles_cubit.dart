@@ -22,7 +22,7 @@ class UserRolesCubit extends Cubit<UserRolesState> {
         emit(UserRolesSuccess(roles));
       }
     } catch (e) {
-      emit(UserRolesLoading());
+      emit(UserRolesFail("failed_to_load_roles".tr()));
     }
   }
 }

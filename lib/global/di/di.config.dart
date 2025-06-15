@@ -43,12 +43,16 @@ import 'package:wellnesstrackerapp/global/services/user_role_service/user_role_s
     as _i474;
 
 extension GetItInjectableX on _i174.GetIt {
-  // initializes the registration of main-scope dependencies inside of GetIt
+// initializes the registration of main-scope dependencies inside of GetIt
   Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
   }) async {
-    final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final gh = _i526.GetItHelper(
+      this,
+      environment,
+      environmentFilter,
+    );
     final appModule = _$AppModule();
     gh.factory<_i533.AppManagerCubit>(() => _i533.AppManagerCubit());
     gh.factory<_i540.UploadImageCubit>(() => _i540.UploadImageCubit());
@@ -57,34 +61,32 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i384.DioClient>(() => _i384.DioClient());
-    await gh.singletonAsync<_i128.UserRepo>(() {
-      final i = _i128.UserRepo();
-      return i.init().then((_) => i);
-    }, preResolve: true);
+    await gh.singletonAsync<_i128.UserRepo>(
+      () {
+        final i = _i128.UserRepo();
+        return i.init().then((_) => i);
+      },
+      preResolve: true,
+    );
     gh.factory<_i386.AuthService>(() => _i386.AuthServiceImp());
     gh.factory<_i936.UserService>(() => _i936.UserServiceImp());
     gh.singleton<_i435.AuthManagerBloc>(
-      () => _i435.AuthManagerBloc(gh<_i128.UserRepo>()),
-    );
+        () => _i435.AuthManagerBloc(gh<_i128.UserRepo>()));
     gh.factory<_i963.DeleteService>(() => _i963.DeleteServiceImp());
     gh.factory<_i474.UserRoleService>(() => _i474.UserRoleServiceImp());
     gh.factory<_i1044.ItemService>(() => _i1044.ItemServiceImp());
     gh.factory<_i396.DeleteCubit>(
-      () => _i396.DeleteCubit(gh<_i963.DeleteService>()),
-    );
-    gh.factory<_i883.AuthCubit>(
-      () =>
-          _i883.AuthCubit(gh<_i386.AuthService>(), gh<_i435.AuthManagerBloc>()),
-    );
+        () => _i396.DeleteCubit(gh<_i963.DeleteService>()));
+    gh.factory<_i883.AuthCubit>(() => _i883.AuthCubit(
+          gh<_i386.AuthService>(),
+          gh<_i435.AuthManagerBloc>(),
+        ));
     gh.factory<_i253.UsersCubit>(
-      () => _i253.UsersCubit(gh<_i936.UserService>()),
-    );
+        () => _i253.UsersCubit(gh<_i936.UserService>()));
     gh.factory<_i803.ItemsCubit>(
-      () => _i803.ItemsCubit(gh<_i1044.ItemService>()),
-    );
+        () => _i803.ItemsCubit(gh<_i1044.ItemService>()));
     gh.factory<_i633.UserRolesCubit>(
-      () => _i633.UserRolesCubit(gh<_i474.UserRoleService>()),
-    );
+        () => _i633.UserRolesCubit(gh<_i474.UserRoleService>()));
     return this;
   }
 }

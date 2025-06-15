@@ -15,11 +15,13 @@ class AddUserModel {
     String? password,
     String? phone,
     String? role,
-  }) : _name = name,
-       _email = email,
-       _password = password,
-       _phone = phone,
-       _role = role;
+    bool? isActive,
+  })  : _name = name,
+        _email = email,
+        _password = password,
+        _phone = phone,
+        _role = role,
+        _isActive = isActive;
 
   final String? _name;
   final String? _email;
@@ -27,12 +29,16 @@ class AddUserModel {
   final String? _phone;
   final String? _role;
 
+  @JsonKey(name: 'is_active')
+  final bool? _isActive;
+
   AddUserModel copyWith({
     String? Function()? name,
     String? Function()? email,
     String? Function()? password,
     String? Function()? phone,
     String? Function()? role,
+    bool? Function()? isActive,
   }) {
     return AddUserModel(
       name: name != null ? name() : _name,
@@ -40,6 +46,7 @@ class AddUserModel {
       password: password != null ? password() : _password,
       phone: phone != null ? phone() : _phone,
       role: role != null ? role() : _role,
+      isActive: isActive != null ? isActive() : _isActive,
     );
   }
 
@@ -77,6 +84,8 @@ class AddUserModel {
     }
     return _role;
   }
+
+  bool get isActive => _isActive ?? true;
 
   factory AddUserModel.fromJson(Map<String, dynamic> json) =>
       _$AddUserModelFromJson(json);

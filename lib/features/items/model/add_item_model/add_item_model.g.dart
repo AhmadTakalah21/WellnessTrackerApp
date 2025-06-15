@@ -7,12 +7,12 @@ part of 'add_item_model.dart';
 // **************************************************************************
 
 AddItemModel _$AddItemModelFromJson(Map<String, dynamic> json) => AddItemModel(
-  nameAr: json['nameAr'] as String?,
-  nameEn: json['nameEn'] as String?,
-  price: json['price'] as String?,
-  descriptionEn: json['descriptionEn'] as String?,
-  descriptionAr: json['descriptionAr'] as String?,
-);
+      nameAr: json['nameAr'] as String?,
+      nameEn: json['nameEn'] as String?,
+      price: json['price'] as String?,
+      descriptionEn: json['descriptionEn'] as String?,
+      descriptionAr: json['descriptionAr'] as String?,
+    );
 
 Map<String, dynamic> _$AddItemModelToJson(AddItemModel instance) =>
     <String, dynamic>{

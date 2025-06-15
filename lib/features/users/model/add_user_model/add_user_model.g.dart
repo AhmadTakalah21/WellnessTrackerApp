@@ -7,12 +7,13 @@ part of 'add_user_model.dart';
 // **************************************************************************
 
 AddUserModel _$AddUserModelFromJson(Map<String, dynamic> json) => AddUserModel(
-  name: json['name'] as String?,
-  email: json['email'] as String?,
-  password: json['password'] as String?,
-  phone: json['phone'] as String?,
-  role: json['role'] as String?,
-);
+      name: json['name'] as String?,
+      email: json['email'] as String?,
+      password: json['password'] as String?,
+      phone: json['phone'] as String?,
+      role: json['role'] as String?,
+      isActive: json['isActive'] as bool?,
+    );
 
 Map<String, dynamic> _$AddUserModelToJson(AddUserModel instance) =>
     <String, dynamic>{
@@ -21,4 +22,5 @@ Map<String, dynamic> _$AddUserModelToJson(AddUserModel instance) =>
       'password': instance.password,
       'phone': instance.phone,
       'role': instance.role,
+      'isActive': instance.isActive,
     };

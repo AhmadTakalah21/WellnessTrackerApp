@@ -69,6 +69,11 @@ dependencies:
   image_picker: ^1.1.2
   shimmer: ^3.0.0
   dropdown_button2: ^2.3.9
+  lucide_icons: ^0.257.0
+  firebase_core: ^2.0.0
+  firebase_auth: ^4.0.0
+  google_sign_in: ^6.0.0
+  flutter_facebook_auth: ^6.0.0
 
 
 dev_dependencies:

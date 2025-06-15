@@ -7,15 +7,15 @@ part of 'reset_password_post_model.dart';
 // **************************************************************************
 
 ResetPasswordPostModel _$ResetPasswordPostModelFromJson(
-  Map<String, dynamic> json,
-) => ResetPasswordPostModel(
-  password: json['password'] as String?,
-  confirmPassword: json['confirmPassword'] as String?,
-);
+        Map<String, dynamic> json) =>
+    ResetPasswordPostModel(
+      password: json['password'] as String?,
+      confirmPassword: json['confirmPassword'] as String?,
+    );
 
 Map<String, dynamic> _$ResetPasswordPostModelToJson(
-  ResetPasswordPostModel instance,
-) => <String, dynamic>{
-  'confirmPassword': instance.confirmPassword,
-  'password': instance.password,
-};
+        ResetPasswordPostModel instance) =>
+    <String, dynamic>{
+      'confirmPassword': instance.confirmPassword,
+      'password': instance.password,
+    };

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
+import 'package:wellnesstrackerapp/features/users/view/widgets/add_user_widget.dart';
 import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -13,6 +14,8 @@ import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_add_floating_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
+
+import '../../../global/blocs/user_roles_cubit/cubit/user_roles_cubit.dart';
 
 abstract class UsersViewCallBacks {
   void onAddTap();
@@ -33,6 +36,7 @@ class UsersView extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => get<UsersCubit>()),
+        BlocProvider(create: (context) => get<UserRolesCubit>()),
         BlocProvider(create: (context) => get<DeleteCubit>()),
       ],
       child: UsersPage(),
@@ -61,14 +65,24 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
 
   @override
   void onAddTap() {
-    // showDialog(
-    //   context: context,
-    //   builder: (context) => AddUserWidget(
-    //     isEdit: false,
-    //     selectedPage: selectedPage,
-    //   ),
-    // );
+    final usersCubit = context.read<UsersCubit>();
+    final rolesCubit = context.read<UserRolesCubit>()..getRoles();
+
+    showDialog(
+      context: context,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: usersCubit),
+          BlocProvider.value(value: rolesCubit),
+        ],
+        child: AddUserWidget(
+          isEdit: false,
+          selectedPage: selectedPage,
+        ),
+      ),
+    );
   }
+
 
   @override
   void onDeleteTap(UserModel user) {
@@ -92,15 +106,25 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
 
   @override
   void onEditTap(UserModel user) {
-    // showDialog(
-    //   context: context,
-    //   builder: (context) => AddUserWidget(
-    //     isEdit: true,
-    //     user: user,
-    //     selectedPage: selectedPage,
-    //   ),
-    // );
+    final usersCubit = context.read<UsersCubit>();
+    final rolesCubit = context.read<UserRolesCubit>()..getRoles();
+
+    showDialog(
+      context: context,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: usersCubit),
+          BlocProvider.value(value: rolesCubit),
+        ],
+        child: AddUserWidget(
+          isEdit: true,
+          user: user,
+          selectedPage: selectedPage,
+        ),
+      ),
+    );
   }
+
 
   @override
   void onSelectPageTap(int page, int perPage) {
@@ -146,8 +170,8 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
                 header: UserModel.header,
                 titles: UserModel.titles,
                 items: state.users,
-                onPageChanged:
-                    (page, perPage) => onSelectPageTap(page, perPage),
+                onPageChanged: (page, perPage) =>
+                    onSelectPageTap(page, perPage),
                 onEditTap: onEditTap,
                 onDeleteTap: onDeleteTap,
                 emptyMessage: state.emptyMessage,
