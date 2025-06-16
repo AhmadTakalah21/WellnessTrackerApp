@@ -159,6 +159,7 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
       body: Padding(
         padding: AppConstants.padding16,
         child: BlocBuilder<UsersCubit, GeneralUsersState>(
+          buildWhen: (previous, current) => current is UsersState,
           builder: (context, state) {
             if (state is UsersLoading) {
               return LoadingIndicator(
