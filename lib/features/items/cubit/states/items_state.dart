@@ -8,7 +8,7 @@ final class ItemsInitial extends ItemsState {}
 final class ItemsLoading extends ItemsState {}
 
 final class ItemsSuccess extends ItemsState {
-  final PaginatedModel<ItemModel> items;
+  final List<ItemModel> items;
 
   ItemsSuccess(this.items);
 }

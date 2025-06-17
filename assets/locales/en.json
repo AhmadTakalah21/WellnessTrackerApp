@@ -83,5 +83,9 @@
     "select_status":"Select status",
     "edit_user": "Edit user",
     "add_user": "Add user ",
-    "select_role": "Select role"
+    "select_role": "Select role",
+    "get_points_methods" : "Get points methods",
+    "store" : "Store",
+    "refresh" : "Refresh",
+    "try_again" : "Try again"
 }

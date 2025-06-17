@@ -24,7 +24,7 @@ class LoadingIndicator extends StatelessWidget {
       alignment: Alignment.center,
       child: SpinKitFadingCircle(
         size: size,
-        color: color ?? context.cs.onSurface,
+        color: color ?? context.cs.primary,
       ),
     );
   }

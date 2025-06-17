@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wellnesstrackerapp/features/points/view/points_view.dart';
 import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart';
 import 'package:wellnesstrackerapp/features/users/view/users_view.dart';
 import 'package:wellnesstrackerapp/global/models/user_view_on_permission_model.dart';
 import 'package:wellnesstrackerapp/views/activitiestracking/actvity.dart';
 import 'package:wellnesstrackerapp/views/daillygoals/daillygoals.dart';
 import 'package:wellnesstrackerapp/views/notifications/notifications.dart';
-import 'package:wellnesstrackerapp/views/stepstrcking/stepstracking.dart';
 
 enum UserRoleEnum {
   admin,
@@ -24,7 +24,7 @@ enum UserRoleEnum {
       return UserRoleEnum.doctor;
     } else if (role == "coach") {
       return UserRoleEnum.coach;
-    } else if (role == "nutritionist") {
+    } else if (role == "dietician") {
       return UserRoleEnum.nutritionist;
     } else {
       //throw 'Role is not supported';
@@ -73,7 +73,7 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "points",
             icon: FontAwesomeIcons.shoePrints,
-            screen: StepTrackerScreen(),
+            screen: PointsView(),
             color: Colors.purple,
           ),
           UserViewOnPermissionModel(
@@ -90,6 +90,13 @@ enum UserRoleEnum {
             icon: Icons.admin_panel_settings,
             screen: ActivityScreen(),
             color: Colors.red,
+          ),
+          // TODO remove points , jsut for tset
+           UserViewOnPermissionModel(
+            title: "points",
+            icon: FontAwesomeIcons.shoePrints,
+            screen: PointsView(),
+            color: Colors.purple,
           ),
         ];
       case UserRoleEnum.coach:

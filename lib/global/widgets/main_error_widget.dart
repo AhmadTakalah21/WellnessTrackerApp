@@ -20,6 +20,7 @@ class MainErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: height),
@@ -29,7 +30,9 @@ class MainErrorWidget extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           if (onTryAgainTap != null)
-            InkWell(
+            ...[
+              SizedBox(height: 5),
+              InkWell(
               onTap: onTryAgainTap,
               child: Text(
                 isRefresh ? "refresh".tr() : "try_again".tr(),
@@ -39,7 +42,7 @@ class MainErrorWidget extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-            )
+            )]
         ],
       ),
     );

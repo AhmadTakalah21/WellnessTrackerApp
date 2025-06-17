@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/activity_status_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_model/user_role_model.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -12,6 +13,38 @@ import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 import '../../../../global/blocs/user_roles_cubit/cubit/user_roles_cubit.dart';
+
+class AddUserView extends StatelessWidget {
+  const AddUserView({
+    super.key,
+    required this.isEdit,
+    this.user,
+    required this.selectedPage,
+    required this.usersCubit,
+  });
+
+  final UsersCubit usersCubit;
+  final bool isEdit;
+  final UserModel? user;
+  final int selectedPage;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: usersCubit),
+        BlocProvider(
+          create: (context) => get<UserRolesCubit>()..getRoles(),
+        ),
+      ],
+      child: AddUserWidget(
+        isEdit: isEdit,
+        user: user,
+        selectedPage: selectedPage,
+      ),
+    );
+  }
+}
 
 class AddUserWidget extends StatefulWidget {
   final bool isEdit;

@@ -30,21 +30,21 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
     this.emptyMessage,
     required this.header,
   });
+
   final String header;
   final List<String> titles;
   final PaginatedModel<T> items;
   final String? emptyMessage;
-  final Function(int page, int perPage) onPageChanged;
-  final Function(T item)? onEditTap;
-  final Function(T item)? onDeleteTap;
+  final void Function(int page, int perPage) onPageChanged;
+  final void Function(T item)? onEditTap;
+  final void Function(T item)? onDeleteTap;
 
   @override
   State<MainDataTable<T>> createState() => _MainDataTableState<T>();
 }
 
 class _MainDataTableState<T extends DataTableModel>
-    extends State<MainDataTable<T>>
-    implements MainDataTableCallbacks {
+    extends State<MainDataTable<T>> implements MainDataTableCallbacks {
   late int page = widget.items.meta.currentPage;
   late int perPage = widget.items.meta.currentPage;
 
@@ -75,70 +75,89 @@ class _MainDataTableState<T extends DataTableModel>
   @override
   void onPerPageSelected(PerPageEnum? perPage) {
     if (perPage != null) {
-      setState(() => this.perPage = perPage.id);
+      setState(() {
+        this.perPage = perPage.id;
+        page = 1;
+      });
       widget.onPageChanged(page, this.perPage);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final titles = widget.titles;
-    final emptyMessage = widget.emptyMessage;
     return Column(
       children: [
-        Text(widget.header, style: context.tt.headlineSmall),
+        _buildHeader(),
         SizedBox(height: 20),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
-            dividerThickness: 1,
-            headingRowColor: WidgetStatePropertyAll(context.cs.primary),
-            border: TableBorder.all(width: 1),
-            columns: List.generate(titles.length, (index) {
-              final title = titles[index];
-              return DataColumn2(
-                headingRowAlignment: MainAxisAlignment.center,
-                label: Text(
-                  title,
-                  style: context.tt.titleLarge?.copyWith(
-                    color: context.cs.onTertiary,
-                  ),
+        _buildTable(),
+        _buildEmptyWidget(),
+        SizedBox(height: 20),
+        _buildPaginator(),
+      ],
+    );
+  }
+
+  Widget _buildHeader() => Text(widget.header, style: context.tt.headlineSmall);
+
+  Widget _buildTable() {
+    final titles = widget.titles;
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        dividerThickness: 1,
+        headingRowColor: WidgetStatePropertyAll(context.cs.primary),
+        border: TableBorder.all(width: 1),
+        columns: List.generate(titles.length, (index) {
+          final title = titles[index];
+          return DataColumn2(
+            headingRowAlignment: MainAxisAlignment.center,
+            label: Text(
+              title,
+              style: context.tt.titleLarge?.copyWith(
+                color: context.cs.onTertiary,
+              ),
+            ),
+          );
+        }),
+        rows: List.generate(widget.items.data.length, (index) {
+          final item = widget.items.data[index];
+          final cells = item.values
+              .map((value) => DataCell(Center(child: Text(value))))
+              .toList();
+          if (widget.onEditTap != null || widget.onDeleteTap != null) {}
+          cells.add(
+            DataCell(
+              Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (widget.onEditTap != null)
+                      IconButton(
+                        onPressed: () => widget.onEditTap!(item),
+                        icon: Icon(Icons.edit, color: context.cs.primary),
+                      ),
+                    if (widget.onDeleteTap != null)
+                      IconButton(
+                        onPressed: () => widget.onDeleteTap!(item),
+                        icon: Icon(Icons.delete, color: context.cs.error),
+                      ),
+                  ],
                 ),
-              );
-            }),
-            rows: List.generate(widget.items.data.length, (index) {
-              final item = widget.items.data[index];
-              final cells =
-                  item.values
-                      .map((value) => DataCell(Center(child: Text(value))))
-                      .toList();
-              if (widget.onEditTap != null || widget.onDeleteTap != null) {}
-              cells.add(
-                DataCell(
-                  Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (widget.onEditTap != null)
-                          IconButton(
-                            onPressed: () => widget.onEditTap!(item),
-                            icon: Icon(Icons.edit, color: context.cs.primary),
-                          ),
-                        if (widget.onDeleteTap != null)
-                          IconButton(
-                            onPressed: () => widget.onDeleteTap!(item),
-                            icon: Icon(Icons.delete, color: context.cs.error),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-              return DataRow2(cells: cells);
-            }),
-          ),
-        ),
-        if (emptyMessage != null) ...[
+              ),
+            ),
+          );
+          return DataRow2(cells: cells);
+        }),
+      ),
+    );
+  }
+
+  Widget _buildEmptyWidget() {
+    final emptyMessage = widget.emptyMessage;
+    if (emptyMessage != null) {
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
           SizedBox(height: 20),
           MainErrorWidget(
             error: emptyMessage,
@@ -146,56 +165,59 @@ class _MainDataTableState<T extends DataTableModel>
             isRefresh: true,
           ),
         ],
-        SizedBox(height: 20),
-        Row(
-          children: [
-            PopupMenuButton<PerPageEnum>(
-              offset: Offset(0, 30),
-              initialValue: PerPageEnum.ten,
-              padding: AppConstants.padding0,
-              constraints: BoxConstraints(maxWidth: 60),
-              itemBuilder: (context) {
-                return PerPageEnum.values.map((perPage) {
-                  return PopupMenuItem<PerPageEnum>(
-                    height: 30,
-                    child: Text(
-                      perPage.displayName,
-                      style: context.tt.bodyMedium,
-                    ),
-                    onTap: () => onPerPageSelected(perPage),
-                  );
-                }).toList();
-              },
-              child: Row(
-                children: [
-                  Text(perPage.toString()),
-                  SizedBox(width: 5),
-                  Icon(Icons.keyboard_arrow_down),
-                ],
-              ),
-            ),
-            IconButton(
-              onPressed: onLastPageTap,
-              icon: Icon(Icons.keyboard_double_arrow_right),
-            ),
-            IconButton(
-              onPressed: onNextPageTap,
-              icon: Icon(Icons.arrow_back_ios),
-            ),
-            Spacer(),
-            Text(
-              "${widget.items.meta.currentPage} ${"of".tr()} ${widget.items.meta.totalPages}",
-            ),
-            Spacer(),
-            IconButton(
-              onPressed: onPreviousPageTap,
-              icon: Icon(Icons.arrow_forward_ios),
-            ),
-            IconButton(
-              onPressed: onFirstPageTap,
-              icon: Icon(Icons.keyboard_double_arrow_left),
-            ),
-          ],
+      );
+    }
+    return SizedBox.shrink();
+  }
+
+  Widget _buildPaginator() {
+    return Row(
+      children: [
+        PopupMenuButton<PerPageEnum>(
+          offset: Offset(0, 30),
+          initialValue: PerPageEnum.ten,
+          padding: AppConstants.padding0,
+          constraints: BoxConstraints(maxWidth: 60),
+          itemBuilder: (context) {
+            return PerPageEnum.values.map((perPage) {
+              return PopupMenuItem<PerPageEnum>(
+                height: 30,
+                child: Text(
+                  perPage.displayName,
+                  style: context.tt.bodyMedium,
+                ),
+                onTap: () => onPerPageSelected(perPage),
+              );
+            }).toList();
+          },
+          child: Row(
+            children: [
+              Text(perPage.toString()),
+              SizedBox(width: 5),
+              Icon(Icons.keyboard_arrow_down),
+            ],
+          ),
+        ),
+        IconButton(
+          onPressed: onLastPageTap,
+          icon: Icon(Icons.keyboard_double_arrow_right),
+        ),
+        IconButton(
+          onPressed: onNextPageTap,
+          icon: Icon(Icons.arrow_back_ios),
+        ),
+        Spacer(),
+        Text(
+          "${widget.items.meta.currentPage} ${"of".tr()} ${widget.items.meta.totalPages}",
+        ),
+        Spacer(),
+        IconButton(
+          onPressed: onPreviousPageTap,
+          icon: Icon(Icons.arrow_forward_ios),
+        ),
+        IconButton(
+          onPressed: onFirstPageTap,
+          icon: Icon(Icons.keyboard_double_arrow_left),
         ),
       ],
     );

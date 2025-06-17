@@ -15,8 +15,6 @@ import 'package:wellnesstrackerapp/global/widgets/main_add_floating_button.dart'
 import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
-import '../../../global/blocs/user_roles_cubit/cubit/user_roles_cubit.dart';
-
 abstract class UsersViewCallBacks {
   void onAddTap();
   void onEditTap(UserModel user);
@@ -36,7 +34,6 @@ class UsersView extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => get<UsersCubit>()),
-        BlocProvider(create: (context) => get<UserRolesCubit>()),
         BlocProvider(create: (context) => get<DeleteCubit>()),
       ],
       child: UsersPage(),
@@ -65,24 +62,15 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
 
   @override
   void onAddTap() {
-    final usersCubit = context.read<UsersCubit>();
-    final rolesCubit = context.read<UserRolesCubit>()..getRoles();
-
     showDialog(
       context: context,
-      builder: (context) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: usersCubit),
-          BlocProvider.value(value: rolesCubit),
-        ],
-        child: AddUserWidget(
-          isEdit: false,
-          selectedPage: selectedPage,
-        ),
+      builder: (context) => AddUserView(
+        usersCubit: usersCubit,
+        isEdit: false,
+        selectedPage: selectedPage,
       ),
     );
   }
-
 
   @override
   void onDeleteTap(UserModel user) {
@@ -106,34 +94,20 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
 
   @override
   void onEditTap(UserModel user) {
-    final usersCubit = context.read<UsersCubit>();
-    final rolesCubit = context.read<UserRolesCubit>()..getRoles();
-
     showDialog(
       context: context,
-      builder: (context) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: usersCubit),
-          BlocProvider.value(value: rolesCubit),
-        ],
-        child: AddUserWidget(
-          isEdit: true,
-          user: user,
-          selectedPage: selectedPage,
-        ),
+      builder: (context) => AddUserView(
+        usersCubit: usersCubit,
+        isEdit: true,
+        user: user,
+        selectedPage: selectedPage,
       ),
     );
   }
 
-
   @override
   void onSelectPageTap(int page, int perPage) {
-    // if (selectedPage != page) {
-    //   setState(() {
-    //     selectedPage = page;
-    //   });
     usersCubit.getUsers(page: page, perPage: perPage);
-    //}
   }
 
   @override
@@ -171,8 +145,7 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
                 header: UserModel.header,
                 titles: UserModel.titles,
                 items: state.users,
-                onPageChanged: (page, perPage) =>
-                    onSelectPageTap(page, perPage),
+                onPageChanged: onSelectPageTap,
                 onEditTap: onEditTap,
                 onDeleteTap: onDeleteTap,
                 emptyMessage: state.emptyMessage,
@@ -196,7 +169,7 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
           },
         ),
       ),
-      floatingActionButton: MainAddFloatingButton(onAddTap: onAddTap),
+      floatingActionButton: MainFloatingButton(onTap: onAddTap),
     );
   }
 }

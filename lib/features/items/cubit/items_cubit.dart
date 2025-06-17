@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/items/model/add_item_model/add_item_model.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
 import 'package:wellnesstrackerapp/features/items/service/items_service.dart';
-import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 
 part 'states/items_state.dart';
 part 'states/general_items_state.dart';
@@ -19,6 +18,10 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
   final ItemService itemService;
   AddItemModel addItemModel = const AddItemModel();
   XFile? image;
+
+  int page = 1;
+  bool hasMore = true;
+  List<ItemModel> items = [];
 
   void setNameAr(String? name) {
     addItemModel = addItemModel.copyWith(nameAr: () => name);
@@ -49,15 +52,28 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     addItemModel = const AddItemModel();
   }
 
-  Future<void> getItems({int perPage = 10, required int page}) async {
+  Future<void> getItems({int perPage = 10, bool isLoadMore = true}) async {
+    if (!hasMore && isLoadMore) return;
+    if (!isLoadMore) {
+      page = 1;
+      hasMore = true;
+      items.clear();
+    }
     emit(ItemsLoading());
     try {
-      final items = await itemService.getItems(page: page, perPage: perPage);
-      if (items.data.isEmpty) {
-        emit(ItemsEmpty("no_items".tr()));
+      final newItems = await itemService.getItems(page: page, perPage: perPage);
+      if (newItems.data.isEmpty) {
+        hasMore = false;
+        //emit(ItemsEmpty("no_items".tr()));
+        if(page == 1){
+          emit(ItemsEmpty("no_items".tr()));
+        }
       } else {
-        emit(ItemsSuccess(items));
+        items.addAll(newItems.data);
+        page++;
+        //emit(ItemsSuccess(items));
       }
+      emit(ItemsSuccess(items));
     } catch (e) {
       emit(ItemsFail(e.toString()));
     }

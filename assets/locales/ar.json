@@ -83,5 +83,9 @@
     "select_status":"اختر الحالة",
     "edit_user": "تعديل بيانات موظف",
     "add_user": "إضافة موظف",
-    "select_role": "اختر الدور"
+    "select_role": "اختر الدور",
+    "get_points_methods" : "طرق كسب النقاط",
+    "store" : "المتجر",
+    "refresh" : "تحديث",
+    "try_again" : "إعادة المحاولة"
 }
