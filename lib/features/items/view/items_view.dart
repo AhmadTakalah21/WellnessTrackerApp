@@ -108,6 +108,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
 
   Widget _buildCardItem(ItemModel item) {
     return Card(
+      margin: AppConstants.paddingV10,
       child: Padding(
         padding: AppConstants.padding20,
         child: Column(
@@ -116,23 +117,29 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppImageWidget(
+                  
+                  width: 70,
+                  height: 70,
                   url: item.image,
                   borderRadius: AppConstants.borderRadiusCircle,
+                  border: Border.all(width: 0.5),
                 ),
                 SizedBox(width: 10),
                 Column(
                   children: [
                     Text(
                       item.name,
-                      style: context.tt.bodyLarge,
+                      style: context.tt.titleMedium,
                     ),
+                    SizedBox(height: 5),
                     Text(
                       item.description,
                       style: context.tt.bodyMedium,
                     ),
+                    SizedBox(height: 5),
                     Text(
                       item.price.toStringAsFixed(0),
-                      style: context.tt.bodyLarge,
+                      style: context.tt.titleMedium,
                     ),
                   ],
                 ),

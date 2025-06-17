@@ -55,6 +55,13 @@ enum UserRoleEnum {
             screen: CryptoNotifications(canSendNotification: true),
             color: Colors.green,
           ),
+          // TODO remove points , jsut for tset
+          UserViewOnPermissionModel(
+            title: "points",
+            icon: FontAwesomeIcons.shoePrints,
+            screen: PointsView(),
+            color: Colors.purple,
+          ),
         ];
       case UserRoleEnum.user:
         return [
@@ -90,13 +97,6 @@ enum UserRoleEnum {
             icon: Icons.admin_panel_settings,
             screen: ActivityScreen(),
             color: Colors.red,
-          ),
-          // TODO remove points , jsut for tset
-           UserViewOnPermissionModel(
-            title: "points",
-            icon: FontAwesomeIcons.shoePrints,
-            screen: PointsView(),
-            color: Colors.purple,
           ),
         ];
       case UserRoleEnum.coach:
