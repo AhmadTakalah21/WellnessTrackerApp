@@ -3,7 +3,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
+import 'package:wellnesstrackerapp/features/auth/view/profile_form_view.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
@@ -346,6 +348,54 @@ class _SignInPageState extends State<SignInPage>
                               ],
                             ),
                           ),
+                          SizedBox(height: 10),
+                          AnimatedSizeAndFade.showHide(
+                            show: !isShowSignIn,
+                            child: Column(
+                              children: [
+                                MainTextField(
+                                  prefixIcon: Icon(Icons.key, color: context.cs.onSecondary),
+                                  labelText: "subscription_code".tr(),
+                                  onChanged: (code) {
+                                  },
+                                ),
+
+                                const SizedBox(height: 10),
+
+                                Center(
+                                  child: InkWell(
+                                    onTap: () async {
+                                      final uri = Uri.parse("https://wa.me/963XXXXXXXXX?text=مرحباً، أحتاج كود الاشتراك");
+                                      if (await canLaunchUrl(uri)) {
+                                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                      } else {
+                                        MainSnackBar.showErrorMessage(context, "لا يمكن فتح واتساب حالياً");
+                                      }
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.phone_bluetooth_speaker_outlined, size: 18, color: context.cs.primary),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          "get_code_via_whatsapp".tr(),
+                                          style: context.tt.bodyMedium?.copyWith(
+                                            color: context.cs.primary,
+                                            fontWeight: FontWeight.w600,
+                                            decoration: TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+
+
                           const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -387,15 +437,23 @@ class _SignInPageState extends State<SignInPage>
                           ),
                           const SizedBox(height: 20),
                           BlocConsumer<AuthCubit, AuthState>(
-                            buildWhen:
-                                (previous, current) => current is SignInState,
+                            buildWhen: (previous, current) => current is SignInState,
                             listener: (context, state) {
                               if (state is SignInSuccess) {
                                 MainSnackBar.showSuccessMessage(
                                   context,
                                   state.message,
                                 );
+                                widget.onSignedIn?.call();
+                              } else if (state is SignUpSuccess) {
+                                MainSnackBar.showSuccessMessage(
+                                  context,
+                                  "تم إنشاء الحساب بنجاح",
+                                );
+                                context.router.push(const CompleteProfileFormRoute());
+
                               } else if (state is SignInFail) {
+                                context.router.push(const CompleteProfileFormRoute());
                                 MainSnackBar.showErrorMessage(
                                   context,
                                   state.error,
@@ -415,10 +473,7 @@ class _SignInPageState extends State<SignInPage>
                                     child: MainActionButton(
                                       padding: AppConstants.padding10,
                                       onTap: onTap,
-                                      text:
-                                          isShowSignIn
-                                              ? "login".tr()
-                                              : "sign_up".tr(),
+                                      text: isShowSignIn ? "login".tr() : "sign_up".tr(),
                                       fontSize: 18,
                                       borderRadius: AppConstants.borderRadius10,
                                       child: child,
@@ -428,6 +483,7 @@ class _SignInPageState extends State<SignInPage>
                               );
                             },
                           ),
+
                           const SizedBox(height: 20),
                           Text('or_continue_with'.tr()),
                           const SizedBox(height: 20),

@@ -47,6 +47,12 @@ class AuthCubit extends Cubit<AuthState> {
     emit(TextFieldState(TextFieldType.confirmPassword));
   }
 
+  void setSubscriptionCode(String code) {
+    postSignUpModel = postSignUpModel.copyWith(subscriptionCode: () => code);
+    emit(TextFieldState(TextFieldType.subscriptionCode));
+  }
+
+
   void setNewPassword(String password) {
     resetPasswordPostModel = resetPasswordPostModel.copyWith(
       password: () => password,
@@ -105,42 +111,33 @@ class AuthCubit extends Cubit<AuthState> {
     if (usernameError != null) {
       emit(TextFieldState(TextFieldType.username, error: usernameError));
       shouldReturn = true;
-    } else {
-      emit(TextFieldState(TextFieldType.username));
     }
 
     final emailError = postSignUpModel.validateEmail();
     if (emailError != null) {
       emit(TextFieldState(TextFieldType.email, error: emailError));
       shouldReturn = true;
-    } else {
-      emit(TextFieldState(TextFieldType.email));
     }
 
     final passwordError = postSignUpModel.validatePassword();
     if (passwordError != null) {
       emit(TextFieldState(TextFieldType.password, error: passwordError));
       shouldReturn = true;
-    } else {
-      emit(TextFieldState(TextFieldType.password));
     }
 
     final confirmPasswordError = postSignUpModel.validateConfirmPassword();
     if (confirmPasswordError != null) {
-      emit(
-        TextFieldState(
-          TextFieldType.confirmPassword,
-          error: confirmPasswordError,
-        ),
-      );
+      emit(TextFieldState(TextFieldType.confirmPassword, error: confirmPasswordError));
       shouldReturn = true;
-    } else {
-      emit(TextFieldState(TextFieldType.confirmPassword));
     }
 
-    if (shouldReturn) {
-      return;
+    final subscriptionCodeError = postSignUpModel.validateSubscriptionCode();
+    if (subscriptionCodeError != null) {
+      emit(TextFieldState(TextFieldType.subscriptionCode, error: subscriptionCodeError));
+      shouldReturn = true;
     }
+
+    if (shouldReturn) return;
 
     emit(SignInLoading());
 

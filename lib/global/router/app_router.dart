@@ -20,6 +20,7 @@ class AppRouter extends RootStackRouter {
             AutoRoute(initial: true, page: SignInRoute.page),
             AutoRoute(page: ForgotPasswordRoute.page),
             AutoRoute(page: ResetPasswordRoute.page),
+            AutoRoute(page: CompleteProfileFormRoute.page),
           ],
         ),
         AdaptiveRoute(page: SignInRoute.page),
@@ -31,3 +32,4 @@ class AppRouter extends RootStackRouter {
     ),
   ];
 }
+

@@ -39,18 +39,19 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
   late T? selectedValue = widget.selectedValue;
 
   @override
+  @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
-      value: widget.selectedValue,
+      value: selectedValue,
       hint: Text(
-        'select_role'.tr(),
+        widget.hintText,
         style: context.tt.bodyMedium?.copyWith(color: Colors.grey[500]),
       ),
       icon: Icon(widget.icon ?? LucideIcons.chevronDown,
           color: context.cs.primary),
       decoration: InputDecoration(
         prefixIcon: Icon(widget.prefixIcon, color: context.cs.primary),
-        labelText: 'role'.tr(),
+        labelText: widget.labelText,
         filled: true,
         fillColor: context.cs.surfaceVariant,
         contentPadding:
@@ -62,13 +63,16 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
         ),
       ),
       style: context.tt.bodyMedium,
-      items: widget.items.map((role) {
+      items: widget.items.map((item) {
         return DropdownMenuItem(
-          value: role,
-          child: Text(role.displayName, style: context.tt.bodyMedium),
+          value: item,
+          child: Text(item.displayName, style: context.tt.bodyMedium),
         );
       }).toList(),
-      onChanged: (value) => setState(() => selectedValue = value),
+      onChanged: (value) {
+        setState(() => selectedValue = value);
+        widget.onChanged(value);
+      },
       validator: (value) => value == null ? widget.errorMessage : null,
     );
   }

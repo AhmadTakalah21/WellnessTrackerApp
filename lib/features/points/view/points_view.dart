@@ -85,133 +85,97 @@ class _PointsPageState extends State<PointsPage>
   @override
   Widget build(BuildContext context) {
     final List<ChartModel> data = [
-      ChartModel(
-        xAxisProperty: "month 1",
-        yAxisProperty: [100],
-      ),
-      ChartModel(
-        xAxisProperty: "month 2",
-        yAxisProperty: [300],
-      ),
-      ChartModel(
-        xAxisProperty: "month 3",
-        yAxisProperty: [350],
-      ),
-      ChartModel(
-        xAxisProperty: "month 5",
-        yAxisProperty: [500],
-      ),
-      ChartModel(
-        xAxisProperty: "month 6",
-        yAxisProperty: [700],
-      ),
-      ChartModel(
-        xAxisProperty: "month 7",
-        yAxisProperty: [700],
-      ),
-      ChartModel(
-        xAxisProperty: "month 8",
-        yAxisProperty: [1000],
-      ),
+      ChartModel(xAxisProperty: "Jan", yAxisProperty: [100]),
+      ChartModel(xAxisProperty: "Feb", yAxisProperty: [300]),
+      ChartModel(xAxisProperty: "Mar", yAxisProperty: [350]),
+      ChartModel(xAxisProperty: "May", yAxisProperty: [500]),
+      ChartModel(xAxisProperty: "Jun", yAxisProperty: [700]),
+      ChartModel(xAxisProperty: "Jul", yAxisProperty: [700]),
+      ChartModel(xAxisProperty: "Aug", yAxisProperty: [1000]),
     ];
+
     final List<Widget> pages = [
       SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: buildStepCounter(context),
+            buildStepCounter(context),
+            const SizedBox(height: 32),
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              elevation: 6,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SfCartesianChart(
+                  title: ChartTitle(
+                    text: "الرسم البياني لتقدم النقاط",
+                    textStyle: context.tt.titleLarge,
+                  ),
+                  borderWidth: 0,
+                  plotAreaBorderWidth: 0,
+                  primaryYAxis: NumericAxis(
+                    minimum: 0,
+                    maximum: 1200,
+                    interval: 200,
+                    majorGridLines: const MajorGridLines(width: 0.5),
+                    labelStyle: context.tt.bodyMedium,
+                  ),
+                  primaryXAxis: CategoryAxis(
+                    labelStyle: context.tt.bodyMedium,
+                    majorGridLines: const MajorGridLines(width: 0),
+                  ),
+                  tooltipBehavior: TooltipBehavior(enable: true),
+                  series: [
+                    LineSeries<ChartModel, String>(
+                      dataSource: data,
+                      color: context.cs.primary,
+                      width: 3,
+                      animationDuration: 1000,
+                      xValueMapper: (point, _) => point.xAxisProperty,
+                      yValueMapper: (point, _) => point.yAxisProperty[0],
+                      markerSettings: const MarkerSettings(isVisible: true),
+                      name: 'النقاط',
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(height: 40),
-            SfCartesianChart(
-              borderColor: Colors.black,
-              borderWidth: 0.5,
-              plotAreaBorderWidth: 1,
-              title:
-                  ChartTitle(text: "التقدم", textStyle: context.tt.titleLarge),
-              primaryYAxis: NumericAxis(
-                minimum: 0,
-                maximum: 2000,
-                interval: 200,
-                labelStyle: context.tt.bodyMedium,
-                majorGridLines: const MajorGridLines(
-                  width: 1,
-                  color: Colors.grey,
-                  dashArray: [0, 0],
-                ),
-              ),
-              primaryXAxis: CategoryAxis(
-                interval: 1,
-                labelStyle: context.tt.titleMedium,
-                majorGridLines: const MajorGridLines(
-                  width: 1,
-                  color: Colors.grey,
-                  dashArray: [0, 0],
-                ),
-              ),
-              series: List<CartesianSeries<ChartModel, String>>.generate(
-                data[0].yAxisProperty.length,
-                (index) => LineSeries<ChartModel, String>(
-                  width: 3,
-                  animationDuration: 1500,
-                  color: context.cs.primary,
-                  dataSource: data,
-                  xValueMapper: (ChartModel xAxis, ind) => xAxis.xAxisProperty,
-                  yValueMapper: (ChartModel yAxis, ind) =>
-                      yAxis.yAxisProperty[index],
-                ),
-              ),
-            ),
-            // const SizedBox(height: 20),
-            // buildStatsRow(),
-            // const SizedBox(height: 20),
-            // buildFriendsList(context),
           ],
         ),
       ),
+
+      /// الصفحة الثانية: طرق كسب النقاط
       SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
-          children: [
-            ...List.generate(
-              10,
-              (index) {
-                return Card(
-                  child: Padding(
-                    padding: AppConstants.padding20,
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.line_weight, color: context.cs.primary),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                "you can get 500 point by losing 3 kgs weekly",
-                                style: context.tt.bodyLarge,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            )
-          ],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(
+            10,
+                (index) => Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: context.cs.primary.withOpacity(0.1),
+                  child: Icon(Icons.trending_up, color: context.cs.primary),
+                ),
+                title: Text(
+                  "اكسب 500 نقطة عند خسارة 3 كغ هذا الأسبوع",
+                  style: context.tt.bodyLarge,
+                ),
+                subtitle: Text(
+                  "احصل على نقاط إضافية عبر الالتزام الأسبوعي",
+                  style: context.tt.bodySmall?.copyWith(color: Colors.grey),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     ];
+
     return Scaffold(
       backgroundColor: context.cs.onSurface,
       appBar: AppBar(
@@ -230,55 +194,100 @@ class _PointsPageState extends State<PointsPage>
             isScrollable: false,
           ),
           Expanded(
-            child: PageView(
+            child: PageView.builder(
               physics: const BouncingScrollPhysics(),
               controller: pageController,
               onPageChanged: onTabSelected,
-              children: List.generate(
-                tabBarTitles.length,
-                (index) => Padding(
-                  padding: AppConstants.padding16,
-                  child: KeepAliveWidget(child: pages[index]),
-                ),
+              itemCount: pages.length,
+              itemBuilder: (context, index) => Padding(
+                padding: AppConstants.padding16,
+                child: KeepAliveWidget(child: pages[index]),
               ),
             ),
           ),
         ],
       ),
       floatingActionButton: MainFloatingButton(
-        icon: Icons.add_shopping_cart_outlined,
+        icon: Icons.storefront_outlined,
         onTap: onGoToStoreTap,
       ),
     );
   }
 
+
   Widget buildStepCounter(BuildContext context) {
-    return Padding(
-      padding: AppConstants.paddingV32,
-      child: Column(
-        children: [
-          Column(
-            children: [
-              Text(
-                "1000",
-                style: GoogleFonts.poppins(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.easeOutBack,
+      tween: Tween<double>(begin: 0.8, end: 1),
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: value,
+          child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            elevation: 10,
+            shadowColor: context.cs.primary.withOpacity(0.2),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: context.cs.primary.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.emoji_events_rounded,
+                      color: context.cs.primary,
+                      size: 42,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "1000",
+                    style: GoogleFonts.poppins(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w900,
+                      color: context.cs.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "نقطة",
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      color: Colors.grey.shade700,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  LinearProgressIndicator(
+                    value: 0.5,
+                    backgroundColor: Colors.grey.shade200,
+                    color: context.cs.primary,
+                    minHeight: 8,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "أنت في منتصف الطريق نحو هدفك 💪",
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: context.cs.primary,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                "نقطة",
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  color: Colors.grey.shade600,
-                ),
-              ),
-            ],
+            ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
+
 
   Widget buildStatsRow() {
     return SingleChildScrollView(

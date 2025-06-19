@@ -74,8 +74,7 @@ class _MainTextFieldState extends State<MainTextField> {
   @override
   void initState() {
     super.initState();
-    _controller =
-        widget.controller ?? TextEditingController(text: widget.initialText);
+    _controller = widget.controller ?? TextEditingController(text: widget.initialText);
   }
 
   @override
@@ -84,20 +83,28 @@ class _MainTextFieldState extends State<MainTextField> {
     final prefixIcon = widget.prefixIcon;
     final showCloseIcon = widget.showCloseIcon ?? true;
     final title = widget.title;
+
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final baseBorder = OutlineInputBorder(
+      borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
+      borderSide: BorderSide(color: primaryColor, width: 1.5),
+    );
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title != null)
+        if (title != null) ...[
           Text(
             title,
             style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: AppColors.greyShade3,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
             ),
           ),
-        if (title != null) const SizedBox(height: 10),
+          const SizedBox(height: 8),
+        ],
         TextFormField(
           controller: _controller,
           obscureText: widget.obscureText,
@@ -111,68 +118,33 @@ class _MainTextFieldState extends State<MainTextField> {
           focusNode: widget.focusNode,
           keyboardType: widget.textInputType ?? TextInputType.name,
           inputFormatters: widget.inputFormatters,
+          style: const TextStyle(color: Colors.black, fontSize: 16),
           decoration: InputDecoration(
-            contentPadding: widget.padding ?? AppConstants.padding6,
+            contentPadding: widget.padding ?? const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
             labelText: widget.labelText,
             floatingLabelStyle: TextStyle(
-              color:
-                  widget.errorText == null
-                      ? floatingLabelColor ?? AppColors.blue
-                      : AppColors.red,
+              color: widget.errorText == null ? floatingLabelColor ?? primaryColor : AppColors.red,
+              fontWeight: FontWeight.w600,
             ),
             labelStyle: TextStyle(
-              color: widget.errorText == null ? AppColors.grey : AppColors.red,
+              color: widget.errorText == null ? Colors.grey.shade700 : AppColors.red,
               fontSize: 14,
             ),
             hintText: widget.hintText,
-            hintStyle:
-                widget.hintStyle ??
+            hintStyle: widget.hintStyle ??
                 TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  height: 1.19,
-                  color: widget.hintColor,
+                  fontSize: 14,
+                  color: widget.hintColor ?? Colors.grey.shade500,
                 ),
-            errorStyle: const TextStyle(fontSize: 16, color: AppColors.red),
+            errorStyle: const TextStyle(fontSize: 13, color: AppColors.red),
             errorText: widget.errorText,
-            border:
-                widget.outlineInputBorder ??
-                OutlineInputBorder(
-                  borderRadius:
-                      widget.borderRadius ?? AppConstants.borderRadius5,
-                  borderSide: BorderSide(
-                    color:
-                        widget.borderColor ??
-                        AppColors.grey.withValues(alpha: 0.5),
-                  ),
-                ),
-            focusedBorder:
-                widget.outlineInputBorder ??
-                OutlineInputBorder(
-                  borderRadius:
-                      widget.borderRadius ?? AppConstants.borderRadius5,
-                  borderSide: BorderSide(
-                    color: widget.borderColor ?? AppColors.blue,
-                  ),
-                ),
-            enabledBorder:
-                widget.outlineInputBorder ??
-                OutlineInputBorder(
-                  borderRadius:
-                      widget.borderRadius ?? AppConstants.borderRadius5,
-                  borderSide: BorderSide(
-                    color:
-                        widget.borderColor ??
-                        AppColors.grey.withValues(alpha: 0.5),
-                  ),
-                ),
-            errorBorder:
-                widget.outlineInputBorder ??
-                OutlineInputBorder(
-                  borderRadius:
-                      widget.borderRadius ?? AppConstants.borderRadius5,
-                  borderSide: const BorderSide(color: AppColors.red),
-                ),
+            border: baseBorder,
+            focusedBorder: baseBorder,
+            enabledBorder: baseBorder,
+            errorBorder: baseBorder.copyWith(
+              borderSide: const BorderSide(color: AppColors.red),
+            ),
+            prefixIcon: prefixIcon,
             suffixIcon: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -186,17 +158,14 @@ class _MainTextFieldState extends State<MainTextField> {
                       widget.onClearTap?.call();
                       setState(() {});
                     },
-                    child: const Icon(Icons.close, color: AppColors.grey),
+                    child: const Icon(Icons.close, color: Colors.grey),
                   ),
-                if (!widget.readOnly &&
-                    _controller.text.isNotEmpty &&
-                    showCloseIcon)
+                if (!widget.readOnly && _controller.text.isNotEmpty && showCloseIcon)
                   const SizedBox(width: 10),
               ],
             ),
-            prefixIcon: prefixIcon,
-            fillColor: widget.fillColor,
-            filled: widget.filled,
+            fillColor: widget.fillColor ?? Colors.white,
+            filled: widget.filled ?? true,
           ),
         ),
       ],

@@ -53,21 +53,18 @@ class _IntroPageState extends State<IntroPage> implements IntroViewCallBacks {
   final introPageModels = [
     IntroPageModel(
       image: 'assets/images/onboarding1.png',
-      title: "Improve your health with\nhabit tracking",
-      subTitle:
-          "Improve your health with habit tracking from\neating more nutritious foods",
+      title: "تتبع العادات لتحسين صحتك",
+      subTitle: "ابدأ رحلتك الصحية عبر تتبع عاداتك اليومية مثل النشاط، الأكل الصحي، النوم والماء.",
     ),
     IntroPageModel(
       image: 'assets/images/onboarding2.png',
-      title: 'The habit tracking method that really works',
-      subTitle:
-          'The habit tracking method that will help you achieve your wildest dreams',
+      title: 'نظام فعال لتتبع تقدمك',
+      subTitle: 'اعتمد أسلوباً بسيطاً وفعالاً يساعدك على التغيير الإيجابي والبقاء ملتزماً بأهدافك.',
     ),
     IntroPageModel(
       image: 'assets/images/onboarding3.png',
-      title: 'Tracking can help you make lasting changes',
-      subTitle:
-          'Habit tracking can help you make lasting changes by building routines',
+      title: 'خطوات صغيرة نحو تغيير كبير',
+      subTitle: 'تتبع العادات يسهّل عليك تبني روتين يومي صحي ومتوازن ويمنحك شعوراً بالإنجاز.',
     ),
   ];
 

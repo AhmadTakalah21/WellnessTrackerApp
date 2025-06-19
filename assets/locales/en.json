@@ -87,5 +87,9 @@
     "get_points_methods" : "Get points methods",
     "store" : "Store",
     "refresh" : "Refresh",
-    "try_again" : "Try again"
+    "try_again" : "Try again",
+    "subscription_code": "Subscription code",
+    "get_code_via_whatsapp": "get code via whatsapp",
+    "contact_support_for_subscription_code": "contact support for subscription code"
+
 }

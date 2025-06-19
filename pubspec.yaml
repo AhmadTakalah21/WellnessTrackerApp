@@ -74,8 +74,13 @@ dependencies:
   firebase_auth: ^4.0.0
   google_sign_in: ^6.0.0
   flutter_facebook_auth: ^6.0.0
-  collection: ^1.19.1
-  syncfusion_flutter_charts: ^29.2.11
+  flutter_staggered_animations: ^1.1.1
+  url_launcher: ^6.2.4
+
+
+#  for dart versionn 3.6
+  collection: ^1.19.0
+  syncfusion_flutter_charts: ^28.2.12
 
 
 dev_dependencies:
