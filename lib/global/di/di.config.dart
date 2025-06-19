@@ -24,6 +24,10 @@ import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart'
     as _i803;
 import 'package:wellnesstrackerapp/features/items/service/items_service.dart'
     as _i1044;
+import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart'
+    as _i32;
+import 'package:wellnesstrackerapp/features/points/service/points_service.dart'
+    as _i985;
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart'
     as _i253;
 import 'package:wellnesstrackerapp/features/users/service/users_service.dart'
@@ -69,10 +73,13 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.factory<_i386.AuthService>(() => _i386.AuthServiceImp());
+    gh.factory<_i985.PointsService>(() => _i985.PointsServiceImp());
     gh.factory<_i936.UserService>(() => _i936.UserServiceImp());
     gh.singleton<_i435.AuthManagerBloc>(
         () => _i435.AuthManagerBloc(gh<_i128.UserRepo>()));
     gh.factory<_i963.DeleteService>(() => _i963.DeleteServiceImp());
+    gh.factory<_i32.PointsCubit>(
+        () => _i32.PointsCubit(gh<_i985.PointsService>()));
     gh.factory<_i474.UserRoleService>(() => _i474.UserRoleServiceImp());
     gh.factory<_i1044.ItemService>(() => _i1044.ItemServiceImp());
     gh.factory<_i396.DeleteCubit>(

@@ -32,6 +32,23 @@ enum UserRoleEnum {
     }
   }
 
+  static String toJson(UserRoleEnum role) {
+    if (role == UserRoleEnum.admin) {
+      return "admin";
+    } else if (role == UserRoleEnum.user) {
+      return "user";
+    } else if (role == UserRoleEnum.doctor) {
+      return "doctor";
+    } else if (role == UserRoleEnum.coach) {
+      return "coach";
+    } else if (role == UserRoleEnum.nutritionist) {
+      return "dietician";
+    } else {
+      //throw 'Role is not supported';
+      return "user";
+    }
+  }
+
   List<UserViewOnPermissionModel> get getPermissions {
     switch (this) {
       case UserRoleEnum.admin:
@@ -54,13 +71,6 @@ enum UserRoleEnum {
             icon: FontAwesomeIcons.bell,
             screen: CryptoNotifications(canSendNotification: true),
             color: Colors.green,
-          ),
-          // TODO remove points , jsut for tset
-          UserViewOnPermissionModel(
-            title: "points",
-            icon: FontAwesomeIcons.shoePrints,
-            screen: PointsView(),
-            color: Colors.purple,
           ),
         ];
       case UserRoleEnum.user:
@@ -115,6 +125,20 @@ enum UserRoleEnum {
             icon: Icons.admin_panel_settings,
             screen: ActivityScreen(),
             color: Colors.red,
+          ),
+          // TODO remove points , jsut for tset
+          UserViewOnPermissionModel(
+            title: "select_plan",
+            icon: FontAwesomeIcons.clipboardList,
+            screen: SelectPlanView(),
+            color: Colors.blue,
+          ),
+          // TODO remove points , jsut for tset
+          UserViewOnPermissionModel(
+            title: "points",
+            icon: FontAwesomeIcons.shoePrints,
+            screen: PointsView(),
+            color: Colors.purple,
           ),
         ];
     }

@@ -3,12 +3,23 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wellnesstrackerapp/features/items/view/items_view.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_add_floating_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_tab_bar.dart';
+
+class ChartModel {
+  ChartModel({
+    required this.xAxisProperty,
+    required this.yAxisProperty,
+  });
+
+  final String xAxisProperty;
+  final List<double> yAxisProperty;
+}
 
 abstract class PointsViewCallBacks {
   void onTabSelected(int index);
@@ -73,30 +84,97 @@ class _PointsPageState extends State<PointsPage>
 
   @override
   Widget build(BuildContext context) {
+    final List<ChartModel> data = [
+      ChartModel(
+        xAxisProperty: "month 1",
+        yAxisProperty: [100],
+      ),
+      ChartModel(
+        xAxisProperty: "month 2",
+        yAxisProperty: [300],
+      ),
+      ChartModel(
+        xAxisProperty: "month 3",
+        yAxisProperty: [350],
+      ),
+      ChartModel(
+        xAxisProperty: "month 5",
+        yAxisProperty: [500],
+      ),
+      ChartModel(
+        xAxisProperty: "month 6",
+        yAxisProperty: [700],
+      ),
+      ChartModel(
+        xAxisProperty: "month 7",
+        yAxisProperty: [700],
+      ),
+      ChartModel(
+        xAxisProperty: "month 8",
+        yAxisProperty: [1000],
+      ),
+    ];
     final List<Widget> pages = [
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: Card(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: buildStepCounter(context),
-                  ),
+      SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: Card(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: buildStepCounter(context),
                 ),
               ),
-              const SizedBox(height: 20),
-              buildStatsRow(),
-              const SizedBox(height: 20),
-              buildFriendsList(context),
-            ],
-          ),
+            ),
+            SizedBox(height: 40),
+            SfCartesianChart(
+              borderColor: Colors.black,
+              borderWidth: 0.5,
+              plotAreaBorderWidth: 1,
+              title:
+                  ChartTitle(text: "التقدم", textStyle: context.tt.titleLarge),
+              primaryYAxis: NumericAxis(
+                minimum: 0,
+                maximum: 2000,
+                interval: 200,
+                labelStyle: context.tt.bodyMedium,
+                majorGridLines: const MajorGridLines(
+                  width: 1,
+                  color: Colors.grey,
+                  dashArray: [0, 0],
+                ),
+              ),
+              primaryXAxis: CategoryAxis(
+                interval: 1,
+                labelStyle: context.tt.titleMedium,
+                majorGridLines: const MajorGridLines(
+                  width: 1,
+                  color: Colors.grey,
+                  dashArray: [0, 0],
+                ),
+              ),
+              series: List<CartesianSeries<ChartModel, String>>.generate(
+                data[0].yAxisProperty.length,
+                (index) => LineSeries<ChartModel, String>(
+                  width: 3,
+                  animationDuration: 1500,
+                  color: context.cs.primary,
+                  dataSource: data,
+                  xValueMapper: (ChartModel xAxis, ind) => xAxis.xAxisProperty,
+                  yValueMapper: (ChartModel yAxis, ind) =>
+                      yAxis.yAxisProperty[index],
+                ),
+              ),
+            ),
+            // const SizedBox(height: 20),
+            // buildStatsRow(),
+            // const SizedBox(height: 20),
+            // buildFriendsList(context),
+          ],
         ),
       ),
       SingleChildScrollView(
@@ -132,7 +210,7 @@ class _PointsPageState extends State<PointsPage>
             )
           ],
         ),
-      )
+      ),
     ];
     return Scaffold(
       backgroundColor: context.cs.onSurface,
@@ -179,36 +257,21 @@ class _PointsPageState extends State<PointsPage>
       padding: AppConstants.paddingV32,
       child: Column(
         children: [
-          Stack(
-            alignment: Alignment.center,
+          Column(
             children: [
-              // SizedBox(
-              //   width: 160,
-              //   height: 160,
-              //   child: CircularProgressIndicator(
-              //     value: 0.5,
-              //     strokeWidth: 12,
-              //     backgroundColor: Colors.grey.shade300,
-              //     valueColor: AlwaysStoppedAnimation(context.cs.primary),
-              //   ),
-              // ),
-              Column(
-                children: [
-                  Text(
-                    "2450",
-                    style: GoogleFonts.poppins(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    "نقطة",
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                ],
+              Text(
+                "1000",
+                style: GoogleFonts.poppins(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "نقطة",
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  color: Colors.grey.shade600,
+                ),
               ),
             ],
           ),

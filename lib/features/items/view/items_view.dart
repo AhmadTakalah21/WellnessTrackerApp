@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
@@ -56,6 +57,17 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
 
   @override
   Widget build(BuildContext context) {
+    // TODO : remove this jsut untile there is a user account
+    final List<ItemModel> staticData = List.generate(
+      10,
+      (index) => ItemModel(
+        id: index + 1,
+        name: "Item name ${index + 1}",
+        price: 1000 + ((index + 1) * 300),
+        description: "description for item ${index + 1}",
+        image: "image",
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -67,7 +79,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
         builder: (context, state) {
           if (state is ItemsLoading) {
             return LoadingIndicator();
-          } else if (state is ItemsSuccess) {
+          } else if (state is ItemsFail) {
             return RefreshIndicator(
               onRefresh: onRefresh,
               child: NotificationListener<ScrollNotification>(
@@ -75,14 +87,22 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   padding: AppConstants.padding16,
-                  child: Column(
-                    children: [
-                      ...state.items.map(
-                        (item) {
-                          return _buildCardItem(item);
-                        },
-                      )
-                    ],
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // ...state.items.map(
+                        //   (item) {
+                        //     return _buildCardItem(item);
+                        //   },
+                        // ),
+                        ...staticData.map(
+                          (item) {
+                            return _buildCardItem(item);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -93,12 +113,14 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
               onTryAgainTap: onTryAgainTap,
               isRefresh: true,
             );
-          } else if (state is ItemsFail) {
-            return MainErrorWidget(
-              error: state.error,
-              onTryAgainTap: onTryAgainTap,
-            );
-          } else {
+          }
+          // else if (state is ItemsFail) {
+          //   return MainErrorWidget(
+          //     error: state.error,
+          //     onTryAgainTap: onTryAgainTap,
+          //   );
+          // }
+          else {
             return SizedBox.shrink();
           }
         },
@@ -107,45 +129,79 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
   }
 
   Widget _buildCardItem(ItemModel item) {
-    return Card(
-      margin: AppConstants.paddingV10,
-      child: Padding(
-        padding: AppConstants.padding20,
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppImageWidget(
-                  
-                  width: 70,
-                  height: 70,
-                  url: item.image,
-                  borderRadius: AppConstants.borderRadiusCircle,
-                  border: Border.all(width: 0.5),
-                ),
-                SizedBox(width: 10),
-                Column(
-                  children: [
-                    Text(
-                      item.name,
-                      style: context.tt.titleMedium,
+    return Badge(
+      offset: Offset(20, 30),
+      backgroundColor: Colors.white,
+      label: Icon(Icons.lock),
+      child: Card(
+        margin: AppConstants.paddingV10,
+        child: Padding(
+          padding: AppConstants.padding30,
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: 80,
+                    height: 80,
+                    child: CircularProgressIndicator(
+                      value: 1000 / item.price,
+                      strokeWidth: 8,
+                      backgroundColor: Colors.grey.shade300,
+                      valueColor: AlwaysStoppedAnimation(context.cs.primary),
                     ),
-                    SizedBox(height: 5),
-                    Text(
-                      item.description,
-                      style: context.tt.bodyMedium,
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      item.price.toStringAsFixed(0),
-                      style: context.tt.titleMedium,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        item.price.toStringAsFixed(0),
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "نقطة",
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppImageWidget(
+                    width: 70,
+                    height: 70,
+                    url: item.image,
+                    borderRadius: AppConstants.borderRadiusCircle,
+                    border: Border.all(width: 0.5),
+                  ),
+                  SizedBox(width: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.name,
+                        style: context.tt.titleLarge,
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        item.description,
+                        style: context.tt.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

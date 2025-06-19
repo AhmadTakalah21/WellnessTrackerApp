@@ -22,13 +22,5 @@ Map<String, dynamic> _$SignInModelToJson(SignInModel instance) =>
       'token': instance.token,
       'name': instance.name,
       'phone': instance.phone,
-      'role': _$UserRoleEnumEnumMap[instance.role]!,
+      'role': UserRoleEnum.toJson(instance.role),
     };
-
-const _$UserRoleEnumEnumMap = {
-  UserRoleEnum.admin: 'admin',
-  UserRoleEnum.user: 'user',
-  UserRoleEnum.doctor: 'doctor',
-  UserRoleEnum.coach: 'coach',
-  UserRoleEnum.nutritionist: 'nutritionist',
-};

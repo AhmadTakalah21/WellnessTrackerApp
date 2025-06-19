@@ -26,7 +26,7 @@ class SignInModel {
   final String name;
   final String phone;
 
-  @JsonKey(fromJson: UserRoleEnum.fromJson)
+  @JsonKey(fromJson: UserRoleEnum.fromJson , toJson: UserRoleEnum.toJson)
   final UserRoleEnum role;
 
   factory SignInModel.fromString(String str) =>

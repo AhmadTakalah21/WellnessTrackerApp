@@ -41,12 +41,12 @@ class AppImageWidget extends StatelessWidget {
           fit: fit,
           errorWidget: (context, url, error) {
             return errorWidget ??
-                const Center(
+                Center(
                   child: Text(
-                    "Failed to load image",
+                    "No image",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: width != null ? width! / 4 : 20,
                     ),
                     textAlign: TextAlign.center,
                   ),
