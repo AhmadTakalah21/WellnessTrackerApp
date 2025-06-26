@@ -7,8 +7,6 @@ part 'auth_service_imp.dart';
 
 abstract class AuthService {
   Future<SignInModel> signIn(String email, String password);
-
   Future<SignInModel> signUp(PostSignUpModel postSignUpModel);
-
   Future<void> logout();
 }

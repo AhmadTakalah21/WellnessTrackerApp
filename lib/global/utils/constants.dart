@@ -30,6 +30,10 @@ abstract class AppConstants {
     bottomLeft: Radius.circular(20),
     topRight: Radius.circular(20),
   );
+  static const borderRadiusTlTr30 = BorderRadius.only(
+    topLeft: Radius.circular(30),
+    topRight: Radius.circular(30),
+  );
   static const borderRadiusTlBr20 = BorderRadius.only(
     topLeft: Radius.circular(20),
     bottomRight: Radius.circular(20),

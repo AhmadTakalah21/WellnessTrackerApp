@@ -13,9 +13,10 @@ class SignInSuccess extends SignInState {
 }
 
 class SignUpSuccess extends SignInState {
-  SignUpSuccess(this.signInModel);
+  SignUpSuccess(this.signInModel, this.message);
 
   final SignInModel signInModel;
+  final String message;
 }
 
 class SignInLoading extends SignInState {}

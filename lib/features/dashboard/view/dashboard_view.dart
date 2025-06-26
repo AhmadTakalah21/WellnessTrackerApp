@@ -38,23 +38,19 @@ abstract class DashboardViewCallBacks {
 
 @RoutePage()
 class DashboardView extends StatelessWidget {
-  const DashboardView({super.key, required this.user});
-
-  final SignInModel user;
+  const DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => get<AuthCubit>(),
-      child: Dashboard(user: user),
+      child: Dashboard(),
     );
   }
 }
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key, required this.user});
-
-  final SignInModel user;
+  const Dashboard({super.key});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -63,13 +59,14 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard>
     implements DashboardViewCallBacks {
   late final AuthCubit authCubit = context.read();
+  late final user = context.read<SignInModel>();
 
   List<UserViewOnPermissionModel> modules = [];
 
   @override
   void initState() {
     super.initState();
-    modules = widget.user.role.getPermissions;
+    modules = user.role.getPermissions;
   }
 
   // final List<Color> iconColors = [
@@ -228,7 +225,6 @@ class _DashboardState extends State<Dashboard>
   Widget _buildGridItem(
     BuildContext context,
     UserViewOnPermissionModel module,
-    //Color color,
   ) {
     return GestureDetector(
       onTap: () {

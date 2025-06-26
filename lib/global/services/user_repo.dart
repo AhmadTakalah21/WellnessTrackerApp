@@ -154,4 +154,5 @@ class UserRepo {
 
 const String _userKey = 'USER_KEY';
 const String firstTimeKey = 'FIRST_TIME_KEY';
+const String profileFormKey = 'PROFILE_FORM_KEY';
 const String healthAssesmentKey = 'HEALTH_ASSESMENT_KEY';

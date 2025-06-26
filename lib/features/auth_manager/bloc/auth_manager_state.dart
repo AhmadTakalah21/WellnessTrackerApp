@@ -14,11 +14,21 @@ class ShowSignInState extends GeneralAuthManagerState {
   final VoidCallback? action;
 }
 
+class ProfileFormState extends GeneralAuthManagerState {}
+
+// class ProfileFormCompletedState extends GeneralAuthManagerState {}
+
 class AuthenticatedState extends GeneralAuthManagerState {
   final SignInModel user;
 
   AuthenticatedState(this.user);
 }
+
+// class SignedUpState extends GeneralAuthManagerState {
+//   final SignInModel user;
+
+//   SignedUpState(this.user);
+// }
 
 //class AuthenticatedWithoutHealthAssesmentState extends GeneralAuthManagerState {}
 

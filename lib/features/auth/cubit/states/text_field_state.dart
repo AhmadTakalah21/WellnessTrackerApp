@@ -13,5 +13,5 @@ enum TextFieldType {
   email,
   password,
   confirmPassword,
-  subscriptionCode,
+  code,
 }

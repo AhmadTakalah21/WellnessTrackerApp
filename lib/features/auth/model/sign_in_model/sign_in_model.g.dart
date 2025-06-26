@@ -9,9 +9,9 @@ part of 'sign_in_model.dart';
 SignInModel _$SignInModelFromJson(Map<String, dynamic> json) => SignInModel(
       id: (json['id'] as num).toInt(),
       email: json['email'] as String,
-      token: json['token'] as String,
+      token: json['token'] as String?,
       name: json['name'] as String,
-      phone: json['phone'] as String,
+      phone: json['phone'] as String?,
       role: UserRoleEnum.fromJson(json['role'] as String),
     );
 

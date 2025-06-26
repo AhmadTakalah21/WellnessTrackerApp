@@ -1,6 +1,10 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wellnesstrackerapp/features/auth_manager/bloc/auth_manager_bloc.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
 @RoutePage()
 class CompleteProfileFormView extends StatefulWidget {
@@ -11,6 +15,7 @@ class CompleteProfileFormView extends StatefulWidget {
 }
 
 class _CompleteProfileFormState extends State<CompleteProfileFormView> {
+  late final AuthManagerBloc authManagerBloc = context.read();
   final _formKey = GlobalKey<FormState>();
 
   final Map<String, TextEditingController> _controllers = {
@@ -40,19 +45,14 @@ class _CompleteProfileFormState extends State<CompleteProfileFormView> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم حفظ المعلومات بنجاح')),
-      );
+      authManagerBloc.add(ProfileFormCompletedRequested());
+      MainSnackBar.showSuccessMessage(context, 'تم حفظ المعلومات بنجاح');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: theme.primaryColor, width: 1.5),
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -111,7 +111,8 @@ class _CompleteProfileFormState extends State<CompleteProfileFormView> {
                   child: ElevatedButton(
                     onPressed: _submit,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.primaryColor.withOpacity(0.9),
+                      backgroundColor:
+                          theme.primaryColor.withValues(alpha: 0.9),
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
@@ -198,7 +199,8 @@ class _CompleteProfileFormState extends State<CompleteProfileFormView> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: theme.primaryColor.withOpacity(0.5)),
+            borderSide:
+                BorderSide(color: theme.primaryColor.withValues(alpha: 0.5)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),

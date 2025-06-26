@@ -61,11 +61,12 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     }
     emit(ItemsLoading());
     try {
+      if (isClosed) return;
       final newItems = await itemService.getItems(page: page, perPage: perPage);
       if (newItems.data.isEmpty) {
         hasMore = false;
         //emit(ItemsEmpty("no_items".tr()));
-        if(page == 1){
+        if (page == 1) {
           emit(ItemsEmpty("no_items".tr()));
         }
       } else {
@@ -75,6 +76,7 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
       }
       emit(ItemsSuccess(items));
     } catch (e) {
+      if (isClosed) return;
       emit(ItemsFail(e.toString()));
     }
   }

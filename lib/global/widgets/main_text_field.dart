@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
-import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
 class MainTextField extends StatefulWidget {
   const MainTextField({

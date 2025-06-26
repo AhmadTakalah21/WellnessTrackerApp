@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
-import 'package:wellnesstrackerapp/features/auth/view/profile_form_view.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
@@ -25,9 +24,15 @@ abstract class SignInViewCallbacks {
   void onPasswordSubmitted(String password);
   void onConfirmPasswordChanged(String confirmPassword);
   void onConfirmPasswordSubmitted(String confirmPassword);
+  void onCodeChanged(String code);
+  void onCodeSubmitted(String code);
+  void onConfirmTermsAndConditionsTap(bool? isChecked);
+  Future<void> onGetCodeTap();
   void onForgetPasswordTap();
   void onShowPassword();
   void onMainAction();
+  void onLoginWithFacebookTap();
+  void onLoginWithGoogleTap();
   void onShowSignInOrUp();
 }
 
@@ -59,7 +64,7 @@ class _SignInPageState extends State<SignInPage>
     with SingleTickerProviderStateMixin
     implements SignInViewCallbacks {
   late final AuthCubit authCubit = context.read();
-  bool _rememberMe = false;
+  bool? _rememberMe = false;
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -68,9 +73,23 @@ class _SignInPageState extends State<SignInPage>
   final usernameFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
   final confirmPasswordFocusNode = FocusNode();
+  final codeFocusNode = FocusNode();
 
   bool isShowSignIn = true;
-  bool isObsecurePassword = true;
+  bool isObsecure = true;
+
+  late List<AnotherWaySignInButton> otherWaysButtons = [
+    AnotherWaySignInButton(
+      image: 'assets/images/icons8-facebook-48.png',
+      text: 'Facebook',
+      onPressed: onLoginWithFacebookTap,
+    ),
+    AnotherWaySignInButton(
+      image: 'assets/images/icons8-google-48.png',
+      text: 'Google',
+      onPressed: onLoginWithGoogleTap,
+    ),
+  ];
 
   @override
   void initState() {
@@ -120,7 +139,13 @@ class _SignInPageState extends State<SignInPage>
 
   @override
   void onConfirmPasswordSubmitted(String confirmpassword) =>
-      confirmPasswordFocusNode.unfocus();
+      codeFocusNode.requestFocus();
+
+  @override
+  void onCodeChanged(String code) => authCubit.setSubscriptionCode(code);
+
+  @override
+  void onCodeSubmitted(String code) => codeFocusNode.unfocus();
 
   @override
   void onForgetPasswordTap() =>
@@ -133,8 +158,25 @@ class _SignInPageState extends State<SignInPage>
   void onUsernameSubmitted(String username) => passwordFocusNode.requestFocus();
 
   @override
-  void onShowPassword() =>
-      setState(() => isObsecurePassword = !isObsecurePassword);
+  Future<void> onGetCodeTap() async {
+    final uri =
+        Uri.parse("https://wa.me/963XXXXXXXXX?text=مرحباً، أحتاج كود الاشتراك");
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      MainSnackBar.showErrorMessage(context, "لا يمكن فتح واتساب حالياً");
+    }
+  }
+
+  @override
+  void onShowPassword() => setState(() => isObsecure = !isObsecure);
+
+  @override
+  void onConfirmTermsAndConditionsTap(bool? isChecked) {
+    setState(() {
+      _rememberMe = isChecked;
+    });
+  }
 
   @override
   void onShowSignInOrUp() {
@@ -149,6 +191,7 @@ class _SignInPageState extends State<SignInPage>
     usernameFocusNode.dispose();
     passwordFocusNode.dispose();
     confirmPasswordFocusNode.dispose();
+    codeFocusNode.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -163,29 +206,21 @@ class _SignInPageState extends State<SignInPage>
   }
 
   @override
+  void onLoginWithFacebookTap() {
+    // TODO: implement onLoginWithFacebookTap
+  }
+
+  @override
+  void onLoginWithGoogleTap() {
+    // TODO: implement onLoginWithGoogleTap
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            width: double.infinity,
-            color: context.cs.primary,
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(height: 100),
-                  Text(
-                    'Health & Wellness App',
-                    style: context.tt.headlineMedium?.copyWith(
-                      color: context.cs.onSurface,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _buildHeader(),
           Positioned.fill(
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -194,348 +229,33 @@ class _SignInPageState extends State<SignInPage>
                 child: Container(
                   decoration: BoxDecoration(
                     color: context.cs.onSurface,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
+                    borderRadius: AppConstants.borderRadiusTlTr30,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: AppConstants.paddingH20,
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
                           const SizedBox(height: 20),
-                          Text(
-                            isShowSignIn ? "login".tr() : "sign_up".tr(),
-                            style: context.tt.headlineMedium?.copyWith(
-                              color: context.cs.primary,
-                            ),
-                          ),
+                          _buildTitle(),
                           const SizedBox(height: 20),
-                          BlocBuilder<AuthCubit, AuthState>(
-                            buildWhen:
-                                (previous, current) =>
-                                    (current is TextFieldState &&
-                                        current.type == TextFieldType.email),
-                            builder: (context, state) {
-                              return MainTextField(
-                                errorText:
-                                    state is TextFieldState &&
-                                            state.type == TextFieldType.email
-                                        ? state.error
-                                        : null,
-                                prefixIcon: Icon(
-                                  Icons.email,
-                                  color: context.cs.onSecondary,
-                                ),
-                                labelText: "email".tr(),
-                                onChanged: onEmailChanged,
-                                onSubmitted: onEmailSubmitted,
-                                focusNode: emailFocusNode,
-                                textInputType: TextInputType.emailAddress,
-                              );
-                            },
-                          ),
-                          AnimatedSizeAndFade.showHide(
-                            show: !isShowSignIn,
-                            child: Column(
-                              children: [
-                                SizedBox(height: 10),
-                                BlocBuilder<AuthCubit, AuthState>(
-                                  buildWhen:
-                                      (previous, current) =>
-                                          (current is TextFieldState &&
-                                              current.type ==
-                                                  TextFieldType.username),
-                                  builder: (context, state) {
-                                    return MainTextField(
-                                      errorText:
-                                          state is TextFieldState &&
-                                                  state.type ==
-                                                      TextFieldType.username
-                                              ? state.error
-                                              : null,
-                                      prefixIcon: Icon(
-                                        Icons.person,
-                                        color: context.cs.onSecondary,
-                                      ),
-                                      labelText: "username".tr(),
-                                      onChanged: onUsernameChanged,
-                                      onSubmitted: onUsernameSubmitted,
-                                      focusNode: usernameFocusNode,
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                          _buildEmailTextField(),
+                          _buildUsernameTextField(),
                           SizedBox(height: 10),
-                          BlocBuilder<AuthCubit, AuthState>(
-                            buildWhen:
-                                (previous, current) =>
-                                    (current is TextFieldState &&
-                                        current.type == TextFieldType.password),
-                            builder: (context, state) {
-                              return MainTextField(
-                                obscureText: isObsecurePassword,
-                                errorText:
-                                    state is TextFieldState &&
-                                            state.type == TextFieldType.password
-                                        ? state.error
-                                        : null,
-                                labelText: "password".tr(),
-                                onChanged: onPasswordChanged,
-                                onSubmitted: onPasswordSubmitted,
-                                focusNode: passwordFocusNode,
-                                prefixIcon: Icon(
-                                  Icons.lock,
-                                  color: context.cs.onSecondary,
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    isObsecurePassword
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: context.cs.onSecondary,
-                                  ),
-                                  onPressed: onShowPassword,
-                                ),
-                              );
-                            },
-                          ),
-                          AnimatedSizeAndFade.showHide(
-                            show: !isShowSignIn,
-                            child: Column(
-                              children: [
-                                SizedBox(height: 10),
-                                BlocBuilder<AuthCubit, AuthState>(
-                                  buildWhen:
-                                      (previous, current) =>
-                                          (current is TextFieldState &&
-                                              current.type ==
-                                                  TextFieldType
-                                                      .confirmPassword),
-                                  builder: (context, state) {
-                                    return MainTextField(
-                                      obscureText: isObsecurePassword,
-                                      errorText:
-                                          state is TextFieldState &&
-                                                  state.type ==
-                                                      TextFieldType
-                                                          .confirmPassword
-                                              ? state.error
-                                              : null,
-                                      labelText: "confirm_password".tr(),
-                                      onChanged: onConfirmPasswordChanged,
-                                      onSubmitted: onConfirmPasswordSubmitted,
-                                      focusNode: confirmPasswordFocusNode,
-                                      prefixIcon: const Icon(
-                                        Icons.lock,
-                                        color: Colors.black54,
-                                      ),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          isObsecurePassword
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: Colors.black54,
-                                        ),
-                                        onPressed: onShowPassword,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                          _buildPasswordTextField(),
+                          _buildConfirmPasswordTextField(),
                           SizedBox(height: 10),
-                          AnimatedSizeAndFade.showHide(
-                            show: !isShowSignIn,
-                            child: Column(
-                              children: [
-                                MainTextField(
-                                  prefixIcon: Icon(Icons.key, color: context.cs.onSecondary),
-                                  labelText: "subscription_code".tr(),
-                                  onChanged: (code) {
-                                  },
-                                ),
-
-                                const SizedBox(height: 10),
-
-                                Center(
-                                  child: InkWell(
-                                    onTap: () async {
-                                      final uri = Uri.parse("https://wa.me/963XXXXXXXXX?text=مرحباً، أحتاج كود الاشتراك");
-                                      if (await canLaunchUrl(uri)) {
-                                        await launchUrl(uri, mode: LaunchMode.externalApplication);
-                                      } else {
-                                        MainSnackBar.showErrorMessage(context, "لا يمكن فتح واتساب حالياً");
-                                      }
-                                    },
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(Icons.phone_bluetooth_speaker_outlined, size: 18, color: context.cs.primary),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          "get_code_via_whatsapp".tr(),
-                                          style: context.tt.bodyMedium?.copyWith(
-                                            color: context.cs.primary,
-                                            fontWeight: FontWeight.w600,
-                                            decoration: TextDecoration.underline,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-
-                                const SizedBox(height: 10),
-                              ],
-                            ),
-                          ),
-
-
+                          _buildCodeTextField(),
                           const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: _rememberMe,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _rememberMe = value!;
-                                      });
-                                    },
-                                    side: BorderSide(
-                                      color: context.cs.secondary,
-                                    ),
-                                    checkColor: context.cs.onSurface,
-                                    activeColor: context.cs.primary,
-                                  ),
-                                  Text('accept_terms'.tr()),
-                                ],
-                              ),
-                              AnimatedSizeAndFade(
-                                child:
-                                    isShowSignIn
-                                        ? TextButton(
-                                          onPressed: onForgetPasswordTap,
-                                          child: Text(
-                                            'forgot_password?'.tr(),
-                                            style: context.tt.labelLarge
-                                                ?.copyWith(
-                                                  color: context.cs.primary,
-                                                ),
-                                          ),
-                                        )
-                                        : SizedBox.shrink(),
-                              ),
-                            ],
-                          ),
+                          _buildTermsAndForgetPassword(),
                           const SizedBox(height: 20),
-                          BlocConsumer<AuthCubit, AuthState>(
-                            buildWhen: (previous, current) => current is SignInState,
-                            listener: (context, state) {
-                              if (state is SignInSuccess) {
-                                MainSnackBar.showSuccessMessage(
-                                  context,
-                                  state.message,
-                                );
-                                widget.onSignedIn?.call();
-                              } else if (state is SignUpSuccess) {
-                                MainSnackBar.showSuccessMessage(
-                                  context,
-                                  "تم إنشاء الحساب بنجاح",
-                                );
-                                context.router.push(const CompleteProfileFormRoute());
-
-                              } else if (state is SignInFail) {
-                                context.router.push(const CompleteProfileFormRoute());
-                                MainSnackBar.showErrorMessage(
-                                  context,
-                                  state.error,
-                                );
-                              }
-                            },
-                            builder: (context, state) {
-                              var onTap = onMainAction;
-                              Widget? child;
-                              if (state is SignInLoading) {
-                                child = const LoadingIndicator(size: 20);
-                                onTap = () {};
-                              }
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: MainActionButton(
-                                      padding: AppConstants.padding10,
-                                      onTap: onTap,
-                                      text: isShowSignIn ? "login".tr() : "sign_up".tr(),
-                                      fontSize: 18,
-                                      borderRadius: AppConstants.borderRadius10,
-                                      child: child,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-
+                          _buildMainActionBtn(),
                           const SizedBox(height: 20),
-                          Text('or_continue_with'.tr()),
+                          _buildContinueWithText(),
                           const SizedBox(height: 20),
-                          FadeTransition(
-                            opacity: _fadeAnimation,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: AnotherWaySignInButton(
-                                    image: 'assets/images/icons8-facebook-48.png',
-                                    text: 'Facebook',
-                                    onPressed: () {
-                                      // TODO: استدعِ loginWithFacebook هنا
-                                      print('Facebook login');
-                                    },
-                                  ),
-                                ),
-                                SizedBox(width: 12),
-                                Expanded(
-                                  child: AnotherWaySignInButton(
-                                    image: 'assets/images/icons8-google-48.png',
-                                    text: 'Google',
-                                    onPressed: () {
-                                      // TODO: استدعِ loginWithGoogle هنا
-                                      print('Google login');
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          _buildOtherWaysSignIn(),
                           const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                isShowSignIn
-                                    ? "not_have_account".tr()
-                                    : "already_have_account".tr(),
-                              ),
-                              GestureDetector(
-                                onTap: onShowSignInOrUp,
-                                child: Text(
-                                  isShowSignIn ? "sign_up".tr() : "login".tr(),
-                                  style: TextStyle(
-                                    color: context.cs.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          _buildGoSignInOrUp(),
                           const SizedBox(height: 100),
                         ],
                       ),
@@ -547,6 +267,302 @@ class _SignInPageState extends State<SignInPage>
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      width: double.infinity,
+      color: context.cs.primary,
+      child: FadeTransition(
+        opacity: _fadeAnimation,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 100),
+            Text(
+              'Health & Wellness App',
+              style: context.tt.headlineMedium?.copyWith(
+                color: context.cs.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitle() {
+    final title = isShowSignIn ? "login".tr() : "sign_up".tr();
+    return Text(
+      title,
+      style: context.tt.headlineMedium?.copyWith(
+        color: context.cs.primary,
+      ),
+    );
+  }
+
+  Widget _buildEmailTextField() {
+    return BlocBuilder<AuthCubit, AuthState>(
+      buildWhen: (previous, current) =>
+          (current is TextFieldState && current.type == TextFieldType.email),
+      builder: (context, state) {
+        final isBuild =
+            state is TextFieldState && state.type == TextFieldType.email;
+        return MainTextField(
+          errorText: isBuild ? state.error : null,
+          prefixIcon: Icon(Icons.email, color: context.cs.onSecondary),
+          labelText: "email".tr(),
+          onChanged: onEmailChanged,
+          onSubmitted: onEmailSubmitted,
+          focusNode: emailFocusNode,
+          textInputType: TextInputType.emailAddress,
+        );
+      },
+    );
+  }
+
+  Widget _buildUsernameTextField() {
+    return AnimatedSizeAndFade.showHide(
+      show: !isShowSignIn,
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          BlocBuilder<AuthCubit, AuthState>(
+            buildWhen: (previous, current) => (current is TextFieldState &&
+                current.type == TextFieldType.username),
+            builder: (context, state) {
+              final isBuild = state is TextFieldState &&
+                  state.type == TextFieldType.username;
+              return MainTextField(
+                errorText: isBuild ? state.error : null,
+                prefixIcon: Icon(Icons.person, color: context.cs.onSecondary),
+                labelText: "username".tr(),
+                onChanged: onUsernameChanged,
+                onSubmitted: onUsernameSubmitted,
+                focusNode: usernameFocusNode,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPasswordTextField() {
+    return BlocBuilder<AuthCubit, AuthState>(
+      buildWhen: (previous, current) =>
+          (current is TextFieldState && current.type == TextFieldType.password),
+      builder: (context, state) {
+        final isBuild =
+            state is TextFieldState && state.type == TextFieldType.password;
+        return MainTextField(
+          obscureText: isObsecure,
+          errorText: isBuild ? state.error : null,
+          labelText: "password".tr(),
+          onChanged: onPasswordChanged,
+          onSubmitted: onPasswordSubmitted,
+          focusNode: passwordFocusNode,
+          prefixIcon: Icon(Icons.lock, color: context.cs.onSecondary),
+          suffixIcon: IconButton(
+            icon: Icon(
+              isObsecure ? Icons.visibility : Icons.visibility_off,
+              color: context.cs.onSecondary,
+            ),
+            onPressed: onShowPassword,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildConfirmPasswordTextField() {
+    return AnimatedSizeAndFade.showHide(
+      show: !isShowSignIn,
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          BlocBuilder<AuthCubit, AuthState>(
+            buildWhen: (previous, current) => (current is TextFieldState &&
+                current.type == TextFieldType.confirmPassword),
+            builder: (context, state) {
+              final isBuild = state is TextFieldState &&
+                  state.type == TextFieldType.confirmPassword;
+              return MainTextField(
+                obscureText: isObsecure,
+                errorText: isBuild ? state.error : null,
+                labelText: "confirm_password".tr(),
+                onChanged: onConfirmPasswordChanged,
+                onSubmitted: onConfirmPasswordSubmitted,
+                focusNode: confirmPasswordFocusNode,
+                prefixIcon: const Icon(Icons.lock, color: Colors.black54),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isObsecure ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.black54,
+                  ),
+                  onPressed: onShowPassword,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCodeTextField() {
+    return AnimatedSizeAndFade.showHide(
+      show: !isShowSignIn,
+      child: Column(
+        children: [
+          SizedBox(height: 5),
+          BlocBuilder<AuthCubit, AuthState>(
+            buildWhen: (previous, current) => (current is TextFieldState &&
+                current.type == TextFieldType.code),
+            builder: (context, state) {
+              final isBuild =
+                  state is TextFieldState && state.type == TextFieldType.code;
+              return MainTextField(
+                errorText: isBuild ? state.error : null,
+                labelText: "subscription_code".tr(),
+                onChanged: onCodeChanged,
+                onSubmitted: onCodeSubmitted,
+                focusNode: codeFocusNode,
+                prefixIcon: const Icon(Icons.key, color: Colors.black54),
+              );
+            },
+          ),
+          const SizedBox(height: 10),
+          Center(
+            child: InkWell(
+              onTap: onGetCodeTap,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.phone_bluetooth_speaker_outlined,
+                      size: 18, color: context.cs.primary),
+                  const SizedBox(width: 6),
+                  Text(
+                    "get_code_via_whatsapp".tr(),
+                    style: context.tt.bodyMedium?.copyWith(
+                      color: context.cs.primary,
+                      fontWeight: FontWeight.w600,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTermsAndForgetPassword() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Checkbox(
+              value: _rememberMe,
+              onChanged: onConfirmTermsAndConditionsTap,
+              side: BorderSide(color: context.cs.secondary),
+              checkColor: context.cs.onSurface,
+              activeColor: context.cs.primary,
+            ),
+            Text('accept_terms'.tr()),
+          ],
+        ),
+        AnimatedSizeAndFade(
+          child: isShowSignIn
+              ? TextButton(
+                  onPressed: onForgetPasswordTap,
+                  child: Text(
+                    'forgot_password?'.tr(),
+                    style: context.tt.labelLarge?.copyWith(
+                      color: context.cs.primary,
+                    ),
+                  ),
+                )
+              : SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMainActionBtn() {
+    return BlocConsumer<AuthCubit, AuthState>(
+      buildWhen: (previous, current) => current is SignInState,
+      listener: (context, state) {
+        if (state is SignInSuccess) {
+          MainSnackBar.showSuccessMessage(context, state.message);
+          widget.onSignedIn?.call();
+        } else if (state is SignUpSuccess) {
+          MainSnackBar.showSuccessMessage(context, state.message);
+        } else if (state is SignInFail) {
+          MainSnackBar.showErrorMessage(context, state.error);
+        }
+      },
+      builder: (context, state) {
+        var onTap = onMainAction;
+        Widget? child;
+        if (state is SignInLoading) {
+          child = const LoadingIndicator(size: 20);
+          onTap = () {};
+        }
+        return Row(
+          children: [
+            Expanded(
+              child: MainActionButton(
+                padding: AppConstants.padding10,
+                onTap: onTap,
+                text: isShowSignIn ? "login".tr() : "sign_up".tr(),
+                fontSize: 18,
+                borderRadius: AppConstants.borderRadius10,
+                child: child,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildContinueWithText() => Text('or_continue_with'.tr());
+
+  Widget _buildOtherWaysSignIn() {
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: Row(
+        spacing: 12,
+        children: otherWaysButtons.map((btn) => btn).toList(),
+      ),
+    );
+  }
+
+  Widget _buildGoSignInOrUp() {
+    final text1 =
+        isShowSignIn ? "not_have_account".tr() : "already_have_account".tr();
+    final text2 = isShowSignIn ? "sign_up".tr() : "login".tr();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(text1),
+        GestureDetector(
+          onTap: onShowSignInOrUp,
+          child: Text(
+            text2,
+            style: TextStyle(
+              color: context.cs.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

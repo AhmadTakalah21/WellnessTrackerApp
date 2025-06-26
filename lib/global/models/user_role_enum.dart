@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wellnesstrackerapp/features/exercises/view/exercises_view.dart';
+import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart';
 import 'package:wellnesstrackerapp/features/points/view/points_view.dart';
 import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart';
 import 'package:wellnesstrackerapp/features/users/view/users_view.dart';
@@ -94,10 +96,28 @@ enum UserRoleEnum {
             color: Colors.purple,
           ),
           UserViewOnPermissionModel(
+            title: "meals",
+            icon: Icons.restaurant_menu_rounded,
+            screen: MealsView(),
+            color: Colors.green.shade400,
+          ),
+          UserViewOnPermissionModel(
+            title: "exercises",
+            icon: Icons.fitness_center_rounded,
+            screen: ExercisesView(),
+            color: Colors.blue.shade400,
+          ),
+          UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
             screen: CryptoNotifications(canSendNotification: true),
             color: Colors.green,
+          ),
+          UserViewOnPermissionModel(
+            title: "settings",
+            icon: Icons.settings,
+            screen: CryptoNotifications(canSendNotification: true),
+            color: Colors.grey.shade300,
           ),
         ];
       case UserRoleEnum.doctor:
@@ -125,20 +145,6 @@ enum UserRoleEnum {
             icon: Icons.admin_panel_settings,
             screen: ActivityScreen(),
             color: Colors.red,
-          ),
-          // TODO remove points , jsut for tset
-          UserViewOnPermissionModel(
-            title: "select_plan",
-            icon: FontAwesomeIcons.clipboardList,
-            screen: SelectPlanView(),
-            color: Colors.blue,
-          ),
-          // TODO remove points , jsut for tset
-          UserViewOnPermissionModel(
-            title: "points",
-            icon: FontAwesomeIcons.shoePrints,
-            screen: PointsView(),
-            color: Colors.purple,
           ),
         ];
     }

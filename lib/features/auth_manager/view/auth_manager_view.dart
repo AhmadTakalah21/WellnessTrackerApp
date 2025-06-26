@@ -28,9 +28,12 @@ class _AuthManagerViewState extends State<AuthManagerView> {
             return [
               if (state is FirstTimeState) const IntroRoute(),
               if (state is UnauthenticatedState) AuthRouter(),
-              //if (state is AuthenticatedState) const AppManagerRoute(),
+              if (state is ProfileFormState) CompleteProfileFormRoute(),
               if (state is AuthenticatedState)
-                AppManagerRoute(children: [DashboardRoute(user: state.user)]),
+                AppManagerRoute(user: state.user),
+
+              // if (state is AuthenticatedState)
+              //   AppManagerRoute(children: [DashboardRoute(user: state.user)]),
             ];
           },
         );

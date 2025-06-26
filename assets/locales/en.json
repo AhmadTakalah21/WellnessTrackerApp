@@ -89,7 +89,11 @@
     "refresh" : "Refresh",
     "try_again" : "Try again",
     "subscription_code": "Subscription code",
+    "code_required" : "Code is required",
     "get_code_via_whatsapp": "get code via whatsapp",
-    "contact_support_for_subscription_code": "contact support for subscription code"
-
+    "contact_support_for_subscription_code": "contact support for subscription code",
+    "signup_success" : "Sign Up Successfully",
+    "meals" : "Meals",
+    "exercises" : "Exercises",
+    "settings" : "Settings"
 }

@@ -20,6 +20,10 @@ import 'package:wellnesstrackerapp/features/auth/service/auth_service.dart'
     as _i386;
 import 'package:wellnesstrackerapp/features/auth_manager/bloc/auth_manager_bloc.dart'
     as _i435;
+import 'package:wellnesstrackerapp/features/codes/cubit/codes_cubit.dart'
+    as _i457;
+import 'package:wellnesstrackerapp/features/codes/service/codes_service.dart'
+    as _i249;
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart'
     as _i803;
 import 'package:wellnesstrackerapp/features/items/service/items_service.dart'
@@ -73,6 +77,7 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.factory<_i386.AuthService>(() => _i386.AuthServiceImp());
+    gh.factory<_i249.CodesService>(() => _i249.CodesServiceImp());
     gh.factory<_i985.PointsService>(() => _i985.PointsServiceImp());
     gh.factory<_i936.UserService>(() => _i936.UserServiceImp());
     gh.singleton<_i435.AuthManagerBloc>(
@@ -80,6 +85,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i963.DeleteService>(() => _i963.DeleteServiceImp());
     gh.factory<_i32.PointsCubit>(
         () => _i32.PointsCubit(gh<_i985.PointsService>()));
+    gh.factory<_i457.CodesCubit>(
+        () => _i457.CodesCubit(gh<_i249.CodesService>()));
     gh.factory<_i474.UserRoleService>(() => _i474.UserRoleServiceImp());
     gh.factory<_i1044.ItemService>(() => _i1044.ItemServiceImp());
     gh.factory<_i396.DeleteCubit>(

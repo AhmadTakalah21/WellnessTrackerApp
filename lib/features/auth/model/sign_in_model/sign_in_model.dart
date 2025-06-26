@@ -14,17 +14,17 @@ class SignInModel {
   const SignInModel({
     required this.id,
     required this.email,
-    required this.token,
+     this.token,
     required this.name,
-    required this.phone,
+    this.phone,
     required this.role,
   });
 
   final int id;
   final String email;
-  final String token;
+  final String? token;
   final String name;
-  final String phone;
+  final String? phone;
 
   @JsonKey(fromJson: UserRoleEnum.fromJson , toJson: UserRoleEnum.toJson)
   final UserRoleEnum role;

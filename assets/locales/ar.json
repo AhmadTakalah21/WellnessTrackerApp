@@ -89,7 +89,11 @@
     "refresh" : "تحديث",
     "try_again" : "إعادة المحاولة",
     "subscription_code": "كود الاشتراك",
+    "code_required" : "كود الاشتراك مطلوب",
     "get_code_via_whatsapp": "انقر هنا للحصول على الكود عبر واتساب",
-    "contact_support_for_subscription_code": "تواصل مع خدمة العملاء للحصول على كود الاشتراك"
-
+    "contact_support_for_subscription_code": "تواصل مع خدمة العملاء للحصول على كود الاشتراك",
+    "signup_success" : "تم إنشاء الحساب بنجاح",
+    "meals" : "الوجبات",
+    "exercises" : "التمارين",
+    "settings" : "الإعدادات"
 }

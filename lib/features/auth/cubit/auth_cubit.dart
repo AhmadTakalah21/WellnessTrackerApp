@@ -48,8 +48,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void setSubscriptionCode(String code) {
-    postSignUpModel = postSignUpModel.copyWith(subscriptionCode: () => code);
-    emit(TextFieldState(TextFieldType.subscriptionCode));
+    postSignUpModel = postSignUpModel.copyWith(code: () => code);
+    emit(TextFieldState(TextFieldType.code));
   }
 
 
@@ -131,9 +131,9 @@ class AuthCubit extends Cubit<AuthState> {
       shouldReturn = true;
     }
 
-    final subscriptionCodeError = postSignUpModel.validateSubscriptionCode();
-    if (subscriptionCodeError != null) {
-      emit(TextFieldState(TextFieldType.subscriptionCode, error: subscriptionCodeError));
+    final codeError = postSignUpModel.validateCode();
+    if (codeError != null) {
+      emit(TextFieldState(TextFieldType.code, error: codeError));
       shouldReturn = true;
     }
 
@@ -143,8 +143,8 @@ class AuthCubit extends Cubit<AuthState> {
 
     try {
       final response = await authRepo.signUp(postSignUpModel);
-      emit(SignUpSuccess(response));
-      authManagerBloc?.add(SignInRequested(response, onSuccess: onSuccess));
+      emit(SignUpSuccess(response,"signup_success".tr()));
+      authManagerBloc?.add(SignUpRequested(response, onSuccess: onSuccess));
     } catch (e) {
       emit(SignInFail(e.toString()));
     }

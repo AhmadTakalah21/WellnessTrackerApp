@@ -26,6 +26,18 @@ class SignInRequested extends AuthManagerEvent {
   final VoidCallback? onSuccess;
 }
 
+class SignUpRequested extends AuthManagerEvent {
+  const SignUpRequested(
+    this.signInModel, {
+    this.onSuccess,
+  });
+
+  final SignInModel signInModel;
+  final VoidCallback? onSuccess;
+}
+
+class ProfileFormCompletedRequested extends AuthManagerEvent {}
+
 class SignOutRequested extends AuthManagerEvent {}
 
 class GuestRequested extends AuthManagerEvent {}
