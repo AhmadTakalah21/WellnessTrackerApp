@@ -1,14 +1,16 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wellnesstrackerapp/features/codes/model/department_model/department_model.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
+import '../../../../global/widgets/main_data_table.dart';
 
 part 'code_model.g.dart';
 
 @JsonSerializable()
 @immutable
-class CodeModel implements DeleteModel {
+class CodeModel implements DeleteModel, DataTableModel {
   const CodeModel({
     required this.id,
     required this.code,
@@ -29,6 +31,25 @@ class CodeModel implements DeleteModel {
 
   final String status;
   final DepartmentModel department;
+
+  static List<String> get header => [
+    '#',
+    'code'.tr(),
+    'start'.tr(),
+    'end'.tr(),
+    'status'.tr(),
+    'department'.tr(),
+  ];
+
+  @override
+  List<String> get values => [
+    '#$id',
+    code,
+    startDate,
+    endDate,
+    status,
+    department.name,
+  ];
 
   factory CodeModel.fromString(String str) =>
       CodeModel.fromJson(jsonDecode(str) as Map<String, dynamic>);

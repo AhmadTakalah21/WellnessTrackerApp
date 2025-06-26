@@ -95,5 +95,11 @@
     "signup_success" : "تم إنشاء الحساب بنجاح",
     "meals" : "الوجبات",
     "exercises" : "التمارين",
-    "settings" : "الإعدادات"
+    "settings" : "الإعدادات",
+    "code" : "الكود",
+    "codes_management" : "إدارة الأكواد",
+    "start" : "تاريخ البداية",
+    "end" : "تاريخ النهاية",
+    "status" : "الحالة",
+    "department" : "القسم"
 }

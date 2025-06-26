@@ -8,9 +8,10 @@ final class CodesInitial extends CodesState {}
 final class CodesLoading extends CodesState {}
 
 final class CodesSuccess extends CodesState {
-  final List<CodeModel> codes;
+  final PaginatedModel<CodeModel> codes;
+  final String? emptyMessage;
 
-  CodesSuccess(this.codes);
+  CodesSuccess(this.codes, this.emptyMessage);
 }
 
 final class CodesEmpty extends CodesState {

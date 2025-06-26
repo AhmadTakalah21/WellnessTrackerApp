@@ -53,17 +53,21 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
   late final DeleteCubit deleteCubit = context.read();
 
   int selectedPage = 1;
+  int perPage = 10;
+  String searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    usersCubit.getUsers(page: selectedPage);
+    usersCubit.getUsers(page: selectedPage, perPage: perPage);
   }
 
   @override
   void onAddTap() {
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => AddUserView(
         usersCubit: usersCubit,
         isEdit: false,
@@ -76,14 +80,12 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
   void onDeleteTap(UserModel user) {
     showDialog(
       context: context,
-      builder: (context) {
-        return InsureDeleteWidget(
-          deleteCubit: deleteCubit,
-          item: user,
-          onSaveTap: onSaveDeleteTap,
-          onSuccess: onTryAgainTap,
-        );
-      },
+      builder: (context) => InsureDeleteWidget(
+        deleteCubit: deleteCubit,
+        item: user,
+        onSaveTap: onSaveDeleteTap,
+        onSuccess: onTryAgainTap,
+      ),
     );
   }
 
@@ -94,8 +96,10 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
 
   @override
   void onEditTap(UserModel user) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => AddUserView(
         usersCubit: usersCubit,
         isEdit: true,
@@ -107,6 +111,10 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
 
   @override
   void onSelectPageTap(int page, int perPage) {
+    setState(() {
+      selectedPage = page;
+      this.perPage = perPage;
+    });
     usersCubit.getUsers(page: page, perPage: perPage);
   }
 
@@ -114,7 +122,7 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => usersCubit.getUsers(page: selectedPage);
+  void onTryAgainTap() => usersCubit.getUsers(page: selectedPage, perPage: perPage);
 
   @override
   Widget build(BuildContext context) {
@@ -132,41 +140,77 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
       backgroundColor: context.cs.onSurface,
       body: Padding(
         padding: AppConstants.padding16,
-        child: BlocBuilder<UsersCubit, GeneralUsersState>(
-          buildWhen: (previous, current) => current is UsersState,
-          builder: (context, state) {
-            if (state is UsersLoading) {
-              return LoadingIndicator(
-                color: context.cs.primary,
-                height: height / 1.2,
-              );
-            } else if (state is UsersSuccess) {
-              return MainDataTable<UserModel>(
-                header: UserModel.header,
-                titles: UserModel.titles,
-                items: state.users,
-                onPageChanged: onSelectPageTap,
-                onEditTap: onEditTap,
-                onDeleteTap: onDeleteTap,
-                emptyMessage: state.emptyMessage,
-              );
-            } else if (state is UsersEmpty) {
-              return MainErrorWidget(
-                error: state.message,
-                onTryAgainTap: onTryAgainTap,
-                height: 2.5,
-                isRefresh: true,
-              );
-            } else if (state is UsersFail) {
-              return MainErrorWidget(
-                error: state.error,
-                height: 2.5,
-                onTryAgainTap: onTryAgainTap,
-              );
-            } else {
-              return SizedBox.shrink();
-            }
-          },
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() => searchQuery = value);
+                      usersCubit.searchUser(value);
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'ابحث عن موظف...'.tr(),
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                DropdownButton<int>(
+                  value: perPage,
+                  items: [10, 25, 50]
+                      .map((e) => DropdownMenuItem(value: e, child: Text('$e')))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      onSelectPageTap(1, value);
+                    }
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: BlocBuilder<UsersCubit, GeneralUsersState>(
+                buildWhen: (previous, current) => current is UsersState,
+                builder: (context, state) {
+                  if (state is UsersLoading) {
+                    return LoadingIndicator(
+                      color: context.cs.primary,
+                      height: height / 1.2,
+                    );
+                  } else if (state is UsersSuccess) {
+                    return MainDataTable<UserModel>(
+                      header: UserModel.header,
+                      titles: UserModel.titles,
+                      items: state.users,
+                      onPageChanged: onSelectPageTap,
+                      onEditTap: onEditTap,
+                      onDeleteTap: onDeleteTap,
+                      emptyMessage: state.emptyMessage,
+                    );
+                  } else if (state is UsersEmpty) {
+                    return MainErrorWidget(
+                      error: state.message,
+                      onTryAgainTap: onTryAgainTap,
+                      height: 2.5,
+                      isRefresh: true,
+                    );
+                  } else if (state is UsersFail) {
+                    return MainErrorWidget(
+                      error: state.error,
+                      height: 2.5,
+                      onTryAgainTap: onTryAgainTap,
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: MainFloatingButton(onTap: onAddTap),

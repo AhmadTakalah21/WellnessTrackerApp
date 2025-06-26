@@ -95,5 +95,11 @@
     "signup_success" : "Sign Up Successfully",
     "meals" : "Meals",
     "exercises" : "Exercises",
-    "settings" : "Settings"
+    "settings" : "Settings",
+    "code" : "Code",
+    "codes_management" : "Codes management",
+    "start" : "Start Date",
+    "end" : "End Date",
+    "status" : "Status",
+    "department" : "Department",
 }
