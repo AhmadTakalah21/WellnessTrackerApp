@@ -40,39 +40,50 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
   @override
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<T>(
-      value: selectedValue,
-      hint: Text(
-        widget.hintText,
-        style: context.tt.bodyMedium?.copyWith(color: Colors.grey[500]),
-      ),
-      icon: Icon(widget.icon ?? LucideIcons.chevronDown,
-          color: context.cs.primary),
-      decoration: InputDecoration(
-        prefixIcon: Icon(widget.prefixIcon, color: context.cs.primary),
-        labelText: widget.labelText,
-        filled: true,
-        fillColor: context.cs.surfaceVariant,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: context.cs.primary, width: 2),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(widget.labelText, style: context.tt.titleLarge),
+        SizedBox(height: 10),
+        DropdownButtonFormField<T>(
+          value: selectedValue,
+          hint: Text(
+            widget.hintText,
+            style: context.tt.bodyMedium?.copyWith(color: Colors.grey[500]),
+          ),
+          icon: Icon(widget.icon ?? LucideIcons.chevronDown,
+              color: context.cs.primary
+              ),
+          decoration: InputDecoration(
+            prefixIcon: Icon(widget.prefixIcon, color: context.cs.primary),
+            filled: true,
+            fillColor: context.cs.surfaceVariant,
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: context.cs.primary, width: 2),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: context.cs.primary, width: 2),
+            ),
+          ),
+          style: context.tt.bodyMedium,
+          items: widget.items.map((item) {
+            return DropdownMenuItem(
+              value: item,
+              child: Text(item.displayName, style: context.tt.bodyMedium),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() => selectedValue = value);
+            widget.onChanged(value);
+          },
+          validator: (value) => value == null ? widget.errorMessage : null,
         ),
-      ),
-      style: context.tt.bodyMedium,
-      items: widget.items.map((item) {
-        return DropdownMenuItem(
-          value: item,
-          child: Text(item.displayName, style: context.tt.bodyMedium),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() => selectedValue = value);
-        widget.onChanged(value);
-      },
-      validator: (value) => value == null ? widget.errorMessage : null,
+      ],
     );
   }
 }

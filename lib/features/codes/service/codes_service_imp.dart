@@ -10,7 +10,9 @@ class CodesServiceImp implements CodesService {
     required int page,
   }) async {
     try {
-      final response = await dio.get("/v1/admin/codes");
+      final perPageParam = "per_page=$perPage";
+      final pageParam = "page=$page";
+      final response = await dio.get("/v1/admin/codes?$pageParam&$perPageParam");
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
         (json) => CodeModel.fromJson(json as Map<String, dynamic>),

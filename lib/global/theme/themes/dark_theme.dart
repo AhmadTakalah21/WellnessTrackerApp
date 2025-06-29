@@ -14,7 +14,8 @@ ThemeData darkTheme = ThemeData(
     onError: AppColors.mainColor,
     surface: AppColors.white,
     onSurface: AppColors.white,
-    onTertiary: Colors.black
+    onTertiary: Colors.black,
+    onSecondaryFixed: Colors.grey,
   ),
   textTheme: TextTheme(
     displayLarge: TextStyle(
@@ -23,6 +24,13 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w700,
       height: 1.48,
       fontSize: 32,
+    ),
+    headlineLarge: TextStyle(
+      fontFamily: GoogleFonts.lexend().fontFamily,
+      color: AppColors.secondaryColor,
+      fontWeight: FontWeight.w700,
+      height: 1.36,
+      fontSize: 28,
     ),
     headlineMedium: TextStyle(
       fontFamily: GoogleFonts.lexend().fontFamily,
@@ -93,6 +101,74 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: AppColors.black,
     iconTheme: IconThemeData(color: AppColors.secondaryColor),
   ),
+  iconButtonTheme: IconButtonThemeData(
+      style: ButtonStyle(
+          iconColor: WidgetStatePropertyAll(AppColors.secondaryColor))),
   iconTheme: IconThemeData(color: AppColors.secondaryColor),
   useMaterial3: true,
+  datePickerTheme: DatePickerThemeData(
+    backgroundColor: AppColors.white,
+    headerForegroundColor: AppColors.secondaryColor,
+    headerBackgroundColor: AppColors.mainColor,
+    dividerColor: AppColors.mainColor,
+
+    weekdayStyle: TextStyle(
+      color: AppColors.secondaryColor,
+    ),
+    yearStyle: TextStyle(
+      color: AppColors.secondaryColor,
+    ),
+
+    todayForegroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.white;
+      }
+      if (states.contains(WidgetState.disabled)) {
+        return AppColors.grey;
+      }
+      return AppColors.mainColor;
+    }),
+    todayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.mainColor;
+      }
+      return null;
+    }),
+
+    dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.white;
+      }
+      if (states.contains(WidgetState.disabled)) {
+        return AppColors.grey;
+      }
+      return AppColors.secondaryColor;
+    }),
+    dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.mainColor;
+      }
+      return null;
+    }),
+    yearForegroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.secondaryColor;
+      }
+      return AppColors.secondaryColor;
+    }),
+    yearBackgroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.mainColor;
+      }
+      return null;
+    }),
+    cancelButtonStyle: ButtonStyle(
+      foregroundColor: WidgetStatePropertyAll(AppColors.mainColor),
+      side: WidgetStatePropertyAll(BorderSide(color: AppColors.mainColor)),
+    ),
+    confirmButtonStyle: ButtonStyle(
+      foregroundColor: WidgetStatePropertyAll(AppColors.white),
+      backgroundColor: WidgetStatePropertyAll(AppColors.mainColor),
+    ),
+  ),
 );

@@ -6,6 +6,7 @@ import 'package:wellnesstrackerapp/global/models/per_page_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_text_field.dart';
 
 abstract class DataTableModel {
   List<String> get values;
@@ -28,13 +29,19 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
     this.onEditTap,
     this.onDeleteTap,
     this.emptyMessage,
-    required this.header,
+    this.header,
+    this.searchHint = "search",
+    this.onSearchChanged,
+    this.bottomHeight = 100,
   });
 
-  final String header;
+  final String? header;
   final List<String> titles;
   final PaginatedModel<T> items;
   final String? emptyMessage;
+  final String searchHint;
+  final double bottomHeight;
+  final void Function(String input)? onSearchChanged;
   final void Function(int page, int perPage) onPageChanged;
   final void Function(T item)? onEditTap;
   final void Function(T item)? onDeleteTap;
@@ -46,58 +53,85 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
 class _MainDataTableState<T extends DataTableModel>
     extends State<MainDataTable<T>> implements MainDataTableCallbacks {
   late int page = widget.items.meta.currentPage;
-  late int perPage = widget.items.meta.currentPage;
+  late int perPage = widget.items.meta.perPage;
 
   @override
-  void onFirstPageTap() {
-    setState(() => page = 1);
-    widget.onPageChanged(page, perPage);
-  }
+  void onFirstPageTap() => widget.onPageChanged(1, perPage);
 
   @override
-  void onLastPageTap() {
-    setState(() => page = widget.items.meta.totalPages);
-    widget.onPageChanged(page, perPage);
-  }
+  void onLastPageTap() =>
+      widget.onPageChanged(widget.items.meta.totalPages, perPage);
 
   @override
   void onNextPageTap() {
-    setState(() => page++);
-    widget.onPageChanged(page, perPage);
+    if (page != widget.items.meta.totalPages) {
+      widget.onPageChanged(page + 1, perPage);
+    }
   }
 
   @override
   void onPreviousPageTap() {
-    setState(() => page = page--);
-    widget.onPageChanged(page, perPage);
+    if (page != 1) {
+      widget.onPageChanged(page - 1, perPage);
+    }
   }
 
   @override
   void onPerPageSelected(PerPageEnum? perPage) {
     if (perPage != null) {
-      setState(() {
-        this.perPage = perPage.id;
-        page = 1;
-      });
-      widget.onPageChanged(page, this.perPage);
+      widget.onPageChanged(1, perPage.id);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildHeader(),
-        SizedBox(height: 20),
-        _buildTable(),
-        _buildEmptyWidget(),
-        SizedBox(height: 20),
-        _buildPaginator(),
-      ],
+    return RefreshIndicator(
+      onRefresh: () async => widget.onPageChanged(page, perPage),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildHeader(),
+            SizedBox(height: 20),
+            _buildSearch(),
+            const SizedBox(height: 16),
+            _buildTable(),
+            _buildEmptyWidget(),
+            SizedBox(height: 20),
+            _buildPaginator(),
+            SizedBox(height: widget.bottomHeight),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildHeader() => Text(widget.header, style: context.tt.headlineSmall);
+  Widget _buildHeader() {
+    final header = widget.header;
+    if (header == null) {
+      return SizedBox.shrink();
+    }
+    return Text(header, style: context.tt.headlineSmall);
+  }
+
+  Widget _buildSearch() {
+    if (widget.onSearchChanged == null) {
+      return SizedBox.shrink();
+    }
+    return Row(
+      children: [
+        Expanded(
+          child: MainTextField(
+            onChanged: widget.onSearchChanged,
+            hintText: widget.searchHint.tr(),
+            prefixIcon: Icon(
+              Icons.search,
+              color: context.cs.primary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildTable() {
     final titles = widget.titles;
@@ -205,6 +239,9 @@ class _MainDataTableState<T extends DataTableModel>
         IconButton(
           onPressed: onNextPageTap,
           icon: Icon(Icons.arrow_back_ios),
+          color: page != widget.items.meta.totalPages
+              ? context.cs.secondary
+              : context.cs.onSecondaryFixed,
         ),
         Spacer(),
         Text(
@@ -214,6 +251,7 @@ class _MainDataTableState<T extends DataTableModel>
         IconButton(
           onPressed: onPreviousPageTap,
           icon: Icon(Icons.arrow_forward_ios),
+          color: page != 1 ? context.cs.secondary : context.cs.onSecondaryFixed,
         ),
         IconButton(
           onPressed: onFirstPageTap,

@@ -30,7 +30,7 @@ class _AuthManagerViewState extends State<AuthManagerView> {
               if (state is UnauthenticatedState) AuthRouter(),
               if (state is ProfileFormState) CompleteProfileFormRoute(),
               if (state is AuthenticatedState)
-                AppManagerRoute(user: state.user),
+                AppManagerRoute(user: state.user, isCustomer: state.isCustomer),
 
               // if (state is AuthenticatedState)
               //   AppManagerRoute(children: [DashboardRoute(user: state.user)]),

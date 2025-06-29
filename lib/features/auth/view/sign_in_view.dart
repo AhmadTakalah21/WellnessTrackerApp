@@ -511,7 +511,7 @@ class _SignInPageState extends State<SignInPage>
         var onTap = onMainAction;
         Widget? child;
         if (state is SignInLoading) {
-          child = const LoadingIndicator(size: 20);
+          child = LoadingIndicator(size: 30, color: context.cs.surface);
           onTap = () {};
         }
         return Row(

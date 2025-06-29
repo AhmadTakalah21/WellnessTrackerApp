@@ -27,7 +27,16 @@ class AppRouter extends RootStackRouter {
             AdaptiveRoute(
               page: AppManagerRoute.page,
               children: [
-                AutoRoute(initial: true, page: DashboardRoute.page),
+                AutoRoute(
+                  initial: true,
+                  page: UserNavigationRoute.page,
+                  children: [
+                    AutoRoute(initial: true, page: DashboardRoute.page),
+                    AutoRoute(page: AddsAndOffersRoute.page),
+                    AutoRoute(page: ProfileRoute.page),
+                  ],
+                ),
+                AutoRoute(page: DashboardRoute.page),
                 AutoRoute(page: UsersRoute.page),
                 AutoRoute(page: PointsRoute.page),
                 AutoRoute(page: MealsRoute.page),

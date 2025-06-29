@@ -32,24 +32,27 @@ class CodeModel implements DeleteModel, DataTableModel {
   final String status;
   final DepartmentModel department;
 
-  static List<String> get header => [
-    '#',
-    'code'.tr(),
-    'start'.tr(),
-    'end'.tr(),
-    'status'.tr(),
-    'department'.tr(),
-  ];
+  static String get header => 'codes_management'.tr();
+
+  static List<String> get titles => [
+        '#',
+        'code'.tr(),
+        'start'.tr(),
+        'end'.tr(),
+        'status'.tr(),
+        'department'.tr(),
+        'event'.tr(),
+      ];
 
   @override
   List<String> get values => [
-    '#$id',
-    code,
-    startDate,
-    endDate,
-    status,
-    department.name,
-  ];
+        '#$id',
+        code,
+        startDate,
+        endDate,
+        status,
+        department.name,
+      ];
 
   factory CodeModel.fromString(String str) =>
       CodeModel.fromJson(jsonDecode(str) as Map<String, dynamic>);

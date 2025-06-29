@@ -100,6 +100,16 @@
     "codes_management" : "Codes management",
     "start" : "Start Date",
     "end" : "End Date",
-    "status" : "Status",
     "department" : "Department",
+    "search_code" : "Search code",
+    "search" : "Search",
+    "search_employee" : "Search employee",
+    "pick_date" : "Pick date",
+    "start_date" : "Start date",
+    "end_date" : "End date",
+    "add_code" : "Add code",
+    "edit_code" : "Edit code",
+    "home" : "Home",
+    "profile" : "Profile",
+    "adds_and_offers" : "Adds and offers"
 }

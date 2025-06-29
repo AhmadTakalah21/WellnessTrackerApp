@@ -21,6 +21,7 @@ abstract class UsersViewCallBacks {
   void onDeleteTap(UserModel user);
   void onSaveDeleteTap(UserModel user);
   void onSelectPageTap(int page, int perPage);
+  void onSearchChanged(String input);
   Future<void> onRefresh();
   void onTryAgainTap();
 }
@@ -54,7 +55,6 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
 
   int selectedPage = 1;
   int perPage = 10;
-  String searchQuery = '';
 
   @override
   void initState() {
@@ -67,7 +67,8 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => AddUserView(
         usersCubit: usersCubit,
         isEdit: false,
@@ -99,7 +100,11 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
       builder: (context) => AddUserView(
         usersCubit: usersCubit,
         isEdit: true,
@@ -119,10 +124,16 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
   }
 
   @override
+  void onSearchChanged(String input) => usersCubit.searchUser(input);
+
+  @override
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => usersCubit.getUsers(page: selectedPage, perPage: perPage);
+  void onTryAgainTap() => usersCubit.getUsers(
+        page: selectedPage,
+        perPage: perPage,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -142,36 +153,6 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
         padding: AppConstants.padding16,
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    onChanged: (value) {
-                      setState(() => searchQuery = value);
-                      usersCubit.searchUser(value);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'ابحث عن موظف...'.tr(),
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                DropdownButton<int>(
-                  value: perPage,
-                  items: [10, 25, 50]
-                      .map((e) => DropdownMenuItem(value: e, child: Text('$e')))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      onSelectPageTap(1, value);
-                    }
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
             Expanded(
               child: BlocBuilder<UsersCubit, GeneralUsersState>(
                 buildWhen: (previous, current) => current is UsersState,
@@ -190,6 +171,8 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
                       onEditTap: onEditTap,
                       onDeleteTap: onDeleteTap,
                       emptyMessage: state.emptyMessage,
+                      onSearchChanged: onSearchChanged,
+                      searchHint: "search_employee",
                     );
                   } else if (state is UsersEmpty) {
                     return MainErrorWidget(

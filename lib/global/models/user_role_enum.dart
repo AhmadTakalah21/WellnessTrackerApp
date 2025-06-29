@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wellnesstrackerapp/features/codes/view/codes_view.dart';
 import 'package:wellnesstrackerapp/features/exercises/view/exercises_view.dart';
 import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart';
 import 'package:wellnesstrackerapp/features/points/view/points_view.dart';
@@ -67,6 +68,12 @@ enum UserRoleEnum {
             screen: UsersView(),
             //screen: Bp1(),
             color: Colors.blue,
+          ),
+           UserViewOnPermissionModel(
+            title: "codes_management",
+            icon: Icons.qr_code,
+            screen: CodesView(),
+            color: Colors.purple,
           ),
           UserViewOnPermissionModel(
             title: "notifications",

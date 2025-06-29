@@ -100,6 +100,16 @@
     "codes_management" : "إدارة الأكواد",
     "start" : "تاريخ البداية",
     "end" : "تاريخ النهاية",
-    "status" : "الحالة",
-    "department" : "القسم"
+    "department" : "القسم",
+    "search_code" : "ابحث عن رمز",
+    "search" : "ابحث",
+    "search_employee" : "ابحث عن موظف",
+    "pick_date" : "حدد تاريخ",
+    "start_date" : "تاريخ البداية",
+    "end_date" : "تاريخ النهاية",
+    "add_code" : "إضافة كود",
+    "edit_code" : "تعديل كود" ,
+    "home" : "الرئيسية",
+    "profile" : "الملف الشخصي",
+    "adds_and_offers" : "الإعلانات والعروض"
 }
