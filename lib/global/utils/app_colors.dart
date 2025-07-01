@@ -28,6 +28,14 @@ abstract class AppColors {
   static const greenShade = Color(0xFF198754);
   static const yellow = Colors.yellow;
 
+  static  List<BoxShadow> firstShadow = [
+    BoxShadow(
+      color: black.withValues(alpha: 0.3),
+      offset: Offset(0, 4),
+      blurRadius: 4
+    ),
+  ];
+
   static const Color tabColor = Color(
     0xff6A1B9A,
   ); // Vibrant Purple for tab background

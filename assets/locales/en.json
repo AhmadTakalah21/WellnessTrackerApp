@@ -111,5 +111,11 @@
     "edit_code" : "Edit code",
     "home" : "Home",
     "profile" : "Profile",
-    "adds_and_offers" : "Adds and offers"
+    "adds_and_offers" : "Adds and offers",
+    "levels" : "Levels",
+    "about_us" : "About us",
+    "terms_and_conditions" : "Terms and conditions",
+    "privacy_policy" : "Privacy policy",
+    "follow_up" : "Follow up",
+    "rate_us" : "Rate us"
 }

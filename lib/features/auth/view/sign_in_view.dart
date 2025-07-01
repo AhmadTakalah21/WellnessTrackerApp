@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
@@ -440,8 +441,10 @@ class _SignInPageState extends State<SignInPage>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.phone_bluetooth_speaker_outlined,
-                      size: 18, color: context.cs.primary),
+                  SvgPicture.asset(
+                    "assets/images/whatsapp.svg",
+                    color: context.cs.primary,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     "get_code_via_whatsapp".tr(),

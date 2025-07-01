@@ -33,7 +33,7 @@ class _SelectPlanPageState extends State<SelectPlanPage>
         centerTitle: true,
         backgroundColor: context.cs.primary,
         elevation: 10,
-        title: Text('select_plan'.tr(), style: context.tt.titleLarge)
+        title: Text('follow_up'.tr(), style: context.tt.titleLarge)
       ),
       backgroundColor: context.cs.onSurface,
       body: Padding(

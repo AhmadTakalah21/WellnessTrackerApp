@@ -5,6 +5,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 
 abstract class UserNavigationViewCallbacks {
   void onBottomTab(
@@ -33,7 +34,7 @@ class UserNavigationPage extends StatefulWidget {
 
 class _UserNavigationPageState extends State<UserNavigationPage>
     implements UserNavigationViewCallbacks {
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   @override
   void onBottomTab(int previousIndex, int currentIndex, TabsRouter tabsRouter) {
@@ -51,6 +52,9 @@ class _UserNavigationPageState extends State<UserNavigationPage>
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
+      appBarBuilder: (context, tabsRouter) {
+        return MainAppBar();
+      },
       routes: const [ProfileRoute(), DashboardRoute(), AddsAndOffersRoute()],
       extendBody: true,
       resizeToAvoidBottomInset: true,
@@ -64,8 +68,9 @@ class _UserNavigationPageState extends State<UserNavigationPage>
           child: ClipRRect(
             borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
             child: Padding(
-               padding: AppConstants.padding20,
+              padding: AppConstants.padding20,
               child: GNav(
+                  selectedIndex: currentIndex,
                   onTabChange: (value) {
                     onBottomTab(tabsRouter.activeIndex, value, tabsRouter);
                   },

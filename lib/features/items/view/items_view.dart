@@ -61,7 +61,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
     // TODO : remove this jsut untile there is a user account
     final List<ItemModel> staticData = List.generate(
       10,
-          (index) => ItemModel(
+      (index) => ItemModel(
         id: index + 1,
         name: "Item name ${index + 1}",
         price: 1000 + ((index + 1) * 300),
@@ -85,26 +85,26 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
               onRefresh: onRefresh,
               child: NotificationListener<ScrollNotification>(
                 onNotification: onNotification,
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  padding: AppConstants.padding16,
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // ...state.items.map(
-                        //   (item) {
-                        //     return _buildCardItem(item);
-                        //   },
-                        // ),
-                        ...staticData.map(
-                              (item) {
-                            return _buildStageCard(item);
-                          },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: GridView.builder(
+                        padding: AppConstants.padding8,
+                        physics: BouncingScrollPhysics(),
+                        itemCount: staticData.length,
+                        gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.8
                         ),
-                      ],
-                    ),
-                  ),
+                        itemBuilder: (context, index) {
+                          final item = staticData[index];
+                          return _buildStageCard(item);
+                        },
+                      ),
+                    )
+                  ],
                 ),
               ),
             );
@@ -231,17 +231,15 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
     );
   }
 
-
-
-
-
-void _showBuyDialog(ItemModel item) {
+  void _showBuyDialog(ItemModel item) {
     showDialog(
       context: context,
       builder: (context) {
         return Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           child: Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
@@ -258,7 +256,8 @@ void _showBuyDialog(ItemModel item) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.shopping_cart_checkout, size: 48, color: Colors.white),
+                Icon(Icons.shopping_cart_checkout,
+                    size: 48, color: Colors.white),
                 const SizedBox(height: 16),
                 Text(
                   "شراء العنصر",
@@ -335,5 +334,4 @@ void _showBuyDialog(ItemModel item) {
       },
     );
   }
-
 }

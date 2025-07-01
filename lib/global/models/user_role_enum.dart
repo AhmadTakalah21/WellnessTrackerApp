@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wellnesstrackerapp/features/codes/view/codes_view.dart';
 import 'package:wellnesstrackerapp/features/exercises/view/exercises_view.dart';
+import 'package:wellnesstrackerapp/features/items/view/items_view.dart';
+import 'package:wellnesstrackerapp/features/levels/view/levels_view.dart';
 import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart';
 import 'package:wellnesstrackerapp/features/points/view/points_view.dart';
 import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart';
@@ -69,7 +71,7 @@ enum UserRoleEnum {
             //screen: Bp1(),
             color: Colors.blue,
           ),
-           UserViewOnPermissionModel(
+          UserViewOnPermissionModel(
             title: "codes_management",
             icon: Icons.qr_code,
             screen: CodesView(),
@@ -85,7 +87,7 @@ enum UserRoleEnum {
       case UserRoleEnum.user:
         return [
           UserViewOnPermissionModel(
-            title: "select_plan",
+            title: "follow_up",
             icon: FontAwesomeIcons.clipboardList,
             screen: SelectPlanView(),
             color: Colors.blue,
@@ -98,7 +100,7 @@ enum UserRoleEnum {
           ),
           UserViewOnPermissionModel(
             title: "points",
-            icon: FontAwesomeIcons.shoePrints,
+            icon: Icons.stacked_bar_chart,
             screen: PointsView(),
             color: Colors.purple,
           ),
@@ -115,16 +117,22 @@ enum UserRoleEnum {
             color: Colors.blue.shade400,
           ),
           UserViewOnPermissionModel(
-            title: "notifications",
-            icon: FontAwesomeIcons.bell,
-            screen: CryptoNotifications(canSendNotification: true),
-            color: Colors.green,
+            title: "levels",
+            icon: Icons.stacked_line_chart,
+            screen: LevelsView(),
+            color: Colors.orange,
           ),
           UserViewOnPermissionModel(
-            title: "settings",
-            icon: Icons.settings,
-            screen: CryptoNotifications(canSendNotification: true),
-            color: Colors.grey.shade300,
+            title: "store",
+            icon: Icons.storefront_outlined,
+            screen: ItemsView(),
+            color: Colors.greenAccent,
+          ),
+          UserViewOnPermissionModel(
+            title: "notifications",
+            icon: FontAwesomeIcons.bell,
+            screen: CryptoNotifications(canSendNotification: false),
+            color: Colors.green,
           ),
         ];
       case UserRoleEnum.doctor:

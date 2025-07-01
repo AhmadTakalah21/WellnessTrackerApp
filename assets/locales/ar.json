@@ -111,5 +111,11 @@
     "edit_code" : "تعديل كود" ,
     "home" : "الرئيسية",
     "profile" : "الملف الشخصي",
-    "adds_and_offers" : "الإعلانات والعروض"
+    "adds_and_offers" : "الإعلانات والعروض",
+    "levels" : "المستويات",
+    "about_us" : "حول الخدمة",
+    "terms_and_conditions" : "البنود والشروط",
+    "privacy_policy" : "سياسة الخصوصية",
+    "follow_up" : "المتابعة",
+    "rate_us" : "قيمنا"
 }
