@@ -117,5 +117,13 @@
     "terms_and_conditions" : "Terms and conditions",
     "privacy_policy" : "Privacy policy",
     "follow_up" : "Follow up",
-    "rate_us" : "Rate us"
+    "rate_us" : "Rate us",
+    "dietician" : "Dietician",
+    "coach" : "Coach",
+    "doctor" : "Doctor",
+    "start_date_required": "Start date is required",
+    "end_date_required": "End date is required",
+    "department_required" : "Department is required",
+    "code_added" : "Code is added successfully",
+    "code_updated" : "Code is updated successfully"
 }

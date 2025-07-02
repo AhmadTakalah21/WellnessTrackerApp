@@ -6,21 +6,25 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 class MainTextField2 extends StatefulWidget {
   const MainTextField2({
     super.key,
-    required this.controller,
+    this.controller,
     required this.label,
     required this.icon,
     this.hint,
     this.validator,
     this.floatingLabelBehavior = FloatingLabelBehavior.auto,
     this.isPassword = false,
+    this.onChanged,
+    this.initialText,
   });
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
+  final String? initialText;
   final String label;
   final IconData icon;
   final bool isPassword;
   final String? hint;
   final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
   final FloatingLabelBehavior floatingLabelBehavior;
 
   @override
@@ -44,7 +48,9 @@ class _MainTextField2State extends State<MainTextField2> {
         Text(widget.label.tr(), style: context.tt.titleLarge),
         SizedBox(height: 10),
         TextFormField(
+          initialValue: widget.initialText,
           controller: widget.controller,
+          onChanged: widget.onChanged,
           obscureText: isVisible,
           style: context.tt.bodyMedium,
           decoration: InputDecoration(

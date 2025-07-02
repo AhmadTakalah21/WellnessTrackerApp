@@ -21,4 +21,21 @@ class CodesServiceImp implements CodesService {
       rethrow;
     }
   }
+
+  @override
+  Future<CodeModel> addCode(
+    AddCodeModel addCodeModel, {
+    required bool isAdd,
+    int? id,
+  }) async {
+    final endpoint = isAdd ? "/api/codes" : "/api/codes/$id";
+    try {
+      final map = addCodeModel.toJson();
+      final response = await dio.post(endpoint, data: map);
+      return CodeModel.fromJson(response.data as Map<String, dynamic>);
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
 }

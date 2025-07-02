@@ -66,7 +66,10 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
           top: Radius.circular(20),
         ),
       ),
-      builder: (context) => AddCodeWidget(isEdit: false),
+      builder: (context) => AddCodeWidget(
+        codesCubit: codesCubit,
+        isEdit: false,
+      ),
     );
   }
 
@@ -85,7 +88,20 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
 
   @override
   void onEditTap(CodeModel code) {
-    // TODO: implement onEditTap
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (context) => AddCodeWidget(
+        codesCubit: codesCubit,
+        code: code,
+        isEdit: true,
+      ),
+    );
   }
 
   @override

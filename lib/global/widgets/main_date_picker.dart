@@ -1,18 +1,28 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/global/extensions/date_x.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
 class MainDatePicker extends StatefulWidget {
   const MainDatePicker({
     super.key,
-    required this.label,
+    this.label = "date",
     required this.onDateSelected,
+    this.padding,
+    this.initialDate,
+    this.hintText = "pick_date",
+    this.isStart = false,
+    this.isEnd = false,
   });
 
   final String label;
-  final void Function() onDateSelected;
+  final String hintText;
+  final bool isStart;
+  final bool isEnd;
+  final void Function(DateTime? date) onDateSelected;
+  final String? initialDate;
+  final EdgeInsets? padding;
 
   @override
   State<MainDatePicker> createState() => _MainDatePickerState();
@@ -20,6 +30,15 @@ class MainDatePicker extends StatefulWidget {
 
 class _MainDatePickerState extends State<MainDatePicker> {
   DateTime? selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialDate != null) {
+      selectedDate = DateTime.tryParse(widget.initialDate!);
+    }
+  }
+
   Future<void> onPickDate() async {
     final date = await showDatePicker(
       context: context,
@@ -29,36 +48,53 @@ class _MainDatePickerState extends State<MainDatePicker> {
     setState(() {
       selectedDate = date;
     });
-    widget.onDateSelected();
+    widget.onDateSelected(date);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(widget.label.tr(), style: context.tt.titleLarge),
-        SizedBox(height: 10),
-        InkWell(
-          onTap: onPickDate,
-          child: Container(
-            padding: AppConstants.padding0,
-            decoration: BoxDecoration(
-              border: Border.all(width: 2, color: context.cs.primary),
-              borderRadius: AppConstants.borderRadius10,
-            ),
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: onPickDate,
-                  icon: Icon(Icons.date_range),
+    final isStart = widget.isStart;
+    final isEnd = widget.isEnd;
+    final label = isStart
+        ? "start_date"
+        : isEnd
+            ? "end_date"
+            : widget.label;
+    final hintText = isStart
+        ? "pick_start_date"
+        : isEnd
+            ? "pick_end_date"
+            : widget.hintText;
+    return Padding(
+      padding: widget.padding ?? AppConstants.paddingH10,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: onPickDate,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 1,
+                  color: AppColors.grey.withValues(alpha: 0.5),
                 ),
-                Text(selectedDate?.formatYYYYMMDD ?? "pick_date".tr())
-              ],
+                borderRadius: AppConstants.borderRadius10,
+              ),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: onPickDate,
+                    icon: const Icon(Icons.date_range),
+                  ),
+                  if (selectedDate?.formatYYYYMMDD != null)
+                    Text("${label.tr()}: "),
+                  Text(selectedDate?.formatYYYYMMDD ?? hintText.tr())
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

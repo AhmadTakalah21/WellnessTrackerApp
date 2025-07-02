@@ -117,5 +117,13 @@
     "terms_and_conditions" : "البنود والشروط",
     "privacy_policy" : "سياسة الخصوصية",
     "follow_up" : "المتابعة",
-    "rate_us" : "قيمنا"
+    "rate_us" : "قيمنا",
+    "dietician" : "أخصائي تغذية",
+    "coach" : "مدرب",
+    "doctor" : "طبيب",
+    "start_date_required" : "حقل تاريخ البداية مطلوب",
+    "end_date_required" : "حقل تاريخ النهاية مطلوب",
+    "department_required" : "حقل القسم مطلوب",
+    "code_added" : "تم إضافة الكود بنجاح",
+    "code_updated" : "تم تعديل الكود بنجاح"
 }
