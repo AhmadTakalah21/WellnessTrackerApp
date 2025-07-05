@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/users/model/add_user_model/add_user_model.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/features/users/service/users_service.dart';
+import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 
 import '../../../global/models/meta_model/meta_model.dart';
@@ -20,6 +21,9 @@ class UsersCubit extends Cubit<GeneralUsersState> {
   AddUserModel addUserModel = const AddUserModel();
 
   List<UserModel> _allUsers = [];
+
+  DepartmentEnum? roleFilter;
+  String? query;
 
   void setName(String? name) {
     addUserModel = addUserModel.copyWith(name: () => name);
@@ -37,32 +41,46 @@ class UsersCubit extends Cubit<GeneralUsersState> {
     addUserModel = addUserModel.copyWith(phone: () => phone);
   }
 
-  void setIsActive(bool? isActive) {
-    addUserModel = addUserModel.copyWith(isActive: () => isActive);
-  }
-
   void setRole(String? role) {
     addUserModel = addUserModel.copyWith(role: () => role);
   }
 
-  Future<void> getUsers({int perPage = 10, required int page}) async {
+  void setRoleFilter(DepartmentEnum? role) {
+    roleFilter = role;
+    _applyFilters(_allUsers, query: query, role: role?.name);
+  }
+
+  void setQueryFilter(String? query) {
+    this.query = query;
+    _applyFilters(_allUsers, query: query, role: roleFilter?.name);
+  }
+
+  Future<void> getUsers({int? perPage = 10, int? page}) async {
     emit(UsersLoading());
     try {
       if (isClosed) return;
       final users = await userService.getUsers(page: page, perPage: perPage);
       _allUsers = users.data;
-      emit(UsersSuccess(users, users.data.isEmpty ? "no_users".tr() : null));
+      _applyFilters(_allUsers, query: query, role: roleFilter?.name);
+      //emit(UsersSuccess(users, users.data.isEmpty ? "no_users".tr() : null));
     } catch (e) {
       if (isClosed) return;
       emit(UsersFail(e.toString()));
     }
   }
 
-  void searchUser(String query) {
-    final filtered = _allUsers.where((user) =>
-    user.name.toLowerCase().contains(query.toLowerCase()) ||
-        user.email.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+  List<UserModel> _applyFilters(
+    List<UserModel> source, {
+    String? query,
+    String? role,
+  }) {
+    final filtered = source.where((user) {
+      final matchesQuery = query == null ||
+          user.name.toLowerCase().contains(query.toLowerCase());
+      final matchesRole =
+          role == null || user.role.toLowerCase() == role.toLowerCase();
+      return matchesQuery && matchesRole;
+    }).toList();
 
     final result = PaginatedModel<UserModel>(
       data: filtered,
@@ -76,9 +94,8 @@ class UsersCubit extends Cubit<GeneralUsersState> {
     );
 
     emit(UsersSuccess(result, filtered.isEmpty ? "no_users".tr() : null));
+    return filtered;
   }
-
-
 
   Future<void> addUser({required bool isAdd, int? userId}) async {
     emit(AddUserLoading());

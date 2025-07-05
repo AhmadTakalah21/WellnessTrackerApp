@@ -12,8 +12,9 @@ part 'auth_manager_state.dart';
 class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
   AuthManagerBloc(this._userRepo) : super(InitialAuthManagerState()) {
     on<IsAuthenticatedOrFirstTime>(_findIfAuthenticatedOrFirstTime);
+    on<OnBoardingViewedRequested>(_goToLogIn);
     on<SignInRequested>(_signIn);
-    on<SignUpRequested>(_signUp);
+    //on<SignUpRequested>(_signUp);
     on<ProfileFormCompletedRequested>(_completeProfileForm);
     on<SignOutRequested>(_signOut);
   }
@@ -26,26 +27,33 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
   ) async {
     final firstTime = await _userRepo.getKey(firstTimeKey, defaultValue: true);
     final profileForm =
-        await _userRepo.getKey(profileFormKey, defaultValue: false);
+        await _userRepo.getKey(profileFormKey, defaultValue: true);
     if (firstTime) {
       emit(FirstTimeState());
-      _userRepo.setKey(firstTimeKey, false);
     } else {
       if (_userRepo.user != null) {
-        emit(
-          AuthenticatedState(
-            _userRepo.user!,
-            _userRepo.user!.role == UserRoleEnum.user,
-          ),
-        );
-      } else {
         if (profileForm) {
           emit(ProfileFormState());
         } else {
-          emit(UnauthenticatedState());
+          emit(
+            AuthenticatedState(
+              _userRepo.user!,
+              _userRepo.user!.role == UserRoleEnum.user,
+            ),
+          );
         }
+      } else {
+        emit(UnauthenticatedState());
       }
     }
+  }
+
+  Future<void> _goToLogIn(
+    OnBoardingViewedRequested event,
+    Emitter<GeneralAuthManagerState> emit,
+  ) async {
+    _userRepo.setKey(firstTimeKey, false);
+    emit(UnauthenticatedState());
   }
 
   Future<void> _signIn(
@@ -53,24 +61,18 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
     Emitter<GeneralAuthManagerState> emit,
   ) async {
     await _userRepo.setUser(event.signInModel);
-    _userRepo.setKey(profileFormKey, false);
+    _userRepo.setKey(profileFormKey, !event.isSignIn);
     event.onSuccess?.call();
-    emit(
-      AuthenticatedState(
-        event.signInModel,
-        _userRepo.user!.role == UserRoleEnum.user,
-      ),
-    );
-  }
-
-  Future<void> _signUp(
-    SignUpRequested event,
-    Emitter<GeneralAuthManagerState> emit,
-  ) async {
-    // await _userRepo.setUser(event.signInModel);
-    _userRepo.setKey(profileFormKey, true);
-    event.onSuccess?.call();
-    add(IsAuthenticatedOrFirstTime());
+    if (!event.isSignIn) {
+      emit(ProfileFormState());
+    } else {
+      emit(
+        AuthenticatedState(
+          _userRepo.user!,
+          _userRepo.user!.role == UserRoleEnum.user,
+        ),
+      );
+    }
   }
 
   Future<void> _completeProfileForm(
@@ -78,7 +80,10 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
     Emitter<GeneralAuthManagerState> emit,
   ) async {
     _userRepo.setKey(profileFormKey, false);
-    emit(UnauthenticatedState());
+    emit(AuthenticatedState(
+      _userRepo.user!,
+      _userRepo.user!.role == UserRoleEnum.user,
+    ));
   }
 
   Future<void> _signOut(

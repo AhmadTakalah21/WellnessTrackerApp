@@ -12,8 +12,6 @@ CodeModel _$CodeModelFromJson(Map<String, dynamic> json) => CodeModel(
       startDate: json['start_date'] as String,
       endDate: json['end_date'] as String,
       status: json['status'] as String,
-      department:
-          DepartmentModel.fromJson(json['department'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CodeModelToJson(CodeModel instance) => <String, dynamic>{
@@ -22,5 +20,4 @@ Map<String, dynamic> _$CodeModelToJson(CodeModel instance) => <String, dynamic>{
       'start_date': instance.startDate,
       'end_date': instance.endDate,
       'status': instance.status,
-      'department': instance.department,
     };

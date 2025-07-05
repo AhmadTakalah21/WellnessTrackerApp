@@ -1,15 +1,12 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/codes/cubit/codes_cubit.dart';
 import 'package:wellnesstrackerapp/features/codes/model/code_model/code_model.dart';
-import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_date_picker.dart';
-import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 
@@ -44,9 +41,9 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
       widget.codesCubit.setCode(code.code);
       widget.codesCubit.setStartDate(code.startDate);
       widget.codesCubit.setEndDate(code.endDate);
-      widget.codesCubit.setDepartment(DepartmentEnum.getDepartmentById(
-        code.department.id,
-      ));
+      // widget.codesCubit.setDepartment(DepartmentEnum.getDepartmentById(
+      //   code.department.id,
+      // ));
     }
   }
 
@@ -67,16 +64,16 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
   void onEndDateSelected(DateTime? date) =>
       widget.codesCubit.setEndDate(_formattedDate(date));
 
-  void onDepartmentSelected(DepartmentEnum? department) =>
-      widget.codesCubit.setDepartment(department);
+  // void onDepartmentSelected(DepartmentEnum? department) =>
+  //     widget.codesCubit.setDepartment(department);
 
   void onSave() => widget.codesCubit.addCode(isAdd: !widget.isEdit);
 
   @override
   Widget build(BuildContext context) {
-    final selectedDepartment = DepartmentEnum.values.firstWhereOrNull(
-      (department) => department.id == widget.code?.department.id,
-    );
+    // final selectedDepartment = DepartmentEnum.values.firstWhereOrNull(
+    //   (department) => department.id == widget.code?.department.id,
+    // );
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: SingleChildScrollView(
@@ -114,16 +111,16 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
                 initialDate: widget.code?.endDate,
                 onDateSelected: onEndDateSelected,
               ),
-              const SizedBox(height: 12),
-              MainDropDownWidget(
-                items: DepartmentEnum.values,
-                prefixIcon: Icons.abc,
-                hintText: "department",
-                labelText: "department",
-                errorMessage: "department_required",
-                onChanged: onDepartmentSelected,
-                selectedValue: selectedDepartment,
-              ),
+              // const SizedBox(height: 12),
+              // MainDropDownWidget(
+              //   items: DepartmentEnum.values,
+              //   prefixIcon: Icons.group,
+              //   hintText: "department".tr(),
+              //   labelText: "department".tr(),
+              //   errorMessage: "department_required".tr(),
+              //   onChanged: onDepartmentSelected,
+              //   // selectedValue: selectedDepartment,
+              // ),
               const SizedBox(height: 30),
               BlocConsumer<CodesCubit, GeneralCodesState>(
                 bloc: widget.codesCubit,

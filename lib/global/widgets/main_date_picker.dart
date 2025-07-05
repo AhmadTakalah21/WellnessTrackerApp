@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/global/extensions/date_x.dart';
-import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
+import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
 class MainDatePicker extends StatefulWidget {
@@ -14,6 +14,7 @@ class MainDatePicker extends StatefulWidget {
     this.hintText = "pick_date",
     this.isStart = false,
     this.isEnd = false,
+    this.validator,
   });
 
   final String label;
@@ -23,6 +24,7 @@ class MainDatePicker extends StatefulWidget {
   final void Function(DateTime? date) onDateSelected;
   final String? initialDate;
   final EdgeInsets? padding;
+  final String? Function(DateTime?)? validator;
 
   @override
   State<MainDatePicker> createState() => _MainDatePickerState();
@@ -39,16 +41,19 @@ class _MainDatePickerState extends State<MainDatePicker> {
     }
   }
 
-  Future<void> onPickDate() async {
+  Future<void> onPickDate(FormFieldState<DateTime?> field) async {
     final date = await showDatePicker(
       context: context,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1900),
       lastDate: DateTime(3000),
     );
-    setState(() {
-      selectedDate = date;
-    });
-    widget.onDateSelected(date);
+    if (date != null) {
+      setState(() {
+        selectedDate = date;
+      });
+      widget.onDateSelected(date);
+      field.didChange(date);
+    }
   }
 
   @override
@@ -65,36 +70,55 @@ class _MainDatePickerState extends State<MainDatePicker> {
         : isEnd
             ? "pick_end_date"
             : widget.hintText;
-    return Padding(
-      padding: widget.padding ?? AppConstants.paddingH10,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          InkWell(
-            onTap: onPickDate,
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1,
-                  color: AppColors.grey.withValues(alpha: 0.5),
-                ),
-                borderRadius: AppConstants.borderRadius10,
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: onPickDate,
-                    icon: const Icon(Icons.date_range),
+
+    return FormField<DateTime?>(
+      validator: widget.validator,
+      initialValue: selectedDate,
+      builder: (field) {
+        final hasError = field.hasError;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label.tr(), style: context.tt.titleLarge),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () => onPickDate(field),
+              child: Container(
+                padding: AppConstants.padding0,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: hasError ? 1 : 2,
+                    color: hasError ? context.cs.error : context.cs.primary,
                   ),
-                  if (selectedDate?.formatYYYYMMDD != null)
-                    Text("${label.tr()}: "),
-                  Text(selectedDate?.formatYYYYMMDD ?? hintText.tr())
-                ],
+                  borderRadius: AppConstants.borderRadius10,
+                ),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => onPickDate(field),
+                      icon: Icon(
+                        Icons.date_range,
+                        color: context.cs.primary,
+                      ),
+                    ),
+                    if (selectedDate?.formatYYYYMMDD != null)
+                      Text("${label.tr()}: "),
+                    Text(selectedDate?.formatYYYYMMDD ?? hintText.tr())
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+            if (hasError)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 4.0),
+                child: Text(
+                  field.errorText ?? '',
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

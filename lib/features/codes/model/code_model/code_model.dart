@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wellnesstrackerapp/features/codes/model/department_model/department_model.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
-import '../../../../global/widgets/main_data_table.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 
 part 'code_model.g.dart';
 
@@ -17,7 +16,7 @@ class CodeModel implements DeleteModel, DataTableModel {
     required this.startDate,
     required this.endDate,
     required this.status,
-    required this.department,
+    // required this.department,
   });
 
   final int id;
@@ -30,7 +29,7 @@ class CodeModel implements DeleteModel, DataTableModel {
   final String endDate;
 
   final String status;
-  final DepartmentModel department;
+  //final DepartmentModel department;
 
   static String get header => 'codes_management'.tr();
 
@@ -40,7 +39,7 @@ class CodeModel implements DeleteModel, DataTableModel {
         'start'.tr(),
         'end'.tr(),
         'status'.tr(),
-        'department'.tr(),
+       // 'department'.tr(),
         'event'.tr(),
       ];
 
@@ -51,7 +50,7 @@ class CodeModel implements DeleteModel, DataTableModel {
         startDate,
         endDate,
         status,
-        department.name,
+       // department.name,
       ];
 
   factory CodeModel.fromString(String str) =>

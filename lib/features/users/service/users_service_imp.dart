@@ -6,13 +6,18 @@ class UserServiceImp implements UserService {
 
   @override
   Future<PaginatedModel<UserModel>> getUsers({
-    int perPage = 10,
-    required int page,
+    int? perPage = 10,
+    int? page,
+    String? role,
   }) async {
     try {
-      final perPageParam = "per_page=$perPage";
-      final pageParam = "page=$page";
-      final response = await dio.get("/user?$pageParam&$perPageParam");
+      final perPageParam = perPage != null ? "per_page=$perPage" : null;
+      final pageParam = page != null ? "page=$page" : "";
+      final roleParam = role != null ? "filter[role]=$role" : "";
+      final endpoint =
+          "/v1/admin/users/customers?$pageParam&$perPageParam&$roleParam";
+      final response = await dio.get(endpoint);
+
       final users = response.data as Map<String, dynamic>;
       return PaginatedModel.fromJson(
         users,
@@ -41,7 +46,7 @@ class UserServiceImp implements UserService {
     int? userId,
   }) async {
     try {
-      final endpoint = isAdd ? "/user" : "/user/$userId";
+      final endpoint = isAdd ? "/v1/admin/users" : "/v1/admin/users/$userId";
       final response = await dio.postOrPut(
         endpoint,
         isAdd: isAdd,

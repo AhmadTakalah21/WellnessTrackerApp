@@ -6,6 +6,8 @@ abstract class AuthManagerEvent {
 
 class IsAuthenticatedOrFirstTime extends AuthManagerEvent {}
 
+class OnBoardingViewedRequested extends AuthManagerEvent {}
+
 class ShowSignIn extends AuthManagerEvent {
   const ShowSignIn({
     this.showBackButton = false,
@@ -20,20 +22,12 @@ class SignInRequested extends AuthManagerEvent {
   const SignInRequested(
     this.signInModel, {
     this.onSuccess,
+    this.isSignIn = true,
   });
 
   final SignInModel signInModel;
   final VoidCallback? onSuccess;
-}
-
-class SignUpRequested extends AuthManagerEvent {
-  const SignUpRequested(
-    this.signInModel, {
-    this.onSuccess,
-  });
-
-  final SignInModel signInModel;
-  final VoidCallback? onSuccess;
+  final bool isSignIn;
 }
 
 class ProfileFormCompletedRequested extends AuthManagerEvent {}
@@ -52,4 +46,3 @@ class VerifyRequested extends AuthManagerEvent {
 class ForgetPasswordRequested extends AuthManagerEvent {
   const ForgetPasswordRequested();
 }
-

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
-import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 
 part 'add_code_model.g.dart';
 
@@ -14,28 +13,28 @@ class AddCodeModel {
     String? code,
     String? startDate,
     String? endDate,
-    DepartmentEnum? department,
+    //DepartmentEnum? department,
   })  : _code = code,
         _startDate = startDate,
-        _endDate = endDate,
-        _department = department;
+        _endDate = endDate;
+  // _department = department;
 
   final String? _code;
   final String? _startDate;
   final String? _endDate;
-  final DepartmentEnum? _department;
+  // final DepartmentEnum? _department;
 
   AddCodeModel copyWith({
     String? Function()? code,
     String? Function()? startDate,
     String? Function()? endDate,
-    DepartmentEnum? Function()? department,
+    //DepartmentEnum? Function()? department,
   }) {
     return AddCodeModel(
       code: code != null ? code() : _code,
       startDate: startDate != null ? startDate() : _startDate,
       endDate: endDate != null ? endDate() : _endDate,
-      department: department != null ? department() : _department,
+      //department: department != null ? department() : _department,
     );
   }
 
@@ -62,13 +61,13 @@ class AddCodeModel {
     return _endDate;
   }
 
-  @JsonKey(toJson: DepartmentEnum.toJson)
-  DepartmentEnum get department {
-    if (_department == null) {
-      throw "department_required".tr();
-    }
-    return _department;
-  }
+  // @JsonKey(toJson: DepartmentEnum.toJson)
+  // DepartmentEnum get department {
+  //   if (_department == null) {
+  //     throw "department_required".tr();
+  //   }
+  //   return _department;
+  // }
 
   factory AddCodeModel.fromJson(Map<String, dynamic> json) =>
       _$AddCodeModelFromJson(json);

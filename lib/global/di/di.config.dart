@@ -12,6 +12,10 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
+import 'package:wellnesstrackerapp/features/adds_and_offers/cubit/adds_and_offers_cubit.dart'
+    as _i972;
+import 'package:wellnesstrackerapp/features/adds_and_offers/service/adds_and_offers_service.dart'
+    as _i602;
 import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart'
     as _i533;
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart'
@@ -24,6 +28,10 @@ import 'package:wellnesstrackerapp/features/codes/cubit/codes_cubit.dart'
     as _i457;
 import 'package:wellnesstrackerapp/features/codes/service/codes_service.dart'
     as _i249;
+import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart'
+    as _i935;
+import 'package:wellnesstrackerapp/features/customers/service/customers_service.dart'
+    as _i299;
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart'
     as _i803;
 import 'package:wellnesstrackerapp/features/items/service/items_service.dart'
@@ -89,6 +97,11 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i457.CodesCubit(gh<_i249.CodesService>()));
     gh.factory<_i474.UserRoleService>(() => _i474.UserRoleServiceImp());
     gh.factory<_i1044.ItemService>(() => _i1044.ItemServiceImp());
+    gh.factory<_i299.CustomersService>(() => _i299.CustomersServiceImp());
+    gh.factory<_i602.AddsAndOffersService>(
+        () => _i602.AddsAndOffersServiceImp());
+    gh.factory<_i935.CustomersCubit>(
+        () => _i935.CustomersCubit(gh<_i299.CustomersService>()));
     gh.factory<_i396.DeleteCubit>(
         () => _i396.DeleteCubit(gh<_i963.DeleteService>()));
     gh.factory<_i883.AuthCubit>(() => _i883.AuthCubit(
@@ -97,6 +110,8 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i253.UsersCubit>(
         () => _i253.UsersCubit(gh<_i936.UserService>()));
+    gh.factory<_i972.AddsAndOffersCubit>(
+        () => _i972.AddsAndOffersCubit(gh<_i602.AddsAndOffersService>()));
     gh.factory<_i803.ItemsCubit>(
         () => _i803.ItemsCubit(gh<_i1044.ItemService>()));
     gh.factory<_i633.UserRolesCubit>(

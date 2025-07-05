@@ -30,7 +30,11 @@ class BadRequestException extends DioException {
 
   @override
   String toString() {
-    return response?.data["message"] ?? "invalid_request".tr();
+    try {
+      return response?.data["message"] ?? "invalid_request".tr();
+    } catch (_) {
+      return "something_went_wrong".tr();
+    }
   }
 }
 
@@ -45,6 +49,10 @@ class CustomDioException extends DioException {
 
   @override
   String toString() {
-    return response?.data["message"] ?? "something_went_wrong".tr();
+    try {
+      return response?.data["message"] ?? "something_went_wrong".tr();
+    } catch (e) {
+      return "something_went_wrong".tr();
+    }
   }
 }

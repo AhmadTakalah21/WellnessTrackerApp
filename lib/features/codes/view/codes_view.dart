@@ -20,7 +20,6 @@ abstract class UsersViewCallBacks {
   void onDeleteTap(CodeModel code);
   void onSelectPageTap(int page, int perPage);
   void onSearchChanged(String input);
-  Future<void> onRefresh();
   void onTryAgainTap();
 }
 
@@ -66,7 +65,7 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
           top: Radius.circular(20),
         ),
       ),
-      builder: (context) => AddCodeWidget(
+      builder: (bottomSheetContext) => AddCodeWidget(
         codesCubit: codesCubit,
         isEdit: false,
       ),
@@ -89,23 +88,21 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
   @override
   void onEditTap(CodeModel code) {
     showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
         ),
-      ),
-      builder: (context) => AddCodeWidget(
-        codesCubit: codesCubit,
-        code: code,
-        isEdit: true,
-      ),
-    );
+        builder: (bottomSheetContext) {
+          return AddCodeWidget(
+            codesCubit: codesCubit,
+            code: code,
+            isEdit: true,
+          );
+        });
   }
-
-  @override
-  Future<void> onRefresh() async => onTryAgainTap();
 
   @override
   void onSelectPageTap(int page, int perPage) {
@@ -145,6 +142,7 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
           children: [
             Expanded(
               child: BlocBuilder<CodesCubit, GeneralCodesState>(
+                buildWhen: (previous, current) => current is CodesState,
                 builder: (context, state) {
                   if (state is CodesLoading) {
                     return LoadingIndicator(

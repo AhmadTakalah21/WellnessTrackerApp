@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 
@@ -15,6 +16,7 @@ class MainTextField2 extends StatefulWidget {
     this.isPassword = false,
     this.onChanged,
     this.initialText,
+    this.keyboardType, this.inputFormatters,
   });
 
   final TextEditingController? controller;
@@ -26,6 +28,8 @@ class MainTextField2 extends StatefulWidget {
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
   final FloatingLabelBehavior floatingLabelBehavior;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   State<MainTextField2> createState() => _MainTextField2State();
@@ -48,6 +52,8 @@ class _MainTextField2State extends State<MainTextField2> {
         Text(widget.label.tr(), style: context.tt.titleLarge),
         SizedBox(height: 10),
         TextFormField(
+          inputFormatters: widget.inputFormatters,
+          keyboardType: widget.keyboardType,
           initialValue: widget.initialText,
           controller: widget.controller,
           onChanged: widget.onChanged,

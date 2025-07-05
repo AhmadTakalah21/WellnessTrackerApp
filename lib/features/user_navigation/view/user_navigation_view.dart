@@ -51,8 +51,8 @@ class _UserNavigationPageState extends State<UserNavigationPage>
 
   @override
   Widget build(BuildContext context) {
-    final icons = [Icons.person, Icons.home, Icons.local_offer];
-    final labels = ['profile'.tr(), 'home'.tr(), 'adds_and_offers'.tr()];
+    final icons = [Icons.local_offer, Icons.home, Icons.person];
+    final labels = ['adds_and_offers'.tr(), 'home'.tr(), 'profile'.tr()];
 
     final rtlIcons = icons.reversed.toList();
     final rtlLabels = labels.reversed.toList();
@@ -92,7 +92,7 @@ class _UserNavigationPageState extends State<UserNavigationPage>
             ),
             tabIconColor: Colors.grey.shade500,
             tabIconSelectedColor: context.cs.primary,
-            tabSelectedColor: context.cs.primary.withOpacity(0.15),
+            tabSelectedColor: context.cs.primary.withValues(alpha: 0.15),
             tabBarColor: context.cs.surface,
             useSafeArea: true,
             onTabItemSelected: (index) {

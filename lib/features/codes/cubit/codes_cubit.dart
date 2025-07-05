@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/codes/model/add_code_model/add_code_model.dart';
 import 'package:wellnesstrackerapp/features/codes/model/code_model/code_model.dart';
 import 'package:wellnesstrackerapp/features/codes/service/codes_service.dart';
-import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import '../../../global/models/meta_model/meta_model.dart';
 import '../../../global/models/paginated_model/paginated_model.dart';
 
@@ -16,10 +15,13 @@ part 'states/general_codes_state.dart';
 @injectable
 class CodesCubit extends Cubit<GeneralCodesState> {
   CodesCubit(this.codeService) : super(GeneralCodesInitial());
-
   final CodesService codeService;
 
   AddCodeModel addCodeModel = const AddCodeModel();
+
+  List<CodeModel> codes = [];
+  String lastQuery = '';
+  String? lastStatus;
 
   void setCode(String? code) {
     addCodeModel = addCodeModel.copyWith(code: () => code);
@@ -33,18 +35,13 @@ class CodesCubit extends Cubit<GeneralCodesState> {
     addCodeModel = addCodeModel.copyWith(endDate: () => endDate);
   }
 
-  void setDepartment(DepartmentEnum? department) {
-    addCodeModel = addCodeModel.copyWith(department: () => department);
-  }
+  // void setDepartment(DepartmentEnum? department) {
+  //   addCodeModel = addCodeModel.copyWith(department: () => department);
+  // }
 
   void resetAddCodeModel() {
     addCodeModel = const AddCodeModel();
   }
-
-  List<CodeModel> codes = [];
-  String lastQuery = '';
-  String? lastStatus;
-  String? lastDepartment;
 
   Future<void> getCodes({required int page, int perPage = 10}) async {
     emit(CodesLoading());
@@ -59,12 +56,15 @@ class CodesCubit extends Cubit<GeneralCodesState> {
     }
   }
 
-  void searchCodes(String query, {String? status, String? departmentName}) {
+  void searchCodes(String query, {String? status}) {
     lastQuery = query;
     lastStatus = status;
-    lastDepartment = departmentName;
 
-    final filtered = _applyFilters(codes, query, status, departmentName);
+    final filtered = _applyFilters(
+      codes,
+      query,
+      status,
+    );
     final result = PaginatedModel<CodeModel>(
       data: filtered,
       meta: MetaModel(
@@ -79,16 +79,17 @@ class CodesCubit extends Cubit<GeneralCodesState> {
     emit(CodesSuccess(result, filtered.isEmpty ? "no_codes".tr() : null));
   }
 
-  List<CodeModel> _applyFilters(List<CodeModel> source, String query,
-      String? status, String? department) {
+  List<CodeModel> _applyFilters(
+    List<CodeModel> source,
+    String query,
+    String? status,
+  ) {
     return source.where((code) {
       final matchesQuery =
           code.code.toLowerCase().contains(query.toLowerCase());
       final matchesStatus =
           status == null || code.status.toLowerCase() == status.toLowerCase();
-      final matchesDepartment = department == null ||
-          code.department.name.toLowerCase() == department.toLowerCase();
-      return matchesQuery && matchesStatus && matchesDepartment;
+      return matchesQuery && matchesStatus;
     }).toList();
   }
 

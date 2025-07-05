@@ -121,6 +121,7 @@ class _MainDataTableState<T extends DataTableModel>
       children: [
         Expanded(
           child: MainTextField(
+            borderRadius: AppConstants.borderRadius10,
             onChanged: widget.onSearchChanged,
             hintText: widget.searchHint.tr(),
             prefixIcon: Icon(

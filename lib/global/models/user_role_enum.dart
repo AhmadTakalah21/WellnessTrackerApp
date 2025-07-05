@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wellnesstrackerapp/features/codes/view/codes_view.dart';
+import 'package:wellnesstrackerapp/features/customers/view/customers_view.dart';
 import 'package:wellnesstrackerapp/features/exercises/view/exercises_view.dart';
 import 'package:wellnesstrackerapp/features/items/view/items_view.dart';
 import 'package:wellnesstrackerapp/features/levels/view/levels_view.dart';
@@ -9,7 +11,6 @@ import 'package:wellnesstrackerapp/features/points/view/points_view.dart';
 import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart';
 import 'package:wellnesstrackerapp/features/users/view/users_view.dart';
 import 'package:wellnesstrackerapp/global/models/user_view_on_permission_model.dart';
-import 'package:wellnesstrackerapp/views/activitiestracking/actvity.dart';
 import 'package:wellnesstrackerapp/views/daillygoals/daillygoals.dart';
 import 'package:wellnesstrackerapp/views/notifications/notifications.dart';
 
@@ -19,6 +20,8 @@ enum UserRoleEnum {
   doctor,
   coach,
   nutritionist;
+
+  String get displayName => name.tr();
 
   static UserRoleEnum fromJson(String role) {
     if (role == "admin") {
@@ -59,16 +62,15 @@ enum UserRoleEnum {
       case UserRoleEnum.admin:
         return [
           UserViewOnPermissionModel(
-            title: "user_administration",
+            title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: ActivityScreen(),
+            screen: CustomersView(),
             color: Colors.red,
           ),
           UserViewOnPermissionModel(
             title: "employees_administration",
             icon: Icons.manage_accounts,
             screen: UsersView(),
-            //screen: Bp1(),
             color: Colors.blue,
           ),
           UserViewOnPermissionModel(
@@ -138,27 +140,27 @@ enum UserRoleEnum {
       case UserRoleEnum.doctor:
         return [
           UserViewOnPermissionModel(
-            title: "user_administration",
+            title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: ActivityScreen(),
+            screen: CustomersView(),
             color: Colors.red,
           ),
         ];
       case UserRoleEnum.coach:
         return [
           UserViewOnPermissionModel(
-            title: "user_administration",
+            title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: ActivityScreen(),
+            screen: CustomersView(),
             color: Colors.red,
           ),
         ];
       case UserRoleEnum.nutritionist:
         return [
           UserViewOnPermissionModel(
-            title: "user_administration",
+            title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: ActivityScreen(),
+            screen: CustomersView(),
             color: Colors.red,
           ),
         ];

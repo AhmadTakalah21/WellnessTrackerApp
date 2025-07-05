@@ -8,8 +8,8 @@ part 'users_service_imp.dart';
 
 abstract class UserService {
   Future<PaginatedModel<UserModel>> getUsers({
-    int perPage = 10,
-    required int page,
+    int? perPage = 10,
+     int? page,
   }); // get all users
   
   Future<UserModel> getUser(int userId); // get one user by id

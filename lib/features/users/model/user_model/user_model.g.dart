@@ -12,7 +12,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       email: json['email'] as String,
       phone: json['phone'] as String,
       role: json['role'] as String,
-      isActive: const BoolConverter().fromJson(json['is_active']),
+      status: json['status'] as String,
       fcmToken: json['fcm_token'] as String?,
     );
 
@@ -22,6 +22,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'email': instance.email,
       'phone': instance.phone,
       'role': instance.role,
-      'is_active': const BoolConverter().toJson(instance.isActive),
+      'status': instance.status,
       'fcm_token': instance.fcmToken,
     };

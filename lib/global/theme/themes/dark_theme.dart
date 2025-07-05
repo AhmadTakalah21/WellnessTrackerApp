@@ -55,6 +55,7 @@ ThemeData darkTheme = ThemeData(
     ),
     titleMedium: const TextStyle(
       color: AppColors.secondaryColor,
+      fontWeight: FontWeight.w600,
       height: 1.4,
       fontSize: 16,
     ),
@@ -98,7 +99,7 @@ ThemeData darkTheme = ThemeData(
   ),
   scaffoldBackgroundColor: AppColors.white,
   appBarTheme: AppBarTheme(
-    backgroundColor: AppColors.black,
+    backgroundColor: AppColors.mainColor,
     iconTheme: IconThemeData(color: AppColors.secondaryColor),
   ),
   iconButtonTheme: IconButtonThemeData(

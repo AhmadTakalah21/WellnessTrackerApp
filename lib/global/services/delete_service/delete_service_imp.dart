@@ -7,7 +7,7 @@ class DeleteServiceImp implements DeleteService {
   @override
   Future<void> deleteItem<T extends DeleteModel>(T item) async {
     try {
-      await dio.post("/api/${item.apiDeleteUrl}", data: {"_method": "DELETE"});
+      await dio.delete("/${item.apiDeleteUrl}");
     } catch (e) {
       rethrow;
     }

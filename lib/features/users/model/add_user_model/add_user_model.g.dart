@@ -12,7 +12,6 @@ AddUserModel _$AddUserModelFromJson(Map<String, dynamic> json) => AddUserModel(
       password: json['password'] as String?,
       phone: json['phone'] as String?,
       role: json['role'] as String?,
-      isActive: json['isActive'] as bool?,
     );
 
 Map<String, dynamic> _$AddUserModelToJson(AddUserModel instance) =>
@@ -22,5 +21,4 @@ Map<String, dynamic> _$AddUserModelToJson(AddUserModel instance) =>
       'password': instance.password,
       'phone': instance.phone,
       'role': instance.role,
-      'isActive': instance.isActive,
     };

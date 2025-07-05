@@ -8,7 +8,7 @@ class AuthServiceImp implements AuthService {
   Future<SignInModel> signIn(String email, String password) async {
     try {
       final data = {'email': email, 'password': password};
-      final response = await dio.post('/login', data: data);
+      final response = await dio.post('/v1/auth/login', data: data);
 
       final body = response.data["data"] as Map<String, dynamic>;
       return SignInModel.fromJson(body);
@@ -21,7 +21,7 @@ class AuthServiceImp implements AuthService {
   Future<SignInModel> signUp(PostSignUpModel postSignUpModel) async {
     try {
       final data = postSignUpModel.toJson();
-      final response = await dio.post('/v1/users', data: data);
+      final response = await dio.post('/v1/auth/register', data: data);
 
       final body = response.data["data"] as Map<String, dynamic>;
       return SignInModel.fromJson(body);
@@ -31,9 +31,24 @@ class AuthServiceImp implements AuthService {
   }
 
   @override
+  Future<CustomerModel> addInfo(AddInfoModel addInfoModel) async {
+    final endpoint = "/v1/users/information";
+    try {
+      final data = addInfoModel.toJson();
+      final response = await dio.post(endpoint, data: data);
+      final customer = response.data["data"] as Map<String, dynamic>;
+      return CustomerModel.fromJson(customer);
+      
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
   Future<void> logout() async {
     try {
-      await dio.post('/logout');
+      await dio.post('/v1/auth/logout');
     } catch (e) {
       rethrow;
     }

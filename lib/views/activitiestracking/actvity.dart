@@ -170,7 +170,7 @@ class ActivityScreenState extends State<ActivityScreen> {
         centerTitle: true,
         backgroundColor: context.cs.primary,
         elevation: 10,
-        title: Text('user_administration'.tr(), style: context.tt.titleLarge),
+        title: Text('customers_administration'.tr(), style: context.tt.titleLarge),
       ),
       backgroundColor: context.cs.onSurface,
       body: Padding(
