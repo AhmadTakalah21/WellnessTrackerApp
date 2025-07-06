@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "17129356765",
+    "project_id": "wellness-tracker-app-d8def",
+    "storage_bucket": "wellness-tracker-app-d8def.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17129356765:android:b323496a4219f96ca00a34",
+        "android_client_info": {
+          "package_name": "com.example.wellnesstrackerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYN9FAZyDj5mmAQ_qXmkrQz1lmOL7-W0o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

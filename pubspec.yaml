@@ -70,12 +70,14 @@ dependencies:
   shimmer: ^3.0.0
   dropdown_button2: ^2.3.9
   lucide_icons: ^0.257.0
-  firebase_core: ^2.0.0
-  firebase_auth: ^4.0.0
   google_sign_in: ^6.0.0
   flutter_facebook_auth: ^6.0.0
   flutter_staggered_animations: ^1.1.1
   url_launcher: ^6.2.4
+  firebase_core: ^3.0.0
+  firebase_auth: ^5.6.2
+  firebase_messaging: ^15.2.9
+  flutter_local_notifications: ^19.1.0
 
 
 #  for dart versionn 3.6
