@@ -21,6 +21,7 @@ class UsersCubit extends Cubit<GeneralUsersState> {
   AddUserModel addUserModel = const AddUserModel();
 
   List<UserModel> _allUsers = [];
+  MetaModel? meta;
 
   DepartmentEnum? roleFilter;
   String? query;
@@ -61,8 +62,9 @@ class UsersCubit extends Cubit<GeneralUsersState> {
       if (isClosed) return;
       final users = await userService.getUsers(page: page, perPage: perPage);
       _allUsers = users.data;
-      _applyFilters(_allUsers, query: query, role: roleFilter?.name);
-      //emit(UsersSuccess(users, users.data.isEmpty ? "no_users".tr() : null));
+      meta = users.meta;
+      //_applyFilters(_allUsers, query: query, role: roleFilter?.name);
+      emit(UsersSuccess(users, users.data.isEmpty ? "no_users".tr() : null));
     } catch (e) {
       if (isClosed) return;
       emit(UsersFail(e.toString()));
@@ -82,16 +84,18 @@ class UsersCubit extends Cubit<GeneralUsersState> {
       return matchesQuery && matchesRole;
     }).toList();
 
-    final result = PaginatedModel<UserModel>(
-      data: filtered,
-      meta: MetaModel(
-        total: filtered.length,
-        count: filtered.length,
-        perPage: filtered.length,
-        currentPage: 1,
-        totalPages: 1,
-      ),
-    );
+    final meta =
+        this.meta != null && ((query == null || query.isEmpty) && role == null)
+            ? this.meta!
+            : MetaModel(
+                total: filtered.length,
+                count: filtered.length,
+                perPage: filtered.length,
+                currentPage: 1,
+                totalPages: 1,
+              );
+
+    final result = PaginatedModel<UserModel>(data: filtered, meta: meta);
 
     emit(UsersSuccess(result, filtered.isEmpty ? "no_users".tr() : null));
     return filtered;

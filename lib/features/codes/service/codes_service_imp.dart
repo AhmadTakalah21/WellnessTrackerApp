@@ -28,7 +28,7 @@ class CodesServiceImp implements CodesService {
     required bool isAdd,
     int? id,
   }) async {
-    final endpoint = isAdd ? "/api/codes" : "/api/codes/$id";
+    final endpoint = isAdd ? "/v1/admin/codes" : "/v1/admin/codes/$id";
     try {
       final map = addCodeModel.toJson();
       final response = await dio.post(endpoint, data: map);

@@ -41,9 +41,6 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
       widget.codesCubit.setCode(code.code);
       widget.codesCubit.setStartDate(code.startDate);
       widget.codesCubit.setEndDate(code.endDate);
-      // widget.codesCubit.setDepartment(DepartmentEnum.getDepartmentById(
-      //   code.department.id,
-      // ));
     }
   }
 
@@ -64,16 +61,10 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
   void onEndDateSelected(DateTime? date) =>
       widget.codesCubit.setEndDate(_formattedDate(date));
 
-  // void onDepartmentSelected(DepartmentEnum? department) =>
-  //     widget.codesCubit.setDepartment(department);
-
   void onSave() => widget.codesCubit.addCode(isAdd: !widget.isEdit);
 
   @override
   Widget build(BuildContext context) {
-    // final selectedDepartment = DepartmentEnum.values.firstWhereOrNull(
-    //   (department) => department.id == widget.code?.department.id,
-    // );
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: SingleChildScrollView(
@@ -111,16 +102,6 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
                 initialDate: widget.code?.endDate,
                 onDateSelected: onEndDateSelected,
               ),
-              // const SizedBox(height: 12),
-              // MainDropDownWidget(
-              //   items: DepartmentEnum.values,
-              //   prefixIcon: Icons.group,
-              //   hintText: "department".tr(),
-              //   labelText: "department".tr(),
-              //   errorMessage: "department_required".tr(),
-              //   onChanged: onDepartmentSelected,
-              //   // selectedValue: selectedDepartment,
-              // ),
               const SizedBox(height: 30),
               BlocConsumer<CodesCubit, GeneralCodesState>(
                 bloc: widget.codesCubit,

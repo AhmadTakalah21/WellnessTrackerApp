@@ -11,16 +11,16 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 
-// class IntroPageModel {
-//   IntroPageModel({
-//     required this.image,
-//     required this.title,
-//     required this.subTitle,
-//   });
-//   final String image;
-//   final String title;
-//   final String subTitle;
-// }
+class IntroPageModel {
+  IntroPageModel({
+    required this.images,
+    required this.title,
+    required this.subTitle,
+  });
+  final List<String> images;
+  final String title;
+  final String subTitle;
+}
 
 abstract class IntroViewCallBacks {
   void onNextTap();
@@ -50,26 +50,26 @@ class _IntroPageState extends State<IntroPage> implements IntroViewCallBacks {
   int selectedPage = 0;
   final pageController = PageController();
 
-  // final introPageModels = [
-  //   IntroPageModel(
-  //     image: 'assets/images/onboarding1.png',
-  //     title: "تتبع العادات لتحسين صحتك",
-  //     subTitle: "ابدأ رحلتك الصحية عبر تتبع عاداتك اليومية مثل النشاط، الأكل الصحي، النوم والماء.",
-  //   ),
-  //   IntroPageModel(
-  //     image: 'assets/images/onboarding2.png',
-  //     title: 'نظام فعال لتتبع تقدمك',
-  //     subTitle: 'اعتمد أسلوباً بسيطاً وفعالاً يساعدك على التغيير الإيجابي والبقاء ملتزماً بأهدافك.',
-  //   ),
-  //   IntroPageModel(
-  //     image: 'assets/images/onboarding3.png',
-  //     title: 'خطوات صغيرة نحو تغيير كبير',
-  //     subTitle: 'تتبع العادات يسهّل عليك تبني روتين يومي صحي ومتوازن ويمنحك شعوراً بالإنجاز.',
-  //   ),
-  // ];
-
-  final List<String> images =
-      List.generate(6, (index) => "assets/images/dashboard${index + 1}.jpg");
+  final introPageModels = [
+    IntroPageModel(
+      images: ["assets/images/dashboard1.jpg", "assets/images/dashboard2.jpg"],
+      title: "تتبع العادات لتحسين صحتك",
+      subTitle:
+          "ابدأ رحلتك الصحية عبر تتبع عاداتك اليومية مثل النشاط، الأكل الصحي، النوم والماء.",
+    ),
+    IntroPageModel(
+      images: ["assets/images/dashboard3.jpg", "assets/images/dashboard4.jpg"],
+      title: 'نظام فعال لتتبع تقدمك',
+      subTitle:
+          'اعتمد أسلوباً بسيطاً وفعالاً يساعدك على التغيير الإيجابي والبقاء ملتزماً بأهدافك.',
+    ),
+    IntroPageModel(
+      images: ["assets/images/dashboard5.jpg", "assets/images/dashboard6.jpg"],
+      title: 'خطوات صغيرة نحو تغيير كبير',
+      subTitle:
+          'تتبع العادات يسهّل عليك تبني روتين يومي صحي ومتوازن ويمنحك شعوراً بالإنجاز.',
+    ),
+  ];
 
   @override
   void initState() {
@@ -91,11 +91,7 @@ class _IntroPageState extends State<IntroPage> implements IntroViewCallBacks {
 
   @override
   void onNextTap() {
-    // if (selectedPage == introPageModels.length-1) {
-    //   onSkipTap();
-    //   return;
-    // }
-    if (selectedPage == images.length-1) {
+    if (selectedPage == introPageModels.length - 1) {
       onSkipTap();
       return;
     }
@@ -107,7 +103,7 @@ class _IntroPageState extends State<IntroPage> implements IntroViewCallBacks {
 
   @override
   void onSkipTap() {
-     authManagerBloc.add(OnBoardingViewedRequested());
+    authManagerBloc.add(OnBoardingViewedRequested());
   }
 
   @override
@@ -122,18 +118,9 @@ class _IntroPageState extends State<IntroPage> implements IntroViewCallBacks {
                 child: PageView(
                   physics: NeverScrollableScrollPhysics(),
                   controller: pageController,
-                  children: images
-                      .map((image) => IntroPageItem(image: image))
+                  children: introPageModels
+                      .map((item) => IntroPageItem(item: item))
                       .toList(),
-                  // children: introPageModels
-                  //     .map(
-                  //       (intro) => IntroPageItem(
-                  //         image: intro.image,
-                  //         title: intro.title,
-                  //         subTitle: intro.subTitle,
-                  //       ),
-                  //     )
-                  //     .toList(),
                 ),
               ),
               const SizedBox(height: 20),
@@ -145,8 +132,7 @@ class _IntroPageState extends State<IntroPage> implements IntroViewCallBacks {
                   type: WormType.thinUnderground,
                 ),
                 controller: pageController,
-                //count: introPageModels.length,
-                count: images.length,
+                count: introPageModels.length,
               ),
               const SizedBox(height: 20),
               MainActionButton(onTap: onNextTap, text: 'next'.tr()),
@@ -163,8 +149,7 @@ class _IntroPageState extends State<IntroPage> implements IntroViewCallBacks {
                   ],
                 ),
                 child: AnimatedSizeAndFade.showHide(
-                  // show: selectedPage != introPageModels.length-1,
-                  show: selectedPage != images.length - 1,
+                  show: selectedPage != introPageModels.length - 1,
                   child: MainActionButton(
                     onTap: onNextTap,
                     text: 'skip'.tr(),

@@ -10,54 +10,50 @@ part 'add_item_model.g.dart';
 @immutable
 class AddItemModel {
   const AddItemModel({
-    String? nameAr,
     String? nameEn,
-    String? price,
+    String? nameAr,
     String? descriptionEn,
     String? descriptionAr,
-  })  : _nameAr = nameAr,
-        _nameEn = nameEn,
-        _price = price,
+    String? link,
+    String? price,
+    int? levelId,
+  })  : _nameEn = nameEn,
+        _nameAr = nameAr,
         _descriptionEn = descriptionEn,
-        _descriptionAr = descriptionAr;
+        _descriptionAr = descriptionAr,
+        _link = link,
+        _price = price,
+        _levelId = levelId;
 
-  @JsonKey(name: 'name_ar')
-  final String? _nameAr;
-
-  @JsonKey(name: 'name_en')
   final String? _nameEn;
-
-  final String? _price;
-
-  @JsonKey(name: 'description_en')
+  final String? _nameAr;
   final String? _descriptionEn;
-
-  @JsonKey(name: 'description_ar')
   final String? _descriptionAr;
+  final String? _link;
+  final String? _price;
+  final int? _levelId;
 
   AddItemModel copyWith({
-    String? Function()? nameAr,
     String? Function()? nameEn,
-    String? Function()? price,
+    String? Function()? nameAr,
     String? Function()? descriptionEn,
     String? Function()? descriptionAr,
+    String? Function()? link,
+    String? Function()? price,
+    int? Function()? levelId,
   }) {
     return AddItemModel(
-      nameAr: nameAr != null ? nameAr() : _nameAr,
       nameEn: nameEn != null ? nameEn() : _nameEn,
-      price: price != null ? price() : _price,
+      nameAr: nameAr != null ? nameAr() : _nameAr,
       descriptionEn: descriptionEn != null ? descriptionEn() : _descriptionEn,
       descriptionAr: descriptionAr != null ? descriptionAr() : _descriptionAr,
+      link: link != null ? link() : _link,
+      price: price != null ? price() : _price,
+      levelId: levelId != null ? levelId() : _levelId,
     );
   }
 
-  String get nameAr {
-    if (_nameAr == null || _nameAr.isEmpty) {
-      throw "name_ar_required".tr();
-    }
-    return _nameAr;
-  }
-
+  @JsonKey(name: 'name[en]')
   String get nameEn {
     if (_nameEn == null || _nameEn.isEmpty) {
       throw "name_en_required".tr();
@@ -65,6 +61,24 @@ class AddItemModel {
     return _nameEn;
   }
 
+  @JsonKey(name: 'name[ar]')
+  String get nameAr {
+    if (_nameAr == null || _nameAr.isEmpty) {
+      throw "name_ar_required".tr();
+    }
+    return _nameAr;
+  }
+
+  @JsonKey(name: 'description[en]')
+  String? get descriptionEn => _descriptionEn;
+
+  @JsonKey(name: 'description[ar]')
+  String? get descriptionAr => _descriptionAr;
+
+  @JsonKey(name: 'link')
+  String? get link => _link;
+
+  @JsonKey(name: 'price')
   String get price {
     if (_price == null || _price.isEmpty) {
       throw "price_required".tr();
@@ -72,18 +86,12 @@ class AddItemModel {
     return _price;
   }
 
-  String get descriptionEn {
-    if (_descriptionEn == null || _descriptionEn.isEmpty) {
-      throw "description_en_required".tr();
+  @JsonKey(name: 'level_id')
+  int get levelId {
+    if (_levelId == null) {
+      throw "level_required".tr();
     }
-    return _descriptionEn;
-  }
-
-  String get descriptionAr {
-    if (_descriptionAr == null || _descriptionAr.isEmpty) {
-      throw "description_ar_required".tr();
-    }
-    return _descriptionAr;
+    return _levelId;
   }
 
   factory AddItemModel.fromJson(Map<String, dynamic> json) =>

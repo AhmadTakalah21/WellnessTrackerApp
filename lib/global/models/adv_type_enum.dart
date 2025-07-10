@@ -11,7 +11,23 @@ enum AdvTypeEnum implements DropDownItemModel {
   @override
   int get id => index + 1;
 
-  static int toJson(AdvTypeEnum adv) => adv.id;
+  bool get isAdv {
+    switch (this) {
+      case AdvTypeEnum.advertisement:
+        return true;
+      case AdvTypeEnum.offer:
+        return false;
+    }
+  }
+
+  static String toJson(AdvTypeEnum adv) {
+    switch (adv) {
+      case AdvTypeEnum.advertisement:
+        return "ad";
+      case AdvTypeEnum.offer:
+        return "offer";
+    }
+  }
 
   static AdvTypeEnum fromJson(int id) {
     switch (id) {

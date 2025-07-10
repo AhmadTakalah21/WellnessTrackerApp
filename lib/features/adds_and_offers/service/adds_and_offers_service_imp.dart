@@ -6,19 +6,43 @@ class AddsAndOffersServiceImp implements AddsAndOffersService {
 
   @override
   Future<PaginatedModel<AdvModel>> getAdvs({
-    int perPage = 10,
-    required int page,
+    int? perPage = 10,
+    int? page,
   }) async {
     try {
-      final perPageParam = "per_page=$perPage";
-      final pageParam = "page=$page";
+      final perPageParam = perPage != null ? "per_page=$perPage" : "";
+      final pageParam = page != null ? "page=$page" : "";
       final response =
-          await dio.get("/v1/admin/adds_and_offers?$pageParam&$perPageParam");
+          await dio.get("/v1/admin/advertisements?$pageParam&$perPageParam");
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
         (json) => AdvModel.fromJson(json as Map<String, dynamic>),
       );
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addAdv(
+    AddAdvModel model, {
+    required bool isAdd,
+    XFile? image,
+    int? id,
+  }) async {
+    final endpoint = isAdd ? "" : "/$id";
+    try {
+      final map = model.toJson();
+      if (image != null) {
+        map['image'] = await MultipartFile.fromFile(
+          image.path,
+          filename: image.name,
+        );
+      }
+      final formData = FormData.fromMap(map);
+      await dio.post("/v1/admin/advertisements$endpoint", data: formData);
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
       rethrow;
     }
   }

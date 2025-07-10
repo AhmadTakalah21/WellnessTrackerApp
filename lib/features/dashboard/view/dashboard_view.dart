@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_mod
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_view_on_permission_model.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 // import 'package:wellnesstrackerapp/views/exercisetracker/exercise.dart';
 // import 'package:wellnesstrackerapp/views/habittracker/habittracker.dart';
@@ -31,7 +33,7 @@ import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 // import 'package:wellnesstrackerapp/views/yogatracker/yogatracker.dart';
 
 abstract class DashboardViewCallBacks {
-  //void onLogoutTap();
+  void onGridItemTap(PageRouteInfo page);
 }
 
 @RoutePage()
@@ -62,6 +64,9 @@ class _DashboardState extends State<Dashboard>
     super.initState();
     modules = user.role.getPermissions;
   }
+
+  @override
+  void onGridItemTap(PageRouteInfo page) => context.router.push(page);
 
   // final List<Color> iconColors = [
   //   Colors.red,
@@ -160,18 +165,24 @@ class _DashboardState extends State<Dashboard>
       backgroundColor: context.cs.onSurface,
       appBar: user.role == UserRoleEnum.user ? null : MainAppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 3,
-          ),
-          itemCount: modules.length,
-          itemBuilder: (context, index) {
-            final module = modules[index];
-            return _buildGridItem(context, module);
-          },
+        padding: AppConstants.padding10,
+        child: Column(
+          children: [
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 3,
+                ),
+                itemCount: modules.length,
+                itemBuilder: (context, index) {
+                  final module = modules[index];
+                  return _buildGridItem(context, module);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -182,12 +193,7 @@ class _DashboardState extends State<Dashboard>
     UserViewOnPermissionModel module,
   ) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => module.screen),
-        );
-      },
+      onTap: () => onGridItemTap(module.screen),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 3,

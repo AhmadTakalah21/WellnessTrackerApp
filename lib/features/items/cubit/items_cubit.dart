@@ -43,6 +43,14 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     addItemModel = addItemModel.copyWith(descriptionAr: () => desc);
   }
 
+  void setLink(String? link) {
+    addItemModel = addItemModel.copyWith(link: () => link);
+  }
+
+  void setLevelId(int? levelId) {
+    addItemModel = addItemModel.copyWith(levelId: () => levelId);
+  }
+
   void setImage(XFile? image) {
     this.image = image;
   }

@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wellnesstrackerapp/features/auth/model/add_info_model/add_info_model.dart';
 import 'package:wellnesstrackerapp/features/auth/model/post_sign_up_model/post_sign_up_model.dart';
 import 'package:wellnesstrackerapp/features/auth/model/reset_password_post_model/reset_password_post_model.dart';
@@ -141,12 +142,17 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
 
+    final prefs = await SharedPreferences.getInstance();
+    final fcmToken = prefs.getString("fcm_token");
+    postSignUpModel = postSignUpModel.copyWith(fcmToken: () => fcmToken);
+
     emit(SignInLoading());
 
     try {
       final response = await authRepo.signIn(
         postSignUpModel.email,
         postSignUpModel.password,
+        fcmToken,
       );
       emit(SignInSuccess(response, "login_success".tr()));
       authManagerBloc?.add(SignInRequested(response, onSuccess: onSuccess));
@@ -190,6 +196,10 @@ class AuthCubit extends Cubit<AuthState> {
     }
 
     if (shouldReturn) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final fcmToken = prefs.getString("fcm_token");
+    postSignUpModel = postSignUpModel.copyWith(fcmToken: () => fcmToken);
 
     emit(SignInLoading());
 

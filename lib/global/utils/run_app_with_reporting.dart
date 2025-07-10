@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/app/app.dart';
+import 'package:wellnesstrackerapp/firebase_options.dart';
 import 'package:wellnesstrackerapp/global/blocs/app_bloc_observer.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
-import '../../firebase_options.dart';
+import 'package:wellnesstrackerapp/global/services/notification_service/notification_config.dart';
 
 Future<void> runAppWithReporting() async {
   await runZonedGuarded(
@@ -19,6 +20,7 @@ Future<void> runAppWithReporting() async {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+      await get<NotaficationsService>().initialize();
 
       final app = App();
 

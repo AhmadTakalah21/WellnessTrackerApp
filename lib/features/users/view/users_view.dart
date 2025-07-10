@@ -154,13 +154,6 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
         padding: AppConstants.padding16,
         child: Column(
           children: [
-            MainDropDownWidget(
-              items: DepartmentEnum.values,
-              onChanged: selectRole,
-              hintText: 'select_role'.tr(),
-              labelText: 'role'.tr(),
-              prefixIcon: LucideIcons.shieldCheck,
-            ),
             Expanded(
               child: BlocBuilder<UsersCubit, GeneralUsersState>(
                 buildWhen: (previous, current) => current is UsersState,
@@ -180,6 +173,7 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
                       emptyMessage: state.emptyMessage,
                       onSearchChanged: onSearchChanged,
                       searchHint: "search_employee",
+                      filters: [_buildDepartmentFilter()],
                     );
                   } else if (state is UsersEmpty) {
                     return MainErrorWidget(
@@ -204,6 +198,16 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
         ),
       ),
       floatingActionButton: MainFloatingButton(onTap: onAddTap),
+    );
+  }
+
+  Widget _buildDepartmentFilter() {
+    return MainDropDownWidget(
+      items: DepartmentEnum.values,
+      onChanged: selectRole,
+      hintText: 'select_role'.tr(),
+      labelText: 'role'.tr(),
+      prefixIcon: LucideIcons.shieldCheck,
     );
   }
 }

@@ -30,7 +30,7 @@ class AdvModel implements DeleteModel, DataTableModel {
   @JsonKey(name: 'exp_date')
   final String expDate;
 
-  @JsonKey(fromJson: AdvTypeEnum.fromJson , toJson: AdvTypeEnum.toJson)
+  @JsonKey(fromJson: AdvTypeEnum.fromJson, toJson: AdvTypeEnum.toJson)
   final AdvTypeEnum type;
 
   @BoolConverter()

@@ -132,14 +132,14 @@ class MainTabBar extends StatelessWidget {
   Widget _buildTab(BuildContext context, String title, int index) {
     return AnimatedContainer(
       duration: AppConstants.duration500ms,
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: AppConstants.borderRadius10,
         color: selectedTab == index ? context.cs.primary : context.cs.onSurface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 2,
             offset: const Offset(0, 2),
           ),

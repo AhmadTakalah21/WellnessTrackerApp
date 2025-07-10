@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
+import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -28,7 +29,7 @@ abstract class SignInViewCallbacks {
   void onCodeChanged(String code);
   void onCodeSubmitted(String code);
   void onConfirmTermsAndConditionsTap(bool? isChecked);
-  Future<void> onGetCodeTap();
+  Future<void> onGetCodeTap(String? whatsappPhone);
   void onForgetPasswordTap();
   void onShowPassword();
   void onMainAction();
@@ -45,8 +46,15 @@ class SignInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => get<AuthCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => get<AuthCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => get<SettingsCubit>(),
+        ),
+      ],
       child: SignInPage(onSignedIn: onSignedIn),
     );
   }
@@ -65,6 +73,7 @@ class _SignInPageState extends State<SignInPage>
     with SingleTickerProviderStateMixin
     implements SignInViewCallbacks {
   late final AuthCubit authCubit = context.read();
+  late final SettingsCubit settingsCubit = context.read();
   bool? _rememberMe = false;
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -95,6 +104,7 @@ class _SignInPageState extends State<SignInPage>
   @override
   void initState() {
     super.initState();
+    settingsCubit.getSettings();
     _controller = AnimationController(
       duration: AppConstants.duration1500ms,
       vsync: this,
@@ -159,13 +169,16 @@ class _SignInPageState extends State<SignInPage>
   void onUsernameSubmitted(String username) => passwordFocusNode.requestFocus();
 
   @override
-  Future<void> onGetCodeTap() async {
-    final uri =
-        Uri.parse("https://wa.me/963XXXXXXXXX?text=مرحباً، أحتاج كود الاشتراك");
+  Future<void> onGetCodeTap(String? whatsappPhone) async {
+    final url =
+        "https://wa.me/963$whatsappPhone?text=مرحباً، أحتاج كود الاشتراك";
+    final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      MainSnackBar.showErrorMessage(context, "لا يمكن فتح واتساب حالياً");
+      if (mounted) {
+        MainSnackBar.showErrorMessage(context, "لا يمكن فتح واتساب حالياً");
+      }
     }
   }
 
@@ -435,28 +448,37 @@ class _SignInPageState extends State<SignInPage>
             },
           ),
           const SizedBox(height: 10),
-          Center(
-            child: InkWell(
-              onTap: onGetCodeTap,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SvgPicture.asset(
-                    "assets/images/whatsapp.svg",
-                    color: context.cs.primary,
+          BlocBuilder<SettingsCubit, GeneralSettingsState>(
+            buildWhen: (previous, current) => current is SettingsState,
+            builder: (context, state) {
+              String? whatsappPhone;
+              if (state is SettingsSuccess) {
+                whatsappPhone = state.settings.supportPhoneNumber;
+              }
+              return Center(
+                child: InkWell(
+                  onTap: () => onGetCodeTap(whatsappPhone),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/images/whatsapp.svg",
+                        color: context.cs.primary,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        "get_code_via_whatsapp".tr(),
+                        style: context.tt.bodyMedium?.copyWith(
+                          color: context.cs.primary,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 6),
-                  Text(
-                    "get_code_via_whatsapp".tr(),
-                    style: context.tt.bodyMedium?.copyWith(
-                      color: context.cs.primary,
-                      fontWeight: FontWeight.w600,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 10),
         ],

@@ -10,7 +10,7 @@ part 'upload_image_state.dart';
 class UploadImageCubit extends Cubit<UploadImageState> {
   UploadImageCubit() : super(UploadImageInitial());
 
-  Future<void> uploadImage(ImageSource source) async {
+  Future<void> uploadImage({ImageSource source = ImageSource.gallery}) async {
     try {
       final ImagePicker picker = ImagePicker();
       final image = await picker.pickImage(source: source);

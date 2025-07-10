@@ -33,6 +33,7 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
     this.searchHint = "search",
     this.onSearchChanged,
     this.bottomHeight = 100,
+    this.filters = const [],
   });
 
   final String? header;
@@ -41,6 +42,7 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
   final String? emptyMessage;
   final String searchHint;
   final double bottomHeight;
+  final List<Widget> filters;
   final void Function(String input)? onSearchChanged;
   final void Function(int page, int perPage) onPageChanged;
   final void Function(T item)? onEditTap;
@@ -89,14 +91,15 @@ class _MainDataTableState<T extends DataTableModel>
       onRefresh: () async => widget.onPageChanged(page, perPage),
       child: SingleChildScrollView(
         child: Column(
+          spacing: 10,
           children: [
             _buildHeader(),
-            SizedBox(height: 20),
+            ...widget.filters,
+            const SizedBox(height: 4),
             _buildSearch(),
-            const SizedBox(height: 16),
+            const SizedBox(height: 4),
             _buildTable(),
             _buildEmptyWidget(),
-            SizedBox(height: 20),
             _buildPaginator(),
             SizedBox(height: widget.bottomHeight),
           ],
@@ -206,6 +209,9 @@ class _MainDataTableState<T extends DataTableModel>
   }
 
   Widget _buildPaginator() {
+    final perPage = this.perPage < 10 ? "10" : this.perPage.toString();
+    final meta = widget.items.meta;
+    
     return Row(
       children: [
         PopupMenuButton<PerPageEnum>(
@@ -214,20 +220,20 @@ class _MainDataTableState<T extends DataTableModel>
           padding: AppConstants.padding0,
           constraints: BoxConstraints(maxWidth: 60),
           itemBuilder: (context) {
-            return PerPageEnum.values.map((perPage) {
+            return PerPageEnum.values.map((perPageItem) {
               return PopupMenuItem<PerPageEnum>(
                 height: 30,
                 child: Text(
-                  perPage.displayName,
+                  perPageItem.displayName,
                   style: context.tt.bodyMedium,
                 ),
-                onTap: () => onPerPageSelected(perPage),
+                onTap: () => onPerPageSelected(perPageItem),
               );
             }).toList();
           },
           child: Row(
             children: [
-              Text(perPage.toString()),
+              Text(perPage),
               SizedBox(width: 5),
               Icon(Icons.keyboard_arrow_down),
             ],
@@ -240,14 +246,12 @@ class _MainDataTableState<T extends DataTableModel>
         IconButton(
           onPressed: onNextPageTap,
           icon: Icon(Icons.arrow_back_ios),
-          color: page != widget.items.meta.totalPages
+          color: page != meta.totalPages
               ? context.cs.secondary
               : context.cs.onSecondaryFixed,
         ),
         Spacer(),
-        Text(
-          "${widget.items.meta.currentPage} ${"of".tr()} ${widget.items.meta.totalPages}",
-        ),
+        Text("${meta.currentPage} ${"of".tr()} ${meta.totalPages}"),
         Spacer(),
         IconButton(
           onPressed: onPreviousPageTap,

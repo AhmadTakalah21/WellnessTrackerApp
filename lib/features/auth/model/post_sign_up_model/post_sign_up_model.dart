@@ -13,6 +13,7 @@ class PostSignUpModel {
     String? email,
     String? password,
     this.confirmPassword,
+    this.fcmToken,
     String? code,
   })  : _username = username,
         _email = email,
@@ -28,6 +29,8 @@ class PostSignUpModel {
   final String? _username;
   final String? _email;
   final String? _password;
+  @JsonKey(name: 'fcm_token')
+  final String? fcmToken;
 
   @JsonKey(name: "password_confirmation")
   final String? confirmPassword;
@@ -88,6 +91,7 @@ class PostSignUpModel {
     String? Function()? password,
     String? Function()? confirmPassword,
     String? Function()? code,
+    String? Function()? fcmToken,
   }) {
     return PostSignUpModel(
       username: username != null ? username() : _username,
@@ -96,6 +100,7 @@ class PostSignUpModel {
       confirmPassword:
           confirmPassword != null ? confirmPassword() : this.confirmPassword,
       code: code != null ? code() : _code,
+      fcmToken: fcmToken != null ? fcmToken() : this.fcmToken,
     );
   }
 

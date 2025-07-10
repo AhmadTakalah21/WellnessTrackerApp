@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ class TitleValueModel {
 
 abstract class ApproveCustomerViewCallBacks {
   void onDepartmentSelected(DepartmentEnum? department);
-  void onUserSelected(UserModel? employee);
+  void onEmployeeSelected(UserModel? employee);
   void onLevelSelected(LevelEnum? level);
   void onCancelTap();
   void onSave();
@@ -86,28 +85,42 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
     implements ApproveCustomerViewCallBacks {
   late final UsersCubit usersCubit = context.read();
 
+  DepartmentEnum? selectedDepartment;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.customersCubit.setUserId(widget.customer.id);
+  }
+
   @override
   void onDepartmentSelected(DepartmentEnum? department) {
-    // TODO: implement onDepartmentSelected
+    setState(() {
+      selectedDepartment = department;
+    });
   }
 
   @override
-  void onLevelSelected(LevelEnum? level) {
-    // TODO: implement onLevelSelected
-  }
+  void onLevelSelected(LevelEnum? level) =>
+      widget.customersCubit.setLevelId(level?.id);
 
   @override
-  void onUserSelected(UserModel? employee) {
-    // TODO: implement onUserSelected
+  void onEmployeeSelected(UserModel? employee) {
+    // TODO check this
+    if (selectedDepartment == DepartmentEnum.coach) {
+      widget.customersCubit.setCoachId(employee?.id);
+    } else if (selectedDepartment == DepartmentEnum.dietitian) {
+      widget.customersCubit.setDietitianId(employee?.id);
+    } else {
+      widget.customersCubit.setDoctorId(employee?.id);
+    }
   }
 
   @override
   void onCancelTap() => Navigator.pop(context);
 
   @override
-  void onSave() {
-    // TODO: implement onSave
-  }
+  void onSave() => widget.customersCubit.assignSubscriber();
 
   @override
   void onTryAgainTap() => usersCubit.getUsers(perPage: null);
@@ -189,28 +202,33 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
               errorMessage: "department_required".tr(),
               onChanged: onDepartmentSelected,
             ),
-            BlocBuilder<UsersCubit, GeneralUsersState>(
-              builder: (context, state) {
-                if (state is UsersLoading) {
-                  return LoadingIndicator();
-                } else if (state is UsersSuccess) {
-                  return MainDropDownWidget(
-                    items: state.users.data,
-                    prefixIcon: Icons.person,
-                    hintText: "employee".tr(),
-                    labelText: "employee".tr(),
-                    onChanged: onUserSelected,
-                  );
-                } else if (state is UsersFail) {
-                  return MainErrorWidget(
-                    error: state.error,
-                    onTryAgainTap: onTryAgainTap,
-                  );
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
-            ),
+            if (selectedDepartment != null)
+              BlocBuilder<UsersCubit, GeneralUsersState>(
+                builder: (context, state) {
+                  if (state is UsersLoading) {
+                    return LoadingIndicator();
+                  } else if (state is UsersSuccess) {
+                    final items = state.users.data
+                        .where((user) => user.role == selectedDepartment!.name)
+                        .toList();
+                    return MainDropDownWidget<UserModel>(
+                      //items: state.users.data,
+                      items: items,
+                      prefixIcon: Icons.person,
+                      hintText: "employee".tr(),
+                      labelText: "employee".tr(),
+                      onChanged: onEmployeeSelected,
+                    );
+                  } else if (state is UsersFail) {
+                    return MainErrorWidget(
+                      error: state.error,
+                      onTryAgainTap: onTryAgainTap,
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
             MainDropDownWidget(
               items: LevelEnum.values,
               prefixIcon: Icons.bar_chart,
@@ -222,18 +240,18 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
             const SizedBox(height: 10),
             BlocConsumer<CustomersCubit, GeneralCustomersState>(
               listener: (context, state) {
-                if (state is ApproveCustomerSuccess) {
+                if (state is AssignSubscriberSuccess) {
                   widget.onSuccess?.call();
                   onCancelTap();
                   MainSnackBar.showSuccessMessage(context, state.message);
-                } else if (state is ApproveCustomerFail) {
+                } else if (state is AssignSubscriberFail) {
                   MainSnackBar.showErrorMessage(context, state.error);
                 }
               },
               builder: (context, state) {
                 var onTap = onSave;
                 Widget? child;
-                if (state is ApproveCustomerLoading) {
+                if (state is AssignSubscriberLoading) {
                   onTap = () {};
                   child = const LoadingIndicator(size: 30);
                 }

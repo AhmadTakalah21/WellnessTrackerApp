@@ -93,11 +93,8 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
                         padding: AppConstants.padding8,
                         physics: BouncingScrollPhysics(),
                         itemCount: staticData.length,
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.8
-                        ),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, childAspectRatio: 0.8),
                         itemBuilder: (context, index) {
                           final item = staticData[index];
                           return _buildStageCard(item);

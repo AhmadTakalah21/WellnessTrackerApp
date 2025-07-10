@@ -20,6 +20,8 @@ class CodesCubit extends Cubit<GeneralCodesState> {
   AddCodeModel addCodeModel = const AddCodeModel();
 
   List<CodeModel> codes = [];
+  MetaModel? meta;
+
   String lastQuery = '';
   String? lastStatus;
 
@@ -49,6 +51,7 @@ class CodesCubit extends Cubit<GeneralCodesState> {
       if (isClosed) return;
       final result = await codeService.getCodes(page: page, perPage: perPage);
       codes = result.data;
+      meta = result.meta;
       emit(CodesSuccess(result, result.data.isEmpty ? "no_users".tr() : null));
     } catch (e) {
       if (isClosed) return;
@@ -60,22 +63,18 @@ class CodesCubit extends Cubit<GeneralCodesState> {
     lastQuery = query;
     lastStatus = status;
 
-    final filtered = _applyFilters(
-      codes,
-      query,
-      status,
-    );
-    final result = PaginatedModel<CodeModel>(
-      data: filtered,
-      meta: MetaModel(
-        total: filtered.length,
-        count: filtered.length,
-        perPage: filtered.length,
-        currentPage: 1,
-        totalPages: 1,
-      ),
-    );
+    final filtered = _applyFilters(codes, query, status);
+    final meta = this.meta != null && (query.isEmpty && status == null)
+        ? this.meta!
+        : MetaModel(
+            total: filtered.length,
+            count: filtered.length,
+            perPage: filtered.length,
+            currentPage: 1,
+            totalPages: 1,
+          );
 
+    final result = PaginatedModel<CodeModel>(data: filtered, meta: meta);
     emit(CodesSuccess(result, filtered.isEmpty ? "no_codes".tr() : null));
   }
 

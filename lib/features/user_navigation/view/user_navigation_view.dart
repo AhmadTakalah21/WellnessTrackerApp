@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
@@ -60,7 +61,11 @@ class _UserNavigationPageState extends State<UserNavigationPage>
       appBarBuilder: (context, tabsRouter) {
         return MainAppBar();
       },
-      routes: const [ProfileRoute(), DashboardRoute(), AddsAndOffersRoute()],
+      routes: [
+        ProfileRoute(),
+        DashboardRouter(),
+        AddsAndOffersRoute(role: UserRoleEnum.user),
+      ],
       extendBody: true,
       resizeToAvoidBottomInset: true,
       bottomNavigationBuilder: (context, tabsRouter) {

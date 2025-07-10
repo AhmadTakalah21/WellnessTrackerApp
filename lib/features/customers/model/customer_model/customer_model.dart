@@ -9,12 +9,13 @@ import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 
 part 'customer_model.g.dart';
 
 @JsonSerializable()
 @immutable
-class CustomerModel implements DeleteModel, DataTableModel {
+class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
   const CustomerModel({
     required this.id,
     required this.name,
@@ -28,6 +29,7 @@ class CustomerModel implements DeleteModel, DataTableModel {
     required this.createdAt,
   });
 
+  @override
   final int id;
   final String name;
   final String email;
@@ -83,5 +85,8 @@ class CustomerModel implements DeleteModel, DataTableModel {
   String toString() => jsonEncode(toJson());
 
   @override
-  String get apiDeleteUrl => "/customer/$id";
+  String get apiDeleteUrl => "/v1/admin/users/$id";
+
+  @override
+  String get displayName => name;
 }

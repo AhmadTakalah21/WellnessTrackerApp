@@ -12,11 +12,13 @@ PostSignUpModel _$PostSignUpModelFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String?,
       password: json['password'] as String?,
       confirmPassword: json['password_confirmation'] as String?,
+      fcmToken: json['fcm_token'] as String?,
       code: json['code'] as String?,
     );
 
 Map<String, dynamic> _$PostSignUpModelToJson(PostSignUpModel instance) =>
     <String, dynamic>{
+      'fcm_token': instance.fcmToken,
       'password_confirmation': instance.confirmPassword,
       'name': instance.username,
       'email': instance.email,

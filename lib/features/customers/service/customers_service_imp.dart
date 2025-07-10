@@ -6,12 +6,12 @@ class CustomersServiceImp implements CustomersService {
 
   @override
   Future<PaginatedModel<CustomerModel>> getCustomers({
-    int perPage = 10,
-    required int page,
+    int? page,
+    int? perPage = 10,
   }) async {
     try {
-      final perPageParam = "per_page=$perPage";
-      final pageParam = "page=$page";
+      final perPageParam = perPage != null ? "per_page=$perPage" : "";
+      final pageParam = page != null ? "page=$page" : "";
       const roleParam = "filter[role]=user";
       final endpoint =
           "/v1/admin/users/customers?$roleParam&$pageParam&$perPageParam";
@@ -20,7 +20,18 @@ class CustomersServiceImp implements CustomersService {
         response.data as Map<String, dynamic>,
         (json) => CustomerModel.fromJson(json as Map<String, dynamic>),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> assignSubscriber(AssignSubscriberModel model) async {
+    try {
+      await dio.post("/v1/admin/subscriptions/assign", data: model.toJson());
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
       rethrow;
     }
   }

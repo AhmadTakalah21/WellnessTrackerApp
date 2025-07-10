@@ -1,18 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:wellnesstrackerapp/features/codes/view/codes_view.dart';
-import 'package:wellnesstrackerapp/features/customers/view/customers_view.dart';
-import 'package:wellnesstrackerapp/features/exercises/view/exercises_view.dart';
-import 'package:wellnesstrackerapp/features/items/view/items_view.dart';
-import 'package:wellnesstrackerapp/features/levels/view/levels_view.dart';
-import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart';
-import 'package:wellnesstrackerapp/features/points/view/points_view.dart';
-import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart';
-import 'package:wellnesstrackerapp/features/users/view/users_view.dart';
 import 'package:wellnesstrackerapp/global/models/user_view_on_permission_model.dart';
-import 'package:wellnesstrackerapp/views/daillygoals/daillygoals.dart';
-import 'package:wellnesstrackerapp/views/notifications/notifications.dart';
+import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 
 enum UserRoleEnum {
   admin,
@@ -32,7 +22,7 @@ enum UserRoleEnum {
       return UserRoleEnum.doctor;
     } else if (role == "coach") {
       return UserRoleEnum.coach;
-    } else if (role == "dietician") {
+    } else if (role == "dietitian") {
       return UserRoleEnum.nutritionist;
     } else {
       //throw 'Role is not supported';
@@ -50,7 +40,7 @@ enum UserRoleEnum {
     } else if (role == UserRoleEnum.coach) {
       return "coach";
     } else if (role == UserRoleEnum.nutritionist) {
-      return "dietician";
+      return "dietitian";
     } else {
       //throw 'Role is not supported';
       return "user";
@@ -64,25 +54,43 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: CustomersView(),
+            screen: CustomersRoute(),
             color: Colors.red,
           ),
           UserViewOnPermissionModel(
             title: "employees_administration",
             icon: Icons.manage_accounts,
-            screen: UsersView(),
+            screen: UsersRoute(),
             color: Colors.blue,
           ),
           UserViewOnPermissionModel(
             title: "codes_management",
             icon: Icons.qr_code,
-            screen: CodesView(),
+            screen: CodesRoute(),
             color: Colors.purple,
+          ),
+          UserViewOnPermissionModel(
+            title: "levels",
+            icon: Icons.stacked_line_chart,
+            screen: LevelsRoute(),
+            color: Colors.indigo,
+          ),
+          UserViewOnPermissionModel(
+            title: "adds_and_offers",
+            icon: Icons.campaign,
+            screen: AddsAndOffersRoute(role: admin),
+            color: Colors.orange,
+          ),
+          UserViewOnPermissionModel(
+            title: "company_info",
+            icon: Icons.info,
+            screen: CompanyInfoRoute(),
+            color: Colors.greenAccent,
           ),
           UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
-            screen: CryptoNotifications(canSendNotification: true),
+            screen: NotificationsRoute(canSendNotification: true),
             color: Colors.green,
           ),
         ];
@@ -91,49 +99,49 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "follow_up",
             icon: FontAwesomeIcons.clipboardList,
-            screen: SelectPlanView(),
+            screen: SelectPlanRoute(),
             color: Colors.blue,
           ),
-          UserViewOnPermissionModel(
-            title: "daily_goals",
-            icon: FontAwesomeIcons.listCheck,
-            screen: DailyGoalsScreen(),
-            color: Colors.green,
-          ),
+          // UserViewOnPermissionModel(
+          //   title: "daily_goals",
+          //   icon: FontAwesomeIcons.listCheck,
+          //   screen: DailyGoalsScreen(),
+          //   color: Colors.green,
+          // ),
           UserViewOnPermissionModel(
             title: "points",
             icon: Icons.stacked_bar_chart,
-            screen: PointsView(),
+            screen: PointsRoute(),
             color: Colors.purple,
           ),
           UserViewOnPermissionModel(
             title: "meals",
             icon: Icons.restaurant_menu_rounded,
-            screen: MealsView(),
+            screen: MealsRoute(),
             color: Colors.green.shade400,
           ),
           UserViewOnPermissionModel(
             title: "exercises",
             icon: Icons.fitness_center_rounded,
-            screen: ExercisesView(),
+            screen: ExercisesRoute(),
             color: Colors.blue.shade400,
           ),
           UserViewOnPermissionModel(
             title: "levels",
             icon: Icons.stacked_line_chart,
-            screen: LevelsView(),
+            screen: LevelsRoute(),
             color: Colors.orange,
           ),
           UserViewOnPermissionModel(
             title: "store",
             icon: Icons.storefront_outlined,
-            screen: ItemsView(),
+            screen: ItemsRoute(),
             color: Colors.greenAccent,
           ),
           UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
-            screen: CryptoNotifications(canSendNotification: false),
+            screen: NotificationsRoute(canSendNotification: false),
             color: Colors.green,
           ),
         ];
@@ -142,7 +150,7 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: CustomersView(),
+            screen: CustomersRoute(),
             color: Colors.red,
           ),
         ];
@@ -151,7 +159,7 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: CustomersView(),
+            screen: CustomersRoute(),
             color: Colors.red,
           ),
         ];
@@ -160,7 +168,7 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: CustomersView(),
+            screen: CustomersRoute(),
             color: Colors.red,
           ),
         ];

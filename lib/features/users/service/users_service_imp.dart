@@ -11,7 +11,7 @@ class UserServiceImp implements UserService {
     String? role,
   }) async {
     try {
-      final perPageParam = perPage != null ? "per_page=$perPage" : null;
+      final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
       final roleParam = role != null ? "filter[role]=$role" : "";
       final endpoint =

@@ -36,10 +36,22 @@ import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart'
     as _i803;
 import 'package:wellnesstrackerapp/features/items/service/items_service.dart'
     as _i1044;
+import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart'
+    as _i726;
+import 'package:wellnesstrackerapp/features/levels/service/level_service.dart'
+    as _i715;
+import 'package:wellnesstrackerapp/features/notifications/cubit/notifications_cubit.dart'
+    as _i1053;
+import 'package:wellnesstrackerapp/features/notifications/service/notifications_service.dart'
+    as _i959;
 import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart'
     as _i32;
 import 'package:wellnesstrackerapp/features/points/service/points_service.dart'
     as _i985;
+import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart'
+    as _i264;
+import 'package:wellnesstrackerapp/features/settings/service/settings_service.dart'
+    as _i1054;
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart'
     as _i253;
 import 'package:wellnesstrackerapp/features/users/service/users_service.dart'
@@ -54,6 +66,8 @@ import 'package:wellnesstrackerapp/global/di/app_module.dart' as _i326;
 import 'package:wellnesstrackerapp/global/dio/dio_client.dart' as _i384;
 import 'package:wellnesstrackerapp/global/services/delete_service/delete_service.dart'
     as _i963;
+import 'package:wellnesstrackerapp/global/services/notification_service/notification_config.dart'
+    as _i1023;
 import 'package:wellnesstrackerapp/global/services/user_repo.dart' as _i128;
 import 'package:wellnesstrackerapp/global/services/user_role_service/user_role_service.dart'
     as _i474;
@@ -77,6 +91,8 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i384.DioClient>(() => _i384.DioClient());
+    gh.singleton<_i1023.NotaficationsService>(
+        () => _i1023.NotaficationsService());
     await gh.singletonAsync<_i128.UserRepo>(
       () {
         final i = _i128.UserRepo();
@@ -87,15 +103,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i386.AuthService>(() => _i386.AuthServiceImp());
     gh.factory<_i249.CodesService>(() => _i249.CodesServiceImp());
     gh.factory<_i985.PointsService>(() => _i985.PointsServiceImp());
+    gh.factory<_i1054.SettingsService>(() => _i1054.SettingsServiceImp());
     gh.factory<_i936.UserService>(() => _i936.UserServiceImp());
+    gh.factory<_i959.NotificationsService>(
+        () => _i959.NotificationsServiceImp());
     gh.singleton<_i435.AuthManagerBloc>(
         () => _i435.AuthManagerBloc(gh<_i128.UserRepo>()));
     gh.factory<_i963.DeleteService>(() => _i963.DeleteServiceImp());
+    gh.factory<_i1053.NotificationsCubit>(
+        () => _i1053.NotificationsCubit(gh<_i959.NotificationsService>()));
     gh.factory<_i32.PointsCubit>(
         () => _i32.PointsCubit(gh<_i985.PointsService>()));
     gh.factory<_i457.CodesCubit>(
         () => _i457.CodesCubit(gh<_i249.CodesService>()));
     gh.factory<_i474.UserRoleService>(() => _i474.UserRoleServiceImp());
+    gh.factory<_i715.LevelsService>(() => _i715.LevelsServiceImp());
     gh.factory<_i1044.ItemService>(() => _i1044.ItemServiceImp());
     gh.factory<_i299.CustomersService>(() => _i299.CustomersServiceImp());
     gh.factory<_i602.AddsAndOffersService>(
@@ -108,12 +130,16 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i386.AuthService>(),
           gh<_i435.AuthManagerBloc>(),
         ));
+    gh.factory<_i264.SettingsCubit>(
+        () => _i264.SettingsCubit(gh<_i1054.SettingsService>()));
     gh.factory<_i253.UsersCubit>(
         () => _i253.UsersCubit(gh<_i936.UserService>()));
     gh.factory<_i972.AddsAndOffersCubit>(
         () => _i972.AddsAndOffersCubit(gh<_i602.AddsAndOffersService>()));
     gh.factory<_i803.ItemsCubit>(
         () => _i803.ItemsCubit(gh<_i1044.ItemService>()));
+    gh.factory<_i726.LevelsCubit>(
+        () => _i726.LevelsCubit(gh<_i715.LevelsService>()));
     gh.factory<_i633.UserRolesCubit>(
         () => _i633.UserRolesCubit(gh<_i474.UserRoleService>()));
     return this;

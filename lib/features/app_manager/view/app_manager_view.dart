@@ -43,7 +43,7 @@ class _AppManagerPageState extends State<AppManagerPage> {
         if (widget.isCustomer) {
           return [const UserNavigationRoute()];
         } else {
-          return [const DashboardRoute()];
+          return [const DashboardRouter()];
         }
       },
     );
