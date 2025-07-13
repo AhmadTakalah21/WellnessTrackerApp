@@ -11,6 +11,7 @@ enum TextFieldType {
   username,
   fullName,
   email,
+  phone,
   password,
   confirmPassword,
   code,

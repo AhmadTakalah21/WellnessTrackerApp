@@ -33,4 +33,7 @@ enum PerPageEnum implements DropDownItemModel {
         return 100;
     }
   }
+  
+  @override
+  String get displayEntityName => displayName;
 }

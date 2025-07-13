@@ -5,11 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
+import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart';
+import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
-import 'package:wellnesstrackerapp/global/models/level_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
@@ -27,7 +28,7 @@ class TitleValueModel {
 abstract class ApproveCustomerViewCallBacks {
   void onDepartmentSelected(DepartmentEnum? department);
   void onEmployeeSelected(UserModel? employee);
-  void onLevelSelected(LevelEnum? level);
+  void onLevelSelected(LevelModel? level);
   void onCancelTap();
   void onSave();
   void onTryAgainTap();
@@ -53,9 +54,8 @@ class ApproveCustomerView extends StatelessWidget {
         BlocProvider.value(
           value: customersCubit,
         ),
-        BlocProvider(
-          create: (context) => get<UsersCubit>()..getUsers(perPage: null),
-        ),
+        BlocProvider(create: (context) => get<UsersCubit>()),
+        BlocProvider(create: (context) => get<LevelsCubit>()),
       ],
       child: ApproveCustomerPage(
         customersCubit: customersCubit,
@@ -84,12 +84,15 @@ class ApproveCustomerPage extends StatefulWidget {
 class _ApproveCustomerPageState extends State<ApproveCustomerPage>
     implements ApproveCustomerViewCallBacks {
   late final UsersCubit usersCubit = context.read();
+  late final LevelsCubit levelsCubit = context.read();
 
   DepartmentEnum? selectedDepartment;
 
   @override
   void initState() {
     super.initState();
+    usersCubit.getUsers(perPage: 1000000);
+    levelsCubit.getLevels(perPage: 1000000);
     widget.customersCubit.setUserId(widget.customer.id);
   }
 
@@ -98,10 +101,12 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
     setState(() {
       selectedDepartment = department;
     });
+    usersCubit.setRoleFilter(department);
+    levelsCubit.setRoleFilter(department);
   }
 
   @override
-  void onLevelSelected(LevelEnum? level) =>
+  void onLevelSelected(LevelModel? level) =>
       widget.customersCubit.setLevelId(level?.id);
 
   @override
@@ -123,7 +128,10 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   void onSave() => widget.customersCubit.assignSubscriber();
 
   @override
-  void onTryAgainTap() => usersCubit.getUsers(perPage: null);
+  void onTryAgainTap() {
+    usersCubit.getUsers(perPage: 1000000);
+    levelsCubit.getLevels(perPage: 1000000);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,40 +210,50 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
               errorMessage: "department_required".tr(),
               onChanged: onDepartmentSelected,
             ),
-            if (selectedDepartment != null)
-              BlocBuilder<UsersCubit, GeneralUsersState>(
-                builder: (context, state) {
-                  if (state is UsersLoading) {
-                    return LoadingIndicator();
-                  } else if (state is UsersSuccess) {
-                    final items = state.users.data
-                        .where((user) => user.role == selectedDepartment!.name)
-                        .toList();
-                    return MainDropDownWidget<UserModel>(
-                      //items: state.users.data,
-                      items: items,
-                      prefixIcon: Icons.person,
-                      hintText: "employee".tr(),
-                      labelText: "employee".tr(),
-                      onChanged: onEmployeeSelected,
-                    );
-                  } else if (state is UsersFail) {
-                    return MainErrorWidget(
-                      error: state.error,
-                      onTryAgainTap: onTryAgainTap,
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-            MainDropDownWidget(
-              items: LevelEnum.values,
-              prefixIcon: Icons.bar_chart,
-              hintText: 'level'.tr(),
-              labelText: 'level'.tr(),
-              errorMessage: 'required_field'.tr(),
-              onChanged: onLevelSelected,
+            BlocBuilder<UsersCubit, GeneralUsersState>(
+              builder: (context, state) {
+                if (state is UsersLoading) {
+                  return LoadingIndicator();
+                } else if (state is UsersSuccess) {
+                  return MainDropDownWidget<UserModel>(
+                    items: state.users.data,
+                    prefixIcon: Icons.person,
+                    hintText: "employee".tr(),
+                    labelText: "employee".tr(),
+                    onChanged: onEmployeeSelected,
+                  );
+                } else if (state is UsersFail) {
+                  return MainErrorWidget(
+                    error: state.error,
+                    onTryAgainTap: onTryAgainTap,
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            ),
+            BlocBuilder<LevelsCubit, GeneralLevelsState>(
+              builder: (context, state) {
+                if (state is LevelsLoading) {
+                  return LoadingIndicator();
+                } else if (state is LevelsSuccess) {
+                  return MainDropDownWidget(
+                    items: state.levels.data,
+                    prefixIcon: Icons.bar_chart,
+                    hintText: 'level'.tr(),
+                    labelText: 'level'.tr(),
+                    errorMessage: 'required_field'.tr(),
+                    onChanged: onLevelSelected,
+                  );
+                } else if (state is LevelsFail) {
+                  return MainErrorWidget(
+                    error: state.error,
+                    onTryAgainTap: onTryAgainTap,
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
             ),
             const SizedBox(height: 10),
             BlocConsumer<CustomersCubit, GeneralCustomersState>(

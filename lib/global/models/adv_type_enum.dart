@@ -39,4 +39,7 @@ enum AdvTypeEnum implements DropDownItemModel {
         return advertisement;
     }
   }
+  
+  @override
+  String get displayEntityName => name.tr();
 }

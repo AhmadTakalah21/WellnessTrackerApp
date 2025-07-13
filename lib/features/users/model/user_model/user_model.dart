@@ -68,4 +68,7 @@ class UserModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   @override
   String get displayName => name;
+  
+  @override
+  String get displayEntityName => name;
 }

@@ -40,6 +40,11 @@ class AuthCubit extends Cubit<AuthState> {
     emit(TextFieldState(TextFieldType.email));
   }
 
+  void setPhone(String phone) {
+    postSignUpModel = postSignUpModel.copyWith(phoneNumber: () => phone);
+    emit(TextFieldState(TextFieldType.phone));
+  }
+
   void setPassword(String password) {
     postSignUpModel = postSignUpModel.copyWith(password: () => password);
     emit(TextFieldState(TextFieldType.password));
@@ -173,6 +178,12 @@ class AuthCubit extends Cubit<AuthState> {
     final emailError = postSignUpModel.validateEmail();
     if (emailError != null) {
       emit(TextFieldState(TextFieldType.email, error: emailError));
+      shouldReturn = true;
+    }
+
+    final phoneError = postSignUpModel.validatePhoneNumber();
+    if (phoneError != null) {
+      emit(TextFieldState(TextFieldType.phone, error: phoneError));
       shouldReturn = true;
     }
 

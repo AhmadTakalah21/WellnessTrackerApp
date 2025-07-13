@@ -19,4 +19,7 @@ enum ActivityStatusEnum implements DropDownItemModel {
         return false;
     }
   }
+  
+  @override
+  String get displayEntityName => name.tr();
 }

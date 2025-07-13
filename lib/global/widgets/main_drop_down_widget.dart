@@ -5,6 +5,7 @@ import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
 abstract class DropDownItemModel {
   String get displayName;
+  String get displayEntityName;
   int get id;
 }
 
@@ -19,6 +20,7 @@ class MainDropDownWidget<T extends DropDownItemModel> extends StatefulWidget {
     this.errorMessage = "required",
     this.icon,
     required this.onChanged,
+    this.isEntityName = false,
   });
 
   final List<T> items;
@@ -29,6 +31,7 @@ class MainDropDownWidget<T extends DropDownItemModel> extends StatefulWidget {
   final String? errorMessage;
   final T? selectedValue;
   final IconData? icon;
+  final bool isEntityName;
 
   @override
   State<MainDropDownWidget<T>> createState() => _MainDropDownWidgetState<T>();
@@ -39,7 +42,20 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
   late T? selectedValue = widget.selectedValue;
 
   @override
+  void didUpdateWidget(MainDropDownWidget<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (selectedValue != null &&
+        !widget.items.any((item) => item.id == selectedValue?.id)) {
+      setState(() {
+        selectedValue = null;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isEntityName = widget.isEntityName;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -115,7 +131,10 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
           items: widget.items.map((item) {
             return DropdownMenuItem(
               value: item,
-              child: Text(item.displayName, style: context.tt.bodyMedium),
+              child: Text(
+                isEntityName ? item.displayEntityName : item.displayName,
+                style: context.tt.bodyMedium,
+              ),
             );
           }).toList(),
           onChanged: (value) {

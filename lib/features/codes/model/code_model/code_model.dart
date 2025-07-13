@@ -65,5 +65,5 @@ class CodeModel implements DeleteModel, DataTableModel {
   String toString() => jsonEncode(toJson());
 
   @override
-  String get apiDeleteUrl => "/code/$id";
+  String get apiDeleteUrl => "/v1/admin/codes/$id";
 }

@@ -61,75 +61,81 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
   void onEndDateSelected(DateTime? date) =>
       widget.codesCubit.setEndDate(_formattedDate(date));
 
-  void onSave() => widget.codesCubit.addCode(isAdd: !widget.isEdit);
+  void onSave() =>
+      widget.codesCubit.addCode(isAdd: !widget.isEdit, id: widget.code?.id);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: MediaQuery.of(context).viewInsets,
-      child: SingleChildScrollView(
-        padding: AppConstants.padding20,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Text(
-                  widget.isEdit ? 'edit_code'.tr() : 'add_code'.tr(),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      child: Scaffold(
+        body: Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: SingleChildScrollView(
+            padding: AppConstants.padding20,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Text(
+                      widget.isEdit ? 'edit_code'.tr() : 'add_code'.tr(),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  MainTextField2(
+                    initialText: widget.code?.code,
+                    onChanged: onCodeChanged,
+                    icon: Icons.qr_code,
+                    label: 'code'.tr(),
+                    validator: (val) =>
+                        val == null || val.isEmpty ? 'required_field'.tr() : null,
+                  ),
+                  const SizedBox(height: 12),
+                  MainDatePicker(
+                    isStart: true,
+                    initialDate: widget.code?.startDate,
+                    onDateSelected: onStartDateSelected,
+                  ),
+                  const SizedBox(height: 12),
+                  MainDatePicker(
+                    isEnd: true,
+                    initialDate: widget.code?.endDate,
+                    onDateSelected: onEndDateSelected,
+                  ),
+                  const SizedBox(height: 30),
+                  BlocConsumer<CodesCubit, GeneralCodesState>(
+                    bloc: widget.codesCubit,
+                    listener: (context, state) {
+                      if (state is AddCodeSuccess) {
+                        widget.onSuccess?.call();
+                        onCancelTap();
+                        MainSnackBar.showSuccessMessage(context, state.message);
+                      } else if (state is AddCodeFail) {
+                        MainSnackBar.showErrorMessage(context, state.error);
+                      }
+                    },
+                    builder: (context, state) {
+                      var onTap = onSave;
+                      Widget? child;
+                      if (state is AddCodeLoading) {
+                        onTap = () {};
+                        child = const LoadingIndicator(size: 30);
+                      }
+                      return MainActionButton(
+                        text: widget.isEdit ? 'update'.tr() : 'save'.tr(),
+                        onTap: onTap,
+                        child: child,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                ],
               ),
-              const SizedBox(height: 16),
-              MainTextField2(
-                initialText: widget.code?.code,
-                onChanged: onCodeChanged,
-                icon: Icons.qr_code,
-                label: 'code'.tr(),
-                validator: (val) =>
-                    val == null || val.isEmpty ? 'required_field'.tr() : null,
-              ),
-              const SizedBox(height: 12),
-              MainDatePicker(
-                isStart: true,
-                initialDate: widget.code?.startDate,
-                onDateSelected: onStartDateSelected,
-              ),
-              const SizedBox(height: 12),
-              MainDatePicker(
-                isEnd: true,
-                initialDate: widget.code?.endDate,
-                onDateSelected: onEndDateSelected,
-              ),
-              const SizedBox(height: 30),
-              BlocConsumer<CodesCubit, GeneralCodesState>(
-                bloc: widget.codesCubit,
-                listener: (context, state) {
-                  if (state is AddCodeSuccess) {
-                    widget.onSuccess?.call();
-                    onCancelTap();
-                    MainSnackBar.showSuccessMessage(context, state.message);
-                  } else if (state is AddCodeFail) {
-                    MainSnackBar.showErrorMessage(context, state.error);
-                  }
-                },
-                builder: (context, state) {
-                  var onTap = onSave;
-                  Widget? child;
-                  if (state is AddCodeLoading) {
-                    onTap = () {};
-                    child = const LoadingIndicator(size: 30);
-                  }
-                  return MainActionButton(
-                    text: widget.isEdit ? 'update'.tr() : 'save'.tr(),
-                    onTap: onTap,
-                    child: child,
-                  );
-                },
-              ),
-              const SizedBox(height: 12),
-            ],
+            ),
           ),
         ),
       ),

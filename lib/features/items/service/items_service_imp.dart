@@ -8,17 +8,24 @@ class ItemServiceImp implements ItemService {
   Future<PaginatedModel<ItemModel>> getItems({
     int perPage = 10,
     required int page,
+    int? levelId,
+    required UserRoleEnum role,
   }) async {
     try {
       final perPageParam = "per_page=$perPage";
       final pageParam = "page=$page";
-      final response = await dio.get("/item?$pageParam&$perPageParam");
+      final levelIdParam = levelId != null ? "filter[level_id]=$levelId" : "";
+      final endPoint = "/v1/${role.getApiRoute}/items?$levelIdParam&$pageParam&$perPageParam";
+      final response = await dio.get(endPoint);
       final items = response.data as Map<String, dynamic>;
       return PaginatedModel.fromJson(
         items,
         (json) => ItemModel.fromJson(json as Map<String, dynamic>),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        print(stackTrace);
+      }
       rethrow;
     }
   }
@@ -29,7 +36,10 @@ class ItemServiceImp implements ItemService {
       final response = await dio.get("/item/$itemId");
       final item = response.data["data"] as Map<String, dynamic>;
       return ItemModel.fromJson(item);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        print(stackTrace);
+      }
       rethrow;
     }
   }
@@ -42,7 +52,7 @@ class ItemServiceImp implements ItemService {
     int? itemId,
   }) async {
     try {
-      final endpoint = isAdd ? "/item" : "/item/$itemId";
+      final endpoint = isAdd ? "/v1/admin/items" : "/v1/admin/items/$itemId";
       final map = addItemModel.toJson();
       if (image != null) {
         map['image'] = await MultipartFile.fromFile(
@@ -57,7 +67,10 @@ class ItemServiceImp implements ItemService {
       );
       final item = response.data["data"] as Map<String, dynamic>;
       return ItemModel.fromJson(item);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        print(stackTrace);
+      }
       rethrow;
     }
   }

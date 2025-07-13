@@ -1,6 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart';
+import 'package:wellnesstrackerapp/features/levels/view/levels_page_item.dart';
+import 'package:wellnesstrackerapp/features/levels/view/widgets/add_level_widget.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -11,6 +17,7 @@ import 'package:wellnesstrackerapp/global/widgets/main_tab_bar.dart';
 abstract class LevelsViewCallBacks {
   void onAddTap();
   void onTabSelected(int index);
+  void onTryAgainTap();
 }
 
 @RoutePage()
@@ -19,7 +26,10 @@ class LevelsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LevelsPage();
+    return BlocProvider(
+      create: (context) => get<LevelsCubit>(),
+      child: const LevelsPage(),
+    );
   }
 }
 
@@ -33,6 +43,8 @@ class LevelsPage extends StatefulWidget {
 class _LevelsPageState extends State<LevelsPage>
     with SingleTickerProviderStateMixin
     implements LevelsViewCallBacks {
+  late final LevelsCubit levelsCubit = context.read();
+
   PageController pageController = PageController();
   late TabController tabController;
   int selectedTab = 0;
@@ -43,6 +55,7 @@ class _LevelsPageState extends State<LevelsPage>
   @override
   void initState() {
     super.initState();
+    levelsCubit.getLevels();
     tabController = TabController(length: tabBarTitles.length, vsync: this);
   }
 
@@ -51,6 +64,27 @@ class _LevelsPageState extends State<LevelsPage>
     setState(() => selectedTab = index);
     tabController.animateTo(index);
     pageController.jumpToPage(index);
+    levelsCubit.setRoleFilter(DepartmentEnum.getDepartmentById(index + 1));
+  }
+
+  @override
+  void onTryAgainTap() => levelsCubit.getLevels();
+
+  @override
+  void onAddTap() {
+    showMaterialModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (bottomSheetContext) => AddLevelView(
+        levelsCubit: levelsCubit,
+        isEdit: false,
+        onSuccess: () => levelsCubit.getLevels(),
+      ),
+    );
   }
 
   @override
@@ -61,38 +95,9 @@ class _LevelsPageState extends State<LevelsPage>
   }
 
   @override
-  void onAddTap() {
-    // TODO: implement onAddTap
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = DepartmentEnum.values.map((department) {
-      final levels = List.generate(
-          5,
-          (index) => {
-                'title': 'المستوى ${index + 1}',
-                'description':
-                    'هذا المستوى يكون متاح عند المشترك عندما يصبح مجموع نقاطه اكبر من ${1000 * (index + 1)}',
-                'image': "assets/images/app_logo.png",
-              });
-
-      return SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          spacing: 20,
-          children: [
-            ...levels.map(
-              (level) => _LevelCard(
-                title: level['title']!,
-                description: level['description']!,
-                image: level['image']!,
-              ),
-            ),
-            SizedBox(height: 80),
-          ],
-        ),
-      );
+    final pages = DepartmentEnum.values.map((department) {
+      return LevelsPageItem(onTryAgainTap: onTryAgainTap);
     }).toList();
     return Scaffold(
       appBar: AppBar(
@@ -126,60 +131,6 @@ class _LevelsPageState extends State<LevelsPage>
       ),
       floatingActionButton: MainFloatingButton(
         onTap: onAddTap,
-      ),
-    );
-  }
-}
-
-class _LevelCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String image;
-
-  const _LevelCard({
-    required this.title,
-    required this.description,
-    required this.image,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AspectRatio(
-            aspectRatio: 5 / 2,
-            child: Image.asset(
-              image,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
-                color: Colors.grey[200],
-                alignment: Alignment.center,
-                child: const Icon(Icons.broken_image, size: 40),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: context.tt.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 6),
-                Text(description,
-                    style: context.tt.bodyMedium
-                        ?.copyWith(color: Colors.grey[700])),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

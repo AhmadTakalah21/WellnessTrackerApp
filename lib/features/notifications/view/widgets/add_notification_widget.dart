@@ -127,162 +127,174 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: MediaQuery.of(context).viewInsets,
-      child: SingleChildScrollView(
-        padding: AppConstants.padding20,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Text(
-                  'send_notification'.tr(),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              const SizedBox(height: 16),
-              SwitchListTile(
-                value: isAll,
-                onChanged: onIsAllSelected,
-                title: Text(
-                  isAll ? "all_subscribers".tr() : "certain_subscribers".tr(),
-                  style: context.tt.bodyLarge,
-                ),
-                activeColor: context.cs.primary,
-                inactiveThumbColor: context.cs.secondary,
-                activeTrackColor: context.cs.primary.withValues(alpha: 0.4),
-                inactiveTrackColor: context.cs.secondary.withValues(alpha: 0.2),
-                dense: true,
-                visualDensity: VisualDensity.compact,
-              ),
-              AnimatedSizeAndFade.showHide(
-                show: !isAll,
-                child: Column(
+    return Scaffold(
+      body: Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: SingleChildScrollView(
+          padding: AppConstants.padding20,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   children: [
-                    const SizedBox(height: 16),
-                    MainDropDownWidget(
-                      items: DepartmentEnum.values,
-                      prefixIcon: Icons.group,
-                      hintText: "department".tr(),
-                      labelText: "department".tr(),
-                      errorMessage: "department_required".tr(),
-                      onChanged: onDepartmentSelected,
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.arrow_back),
                     ),
-                    const SizedBox(height: 16),
-                    BlocBuilder<CustomersCubit, GeneralCustomersState>(
-                      builder: (context, state) {
-                        if (state is CustomersLoading) {
-                          return LoadingIndicator();
-                        } else if (state is CustomersSuccess) {
-                          // TODO filter depending on department
-                          //inal data = state.customers.data;
-                          // final items = selectedDepartment == null
-                          //     ? data
-                          //     : data.where((customer) {
-                          //         return customer.department.id ==
-                          //             selectedDepartment?.id;
-                          //       }).toList();
-                          return MutliSelectorDropDown(
-                            items: state.customers.data,
-                            prefixIcon: Icons.subscriptions,
-                            hintText: "subscribers".tr(),
-                            labelText: "subscribers".tr(),
-                            onChanged: onSubscripersSelected,
-                          );
-                        } else if (state is CustomersEmpty) {
-                          return MainErrorWidget(
-                            error: state.message,
-                            onTryAgainTap: onTryAgainTap,
-                            isRefresh: true,
-                          );
-                        } else if (state is CustomersFail) {
-                          return MainErrorWidget(
-                            error: state.error,
-                            onTryAgainTap: onTryAgainTap,
-                          );
-                        } else {
-                          return SizedBox.shrink();
-                        }
-                      },
+                    Spacer(),
+                    Text(
+                      'send_notification'.tr(),
+                      style: context.tt.headlineSmall,
                     ),
+                    Spacer(),
+                    SizedBox(width: 30)
                   ],
                 ),
-              ),
-              const SizedBox(height: 16),
-              MainTextField2(
-                onChanged: onTitleChanged,
-                icon: Icons.title,
-                label: 'title'.tr(),
-                validator: (val) =>
-                    val == null || val.isEmpty ? 'required_field'.tr() : null,
-              ),
-              const SizedBox(height: 12),
-              MainTextField2(
-                onChanged: onMessageChanged,
-                icon: Icons.message,
-                label: 'message'.tr(),
-                validator: (val) =>
-                    val == null || val.isEmpty ? 'required_field'.tr() : null,
-              ),
-              const SizedBox(height: 12),
-              BlocConsumer<UploadImageCubit, UploadImageState>(
-                listener: (context, state) {
-                  if (state is UploadImageSuccess) {
-                    widget.notificationsCubit.setImage(state.image);
-                  } else if (state is UploadImageFail) {
-                    MainSnackBar.showErrorMessage(
-                      context,
-                      state.message,
+                const SizedBox(height: 24),
+                SwitchListTile(
+                  value: isAll,
+                  onChanged: onIsAllSelected,
+                  title: Text(
+                    isAll ? "all_subscribers".tr() : "certain_subscribers".tr(),
+                    style: context.tt.bodyLarge,
+                  ),
+                  activeColor: context.cs.primary,
+                  inactiveThumbColor: context.cs.secondary,
+                  activeTrackColor: context.cs.primary.withValues(alpha: 0.4),
+                  inactiveTrackColor: context.cs.secondary.withValues(alpha: 0.2),
+                  dense: true,
+                  visualDensity: VisualDensity.compact,
+                ),
+                AnimatedSizeAndFade.showHide(
+                  show: !isAll,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      MainDropDownWidget(
+                        items: DepartmentEnum.values,
+                        prefixIcon: Icons.group,
+                        hintText: "department".tr(),
+                        labelText: "department".tr(),
+                        errorMessage: "department_required".tr(),
+                        onChanged: onDepartmentSelected,
+                        isEntityName: true,
+                      ),
+                      const SizedBox(height: 16),
+                      BlocBuilder<CustomersCubit, GeneralCustomersState>(
+                        builder: (context, state) {
+                          if (state is CustomersLoading) {
+                            return LoadingIndicator();
+                          } else if (state is CustomersSuccess) {
+                            // TODO filter depending on department
+                            //inal data = state.customers.data;
+                            // final items = selectedDepartment == null
+                            //     ? data
+                            //     : data.where((customer) {
+                            //         return customer.department.id ==
+                            //             selectedDepartment?.id;
+                            //       }).toList();
+                            return MutliSelectorDropDown(
+                              items: state.customers.data,
+                              prefixIcon: Icons.subscriptions,
+                              hintText: "subscribers".tr(),
+                              labelText: "subscribers".tr(),
+                              onChanged: onSubscripersSelected,
+                            );
+                          } else if (state is CustomersEmpty) {
+                            return MainErrorWidget(
+                              error: state.message,
+                              onTryAgainTap: onTryAgainTap,
+                              isRefresh: true,
+                            );
+                          } else if (state is CustomersFail) {
+                            return MainErrorWidget(
+                              error: state.error,
+                              onTryAgainTap: onTryAgainTap,
+                            );
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                MainTextField2(
+                  onChanged: onTitleChanged,
+                  icon: Icons.title,
+                  label: 'title'.tr(),
+                  validator: (val) =>
+                      val == null || val.isEmpty ? 'required_field'.tr() : null,
+                ),
+                const SizedBox(height: 12),
+                MainTextField2(
+                  onChanged: onMessageChanged,
+                  icon: Icons.message,
+                  label: 'message'.tr(),
+                  validator: (val) =>
+                      val == null || val.isEmpty ? 'required_field'.tr() : null,
+                ),
+                const SizedBox(height: 12),
+                BlocConsumer<UploadImageCubit, UploadImageState>(
+                  listener: (context, state) {
+                    if (state is UploadImageSuccess) {
+                      widget.notificationsCubit.setImage(state.image);
+                    } else if (state is UploadImageFail) {
+                      MainSnackBar.showErrorMessage(
+                        context,
+                        state.message,
+                      );
+                      widget.notificationsCubit.setImage(null);
+                    }
+                  },
+                  builder: (context, state) {
+                    String? imagePath;
+                    if (state is UploadImageSuccess) {
+                      imagePath = state.image.path;
+                    } else if (state is UploadImageFail) {
+                      imagePath = state.message;
+                    }
+                    return ChooseImageWidget(
+                      onTap: onImageTap,
+                      filePath: imagePath,
+                      validator: (image) =>
+                          image == null ? 'image_required'.tr() : null,
                     );
-                    widget.notificationsCubit.setImage(null);
-                  }
-                },
-                builder: (context, state) {
-                  String? imagePath;
-                  if (state is UploadImageSuccess) {
-                    imagePath = state.image.path;
-                  } else if (state is UploadImageFail) {
-                    imagePath = state.message;
-                  }
-                  return ChooseImageWidget(
-                    onTap: onImageTap,
-                    filePath: imagePath,
-                    validator: (image) =>
-                        image == null ? 'image_required'.tr() : null,
-                  );
-                },
-              ),
-              const SizedBox(height: 30),
-              BlocConsumer<NotificationsCubit, GeneralNotificationsState>(
-                bloc: widget.notificationsCubit,
-                listener: (context, state) {
-                  if (state is AddNotificationSuccess) {
-                    widget.onSuccess?.call();
-                    onCancelTap();
-                    MainSnackBar.showSuccessMessage(context, state.message);
-                  } else if (state is AddNotificationFail) {
-                    MainSnackBar.showErrorMessage(context, state.error);
-                  }
-                },
-                builder: (context, state) {
-                  var onTap = onSend;
-                  Widget? child;
-                  if (state is AddNotificationLoading) {
-                    onTap = () {};
-                    child = const LoadingIndicator(size: 30);
-                  }
-                  return MainActionButton(
-                    text: 'send'.tr(),
-                    onTap: onTap,
-                    child: child,
-                  );
-                },
-              ),
-              const SizedBox(height: 12),
-            ],
+                  },
+                ),
+                const SizedBox(height: 30),
+                BlocConsumer<NotificationsCubit, GeneralNotificationsState>(
+                  bloc: widget.notificationsCubit,
+                  listener: (context, state) {
+                    if (state is AddNotificationSuccess) {
+                      widget.onSuccess?.call();
+                      onCancelTap();
+                      MainSnackBar.showSuccessMessage(context, state.message);
+                    } else if (state is AddNotificationFail) {
+                      MainSnackBar.showErrorMessage(context, state.error);
+                    }
+                  },
+                  builder: (context, state) {
+                    var onTap = onSend;
+                    Widget? child;
+                    if (state is AddNotificationLoading) {
+                      onTap = () {};
+                      child = const LoadingIndicator(size: 30);
+                    }
+                    return MainActionButton(
+                      text: 'send'.tr(),
+                      onTap: onTap,
+                      child: child,
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+              ],
+            ),
           ),
         ),
       ),

@@ -24,13 +24,6 @@ class _IntroPageItemState extends State<IntroPageItem> {
     return Column(
       children: [
         Spacer(),
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: ClipRRect(
-        //     borderRadius: AppConstants.borderRadius10,
-        //     child: Image.asset(widget.item.image),
-        //   ),
-        // ),
         ClipRRect(
           borderRadius: AppConstants.borderRadius10,
           child: CarouselSlider(
@@ -63,7 +56,7 @@ class _IntroPageItemState extends State<IntroPageItem> {
                 textAlign: TextAlign.center,
                 style: context.tt.headlineSmall,
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
               Text(
                 widget.item.subTitle,
                 textAlign: TextAlign.center,

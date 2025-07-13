@@ -12,6 +12,7 @@ enum DepartmentEnum implements DropDownItemModel {
   @override
   int get id => index + 1;
 
+  @override
   String get displayEntityName {
     switch (this) {
       case DepartmentEnum.dietitian:
@@ -24,6 +25,19 @@ enum DepartmentEnum implements DropDownItemModel {
   }
 
   static int toJson(DepartmentEnum role) => role.id;
+
+  static DepartmentEnum fromJson(int id) {
+    switch (id) {
+      case 1:
+        return dietitian;
+      case 2:
+        return coach;
+      case 3:
+        return doctor;
+      default:
+        return dietitian;
+    }
+  }
 
   static DepartmentEnum getDepartmentById(int id) {
     switch (id) {

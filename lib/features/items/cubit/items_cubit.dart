@@ -6,6 +6,8 @@ import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/items/model/add_item_model/add_item_model.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
 import 'package:wellnesstrackerapp/features/items/service/items_service.dart';
+import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/items_state.dart';
 part 'states/general_items_state.dart';
@@ -47,8 +49,8 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     addItemModel = addItemModel.copyWith(link: () => link);
   }
 
-  void setLevelId(int? levelId) {
-    addItemModel = addItemModel.copyWith(levelId: () => levelId);
+  void setLevelId(LevelModel? level) {
+    addItemModel = addItemModel.copyWith(levelId: () => level?.id);
   }
 
   void setImage(XFile? image) {
@@ -60,7 +62,12 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     addItemModel = const AddItemModel();
   }
 
-  Future<void> getItems({int perPage = 10, bool isLoadMore = true}) async {
+  Future<void> getItems(
+    UserRoleEnum role, {
+    int perPage = 10,
+    bool isLoadMore = true,
+    int? levelId,
+  }) async {
     if (!hasMore && isLoadMore) return;
     if (!isLoadMore) {
       page = 1;
@@ -70,37 +77,40 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     emit(ItemsLoading());
     try {
       if (isClosed) return;
-      final newItems = await itemService.getItems(page: page, perPage: perPage);
+      final newItems = await itemService.getItems(
+        page: page,
+        perPage: perPage,
+        role: role,
+        levelId: levelId,
+      );
       if (newItems.data.isEmpty) {
         hasMore = false;
-        //emit(ItemsEmpty("no_items".tr()));
         if (page == 1) {
           emit(ItemsEmpty("no_items".tr()));
         }
       } else {
         items.addAll(newItems.data);
         page++;
-        //emit(ItemsSuccess(items));
       }
-      emit(ItemsSuccess(items));
+      if (items.isEmpty) {
+        emit(ItemsEmpty("no_items".tr()));
+      } else {
+        emit(ItemsSuccess(items));
+      }
     } catch (e) {
       if (isClosed) return;
       emit(ItemsFail(e.toString()));
     }
   }
 
-  Future<void> addItem({required bool isAdd, int? itemId}) async {
-    if (isAdd && image == null) {
-      emit(AddItemFail("image_required".tr()));
-      return;
-    }
+  Future<void> addItem({required bool isAdd, int? id}) async {
     emit(AddItemLoading());
     try {
       final item = await itemService.addItem(
         addItemModel,
         image: image,
         isAdd: isAdd,
-        itemId: itemId,
+        itemId: id,
       );
       final message = isAdd ? "item_added".tr() : "item_updated".tr();
       emit(AddItemSuccess(item, message));

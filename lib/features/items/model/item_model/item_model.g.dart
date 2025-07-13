@@ -10,8 +10,10 @@ ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => ItemModel(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       price: (json['price'] as num).toDouble(),
-      description: json['description'] as String,
-      image: json['image'] as String,
+      description: json['description'] as String?,
+      link: json['link'] as String?,
+      level: LevelModel.fromJson(json['level'] as Map<String, dynamic>),
+      image: json['image_path'] as String?,
     );
 
 Map<String, dynamic> _$ItemModelToJson(ItemModel instance) => <String, dynamic>{
@@ -19,5 +21,7 @@ Map<String, dynamic> _$ItemModelToJson(ItemModel instance) => <String, dynamic>{
       'name': instance.name,
       'price': instance.price,
       'description': instance.description,
-      'image': instance.image,
+      'link': instance.link,
+      'level': instance.level,
+      'image_path': instance.image,
     };

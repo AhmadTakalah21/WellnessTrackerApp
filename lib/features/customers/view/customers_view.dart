@@ -79,6 +79,9 @@ class CustomersPageState extends State<CustomersPage>
           builder: (context) => ApproveCustomerView(
             customer: customer,
             customersCubit: customersCubit,
+            onSuccess: () {
+              customersCubit.getCustomers(page: currentPage, perPage: perPage);
+            },
           ),
         ),
       );

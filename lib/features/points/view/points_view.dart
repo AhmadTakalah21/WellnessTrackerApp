@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/features/items/view/items_view.dart';
 import 'package:wellnesstrackerapp/features/points/view/pages/current_points_view.dart';
 import 'package:wellnesstrackerapp/features/points/view/pages/earn_points_ways_view.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
@@ -69,7 +70,7 @@ class _PointsPageState extends State<PointsPage>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ItemsView(),
+        builder: (context) => ItemsView(role: UserRoleEnum.user),
       ),
     );
   }

@@ -12,7 +12,8 @@ class CodesServiceImp implements CodesService {
     try {
       final perPageParam = "per_page=$perPage";
       final pageParam = "page=$page";
-      final response = await dio.get("/v1/admin/codes?$pageParam&$perPageParam");
+      final response =
+          await dio.get("/v1/admin/codes?$pageParam&$perPageParam");
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
         (json) => CodeModel.fromJson(json as Map<String, dynamic>),
@@ -31,8 +32,9 @@ class CodesServiceImp implements CodesService {
     final endpoint = isAdd ? "/v1/admin/codes" : "/v1/admin/codes/$id";
     try {
       final map = addCodeModel.toJson();
-      final response = await dio.post(endpoint, data: map);
-      return CodeModel.fromJson(response.data as Map<String, dynamic>);
+      final response = await dio.postOrPut(endpoint, isAdd: isAdd, data: map);
+      final data = response.data["data"] as Map<String, dynamic>;
+      return CodeModel.fromJson(data);
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;

@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class Dividddddddddddeeeeeerrrrrr extends StatelessWidget {
-  const Dividddddddddddeeeeeerrrrrr({
-    super.key,
-  });
+// class Dividddddddddddeeeeeerrrrrr extends StatelessWidget {
+//   const Dividddddddddddeeeeeerrrrrr({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Divider(
-      color: Colors.grey[700],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Divider(
+//       color: Colors.grey[700],
+//     );
+//   }
+// }

@@ -3,14 +3,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:wellnesstrackerapp/Widgets/detailstext1.dart';
-import 'package:wellnesstrackerapp/Widgets/detailstext2.dart';
-import 'package:wellnesstrackerapp/Widgets/text11.dart';
 import 'package:wellnesstrackerapp/features/notifications/cubit/notifications_cubit.dart';
 import 'package:wellnesstrackerapp/features/notifications/view/widgets/add_notification_widget.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/widgets/detailstext1.dart';
+import 'package:wellnesstrackerapp/widgets/detailstext2.dart';
+import 'package:wellnesstrackerapp/widgets/text11.dart';
 
 abstract class NotificationsViewCallBacks {
   void onAddTap();

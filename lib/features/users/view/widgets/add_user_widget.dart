@@ -65,19 +65,10 @@ class _AddUserWidgetState extends State<AddUserWidget> {
   UsersCubit get usersCubit => context.read<UsersCubit>();
   final _formKey = GlobalKey<FormState>();
 
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final phoneController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
     if (widget.isEdit && widget.user != null) {
-      nameController.text = widget.user!.name;
-      emailController.text = widget.user!.email;
-      phoneController.text = widget.user!.phone;
-
       usersCubit.setName(widget.user!.name);
       usersCubit.setEmail(widget.user!.email);
       usersCubit.setPhone(widget.user!.phone);
@@ -87,11 +78,6 @@ class _AddUserWidgetState extends State<AddUserWidget> {
 
   void _saveUser() {
     if (_formKey.currentState?.validate() ?? false) {
-      usersCubit.setName(nameController.text);
-      usersCubit.setEmail(emailController.text);
-      usersCubit.setPassword(passwordController.text);
-      usersCubit.setPhone(phoneController.text);
-
       usersCubit.addUser(isAdd: !widget.isEdit, userId: widget.user?.id);
     }
   }
@@ -102,9 +88,10 @@ class _AddUserWidgetState extends State<AddUserWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final user = widget.user;
     final spacing = const SizedBox(height: 16);
     final selectedRole = DepartmentEnum.values
-        .firstWhereOrNull((role) => role.name == widget.user?.role);
+        .firstWhereOrNull((role) => role.name == user?.role);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -131,40 +118,52 @@ class _AddUserWidgetState extends State<AddUserWidget> {
                 ),
                 const SizedBox(height: 24),
                 MainTextField2(
-                  controller: nameController,
+                  initialText: user?.name,
                   label: 'name'.tr(),
                   icon: LucideIcons.user,
                   hint: 'John Doe',
+                  onChanged: usersCubit.setName,
                   validator: (val) =>
                       val == null || val.isEmpty ? 'required'.tr() : null,
                 ),
                 spacing,
                 MainTextField2(
-                  controller: emailController,
+                  initialText: user?.email,
                   label: 'email'.tr(),
                   icon: LucideIcons.mail,
                   hint: 'example@mail.com',
+                  keyboardType: TextInputType.emailAddress,
+                  onChanged: usersCubit.setEmail,
                   validator: (val) => val == null || !val.contains('@')
                       ? 'invalid_email'.tr()
                       : null,
                 ),
                 spacing,
                 MainTextField2(
-                  controller: passwordController,
                   label: 'password'.tr(),
                   icon: LucideIcons.lock,
+                  onChanged: usersCubit.setPassword,
                   validator: (val) =>
                       val == null || val.length < 6 ? 'too_short'.tr() : null,
                   isPassword: true,
                 ),
                 spacing,
                 MainTextField2(
-                  controller: phoneController,
-                  label: 'phone'.tr(),
-                  icon: LucideIcons.phone,
-                  validator: (val) =>
-                      val == null || val.isEmpty ? 'required'.tr() : null,
-                ),
+                    initialText: user?.phone,
+                    label: 'phone'.tr(),
+                    icon: LucideIcons.phone,
+                    onChanged: usersCubit.setPhone,
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'required'.tr();
+                      } else if (val.length != 10) {
+                        return 'phone_number_10_digits'.tr();
+                      } else if (!val.startsWith('09')) {
+                        return 'phone_number_start_09'.tr();
+                      } else {
+                        return null;
+                      }
+                    }),
                 spacing,
                 MainDropDownWidget(
                   items: DepartmentEnum.values,

@@ -4,3 +4,5 @@ part of 'app_manager_cubit.dart';
 sealed class AppManagerState {}
 
 final class AppManagerInitial extends AppManagerState {}
+
+final class LanguageChanged extends AppManagerState {}

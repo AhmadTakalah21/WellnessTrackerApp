@@ -22,4 +22,36 @@ class LevelsServiceImp implements LevelsService {
       rethrow;
     }
   }
+
+  @override
+  Future<LevelModel> addLevel(
+    AddLevelModel model, {
+    required bool isAdd,
+    XFile? image,
+    int? id,
+  }) async {
+    final endpoint = isAdd ? "/v1/admin/levels" : "/v1/admin/levels/$id";
+    try {
+      final map = model.toJson();
+      if (image != null) {
+        map['image'] = await MultipartFile.fromFile(
+          image.path,
+          filename: image.name,
+        );
+      }
+      final formData = FormData.fromMap(map);
+
+      final response = await dio.postOrPut(
+        endpoint,
+        isAdd: isAdd,
+        data: formData,
+      );
+
+      final data = response.data["data"] as Map<String, dynamic>;
+      return LevelModel.fromJson(data);
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
 }

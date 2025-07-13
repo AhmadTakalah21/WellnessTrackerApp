@@ -48,6 +48,7 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   Future<void> getNotifications({int? perPage = 10, int? page}) async {
     emit(NotificationsLoading());
     try {
+      if(isClosed) return;
       final result = await notificationsService.getNotifications(
         page: page,
         perPage: perPage,
@@ -57,6 +58,7 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
       final message = result.data.isEmpty ? "no_notifications".tr() : null;
       emit(NotificationsSuccess(result, message));
     } catch (e) {
+      if(isClosed) return;
       emit(NotificationsFail(e.toString()));
     }
   }

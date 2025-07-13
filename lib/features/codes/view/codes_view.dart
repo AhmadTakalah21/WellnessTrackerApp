@@ -61,13 +61,13 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
+      constraints: BoxConstraints(maxHeight: 500),
       builder: (bottomSheetContext) => AddCodeWidget(
         codesCubit: codesCubit,
         isEdit: false,
+        onSuccess: () => codesCubit.getCodes(page: 1, perPage: 10),
       ),
     );
   }
@@ -100,6 +100,7 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
             codesCubit: codesCubit,
             code: code,
             isEdit: true,
+            onSuccess: () => codesCubit.getCodes(page: 1, perPage: 10),
           );
         });
   }

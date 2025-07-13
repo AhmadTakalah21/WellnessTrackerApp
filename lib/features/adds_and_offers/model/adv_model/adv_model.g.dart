@@ -8,20 +8,21 @@ part of 'adv_model.dart';
 
 AdvModel _$AdvModelFromJson(Map<String, dynamic> json) => AdvModel(
       id: (json['id'] as num).toInt(),
-      address: json['address'] as String,
-      description: json['description'] as String,
-      image: json['image'] as String,
-      expDate: json['exp_date'] as String,
+      title: EnArModel.fromJson(json['title'] as Map<String, dynamic>),
+      description:
+          EnArModel.fromJson(json['description'] as Map<String, dynamic>),
       type: AdvTypeEnum.fromJson((json['type'] as num).toInt()),
-      isActive: const BoolConverter().fromJson(json['is_active']),
+      image: json['image_path'] as String,
+      startDate: json['start_date'] as String,
+      endDate: json['end_date'] as String,
     );
 
 Map<String, dynamic> _$AdvModelToJson(AdvModel instance) => <String, dynamic>{
       'id': instance.id,
-      'address': instance.address,
+      'title': instance.title,
       'description': instance.description,
-      'image': instance.image,
-      'exp_date': instance.expDate,
       'type': AdvTypeEnum.toJson(instance.type),
-      'is_active': const BoolConverter().toJson(instance.isActive),
+      'image_path': instance.image,
+      'start_date': instance.startDate,
+      'end_date': instance.endDate,
     };

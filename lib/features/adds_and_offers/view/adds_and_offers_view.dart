@@ -8,7 +8,6 @@ import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/add_adv
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/adv_details_widget.dart';
 import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
-import 'package:wellnesstrackerapp/global/models/adv_type_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
@@ -59,38 +58,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     implements AddsAndOffersViewCallBacks {
   late final AddsAndOffersCubit addsAndOffersCubit = context.read();
   late final DeleteCubit deleteCubit = context.read();
-  List<AdvModel> ads = List.generate(
-    10,
-    (index) {
-      return AdvModel(
-        id: index + 1,
-        address: "address",
-        description:
-            "شاهد خدمتنا الجديدة !! الأن يمكنك متابعة صحتك من خلال تحميل تطبيقنا من غوغل بلاي",
-        image: "image",
-        expDate: "20-7-2025",
-        type: AdvTypeEnum.advertisement,
-        isActive: true,
-      );
-    },
-  );
-
-  List<AdvModel> offers = List.generate(
-    10,
-    (index) {
-      return AdvModel(
-        id: index + 1,
-        address: "address",
-        description:
-            "هذا المنتج متاح الان ب 500 نقطة بدلا من 1000 ! اذا ماذا تنتظر الان ؟؟ تواصل معنا للاستفادة من هذا العرض",
-        image: "image",
-        expDate: "20-7-2025",
-        type: AdvTypeEnum.offer,
-        isActive: true,
-      );
-    },
-  );
-
+  
   @override
   void initState() {
     super.initState();
@@ -114,55 +82,56 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
   @override
   void onAdvLongPress(AdvModel adv) {
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
         ),
-        builder: (context) => Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: AppConstants.padding16,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Center(
-                          child: Text(
-                            "additional_options".tr(),
-                            style: context.tt.headlineMedium,
-                          ),
-                        ),
-                        TextButton.icon(
-                          icon: Icon(Icons.edit),
-                          onPressed: () => onEditTap(adv),
-                          label: Text(
-                            "edit".tr(),
-                            style: context.tt.labelMedium?.copyWith(
-                              color: context.cs.primary,
-                            ),
-                          ),
-                        ),
-                        TextButton.icon(
-                          icon: Icon(Icons.delete, color: context.cs.error),
-                          onPressed: () => onDeleteTap(adv),
-                          label: Text(
-                            "delete".tr(),
-                            style: context.tt.labelMedium?.copyWith(
-                              color: context.cs.error,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                      ],
+      ),
+      builder: (context) => Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: AppConstants.padding16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Text(
+                      "additional_options".tr(),
+                      style: context.tt.headlineMedium,
                     ),
                   ),
-                ),
-              ],
-            ));
+                  TextButton.icon(
+                    icon: Icon(Icons.edit),
+                    onPressed: () => onEditTap(adv),
+                    label: Text(
+                      "edit".tr(),
+                      style: context.tt.labelMedium?.copyWith(
+                        color: context.cs.primary,
+                      ),
+                    ),
+                  ),
+                  TextButton.icon(
+                    icon: Icon(Icons.delete, color: context.cs.error),
+                    onPressed: () => onDeleteTap(adv),
+                    label: Text(
+                      "delete".tr(),
+                      style: context.tt.labelMedium?.copyWith(
+                        color: context.cs.error,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override

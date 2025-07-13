@@ -1,11 +1,13 @@
 import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:wellnesstrackerapp/global/models/adv_type_enum.dart';
-import 'package:wellnesstrackerapp/global/utils/json_converters/bool_converter.dart';
+import 'package:wellnesstrackerapp/global/models/en_ar_model/en_ar_model.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
-import '../../../../global/widgets/main_data_table.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 
 part 'adv_model.g.dart';
 
@@ -14,51 +16,52 @@ part 'adv_model.g.dart';
 class AdvModel implements DeleteModel, DataTableModel {
   const AdvModel({
     required this.id,
-    required this.address,
+    required this.title,
     required this.description,
-    required this.image,
-    required this.expDate,
     required this.type,
-    required this.isActive,
+    required this.image,
+    required this.startDate,
+    required this.endDate,
   });
 
   final int id;
-  final String address;
-  final String description;
-  final String image;
-
-  @JsonKey(name: 'exp_date')
-  final String expDate;
+  final EnArModel title;
+  final EnArModel description;
 
   @JsonKey(fromJson: AdvTypeEnum.fromJson, toJson: AdvTypeEnum.toJson)
   final AdvTypeEnum type;
 
-  @BoolConverter()
-  @JsonKey(name: 'is_active')
-  final bool isActive;
+  @JsonKey(name: "image_path")
+  final String image;
+
+  @JsonKey(name: 'start_date')
+  final String startDate;
+
+  @JsonKey(name: 'end_date')
+  final String endDate;
 
   static String get header => 'adv_management'.tr();
 
   static List<String> get titles => [
         '#',
-        'address'.tr(),
+        'title'.tr(),
         'description'.tr(),
-        'image'.tr(),
-        'exp_date'.tr(),
         'type'.tr(),
-        'is_active'.tr(),
+        'image'.tr(),
+        'start_date'.tr(),
+        'end_date'.tr(),
         'event'.tr(),
       ];
 
   @override
   List<String> get values => [
         '#$id',
-        address,
-        description,
-        image,
-        expDate,
+        title.en,
+        description.en,
         type.displayName,
-        isActive ? 'active'.tr() : 'inactive'.tr(),
+        image,
+        startDate,
+        endDate,
       ];
 
   factory AdvModel.fromString(String str) =>
@@ -73,5 +76,5 @@ class AdvModel implements DeleteModel, DataTableModel {
   String toString() => jsonEncode(toJson());
 
   @override
-  String get apiDeleteUrl => "/adv/$id";
+  String get apiDeleteUrl => "v1/admin/advertisements/$id";
 }

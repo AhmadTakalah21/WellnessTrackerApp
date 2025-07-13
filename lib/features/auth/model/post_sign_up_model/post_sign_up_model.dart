@@ -11,12 +11,14 @@ class PostSignUpModel {
   const PostSignUpModel({
     String? username,
     String? email,
+    String? phoneNumber,
     String? password,
     this.confirmPassword,
     this.fcmToken,
     String? code,
   })  : _username = username,
         _email = email,
+        _phoneNumber = phoneNumber,
         _password = password,
         _code = code;
 
@@ -28,6 +30,7 @@ class PostSignUpModel {
 
   final String? _username;
   final String? _email;
+  final String? _phoneNumber;
   final String? _password;
   @JsonKey(name: 'fcm_token')
   final String? fcmToken;
@@ -55,6 +58,22 @@ class PostSignUpModel {
     if (!emailRegex.hasMatch(_email)) {
       return 'email_invalid'.tr();
     }
+    return null;
+  }
+
+  String? validatePhoneNumber() {
+    if (_phoneNumber == null || _phoneNumber.isEmpty) {
+      return null;
+    }
+
+    if (_phoneNumber.length != 10) {
+      return 'phone_number_10_digits'.tr();
+    }
+
+    if (!_phoneNumber.startsWith('09')) {
+      return 'phone_number_start_09'.tr();
+    }
+
     return null;
   }
 
@@ -88,6 +107,7 @@ class PostSignUpModel {
   PostSignUpModel copyWith({
     String? Function()? username,
     String? Function()? email,
+    String? Function()? phoneNumber,
     String? Function()? password,
     String? Function()? confirmPassword,
     String? Function()? code,
@@ -96,6 +116,7 @@ class PostSignUpModel {
     return PostSignUpModel(
       username: username != null ? username() : _username,
       email: email != null ? email() : _email,
+      phoneNumber: phoneNumber != null ? phoneNumber() : _phoneNumber,
       password: password != null ? password() : _password,
       confirmPassword:
           confirmPassword != null ? confirmPassword() : this.confirmPassword,
@@ -108,6 +129,10 @@ class PostSignUpModel {
   String get username => _username ?? (throw 'username_required'.tr());
 
   String get email => _email ?? (throw 'email_empty'.tr());
+
+  @JsonKey(name: "phone")
+  String? get phoneNumber => _phoneNumber;
+
   String get password => _password ?? (throw 'password_required'.tr());
   String get code => _code ?? (throw 'code_required'.tr());
   String? get getEmail => _email;

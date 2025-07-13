@@ -7,15 +7,6 @@ import 'package:wellnesstrackerapp/features/auth_manager/bloc/auth_manager_bloc.
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
-import 'package:wellnesstrackerapp/views/healthassesment/yourlifstyle/dietarypreferences.dart';
-import 'package:wellnesstrackerapp/views/healthassesment/yourlifstyle/healthgoals.dart';
-import 'package:wellnesstrackerapp/views/healthassesment/yourlifstyle/lifestyle.dart';
-import 'package:wellnesstrackerapp/views/healthassesment/yourlifstyle/lifestylehabits.dart';
-import 'package:wellnesstrackerapp/views/healthassesment/yourlifstyle/preexisting.dart';
-import 'package:wellnesstrackerapp/views/healthassesment/yourlifstyle/sleephourses.dart';
-import 'package:wellnesstrackerapp/views/healthassesment/yourlifstyle/stressfrequencey.dart';
-import 'package:wellnesstrackerapp/views/healthassesment/yourlifstyle/waterintake.dart';
-import 'package:wellnesstrackerapp/views/healthassesment/yourlifstyle/workoutpreferences.dart';
 
 abstract class HealthAssesmentViewCallBacks {
   void onNextTap();
@@ -66,15 +57,15 @@ class _HealthAssesmentPageState extends State<HealthAssesmentPage>
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      ActivityLevelScreen(),
-      SleepHoursScreen(),
-      WaterIntakeScreen(),
-      DietaryPreferencesScreen(),
-      HealthGoalsScreen(),
-      StressFrequencyScreen(),
-      AlcoholSmokingScreen(),
-      PreExistingConditionsScreen(),
-      WorkoutPreferenceScreen(),
+      // ActivityLevelScreen(),
+      // SleepHoursScreen(),
+      // WaterIntakeScreen(),
+      // DietaryPreferencesScreen(),
+      // HealthGoalsScreen(),
+      // StressFrequencyScreen(),
+      // AlcoholSmokingScreen(),
+      // PreExistingConditionsScreen(),
+      // WorkoutPreferenceScreen(),
     ];
     return Scaffold(
       appBar: AppBar(

@@ -2,6 +2,7 @@ import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,6 +23,8 @@ abstract class SignInViewCallbacks {
   void onEmailSubmitted(String email);
   void onUsernameChanged(String username);
   void onUsernameSubmitted(String username);
+  void onPhoneChanged(String phone);
+  void onPhoneSubmitted(String phone);
   void onPasswordChanged(String password);
   void onPasswordSubmitted(String password);
   void onConfirmPasswordChanged(String confirmPassword);
@@ -81,6 +84,7 @@ class _SignInPageState extends State<SignInPage>
 
   final emailFocusNode = FocusNode();
   final usernameFocusNode = FocusNode();
+  final phoneFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
   final confirmPasswordFocusNode = FocusNode();
   final codeFocusNode = FocusNode();
@@ -166,7 +170,13 @@ class _SignInPageState extends State<SignInPage>
   void onUsernameChanged(String username) => authCubit.setUsername(username);
 
   @override
-  void onUsernameSubmitted(String username) => passwordFocusNode.requestFocus();
+  void onUsernameSubmitted(String username) => phoneFocusNode.requestFocus();
+
+  @override
+  void onPhoneChanged(String phone) => authCubit.setPhone(phone);
+
+  @override
+  void onPhoneSubmitted(String phone) => passwordFocusNode.requestFocus();
 
   @override
   Future<void> onGetCodeTap(String? whatsappPhone) async {
@@ -200,17 +210,6 @@ class _SignInPageState extends State<SignInPage>
   }
 
   @override
-  void dispose() {
-    emailFocusNode.dispose();
-    usernameFocusNode.dispose();
-    passwordFocusNode.dispose();
-    confirmPasswordFocusNode.dispose();
-    codeFocusNode.dispose();
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   void onMainAction() {
     if (isShowSignIn) {
       authCubit.signIn();
@@ -227,6 +226,18 @@ class _SignInPageState extends State<SignInPage>
   @override
   void onLoginWithGoogleTap() {
     // TODO: implement onLoginWithGoogleTap
+  }
+
+  @override
+  void dispose() {
+    emailFocusNode.dispose();
+    usernameFocusNode.dispose();
+    phoneFocusNode.dispose();
+    passwordFocusNode.dispose();
+    confirmPasswordFocusNode.dispose();
+    codeFocusNode.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -255,6 +266,7 @@ class _SignInPageState extends State<SignInPage>
                           const SizedBox(height: 20),
                           _buildEmailTextField(),
                           _buildUsernameTextField(),
+                          _buildPhoneTextField(),
                           SizedBox(height: 10),
                           _buildPasswordTextField(),
                           _buildConfirmPasswordTextField(),
@@ -363,6 +375,35 @@ class _SignInPageState extends State<SignInPage>
     );
   }
 
+  Widget _buildPhoneTextField() {
+    return AnimatedSizeAndFade.showHide(
+      show: !isShowSignIn,
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          BlocBuilder<AuthCubit, AuthState>(
+            buildWhen: (previous, current) => (current is TextFieldState &&
+                current.type == TextFieldType.phone),
+            builder: (context, state) {
+              final isBuild =
+                  state is TextFieldState && state.type == TextFieldType.phone;
+              return MainTextField(
+                errorText: isBuild ? state.error : null,
+                prefixIcon: Icon(Icons.phone, color: context.cs.onSecondary),
+                labelText: "phone_number".tr(),
+                onChanged: onPhoneChanged,
+                onSubmitted: onPhoneSubmitted,
+                focusNode: phoneFocusNode,
+                textInputType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildPasswordTextField() {
     return BlocBuilder<AuthCubit, AuthState>(
       buildWhen: (previous, current) =>
@@ -463,6 +504,7 @@ class _SignInPageState extends State<SignInPage>
                     children: [
                       SvgPicture.asset(
                         "assets/images/whatsapp.svg",
+                        // ignore: deprecated_member_use
                         color: context.cs.primary,
                       ),
                       const SizedBox(width: 6),
@@ -563,7 +605,7 @@ class _SignInPageState extends State<SignInPage>
     return FadeTransition(
       opacity: _fadeAnimation,
       child: Row(
-        spacing: 12,
+        spacing: 6,
         children: otherWaysButtons.map((btn) => btn).toList(),
       ),
     );

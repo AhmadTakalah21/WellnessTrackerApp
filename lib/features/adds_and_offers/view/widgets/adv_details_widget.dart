@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 
 class AdvDetailsWidget extends StatelessWidget {
   const AdvDetailsWidget({super.key, required this.adv});
@@ -24,19 +25,14 @@ class AdvDetailsWidget extends StatelessWidget {
               padding: const EdgeInsets.all(4),
               child: Stack(
                 children: [
-                  Image.asset(
-                    "assets/images/app_logo.png",
-                    width: 300,
-                    height: 300,
+                  Center(
+                    child: AppImageWidget(
+                      width: 300,
+                      borderRadius: AppConstants.borderRadius20,
+                      fit: BoxFit.contain,
+                      url: adv.image,
+                    ),
                   ),
-                  // Center(
-                  //   child: AppImageWidget(
-                  //     width: 300,
-                  //     borderRadius: AppConstants.borderRadius20,
-                  //     fit: BoxFit.contain,
-                  //     url: adv.image,
-                  //   ),
-                  // ),
                   DecoratedBox(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -55,7 +51,7 @@ class AdvDetailsWidget extends StatelessWidget {
             const SizedBox(height: 25),
             Center(
               child: Text(
-                adv.description,
+                adv.description.en,
                 style: context.tt.titleMedium,
               ),
             ),
@@ -65,7 +61,7 @@ class AdvDetailsWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${"exp_date".tr()}: ${adv.expDate}",
+                    "${"exp_date".tr()}: ${adv.endDate}",
                     style: context.tt.titleLarge,
                   ),
                 ],

@@ -47,6 +47,24 @@ enum UserRoleEnum {
     }
   }
 
+  String get getApiRoute {
+    switch (this) {
+      case UserRoleEnum.admin:
+        return "admin";
+      case UserRoleEnum.user:
+        return "users";
+      case UserRoleEnum.doctor:
+        return "doctors";
+      case UserRoleEnum.coach:
+        return "coaches";
+      case UserRoleEnum.nutritionist:
+        return "nutritionists";
+    }
+  }
+
+  bool get isUser => this == user;
+  bool get isAdmin => this == admin;
+
   List<UserViewOnPermissionModel> get getPermissions {
     switch (this) {
       case UserRoleEnum.admin:
@@ -82,16 +100,16 @@ enum UserRoleEnum {
             color: Colors.orange,
           ),
           UserViewOnPermissionModel(
-            title: "company_info",
-            icon: Icons.info,
-            screen: CompanyInfoRoute(),
-            color: Colors.greenAccent,
-          ),
-          UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
             screen: NotificationsRoute(canSendNotification: true),
             color: Colors.green,
+          ),
+          UserViewOnPermissionModel(
+            title: "settings",
+            icon: Icons.settings,
+            screen: SettingsRoute(),
+            color: Colors.black,
           ),
         ];
       case UserRoleEnum.user:
@@ -135,7 +153,7 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "store",
             icon: Icons.storefront_outlined,
-            screen: ItemsRoute(),
+            screen: ItemsRoute(role: user),
             color: Colors.greenAccent,
           ),
           UserViewOnPermissionModel(

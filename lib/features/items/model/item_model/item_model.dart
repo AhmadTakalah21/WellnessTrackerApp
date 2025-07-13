@@ -1,6 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 
 part 'item_model.g.dart';
@@ -12,15 +15,21 @@ class ItemModel implements DeleteModel {
     required this.id,
     required this.name,
     required this.price,
-    required this.description,
-    required this.image,
+    this.description,
+    this.link,
+    required this.level,
+    this.image,
   });
 
   final int id;
   final String name;
   final double price;
-  final String description;
-  final String image;
+  final String? description;
+  final String? link;
+  final LevelModel level;
+
+  @JsonKey(name: "image_path")
+  final String? image;
 
   factory ItemModel.fromString(String str) =>
       ItemModel.fromJson(jsonDecode(str) as Map<String, dynamic>);
@@ -34,5 +43,5 @@ class ItemModel implements DeleteModel {
   String toString() => jsonEncode(toJson());
 
   @override
-  String get apiDeleteUrl => "/item/$id";
+  String get apiDeleteUrl => "/v1/admin/items/$id";
 }

@@ -40,4 +40,7 @@ enum GenderEnum implements DropDownItemModel {
   bool get isMale => this == GenderEnum.male;
 
   bool get isFemale => this == GenderEnum.female;
+  
+  @override
+  String get displayEntityName => name.tr();
 }

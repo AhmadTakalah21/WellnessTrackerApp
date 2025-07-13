@@ -89,7 +89,8 @@ class _AddAdvPageState extends State<AddAdvPage>
     // widget.advCubit.setDescriptionEn(adv?.descriptionEn);
     // widget.advCubit.setDescriptionAr(adv?.descriptionAr);
     widget.advCubit.setType(adv?.type);
-    widget.advCubit.setEndDate(adv?.expDate);
+    widget.advCubit.setEndDate(adv?.endDate);
+    
     // widget.advCubit.setImage(adv?.image);
   }
 
@@ -171,7 +172,7 @@ class _AddAdvPageState extends State<AddAdvPage>
                     onChanged: widget.advCubit.setType,
                   ),
                   MainDatePicker(
-                    initialDate: adv?.expDate,
+                    initialDate: adv?.endDate,
                     onDateSelected: (date) =>
                         widget.advCubit.setEndDate(date?.formatYYYYMMDD),
                     validator: (date) =>

@@ -3,37 +3,56 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
+import 'package:wellnesstrackerapp/features/items/view/widgets/add_item_view.dart';
+import 'package:wellnesstrackerapp/features/items/view/widgets/item_tile.dart';
+import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
+import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
 abstract class ItemsViewCallBacks {
   void onTryAgainTap();
   Future<void> onRefresh();
+  void onAddTap();
   bool onNotification(ScrollNotification scrollInfo);
+  void showBuyDialog(ItemModel item);
+  void onTap(ItemModel item);
+  void onEditTap(ItemModel item);
+  void onDeleteTap(ItemModel item);
 }
 
 @RoutePage()
 class ItemsView extends StatelessWidget {
-  const ItemsView({super.key});
+  const ItemsView({super.key, required this.role, this.levelId});
+  final UserRoleEnum role;
+  final int? levelId;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => get<ItemsCubit>()..getItems(),
-      child: const ItemsPage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              get<ItemsCubit>()..getItems(role, levelId: levelId),
+        ),
+        BlocProvider(create: (context) => get<DeleteCubit>()),
+      ],
+      child: ItemsPage(role: role, levelId: levelId),
     );
   }
 }
 
 class ItemsPage extends StatefulWidget {
-  const ItemsPage({super.key});
+  const ItemsPage({super.key, required this.role, this.levelId});
+
+  final UserRoleEnum role;
+  final int? levelId;
 
   @override
   State<ItemsPage> createState() => _ItemsPageState();
@@ -41,11 +60,12 @@ class ItemsPage extends StatefulWidget {
 
 class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
   late final ItemsCubit itemsCubit = context.read();
+  late final DeleteCubit deleteCubit = context.read();
 
   @override
   bool onNotification(ScrollNotification scrollInfo) {
     if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-      itemsCubit.getItems();
+      itemsCubit.getItems(widget.role, levelId: widget.levelId);
     }
     return true;
   }
@@ -54,181 +74,111 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => itemsCubit.getItems(isLoadMore: false);
+  void onTryAgainTap() => itemsCubit.getItems(widget.role,
+      isLoadMore: false, levelId: widget.levelId);
 
   @override
-  Widget build(BuildContext context) {
-    // TODO : remove this jsut untile there is a user account
-    final List<ItemModel> staticData = List.generate(
-      10,
-      (index) => ItemModel(
-        id: index + 1,
-        name: "Item name ${index + 1}",
-        price: 1000 + ((index + 1) * 300),
-        description: "description for item ${index + 1}",
-        image: "image",
-      ),
-    );
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('store'.tr(), style: context.tt.titleLarge),
-      ),
-      body: BlocBuilder<ItemsCubit, GeneralItemsState>(
-        builder: (context, state) {
-          if (state is ItemsLoading) {
-            return LoadingIndicator();
-          } else if (state is ItemsFail) {
-            return RefreshIndicator(
-              onRefresh: onRefresh,
-              child: NotificationListener<ScrollNotification>(
-                onNotification: onNotification,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: GridView.builder(
-                        padding: AppConstants.padding8,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: staticData.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, childAspectRatio: 0.8),
-                        itemBuilder: (context, index) {
-                          final item = staticData[index];
-                          return _buildStageCard(item);
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          } else if (state is ItemsEmpty) {
-            return MainErrorWidget(
-              error: state.message,
-              onTryAgainTap: onTryAgainTap,
-              isRefresh: true,
-            );
-          }
-          // else if (state is ItemsFail) {
-          //   return MainErrorWidget(
-          //     error: state.error,
-          //     onTryAgainTap: onTryAgainTap,
-          //   );
-          // }
-          else {
-            return SizedBox.shrink();
-          }
-        },
+  void onAddTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddItemView(
+          itemCubit: itemsCubit,
+          isEdit: false,
+          onSuccess: () =>
+              itemsCubit.getItems(widget.role, levelId: widget.levelId),
+        ),
       ),
     );
   }
 
-  Widget _buildStageCard(ItemModel item) {
-    final userPoints = 1000;
-    final progress = (userPoints / item.price).clamp(0.0, 1.0);
+  @override
+  void onDeleteTap(ItemModel item) {
+    showDialog(
+      context: context,
+      builder: (_) => InsureDeleteWidget(
+        deleteCubit: deleteCubit,
+        item: item,
+        onSaveTap: (c) => deleteCubit.deleteItem<ItemModel>(item),
+        onSuccess: () =>
+            itemsCubit.getItems(widget.role, levelId: widget.levelId),
+      ),
+    );
+  }
 
-    return GestureDetector(
-      onTap: () => _showBuyDialog(item),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        width: MediaQuery.of(context).size.width / 2 - 24,
-        margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              context.cs.primary.withOpacity(0.9),
-              context.cs.primary.withOpacity(0.7),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: context.cs.primary.withOpacity(0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
+  @override
+  void onEditTap(ItemModel item) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddItemView(
+          itemCubit: itemsCubit,
+          item: item,
+          isEdit: true,
+          onSuccess: () =>
+              itemsCubit.getItems(widget.role, levelId: widget.levelId),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Icon(Icons.lock_outline, color: Colors.white, size: 20),
-            ),
-            const SizedBox(height: 6),
-            CircularPercentIndicator(
-              radius: 35,
-              lineWidth: 5,
-              percent: progress,
-              animation: true,
-              circularStrokeCap: CircularStrokeCap.round,
-              progressColor: Colors.white,
-              backgroundColor: Colors.white24,
-              center: AppImageWidget(
-                width: 40,
-                height: 40,
-                url: item.image,
-                borderRadius: AppConstants.borderRadiusCircle,
-                border: Border.all(color: Colors.white, width: 1),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              item.name,
-              style: context.tt.titleMedium?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              item.description,
-              style: context.tt.bodySmall?.copyWith(
-                color: Colors.white70,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 6),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
+      ),
+    );
+  }
+
+  @override
+  void onTap(ItemModel item) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (context) => Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: AppConstants.padding16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Text(
+                      "additional_options".tr(),
+                      style: context.tt.headlineMedium,
+                    ),
                   ),
+                  TextButton.icon(
+                    icon: Icon(Icons.edit),
+                    onPressed: () => onEditTap(item),
+                    label: Text(
+                      "edit".tr(),
+                      style: context.tt.labelMedium?.copyWith(
+                        color: context.cs.primary,
+                      ),
+                    ),
+                  ),
+                  TextButton.icon(
+                    icon: Icon(Icons.delete, color: context.cs.error),
+                    onPressed: () => onDeleteTap(item),
+                    label: Text(
+                      "delete".tr(),
+                      style: context.tt.labelMedium?.copyWith(
+                        color: context.cs.error,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
                 ],
               ),
-              child: Text(
-                "${item.price.toInt()} نقطة",
-                style: GoogleFonts.poppins(
-                  color: context.cs.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  void _showBuyDialog(ItemModel item) {
+  @override
+  void showBuyDialog(ItemModel item) {
     showDialog(
       context: context,
       builder: (context) {
@@ -329,6 +279,86 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
           ),
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final role = widget.role;
+    final onItem = role.isUser
+        ? showBuyDialog
+        : role.isAdmin
+            ? onTap
+            : (item) {};
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: context.cs.primary,
+        elevation: 10,
+        title: Text('store'.tr(), style: context.tt.titleLarge),
+      ),
+      body: BlocBuilder<ItemsCubit, GeneralItemsState>(
+        buildWhen: (previous, current) => current is ItemsState,
+        builder: (context, state) {
+          if (state is ItemsLoading) {
+            return LoadingIndicator();
+          } else if (state is ItemsSuccess) {
+            return RefreshIndicator(
+              onRefresh: onRefresh,
+              child: NotificationListener<ScrollNotification>(
+                onNotification: onNotification,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: GridView.builder(
+                        padding: AppConstants.padding8,
+                        physics: BouncingScrollPhysics(),
+                        itemCount: state.items.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, childAspectRatio: 0.8),
+                        itemBuilder: (context, index) {
+                          final item = state.items[index];
+                          return ItemTile(
+                            item: item,
+                            role: role,
+                            onTap: onItem,
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          } else if (state is ItemsEmpty) {
+            return MainErrorWidget(
+              error: state.message,
+              onTryAgainTap: onTryAgainTap,
+              isRefresh: true,
+            );
+          } else if (state is ItemsFail) {
+            return MainErrorWidget(
+              error: state.error,
+              onTryAgainTap: onTryAgainTap,
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      ),
+      floatingActionButton: widget.role == UserRoleEnum.admin
+          ? Padding(
+              padding: AppConstants.padding8,
+              child: FloatingActionButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: AppConstants.borderRadiusCircle,
+                ),
+                onPressed: onAddTap,
+                child: Icon(Icons.add, color: context.cs.secondary, size: 30),
+              ),
+            )
+          : null,
     );
   }
 }

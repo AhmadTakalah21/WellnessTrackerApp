@@ -18,7 +18,8 @@ class AddsAndOffersServiceImp implements AddsAndOffersService {
         response.data as Map<String, dynamic>,
         (json) => AdvModel.fromJson(json as Map<String, dynamic>),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
       rethrow;
     }
   }
@@ -40,7 +41,11 @@ class AddsAndOffersServiceImp implements AddsAndOffersService {
         );
       }
       final formData = FormData.fromMap(map);
-      await dio.post("/v1/admin/advertisements$endpoint", data: formData);
+      await dio.postOrPut(
+        "/v1/admin/advertisements$endpoint",
+        isAdd: isAdd,
+        data: formData,
+      );
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;
