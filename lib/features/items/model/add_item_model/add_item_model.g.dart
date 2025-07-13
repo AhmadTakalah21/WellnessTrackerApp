@@ -7,10 +7,12 @@ part of 'add_item_model.dart';
 // **************************************************************************
 
 AddItemModel _$AddItemModelFromJson(Map<String, dynamic> json) => AddItemModel(
-      nameEn: json['name[en]'] as String?,
-      nameAr: json['name[ar]'] as String?,
-      descriptionEn: json['description[en]'] as String?,
-      descriptionAr: json['description[ar]'] as String?,
+      name: json['name'] == null
+          ? null
+          : EnArAddModel.fromJson(json['name'] as Map<String, dynamic>),
+      description: json['description'] == null
+          ? null
+          : EnArAddModel.fromJson(json['description'] as Map<String, dynamic>),
       link: json['link'] as String?,
       price: json['price'] as String?,
       levelId: (json['level_id'] as num?)?.toInt(),
@@ -18,10 +20,8 @@ AddItemModel _$AddItemModelFromJson(Map<String, dynamic> json) => AddItemModel(
 
 Map<String, dynamic> _$AddItemModelToJson(AddItemModel instance) =>
     <String, dynamic>{
-      'name[en]': instance.nameEn,
-      'name[ar]': instance.nameAr,
-      'description[en]': instance.descriptionEn,
-      'description[ar]': instance.descriptionAr,
+      'name': instance.name.toJson(),
+      'description': instance.description?.toJson(),
       'link': instance.link,
       'price': instance.price,
       'level_id': instance.levelId,

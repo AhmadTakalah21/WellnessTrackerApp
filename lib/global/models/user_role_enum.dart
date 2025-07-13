@@ -90,7 +90,7 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "levels",
             icon: Icons.stacked_line_chart,
-            screen: LevelsRoute(),
+            screen: LevelsRoute(role: admin),
             color: Colors.indigo,
           ),
           UserViewOnPermissionModel(
@@ -102,7 +102,7 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
-            screen: NotificationsRoute(canSendNotification: true),
+            screen: NotificationsRoute(role: admin),
             color: Colors.green,
           ),
           UserViewOnPermissionModel(
@@ -147,7 +147,7 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "levels",
             icon: Icons.stacked_line_chart,
-            screen: LevelsRoute(),
+            screen: LevelsRoute(role: user),
             color: Colors.orange,
           ),
           UserViewOnPermissionModel(
@@ -159,7 +159,7 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
-            screen: NotificationsRoute(canSendNotification: false),
+            screen: NotificationsRoute(role: user),
             color: Colors.green,
           ),
         ];

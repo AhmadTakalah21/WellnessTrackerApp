@@ -8,11 +8,7 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 
 abstract class UserNavigationViewCallbacks {
-  void onBottomTab(
-    int previousIndex,
-    int currentIndex,
-    TabsRouter tabsRouter,
-  );
+  void onBottomTab(int currentIndex, TabsRouter tabsRouter);
 }
 
 @RoutePage()
@@ -38,7 +34,7 @@ class _UserNavigationPageState extends State<UserNavigationPage>
   bool get isRtl => context.locale.languageCode == 'ar';
 
   @override
-  void onBottomTab(int previousIndex, int currentIndex, TabsRouter tabsRouter) {
+  void onBottomTab(int currentIndex, TabsRouter tabsRouter) {
     tabsRouter.setActiveIndex(currentIndex);
     setState(() {
       this.currentIndex = currentIndex;
@@ -58,9 +54,30 @@ class _UserNavigationPageState extends State<UserNavigationPage>
     final rtlIcons = icons.reversed.toList();
     final rtlLabels = labels.reversed.toList();
     return AutoTabsScaffold(
+      // appBarBuilder: (context, tabsRouter) {
+      //   return MainAppBar();
+      // },
+
       appBarBuilder: (context, tabsRouter) {
-        return MainAppBar();
+        if (tabsRouter.activeIndex == 1) {
+          final nestedRouter =
+              context.innerRouterOf<StackRouter>(DashboardRouter.name);
+
+          final nestedRouteName = nestedRouter?.current.name;
+          print("Nested route inside DashboardRouter: $nestedRouteName");
+          if (nestedRouteName == DashboardRoute.name) {
+            return const MainAppBar();
+          } else {
+            return const PreferredSize(
+              preferredSize: Size.fromHeight(0),
+              child: SizedBox.shrink(),
+            );
+          }
+        } else {
+          return const MainAppBar();
+        }
       },
+
       routes: [
         ProfileRoute(),
         DashboardRouter(),
@@ -101,7 +118,7 @@ class _UserNavigationPageState extends State<UserNavigationPage>
             tabBarColor: context.cs.surface,
             useSafeArea: true,
             onTabItemSelected: (index) {
-              onBottomTab(tabsRouter.activeIndex, index, tabsRouter);
+              onBottomTab(index, tabsRouter);
             },
           ),
         );

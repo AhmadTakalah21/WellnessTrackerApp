@@ -58,11 +58,11 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     implements AddsAndOffersViewCallBacks {
   late final AddsAndOffersCubit addsAndOffersCubit = context.read();
   late final DeleteCubit deleteCubit = context.read();
-  
+
   @override
   void initState() {
     super.initState();
-    addsAndOffersCubit.getAddsAndOffers(perPage: null);
+    addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null);
   }
 
   @override
@@ -73,7 +73,8 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
         builder: (context) => AddAdvView(
           advCubit: addsAndOffersCubit,
           isEdit: false,
-          onSuccess: () => addsAndOffersCubit.getAddsAndOffers(perPage: null),
+          onSuccess: () =>
+              addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null),
         ),
       ),
     );
@@ -142,7 +143,8 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
         deleteCubit: deleteCubit,
         item: adv,
         onSaveTap: (c) => deleteCubit.deleteItem<AdvModel>(adv),
-        onSuccess: () => addsAndOffersCubit.getAddsAndOffers(perPage: null),
+        onSuccess: () =>
+            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null),
       ),
     );
   }
@@ -157,7 +159,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
           isEdit: true,
           adv: adv,
           onSuccess: () {
-            addsAndOffersCubit.getAddsAndOffers(perPage: null);
+            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null);
           },
         ),
       ),
@@ -165,7 +167,8 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
   }
 
   @override
-  void onTryAgainTap() => addsAndOffersCubit.getAddsAndOffers(perPage: null);
+  void onTryAgainTap() =>
+      addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null);
 
   @override
   void onAdvTap(AdvModel adv) {
@@ -195,17 +198,19 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
             if (state is AddsAndOffersLoading) {
               return LoadingIndicator();
             } else if (state is AddsAndOffersSuccess) {
+              final data = state.addsAndOffers.data;
+              final ads = data.where((ad) => ad.type.isAdv).toList();
+              final offers = data.where((ad) => !ad.type.isAdv).toList();
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 10,
                 children: [
-                  // TODO check state.addsAndOffers.data for appropriate type
                   SizedBox(height: 10),
                   Text("الإعلانات", style: context.tt.headlineLarge),
-                  _buildAdsList(state.addsAndOffers.data),
+                  _buildAdsList(ads),
                   SizedBox.shrink(),
                   Text("العروض", style: context.tt.headlineLarge),
-                  _buildOffersList(state.addsAndOffers.data),
+                  _buildOffersList(offers),
                   if (widget.role != UserRoleEnum.admin) SizedBox(height: 70),
                 ],
               );

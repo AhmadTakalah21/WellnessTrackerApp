@@ -7,6 +7,7 @@ import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
 import 'package:wellnesstrackerapp/features/items/view/widgets/add_item_view.dart';
 import 'package:wellnesstrackerapp/features/items/view/widgets/item_tile.dart';
+import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
@@ -29,9 +30,9 @@ abstract class ItemsViewCallBacks {
 
 @RoutePage()
 class ItemsView extends StatelessWidget {
-  const ItemsView({super.key, required this.role, this.levelId});
+  const ItemsView({super.key, required this.role, this.level});
   final UserRoleEnum role;
-  final int? levelId;
+  final LevelModel? level;
 
   @override
   Widget build(BuildContext context) {
@@ -39,20 +40,20 @@ class ItemsView extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              get<ItemsCubit>()..getItems(role, levelId: levelId),
+              get<ItemsCubit>()..getItems(role, levelId: level?.id),
         ),
         BlocProvider(create: (context) => get<DeleteCubit>()),
       ],
-      child: ItemsPage(role: role, levelId: levelId),
+      child: ItemsPage(role: role, level: level),
     );
   }
 }
 
 class ItemsPage extends StatefulWidget {
-  const ItemsPage({super.key, required this.role, this.levelId});
+  const ItemsPage({super.key, required this.role, this.level});
 
   final UserRoleEnum role;
-  final int? levelId;
+  final LevelModel? level;
 
   @override
   State<ItemsPage> createState() => _ItemsPageState();
@@ -65,7 +66,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
   @override
   bool onNotification(ScrollNotification scrollInfo) {
     if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-      itemsCubit.getItems(widget.role, levelId: widget.levelId);
+      itemsCubit.getItems(widget.role, levelId: widget.level?.id);
     }
     return true;
   }
@@ -75,7 +76,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
 
   @override
   void onTryAgainTap() => itemsCubit.getItems(widget.role,
-      isLoadMore: false, levelId: widget.levelId);
+      isLoadMore: false, levelId: widget.level?.id);
 
   @override
   void onAddTap() {
@@ -84,9 +85,13 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
       MaterialPageRoute(
         builder: (context) => AddItemView(
           itemCubit: itemsCubit,
+          level: widget.level,
           isEdit: false,
-          onSuccess: () =>
-              itemsCubit.getItems(widget.role, levelId: widget.levelId),
+          onSuccess: () => itemsCubit.getItems(
+            widget.role,
+            levelId: widget.level?.id,
+            isLoadMore: false,
+          ),
         ),
       ),
     );
@@ -101,7 +106,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
         item: item,
         onSaveTap: (c) => deleteCubit.deleteItem<ItemModel>(item),
         onSuccess: () =>
-            itemsCubit.getItems(widget.role, levelId: widget.levelId),
+            itemsCubit.getItems(widget.role, levelId: widget.level?.id),
       ),
     );
   }
@@ -114,9 +119,13 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
         builder: (context) => AddItemView(
           itemCubit: itemsCubit,
           item: item,
+          level: widget.level,
           isEdit: true,
-          onSuccess: () =>
-              itemsCubit.getItems(widget.role, levelId: widget.levelId),
+          onSuccess: () => itemsCubit.getItems(
+            widget.role,
+            levelId: widget.level?.id,
+            isLoadMore: false,
+          ),
         ),
       ),
     );
@@ -303,20 +312,20 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
           if (state is ItemsLoading) {
             return LoadingIndicator();
           } else if (state is ItemsSuccess) {
-            return RefreshIndicator(
-              onRefresh: onRefresh,
-              child: NotificationListener<ScrollNotification>(
-                onNotification: onNotification,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
+            return NotificationListener<ScrollNotification>(
+              onNotification: onNotification,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: onRefresh,
                       child: GridView.builder(
                         padding: AppConstants.padding8,
                         physics: BouncingScrollPhysics(),
                         itemCount: state.items.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, childAspectRatio: 0.8),
+                            crossAxisCount: 2, childAspectRatio: 0.75),
                         itemBuilder: (context, index) {
                           final item = state.items[index];
                           return ItemTile(
@@ -326,9 +335,9 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
                           );
                         },
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             );
           } else if (state is ItemsEmpty) {

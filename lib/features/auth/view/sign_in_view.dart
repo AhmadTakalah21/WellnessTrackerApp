@@ -181,7 +181,7 @@ class _SignInPageState extends State<SignInPage>
   @override
   Future<void> onGetCodeTap(String? whatsappPhone) async {
     final url =
-        "https://wa.me/963$whatsappPhone?text=مرحباً، أحتاج كود الاشتراك";
+        "https://wa.me/$whatsappPhone?text=مرحباً، أحتاج كود الاشتراك";
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);

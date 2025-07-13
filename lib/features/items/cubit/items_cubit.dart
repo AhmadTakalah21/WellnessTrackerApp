@@ -7,6 +7,7 @@ import 'package:wellnesstrackerapp/features/items/model/add_item_model/add_item_
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
 import 'package:wellnesstrackerapp/features/items/service/items_service.dart';
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
+import 'package:wellnesstrackerapp/global/models/en_ar_add_model/en_ar_add_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/items_state.dart';
@@ -19,6 +20,8 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
 
   final ItemService itemService;
   AddItemModel addItemModel = const AddItemModel();
+  EnArAddModel itemName = const EnArAddModel();
+  EnArAddModel itemDescription = const EnArAddModel();
   XFile? image;
 
   int page = 1;
@@ -26,11 +29,13 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
   List<ItemModel> items = [];
 
   void setNameAr(String? name) {
-    addItemModel = addItemModel.copyWith(nameAr: () => name);
+    itemName = itemName.copyWith(ar: () => name);
+    addItemModel = addItemModel.copyWith(name: () => itemName);
   }
 
   void setNameEn(String? name) {
-    addItemModel = addItemModel.copyWith(nameEn: () => name);
+    itemName = itemName.copyWith(en: () => name);
+    addItemModel = addItemModel.copyWith(name: () => itemName);
   }
 
   void setPrice(String? price) {
@@ -38,11 +43,13 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
   }
 
   void setDescriptionEn(String? desc) {
-    addItemModel = addItemModel.copyWith(descriptionEn: () => desc);
+    itemDescription = itemDescription.copyWith(en: () => desc);
+    addItemModel = addItemModel.copyWith(description: () => itemDescription);
   }
 
   void setDescriptionAr(String? desc) {
-    addItemModel = addItemModel.copyWith(descriptionAr: () => desc);
+    itemDescription = itemDescription.copyWith(ar: () => desc);
+    addItemModel = addItemModel.copyWith(description: () => itemDescription);
   }
 
   void setLink(String? link) {
@@ -68,6 +75,7 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     bool isLoadMore = true,
     int? levelId,
   }) async {
+    print("object");
     if (!hasMore && isLoadMore) return;
     if (!isLoadMore) {
       page = 1;

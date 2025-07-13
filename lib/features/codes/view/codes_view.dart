@@ -95,6 +95,7 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
             top: Radius.circular(20),
           ),
         ),
+        constraints: BoxConstraints(maxHeight: 500),
         builder: (bottomSheetContext) {
           return AddCodeWidget(
             codesCubit: codesCubit,

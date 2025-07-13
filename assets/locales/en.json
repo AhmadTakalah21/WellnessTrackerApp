@@ -238,5 +238,7 @@
   "price": "Price",
   "select_level": "Select Level",
   "current_language" : "English",
-  "customer_required": "Customer is required."
+  "customer_required": "Customer is required.",
+  "added"  : "Added successfully",
+  "updated" : "Updated successfully"
 }

@@ -5,14 +5,16 @@ class LevelsServiceImp implements LevelsService {
   final dio = DioClient();
 
   @override
-  Future<PaginatedModel<LevelModel>> getLevels({
+  Future<PaginatedModel<LevelModel>> getLevels(
+    UserRoleEnum role, {
     int? perPage = 10,
     int? page,
   }) async {
     try {
       final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
-      final endpoint = "/v1/admin/levels?$pageParam&$perPageParam";
+      final endpoint =
+          "/v1/${role.getApiRoute}/levels?$pageParam&$perPageParam";
       final response = await dio.get(endpoint);
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,

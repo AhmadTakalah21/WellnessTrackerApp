@@ -238,5 +238,7 @@
   "price": "السعر",
   "select_level": "اختر المستوى",
   "current_language" : "العربية",
-  "customer_required": "المشترك مطلوب."
+  "customer_required": "المشترك مطلوب.",
+  "added"  : "تم الإضافة بنجاح",
+  "updated" : "تم التعديل بنجاح"
 }

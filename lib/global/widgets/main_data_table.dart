@@ -28,6 +28,7 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
     required this.onPageChanged,
     this.onEditTap,
     this.onDeleteTap,
+    this.onShowDetailsTap,
     this.emptyMessage,
     this.header,
     this.searchHint = "search",
@@ -45,6 +46,7 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
   final List<Widget> filters;
   final void Function(String input)? onSearchChanged;
   final void Function(int page, int perPage) onPageChanged;
+  final void Function(T item)? onShowDetailsTap;
   final void Function(T item)? onEditTap;
   final void Function(T item)? onDeleteTap;
 
@@ -169,6 +171,14 @@ class _MainDataTableState<T extends DataTableModel>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    if (widget.onShowDetailsTap != null)
+                      IconButton(
+                        onPressed: () => widget.onShowDetailsTap!(item),
+                        icon: Icon(
+                          Icons.visibility,
+                          color: context.cs.onPrimaryFixed,
+                        ),
+                      ),
                     if (widget.onEditTap != null)
                       IconButton(
                         onPressed: () => widget.onEditTap!(item),
@@ -211,7 +221,7 @@ class _MainDataTableState<T extends DataTableModel>
   Widget _buildPaginator() {
     final perPage = this.perPage < 10 ? "10" : this.perPage.toString();
     final meta = widget.items.meta;
-    
+
     return Row(
       children: [
         PopupMenuButton<PerPageEnum>(

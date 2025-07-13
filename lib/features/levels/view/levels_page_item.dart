@@ -15,8 +15,7 @@ class LevelsPageItem extends StatelessWidget {
 
   Future<void> onRefresh() async => onTryAgainTap();
   void onTap(BuildContext context, LevelModel level) {
-    context.router
-        .push(ItemsRoute(role: UserRoleEnum.admin, levelId: level.id));
+    context.router.push(ItemsRoute(role: UserRoleEnum.admin, level: level));
   }
 
   void onLongPress(BuildContext context, LevelModel level) {

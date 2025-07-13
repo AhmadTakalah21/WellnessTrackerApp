@@ -33,40 +33,35 @@ class _SelectPlanPageState extends State<SelectPlanPage>
         centerTitle: true,
         backgroundColor: context.cs.primary,
         elevation: 10,
-        title: Text('follow_up'.tr(), style: context.tt.titleLarge)
+        title: Text('follow_up'.tr(), style: context.tt.titleLarge),
       ),
-      backgroundColor: context.cs.onSurface,
-      body: Padding(
+      body: SingleChildScrollView(
         padding: AppConstants.padding20,
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
-            Expanded(
-              child: _buildGridItem(
-                context,
-                'medical_follow',
-                '0912345678',
-                Icons.medication_rounded,
-                Colors.red.shade400,
-              ),
+            _buildGridItem(
+              context,
+              'medical_follow',
+              '0912345678',
+              Icons.medication_rounded,
+              Colors.red.shade400,
             ),
-            Expanded(
-              child: _buildGridItem(
-                context,
-                'nutrition_follow',
-                '0912345678',
-                Icons.restaurant_menu_rounded,
-                Colors.green.shade400,
-              ),
+            _buildGridItem(
+              context,
+              'nutrition_follow',
+              '0912345678',
+              Icons.restaurant_menu_rounded,
+              Colors.green.shade400,
             ),
-            Expanded(
-              child: _buildGridItem(
-                context,
-                'sport_follow',
-                '0912345678',
-                Icons.fitness_center_rounded,
-                Colors.blue.shade400,
-              ),
+            _buildGridItem(
+              context,
+              'sport_follow',
+              '0912345678',
+              Icons.fitness_center_rounded,
+              Colors.blue.shade400,
             ),
+            SizedBox(height: 100),
           ],
         ),
       ),
@@ -93,6 +88,7 @@ class _SelectPlanPageState extends State<SelectPlanPage>
           elevation: 6,
           color: Colors.white,
           child: Column(
+            spacing: 10,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(),
@@ -104,13 +100,12 @@ class _SelectPlanPageState extends State<SelectPlanPage>
                 ),
                 child: Icon(icon, size: 37, color: color),
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 5),
               Text(
                 name.tr(),
                 textAlign: TextAlign.center,
                 style: context.tt.titleLarge,
               ),
-              const SizedBox(height: 6),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -126,6 +121,7 @@ class _SelectPlanPageState extends State<SelectPlanPage>
                   ),
                 ],
               ),
+              SizedBox.shrink(),
             ],
           ),
         ),

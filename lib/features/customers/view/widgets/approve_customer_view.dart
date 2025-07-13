@@ -11,6 +11,7 @@ import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
@@ -92,7 +93,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   void initState() {
     super.initState();
     usersCubit.getUsers(perPage: 1000000);
-    levelsCubit.getLevels(perPage: 1000000);
+    levelsCubit.getLevels(UserRoleEnum.admin,perPage: 1000000);
     widget.customersCubit.setUserId(widget.customer.id);
   }
 
@@ -130,7 +131,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   @override
   void onTryAgainTap() {
     usersCubit.getUsers(perPage: 1000000);
-    levelsCubit.getLevels(perPage: 1000000);
+    levelsCubit.getLevels(UserRoleEnum.admin, perPage: 1000000);
   }
 
   @override

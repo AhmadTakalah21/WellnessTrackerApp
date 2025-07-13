@@ -3,12 +3,14 @@ import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/cubit/adds_and_offers_cubit.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart';
 import 'package:wellnesstrackerapp/global/blocs/upload_image_cubit/cubit/upload_image_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/extensions/date_x.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/utils.dart';
 import 'package:wellnesstrackerapp/global/widgets/choose_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
@@ -84,14 +86,17 @@ class _AddAdvPageState extends State<AddAdvPage>
     super.initState();
     // TODO check this after updating AdvModel from backend
     final adv = widget.adv;
-    // widget.advCubit.setTitleEn(adv?.titleEn);
-    // widget.advCubit.setTitleAr(adv?.titleAr);
-    // widget.advCubit.setDescriptionEn(adv?.descriptionEn);
-    // widget.advCubit.setDescriptionAr(adv?.descriptionAr);
+    widget.advCubit.setTitleEn(adv?.title.en);
+    widget.advCubit.setTitleAr(adv?.title.ar);
+    widget.advCubit.setDescriptionEn(adv?.description.en);
+    widget.advCubit.setDescriptionAr(adv?.description.ar);
     widget.advCubit.setType(adv?.type);
     widget.advCubit.setEndDate(adv?.endDate);
-    
+
     // widget.advCubit.setImage(adv?.image);
+    if (adv != null) {
+      widget.advCubit.setImage(Utils.urlToXFile(adv.image));
+    }
   }
 
   @override
@@ -133,7 +138,7 @@ class _AddAdvPageState extends State<AddAdvPage>
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   MainTextField2(
-                    //initialText: adv?.titleEn,
+                    initialText: adv?.title.en,
                     onChanged: widget.advCubit.setTitleEn,
                     label: 'title_en'.tr(),
                     icon: Icons.title,
@@ -142,7 +147,7 @@ class _AddAdvPageState extends State<AddAdvPage>
                         : null,
                   ),
                   MainTextField2(
-                    //initialText: adv?.titleAr,
+                    initialText: adv?.title.ar,
                     onChanged: widget.advCubit.setTitleAr,
                     label: 'title_ar'.tr(),
                     icon: Icons.title,
@@ -151,13 +156,13 @@ class _AddAdvPageState extends State<AddAdvPage>
                         : null,
                   ),
                   MainTextField2(
-                    // initialText: adv?.descriptionEn,
+                    initialText: adv?.description.en,
                     onChanged: widget.advCubit.setDescriptionEn,
                     label: 'description_en'.tr(),
                     icon: Icons.description,
                   ),
                   MainTextField2(
-                    //initialText: adv?.descriptionAr,
+                    initialText: adv?.description.ar,
                     onChanged: widget.advCubit.setDescriptionAr,
                     label: 'description_ar'.tr(),
                     icon: Icons.description,
@@ -181,7 +186,12 @@ class _AddAdvPageState extends State<AddAdvPage>
                   BlocConsumer<UploadImageCubit, UploadImageState>(
                     listener: (context, state) {
                       if (state is UploadImageSuccess) {
-                        widget.advCubit.setImage(state.image);
+                        // widget.advCubit.setImage(state.image);
+                        final image = Future<XFile>.delayed(
+                            Duration(microseconds: 1), () {
+                          return state.image;
+                        });
+                        widget.advCubit.setImage(image);
                       } else if (state is UploadImageFail) {
                         MainSnackBar.showErrorMessage(
                           context,
@@ -201,8 +211,9 @@ class _AddAdvPageState extends State<AddAdvPage>
                         initialImage: adv?.image,
                         onTap: onImageTap,
                         filePath: imagePath,
-                        validator: (image) =>
-                            image == null ? 'image_required'.tr() : null,
+                        validator: (_) => widget.advCubit.image == null
+                            ? 'image_required'.tr()
+                            : null,
                       );
                     },
                   ),

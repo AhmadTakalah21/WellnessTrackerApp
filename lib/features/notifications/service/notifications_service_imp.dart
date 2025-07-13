@@ -5,14 +5,16 @@ class NotificationsServiceImp implements NotificationsService {
   final dio = DioClient();
 
   @override
-  Future<PaginatedModel<NotificationModel>> getNotifications({
+  Future<PaginatedModel<NotificationModel>> getNotifications(
+    UserRoleEnum role, {
     int? perPage = 10,
     int? page,
   }) async {
     try {
       final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
-      final endpoint = "/v1/admin/notifications?$pageParam&$perPageParam";
+      final endpoint =
+          "/v1/${role.getApiRoute}/notifications?$pageParam&$perPageParam";
       final response = await dio.get(endpoint);
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,

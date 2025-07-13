@@ -37,6 +37,7 @@ class _ExercisesPageState extends State<ExercisesPage>
       body: Padding(
         padding: AppConstants.padding16,
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             spacing: 20,
             children: [
@@ -97,6 +98,7 @@ class _ExercisesPageState extends State<ExercisesPage>
                   );
                 },
               ),
+              SizedBox(height: 100),
             ],
           ),
         ),

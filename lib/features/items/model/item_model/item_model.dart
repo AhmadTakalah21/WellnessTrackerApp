@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
+import 'package:wellnesstrackerapp/global/models/en_ar_model/en_ar_model.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 
 part 'item_model.g.dart';
@@ -22,9 +23,9 @@ class ItemModel implements DeleteModel {
   });
 
   final int id;
-  final String name;
+  final EnArModel name;
   final double price;
-  final String? description;
+  final EnArModel? description;
   final String? link;
   final LevelModel level;
 

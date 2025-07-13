@@ -8,9 +8,11 @@ part of 'item_model.dart';
 
 ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => ItemModel(
       id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
+      name: EnArModel.fromJson(json['name'] as Map<String, dynamic>),
       price: (json['price'] as num).toDouble(),
-      description: json['description'] as String?,
+      description: json['description'] == null
+          ? null
+          : EnArModel.fromJson(json['description'] as Map<String, dynamic>),
       link: json['link'] as String?,
       level: LevelModel.fromJson(json['level'] as Map<String, dynamic>),
       image: json['image_path'] as String?,

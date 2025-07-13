@@ -5,7 +5,8 @@ class AddsAndOffersServiceImp implements AddsAndOffersService {
   final dio = DioClient();
 
   @override
-  Future<PaginatedModel<AdvModel>> getAdvs({
+  Future<PaginatedModel<AdvModel>> getAdvs(
+    UserRoleEnum role, {
     int? perPage = 10,
     int? page,
   }) async {
@@ -13,7 +14,7 @@ class AddsAndOffersServiceImp implements AddsAndOffersService {
       final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
       final response =
-          await dio.get("/v1/admin/advertisements?$pageParam&$perPageParam");
+          await dio.get("/v1/${role.getApiRoute}/advertisements?$pageParam&$perPageParam");
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
         (json) => AdvModel.fromJson(json as Map<String, dynamic>),

@@ -165,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage>
               title: "privacy_policy".tr(),
               onTap: onPrivacyPolicyTap,
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 120),
           ],
         ),
       ),

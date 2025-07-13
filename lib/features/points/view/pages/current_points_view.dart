@@ -18,6 +18,7 @@ class CurrentPointsView extends StatelessWidget {
           buildStepCounter(context),
           const SizedBox(height: 32),
           _buildChart(context),
+          SizedBox(height: 110),
         ],
       ),
     );

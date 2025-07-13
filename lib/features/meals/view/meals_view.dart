@@ -89,7 +89,7 @@ class _MealsPageState extends State<MealsPage> implements MealsViewCallbacks {
               // ...List.generate(4, (index) {
               //   return _buildMealItem();
               // }),
-              SizedBox(height: 40)
+              SizedBox(height: 100)
             ],
           ),
         ),

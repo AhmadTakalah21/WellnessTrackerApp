@@ -7,7 +7,9 @@ import 'package:wellnesstrackerapp/features/adds_and_offers/model/add_adv_model/
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/service/adds_and_offers_service.dart';
 import 'package:wellnesstrackerapp/global/models/adv_type_enum.dart';
+import 'package:wellnesstrackerapp/global/models/en_ar_add_model/en_ar_add_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/adds_and_offers_state.dart';
 part 'states/general_adds_and_offers_state.dart';
@@ -18,24 +20,30 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
   AddsAndOffersCubit(this.addsAndOffersService)
       : super(GeneralAddsAndOffersInitial());
   final AddsAndOffersService addsAndOffersService;
+  EnArAddModel advTitle = const EnArAddModel();
+  EnArAddModel advDescription = const EnArAddModel();
 
   AddAdvModel model = const AddAdvModel();
   XFile? image;
 
-  void setTitleEn(String? value) {
-    model = model.copyWith(titleEn: () => value);
+  void setTitleEn(String? title) {
+    advTitle = advTitle.copyWith(en: () => title);
+    model = model.copyWith(title: () => advTitle);
   }
 
-  void setTitleAr(String? value) {
-    model = model.copyWith(titleAr: () => value);
+  void setTitleAr(String? title) {
+    advTitle = advTitle.copyWith(ar: () => title);
+    model = model.copyWith(title: () => advTitle);
   }
 
-  void setDescriptionEn(String? value) {
-    model = model.copyWith(descriptionEn: () => value);
+  void setDescriptionEn(String? description) {
+    advDescription = advDescription.copyWith(en: () => description);
+    model = model.copyWith(description: () => advDescription);
   }
 
-  void setDescriptionAr(String? value) {
-    model = model.copyWith(descriptionAr: () => value);
+  void setDescriptionAr(String? description) {
+    advDescription = advDescription.copyWith(ar: () => description);
+    model = model.copyWith(description: () => advDescription);
   }
 
   void setEndDate(String? value) {
@@ -46,18 +54,23 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
     model = model.copyWith(type: () => type);
   }
 
-  void setImage(XFile? image) {
-    this.image = image;
+  Future<void> setImage(Future<XFile?>? image) async {
+    this.image = await image;
   }
 
   void resetModel() {
     model = const AddAdvModel();
   }
 
-  Future<void> getAddsAndOffers({int? perPage = 10, int? page}) async {
+  Future<void> getAddsAndOffers(
+    UserRoleEnum role, {
+    int? perPage = 10,
+    int? page,
+  }) async {
     emit(AddsAndOffersLoading());
     try {
       final result = await addsAndOffersService.getAdvs(
+        role,
         page: page,
         perPage: perPage,
       );
@@ -85,7 +98,8 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
         id: id,
         image: image,
       );
-      emit(AddAdvSuccess("ad_added_successfully".tr()));
+      final message = isAdd ? "added".tr() : "updated".tr();
+      emit(AddAdvSuccess(message));
     } catch (e) {
       if (isClosed) return;
       emit(AddAdvFail(e.toString()));

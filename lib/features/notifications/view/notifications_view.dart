@@ -6,11 +6,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wellnesstrackerapp/features/notifications/cubit/notifications_cubit.dart';
 import 'package:wellnesstrackerapp/features/notifications/view/widgets/add_notification_widget.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/widgets/detailstext1.dart';
-import 'package:wellnesstrackerapp/widgets/detailstext2.dart';
-import 'package:wellnesstrackerapp/widgets/text11.dart';
 
 abstract class NotificationsViewCallBacks {
   void onAddTap();
@@ -20,23 +18,23 @@ abstract class NotificationsViewCallBacks {
 
 @RoutePage()
 class NotificationsView extends StatelessWidget {
-  const NotificationsView({super.key, required this.canSendNotification});
+  const NotificationsView({super.key, required this.role});
 
-  final bool canSendNotification;
+  final UserRoleEnum role;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => get<NotificationsCubit>(),
-      child: NotificationsPage(canSendNotification: canSendNotification),
+      child: NotificationsPage(role: role),
     );
   }
 }
 
 class NotificationsPage extends StatefulWidget {
-  const NotificationsPage({super.key, required this.canSendNotification});
+  const NotificationsPage({super.key, required this.role});
 
-  final bool canSendNotification;
+  final UserRoleEnum role;
 
   @override
   State<NotificationsPage> createState() => _NotificationsPageState();
@@ -49,7 +47,7 @@ class _NotificationsPageState extends State<NotificationsPage>
   @override
   void initState() {
     super.initState();
-    notificationsCubit.getNotifications();
+    notificationsCubit.getNotifications(widget.role);
   }
 
   @override
@@ -72,7 +70,7 @@ class _NotificationsPageState extends State<NotificationsPage>
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => notificationsCubit.getNotifications();
+  void onTryAgainTap() => notificationsCubit.getNotifications(widget.role);
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +87,12 @@ class _NotificationsPageState extends State<NotificationsPage>
               color: context.cs.onSurface,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text11(text2: '3 جديد', color: context.cs.primary),
+            child: Text(
+              '3 جديد',
+              style: context.tt.bodyLarge?.copyWith(
+                color: context.cs.primary,
+              ),
+            ),
           ),
           SizedBox(width: 10),
         ],
@@ -111,11 +114,17 @@ class _NotificationsPageState extends State<NotificationsPage>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text1(text1: 'اليوم'),
-                          Text11(
-                            text2: 'تمييز كمقروء',
-                            color: context.cs.primary,
+                          Text(
+                            'اليوم',
+                            style: context.tt.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w500),
                           ),
+                          Text(
+                            'تمييز كمقروء',
+                            style: context.tt.bodyLarge?.copyWith(
+                              color: context.cs.primary,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -123,12 +132,12 @@ class _NotificationsPageState extends State<NotificationsPage>
                   ],
                 ),
               ),
-              SizedBox(height: 80),
+              SizedBox(height: 40),
             ],
           ),
         ),
       ),
-      floatingActionButton: widget.canSendNotification
+      floatingActionButton: widget.role.isAdmin
           ? Padding(
               padding: AppConstants.padding8,
               child: FloatingActionButton(
@@ -175,8 +184,13 @@ class _NotificationsPageState extends State<NotificationsPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text1(text1: notification['title']),
-                    Text2(text2: notification['content']),
+                    Text(
+                      notification['title'],
+                      style: context.tt.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(notification['content'], style: context.tt.bodyLarge)
                   ],
                 ),
               ),

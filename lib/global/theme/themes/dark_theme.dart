@@ -15,7 +15,8 @@ ThemeData darkTheme = ThemeData(
     surface: AppColors.white,
     onSurface: AppColors.white,
     onTertiary: Colors.black,
-    onSecondaryFixed: Colors.grey,
+    onSecondaryFixed: AppColors.grey,
+    onPrimaryFixed: AppColors.blue
   ),
   textTheme: TextTheme(
     displayLarge: TextStyle(

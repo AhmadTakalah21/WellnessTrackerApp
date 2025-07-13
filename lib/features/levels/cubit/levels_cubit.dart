@@ -10,6 +10,7 @@ import 'package:wellnesstrackerapp/features/levels/service/level_service.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/levels_state.dart';
 part 'states/add_level_state.dart';
@@ -54,10 +55,16 @@ class LevelsCubit extends Cubit<GeneralLevelsState> {
     _applyFilters(_alllevels, role: role);
   }
 
-  Future<void> getLevels({int? perPage = 10, int? page}) async {
+  Future<void> getLevels(
+    UserRoleEnum role, {
+    int? perPage = 10,
+    int? page,
+  }) async {
     emit(LevelsLoading());
     try {
+      if (isClosed) return;
       final result = await levelsService.getLevels(
+        role,
         page: page,
         perPage: perPage,
       );
@@ -66,6 +73,7 @@ class LevelsCubit extends Cubit<GeneralLevelsState> {
 
       _applyFilters(_alllevels, role: roleFilter);
     } catch (e) {
+      if (isClosed) return;
       emit(LevelsFail(e.toString()));
     }
   }

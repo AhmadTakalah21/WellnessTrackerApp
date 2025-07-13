@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
 
 abstract class Utils {
   static Color? stringToColor(String color) {
@@ -7,16 +13,6 @@ abstract class Utils {
     if (hex == null) return null;
     return Color(hex);
   }
-
-  // static Future<String> determineInitialRoute() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final isLogin = prefs.getBool("is_login") ?? false;
-  //   if (isLogin) {
-  //     return AppRoutes.welcome;
-  //   } else {
-  //     return AppRoutes.login;
-  //   }
-  // }
 
   static String convertDateFormat(String inputDate) {
     DateTime parsedDate = DateTime.parse(inputDate);
@@ -46,5 +42,22 @@ abstract class Utils {
       return (size / 390) * screenWidth / 1.2;
     }
     return (size / 390) * screenWidth;
+  }
+
+  static Future<XFile?> urlToXFile(String imageUrl) async {
+    final response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      final tempDir = await getTemporaryDirectory();
+      final fileName = path.basename(imageUrl);
+      final filePath = path.join(tempDir.path, fileName);
+
+      final file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+
+      return XFile(file.path);
+    } else {
+      return null;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +9,7 @@ import 'package:wellnesstrackerapp/features/users/view/widgets/add_user_widget.d
 import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
+import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
@@ -20,6 +21,7 @@ import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
 abstract class UsersViewCallBacks {
   void onAddTap();
+  void onShowDetailsTap(UserModel user);
   void onEditTap(UserModel user);
   void onDeleteTap(UserModel user);
   void onSaveDeleteTap(UserModel user);
@@ -78,6 +80,11 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
         onSuccess: onTryAgainTap,
       ),
     );
+  }
+
+  @override
+  void onShowDetailsTap(UserModel user) {
+    context.router.push(CustomersRoute());
   }
 
   @override
@@ -168,6 +175,7 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
                       titles: UserModel.titles,
                       items: state.users,
                       onPageChanged: onSelectPageTap,
+                      onShowDetailsTap: onShowDetailsTap,
                       onEditTap: onEditTap,
                       onDeleteTap: onDeleteTap,
                       emptyMessage: state.emptyMessage,

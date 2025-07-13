@@ -15,7 +15,8 @@ class ItemServiceImp implements ItemService {
       final perPageParam = "per_page=$perPage";
       final pageParam = "page=$page";
       final levelIdParam = levelId != null ? "filter[level_id]=$levelId" : "";
-      final endPoint = "/v1/${role.getApiRoute}/items?$levelIdParam&$pageParam&$perPageParam";
+      final endPoint =
+          "/v1/${role.getApiRoute}/items?$levelIdParam&$pageParam&$perPageParam";
       final response = await dio.get(endPoint);
       final items = response.data as Map<String, dynamic>;
       return PaginatedModel.fromJson(
@@ -60,10 +61,12 @@ class ItemServiceImp implements ItemService {
           filename: image.name,
         );
       }
+      final formData = FormData.fromMap(map);
+
       final response = await dio.postOrPut(
         endpoint,
         isAdd: isAdd,
-        data: addItemModel.toJson(),
+        data: formData,
       );
       final item = response.data["data"] as Map<String, dynamic>;
       return ItemModel.fromJson(item);

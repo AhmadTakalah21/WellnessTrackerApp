@@ -8,6 +8,7 @@ import 'package:wellnesstrackerapp/features/notifications/model/notification_mod
 import 'package:wellnesstrackerapp/features/notifications/service/notifications_service.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/general_notifications_state.dart';
 part 'states/notifications_state.dart';
@@ -45,11 +46,16 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
     addNotificationModel = const AddNotificationModel();
   }
 
-  Future<void> getNotifications({int? perPage = 10, int? page}) async {
+  Future<void> getNotifications(
+    UserRoleEnum role, {
+    int? perPage = 10,
+    int? page,
+  }) async {
     emit(NotificationsLoading());
     try {
-      if(isClosed) return;
+      if (isClosed) return;
       final result = await notificationsService.getNotifications(
+        role,
         page: page,
         perPage: perPage,
       );
@@ -58,7 +64,7 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
       final message = result.data.isEmpty ? "no_notifications".tr() : null;
       emit(NotificationsSuccess(result, message));
     } catch (e) {
-      if(isClosed) return;
+      if (isClosed) return;
       emit(NotificationsFail(e.toString()));
     }
   }
