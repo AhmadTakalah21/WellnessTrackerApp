@@ -6,12 +6,13 @@ import 'package:wellnesstrackerapp/features/adds_and_offers/cubit/adds_and_offer
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/add_adv_view.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/adv_details_widget.dart';
-import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/additional_options_bottom_sheet.dart';
+import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
@@ -22,6 +23,7 @@ abstract class AddsAndOffersViewCallBacks {
   void onEditTap(AdvModel adv);
   void onDeleteTap(AdvModel adv);
   void onTryAgainTap();
+  Future<void> onRefresh();
   void onAddTap();
 }
 
@@ -33,13 +35,8 @@ class AddsAndOffersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => get<AddsAndOffersCubit>(),
-        ),
-        BlocProvider(create: (context) => get<DeleteCubit>()),
-      ],
+    return BlocProvider(
+      create: (context) => get<AddsAndOffersCubit>(),
       child: AddsAndOffersPage(role: role),
     );
   }
@@ -57,12 +54,11 @@ class AddsAndOffersPage extends StatefulWidget {
 class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     implements AddsAndOffersViewCallBacks {
   late final AddsAndOffersCubit addsAndOffersCubit = context.read();
-  late final DeleteCubit deleteCubit = context.read();
 
   @override
   void initState() {
     super.initState();
-    addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null);
+    addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000);
   }
 
   @override
@@ -72,9 +68,10 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
       MaterialPageRoute(
         builder: (context) => AddAdvView(
           advCubit: addsAndOffersCubit,
-          isEdit: false,
-          onSuccess: () =>
-              addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null),
+          onSuccess: () => addsAndOffersCubit.getAddsAndOffers(
+            widget.role,
+            perPage: 1000000,
+          ),
         ),
       ),
     );
@@ -85,52 +82,11 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-      builder: (context) => Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: AppConstants.padding16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: Text(
-                      "additional_options".tr(),
-                      style: context.tt.headlineMedium,
-                    ),
-                  ),
-                  TextButton.icon(
-                    icon: Icon(Icons.edit),
-                    onPressed: () => onEditTap(adv),
-                    label: Text(
-                      "edit".tr(),
-                      style: context.tt.labelMedium?.copyWith(
-                        color: context.cs.primary,
-                      ),
-                    ),
-                  ),
-                  TextButton.icon(
-                    icon: Icon(Icons.delete, color: context.cs.error),
-                    onPressed: () => onDeleteTap(adv),
-                    label: Text(
-                      "delete".tr(),
-                      style: context.tt.labelMedium?.copyWith(
-                        color: context.cs.error,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                ],
-              ),
-            ),
-          ),
-        ],
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      builder: (context) => AdditionalOptionsBottomSheet(
+        item: adv,
+        onEditTap: onEditTap,
+        onDeleteTap: onDeleteTap,
       ),
     );
   }
@@ -140,11 +96,9 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     showDialog(
       context: context,
       builder: (_) => InsureDeleteWidget(
-        deleteCubit: deleteCubit,
         item: adv,
-        onSaveTap: (c) => deleteCubit.deleteItem<AdvModel>(adv),
         onSuccess: () =>
-            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null),
+            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000),
       ),
     );
   }
@@ -156,10 +110,9 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
       MaterialPageRoute(
         builder: (context) => AddAdvView(
           advCubit: addsAndOffersCubit,
-          isEdit: true,
           adv: adv,
           onSuccess: () {
-            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null);
+            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000);
           },
         ),
       ),
@@ -168,7 +121,10 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
 
   @override
   void onTryAgainTap() =>
-      addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: null);
+      addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000);
+
+  @override
+  Future<void> onRefresh() async => onTryAgainTap();
 
   @override
   void onAdvTap(AdvModel adv) {
@@ -182,6 +138,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: widget.role == UserRoleEnum.admin
           ? AppBar(
@@ -201,18 +158,23 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
               final data = state.addsAndOffers.data;
               final ads = data.where((ad) => ad.type.isAdv).toList();
               final offers = data.where((ad) => !ad.type.isAdv).toList();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 10,
-                children: [
-                  SizedBox(height: 10),
-                  Text("الإعلانات", style: context.tt.headlineLarge),
-                  _buildAdsList(ads),
-                  SizedBox.shrink(),
-                  Text("العروض", style: context.tt.headlineLarge),
-                  _buildOffersList(offers),
-                  if (widget.role != UserRoleEnum.admin) SizedBox(height: 70),
-                ],
+              return RefreshIndicator(
+                onRefresh: onRefresh,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 10,
+                    children: [
+                      SizedBox(height: 10),
+                      Text("الإعلانات", style: context.tt.headlineLarge),
+                      _buildAdsList(ads, width / 2.4),
+                      SizedBox.shrink(),
+                      Text("العروض", style: context.tt.headlineLarge),
+                      _buildOffersList(offers),
+                      if (!widget.role.isUser) SizedBox(height: 80),
+                    ],
+                  ),
+                ),
               );
             } else if (state is AddsAndOffersEmpty) {
               return MainErrorWidget(
@@ -246,7 +208,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     );
   }
 
-  Widget _buildAdsList(List<AdvModel> ads) {
+  Widget _buildAdsList(List<AdvModel> ads, double width) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       padding: AppConstants.padding8,
@@ -255,32 +217,31 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
         spacing: 20,
         children: List.generate(ads.length, (index) {
           final ad = ads[index];
-          return _buildAdvItem(ad);
+          return _buildAdvItem(ad, width: width);
         }),
       ),
     );
   }
 
   Widget _buildOffersList(List<AdvModel> offers) {
-    return Expanded(
-      child: GridView.builder(
-        padding: AppConstants.padding8,
-        physics: BouncingScrollPhysics(),
-        itemCount: offers.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-        ),
-        itemBuilder: (context, index) {
-          final offer = offers[index];
-          return _buildAdvItem(offer);
-        },
+    return GridView.builder(
+      shrinkWrap: true,
+      padding: AppConstants.padding8,
+      physics: BouncingScrollPhysics(),
+      itemCount: offers.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
       ),
+      itemBuilder: (context, index) {
+        final offer = offers[index];
+        return _buildAdvItem(offer);
+      },
     );
   }
 
-  Widget _buildAdvItem(AdvModel adv) {
+  Widget _buildAdvItem(AdvModel adv, {double width = 150}) {
     return InkWell(
       onLongPress: () => onAdvLongPress(adv),
       onTap: () => onAdvTap(adv),
@@ -296,10 +257,10 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
             )
           ],
         ),
-        child: Image.asset(
-          "assets/images/app_logo.png",
-          width: 150,
-          height: 150,
+        child: AppImageWidget(
+          url: adv.image,
+          width: width,
+          height: width,
         ),
       ),
     );

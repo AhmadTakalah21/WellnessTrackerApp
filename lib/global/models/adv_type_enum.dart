@@ -11,35 +11,12 @@ enum AdvTypeEnum implements DropDownItemModel {
   @override
   int get id => index + 1;
 
-  bool get isAdv {
-    switch (this) {
-      case AdvTypeEnum.advertisement:
-        return true;
-      case AdvTypeEnum.offer:
-        return false;
-    }
-  }
+  bool get isAdv => this == advertisement;
 
-  static String toJson(AdvTypeEnum adv) {
-    switch (adv) {
-      case AdvTypeEnum.advertisement:
-        return "ad";
-      case AdvTypeEnum.offer:
-        return "offer";
-    }
-  }
+  static int toJson(AdvTypeEnum adv) => adv.id;
 
-  static AdvTypeEnum fromJson(int id) {
-    switch (id) {
-      case 1:
-        return advertisement;
-      case 2:
-        return offer;
-      default:
-        return advertisement;
-    }
-  }
-  
+  static AdvTypeEnum fromJson(int id) => values[id - 1];
+
   @override
   String get displayEntityName => name.tr();
 }

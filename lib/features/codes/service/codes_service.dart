@@ -13,9 +13,5 @@ abstract class CodesService {
     required int page,
   });
 
-  Future<CodeModel> addCode(
-    AddCodeModel addCodeModel, {
-    required bool isAdd,
-    int? id,
-  });
+  Future<CodeModel> addCode(AddCodeModel addCodeModel, {int? id});
 }

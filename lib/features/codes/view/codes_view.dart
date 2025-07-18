@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/codes/cubit/codes_cubit.dart';
 import 'package:wellnesstrackerapp/features/codes/model/code_model/code_model.dart';
 import 'package:wellnesstrackerapp/features/codes/view/widgets/add_code_widget.dart';
-import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -29,13 +28,8 @@ class CodesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => get<CodesCubit>()..getCodes(page: 1),
-        ),
-        BlocProvider(create: (context) => get<DeleteCubit>()),
-      ],
+    return BlocProvider(
+      create: (context) => get<CodesCubit>()..getCodes(page: 1),
       child: const CodesPage(),
     );
   }
@@ -50,7 +44,6 @@ class CodesPage extends StatefulWidget {
 
 class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
   late final CodesCubit codesCubit = context.read();
-  late final DeleteCubit deleteCubit = context.read();
 
   int perPage = 10;
   int currentPage = 1;
@@ -60,13 +53,10 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
       constraints: BoxConstraints(maxHeight: 500),
       builder: (bottomSheetContext) => AddCodeWidget(
         codesCubit: codesCubit,
-        isEdit: false,
         onSuccess: () => codesCubit.getCodes(page: 1, perPage: 10),
       ),
     );
@@ -77,9 +67,7 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
     showDialog(
       context: context,
       builder: (_) => InsureDeleteWidget(
-        deleteCubit: deleteCubit,
         item: code,
-        onSaveTap: (c) => deleteCubit.deleteItem<CodeModel>(code),
         onSuccess: () => codesCubit.getCodes(page: 1, perPage: 10),
       ),
     );
@@ -88,22 +76,18 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
   @override
   void onEditTap(CodeModel code) {
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
-        ),
-        constraints: BoxConstraints(maxHeight: 500),
-        builder: (bottomSheetContext) {
-          return AddCodeWidget(
-            codesCubit: codesCubit,
-            code: code,
-            isEdit: true,
-            onSuccess: () => codesCubit.getCodes(page: 1, perPage: 10),
-          );
-        });
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      constraints: BoxConstraints(maxHeight: 500),
+      builder: (bottomSheetContext) {
+        return AddCodeWidget(
+          codesCubit: codesCubit,
+          code: code,
+          onSuccess: () => codesCubit.getCodes(page: 1, perPage: 10),
+        );
+      },
+    );
   }
 
   @override

@@ -11,15 +11,8 @@ enum ActivityStatusEnum implements DropDownItemModel {
   @override
   int get id => index + 1;
 
-  bool get isActive {
-    switch (this) {
-      case ActivityStatusEnum.active:
-        return true;
-      case ActivityStatusEnum.inactive:
-        return false;
-    }
-  }
-  
+  bool get isActive => this == active;
+
   @override
   String get displayEntityName => name.tr();
 }

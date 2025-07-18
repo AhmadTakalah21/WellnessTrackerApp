@@ -13,6 +13,7 @@ class AppImageWidget extends StatelessWidget {
     this.border,
     this.shadows,
     this.errorWidget,
+    this.onImageLoaded,
   });
 
   final String url;
@@ -23,6 +24,7 @@ class AppImageWidget extends StatelessWidget {
   final Border? border;
   final List<BoxShadow>? shadows;
   final Widget? errorWidget;
+  final void Function(ImageProvider)? onImageLoaded;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,12 @@ class AppImageWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: borderRadius,
         child: CachedNetworkImage(
+          imageBuilder: (context, imageProvider) {
+            if (onImageLoaded != null) {
+              onImageLoaded!(imageProvider);
+            }
+            return Image(image: imageProvider, fit: fit);
+          },
           imageUrl: url,
           fit: fit,
           errorWidget: (context, url, error) {

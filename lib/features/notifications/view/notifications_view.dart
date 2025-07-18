@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wellnesstrackerapp/features/notifications/cubit/notifications_cubit.dart';
+import 'package:wellnesstrackerapp/features/notifications/model/notification_model/notification_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/view/widgets/add_notification_widget.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
 abstract class NotificationsViewCallBacks {
   void onAddTap();
@@ -44,6 +47,15 @@ class _NotificationsPageState extends State<NotificationsPage>
     implements NotificationsViewCallBacks {
   late final NotificationsCubit notificationsCubit = context.read();
 
+  final List<NotificationModel> _notifications = List.generate(
+    8,
+    (index) => NotificationModel(
+      id: index + 1,
+      title: 'نقاط',
+      body: 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
+    ),
+  );
+
   @override
   void initState() {
     super.initState();
@@ -54,13 +66,10 @@ class _NotificationsPageState extends State<NotificationsPage>
   onAddTap() {
     showMaterialModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
       builder: (bottomSheetContext) => AddNotificationView(
         notificationsCubit: notificationsCubit,
+        role: widget.role,
         onSuccess: onTryAgainTap,
       ),
     );
@@ -99,45 +108,66 @@ class _NotificationsPageState extends State<NotificationsPage>
       ),
       body: SafeArea(
         top: false,
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'اليوم',
-                            style: context.tt.bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            'تمييز كمقروء',
-                            style: context.tt.bodyLarge?.copyWith(
-                              color: context.cs.primary,
+        child: BlocBuilder<NotificationsCubit, GeneralNotificationsState>(
+          buildWhen: (previous, current) => current is NotificationsState,
+          builder: (context, state) {
+            if (state is NotificationsLoading) {
+              return LoadingIndicator();
+            } else if (state is NotificationsSuccess ||
+                state is NotificationsFail ||
+                state is NotificationsEmpty) {
+              return Padding(
+                padding: AppConstants.paddingH8,
+                child: RefreshIndicator(
+                  onRefresh: onRefresh,
+                  child: SingleChildScrollView(
+                    padding: AppConstants.padding10,
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'اليوم',
+                              style: context.tt.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w500),
                             ),
-                          )
-                        ],
-                      ),
+                            Text(
+                              'تمييز كمقروء',
+                              style: context.tt.bodyLarge?.copyWith(
+                                color: context.cs.primary,
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        ..._buildNotifications(_notifications),
+                        SizedBox(height: 70),
+                      ],
                     ),
-                    ..._buildNotifications(),
-                  ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 40),
-            ],
-          ),
+              );
+            } else if (state is NotificationsEmpty) {
+              return MainErrorWidget(
+                isRefresh: true,
+                error: state.message,
+                onTryAgainTap: onTryAgainTap,
+              );
+            } else if (state is NotificationsFail) {
+              return MainErrorWidget(
+                error: state.error,
+                onTryAgainTap: onTryAgainTap,
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          },
         ),
       ),
-      floatingActionButton: widget.role.isAdmin
+      floatingActionButton: !widget.role.isUser
           ? Padding(
               padding: AppConstants.padding8,
               child: FloatingActionButton(
@@ -152,7 +182,7 @@ class _NotificationsPageState extends State<NotificationsPage>
     );
   }
 
-  List<Widget> _buildNotifications() {
+  List<Widget> _buildNotifications(List<NotificationModel> notifications) {
     return List.generate(_notifications.length, (index) {
       final notification = _notifications[index];
       return Card(
@@ -170,13 +200,13 @@ class _NotificationsPageState extends State<NotificationsPage>
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: notification['iconBackgroundColor'],
+                  color: Colors.green.shade100,
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Icon(
-                  notification['icon'],
+                  Icons.account_balance_wallet,
                   size: 24,
-                  color: notification['iconColor'],
+                  color: Colors.green,
                 ),
               ),
               const SizedBox(width: 10),
@@ -185,12 +215,12 @@ class _NotificationsPageState extends State<NotificationsPage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      notification['title'],
+                      notification.title,
                       style: context.tt.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Text(notification['content'], style: context.tt.bodyLarge)
+                    Text(notification.body, style: context.tt.bodyLarge)
                   ],
                 ),
               ),
@@ -207,63 +237,4 @@ class _NotificationsPageState extends State<NotificationsPage>
       );
     });
   }
-
-  final List<Map<String, dynamic>> _notifications = [
-    {
-      'icon': Icons.account_balance_wallet,
-      'iconColor': Colors.green,
-      'iconBackgroundColor': Colors.green.shade100,
-      'title': 'نقاط',
-      'content': 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
-    },
-    {
-      'icon': Icons.account_balance_wallet,
-      'iconColor': Colors.green,
-      'iconBackgroundColor': Colors.green.shade100,
-      'title': 'نقاط',
-      'content': 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
-    },
-    {
-      'icon': Icons.account_balance_wallet,
-      'iconColor': Colors.green,
-      'iconBackgroundColor': Colors.green.shade100,
-      'title': 'نقاط',
-      'content': 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
-    },
-    {
-      'icon': Icons.account_balance_wallet,
-      'iconColor': Colors.green,
-      'iconBackgroundColor': Colors.green.shade100,
-      'title': 'نقاط',
-      'content': 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
-    },
-    {
-      'icon': Icons.account_balance_wallet,
-      'iconColor': Colors.green,
-      'iconBackgroundColor': Colors.green.shade100,
-      'title': 'نقاط',
-      'content': 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
-    },
-    {
-      'icon': Icons.account_balance_wallet,
-      'iconColor': Colors.green,
-      'iconBackgroundColor': Colors.green.shade100,
-      'title': 'نقاط',
-      'content': 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
-    },
-    {
-      'icon': Icons.account_balance_wallet,
-      'iconColor': Colors.green,
-      'iconBackgroundColor': Colors.green.shade100,
-      'title': 'نقاط',
-      'content': 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
-    },
-    {
-      'icon': Icons.account_balance_wallet,
-      'iconColor': Colors.green,
-      'iconBackgroundColor': Colors.green.shade100,
-      'title': 'نقاط',
-      'content': 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
-    },
-  ];
 }

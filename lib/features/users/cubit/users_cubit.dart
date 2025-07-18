@@ -26,6 +26,13 @@ class UsersCubit extends Cubit<GeneralUsersState> {
   DepartmentEnum? roleFilter;
   String? query;
 
+  void setModel(UserModel? user) {
+    setName(user?.name);
+    setEmail(user?.email);
+    setPhone(user?.phone);
+    setRole(user?.role);
+  }
+
   void setName(String? name) {
     addUserModel = addUserModel.copyWith(name: () => name);
   }
@@ -101,14 +108,11 @@ class UsersCubit extends Cubit<GeneralUsersState> {
     return filtered;
   }
 
-  Future<void> addUser({required bool isAdd, int? userId}) async {
+  Future<void> addUser({int? userId}) async {
     emit(AddUserLoading());
     try {
-      final response = await userService.addUser(
-        addUserModel,
-        isAdd: isAdd,
-        userId: userId,
-      );
+      final response = await userService.addUser(addUserModel, userId: userId);
+      final isAdd = userId == null;
       final message = isAdd ? "user_added".tr() : "user_updated".tr();
       emit(AddUserSuccess(response, message));
     } catch (e) {

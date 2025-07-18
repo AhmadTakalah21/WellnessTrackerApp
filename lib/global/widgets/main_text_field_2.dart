@@ -16,7 +16,8 @@ class MainTextField2 extends StatefulWidget {
     this.isPassword = false,
     this.onChanged,
     this.initialText,
-    this.keyboardType, this.inputFormatters,
+    this.keyboardType,
+    this.inputFormatters,
   });
 
   final TextEditingController? controller;

@@ -13,8 +13,8 @@ class AddsAndOffersServiceImp implements AddsAndOffersService {
     try {
       final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
-      final response =
-          await dio.get("/v1/${role.getApiRoute}/advertisements?$pageParam&$perPageParam");
+      final response = await dio.get(
+          "/v1/${role.getApiRoute}/advertisements?$pageParam&$perPageParam");
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
         (json) => AdvModel.fromJson(json as Map<String, dynamic>),
@@ -26,15 +26,15 @@ class AddsAndOffersServiceImp implements AddsAndOffersService {
   }
 
   @override
-  Future<void> addAdv(
-    AddAdvModel model, {
-    required bool isAdd,
-    XFile? image,
-    int? id,
-  }) async {
+  Future<void> addAdv(AddAdvModel model, {XFile? image, int? id}) async {
+    final isAdd = id == null;
     final endpoint = isAdd ? "" : "/$id";
     try {
       final map = model.toJson();
+
+      if (!isAdd) {
+        map["_method"] = "put";
+      }
       if (image != null) {
         map['image'] = await MultipartFile.fromFile(
           image.path,
@@ -42,11 +42,12 @@ class AddsAndOffersServiceImp implements AddsAndOffersService {
         );
       }
       final formData = FormData.fromMap(map);
-      await dio.postOrPut(
-        "/v1/admin/advertisements$endpoint",
-        isAdd: isAdd,
-        data: formData,
-      );
+      await dio.post("/v1/admin/advertisements$endpoint", data: formData);
+      // await dio.postOrPut(
+      //   "/v1/admin/advertisements$endpoint",
+      //   isAdd: isAdd,
+      //   data: formData,
+      // );
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;

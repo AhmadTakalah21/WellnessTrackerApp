@@ -9,43 +9,14 @@ enum UserRoleEnum {
   user,
   doctor,
   coach,
-  nutritionist;
+  dietitian;
 
   String get displayName => name.tr();
 
-  static UserRoleEnum fromJson(String role) {
-    if (role == "admin") {
-      return UserRoleEnum.admin;
-    } else if (role == "user") {
-      return UserRoleEnum.user;
-    } else if (role == "doctor") {
-      return UserRoleEnum.doctor;
-    } else if (role == "coach") {
-      return UserRoleEnum.coach;
-    } else if (role == "dietitian") {
-      return UserRoleEnum.nutritionist;
-    } else {
-      //throw 'Role is not supported';
-      return UserRoleEnum.user;
-    }
-  }
+  static UserRoleEnum fromJson(String role) =>
+      values.firstWhere((value) => value.name == role, orElse: () => user);
 
-  static String toJson(UserRoleEnum role) {
-    if (role == UserRoleEnum.admin) {
-      return "admin";
-    } else if (role == UserRoleEnum.user) {
-      return "user";
-    } else if (role == UserRoleEnum.doctor) {
-      return "doctor";
-    } else if (role == UserRoleEnum.coach) {
-      return "coach";
-    } else if (role == UserRoleEnum.nutritionist) {
-      return "dietitian";
-    } else {
-      //throw 'Role is not supported';
-      return "user";
-    }
-  }
+  static String toJson(UserRoleEnum role) => role.name;
 
   String get getApiRoute {
     switch (this) {
@@ -54,25 +25,28 @@ enum UserRoleEnum {
       case UserRoleEnum.user:
         return "users";
       case UserRoleEnum.doctor:
-        return "doctors";
+        return "doctor";
       case UserRoleEnum.coach:
-        return "coaches";
-      case UserRoleEnum.nutritionist:
-        return "nutritionists";
+        return "coach";
+      case UserRoleEnum.dietitian:
+        return "dietitian";
     }
   }
 
   bool get isUser => this == user;
   bool get isAdmin => this == admin;
+  bool get isDietitian => this == dietitian;
+  bool get isCoach => this == coach;
+  bool get isDoctor => this == doctor;
 
   List<UserViewOnPermissionModel> get getPermissions {
     switch (this) {
-      case UserRoleEnum.admin:
+      case admin:
         return [
           UserViewOnPermissionModel(
             title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: CustomersRoute(),
+            screen: CustomersRoute(role: this),
             color: Colors.red,
           ),
           UserViewOnPermissionModel(
@@ -90,19 +64,19 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "levels",
             icon: Icons.stacked_line_chart,
-            screen: LevelsRoute(role: admin),
+            screen: LevelsRoute(role: this),
             color: Colors.indigo,
           ),
           UserViewOnPermissionModel(
             title: "adds_and_offers",
             icon: Icons.campaign,
-            screen: AddsAndOffersRoute(role: admin),
+            screen: AddsAndOffersRoute(role: this),
             color: Colors.orange,
           ),
           UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
-            screen: NotificationsRoute(role: admin),
+            screen: NotificationsRoute(role: this),
             color: Colors.green,
           ),
           UserViewOnPermissionModel(
@@ -112,7 +86,7 @@ enum UserRoleEnum {
             color: Colors.black,
           ),
         ];
-      case UserRoleEnum.user:
+      case user:
         return [
           UserViewOnPermissionModel(
             title: "follow_up",
@@ -147,47 +121,65 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "levels",
             icon: Icons.stacked_line_chart,
-            screen: LevelsRoute(role: user),
+            screen: LevelsRoute(role: this),
             color: Colors.orange,
           ),
           UserViewOnPermissionModel(
             title: "store",
             icon: Icons.storefront_outlined,
-            screen: ItemsRoute(role: user),
+            screen: ItemsRoute(role: this),
             color: Colors.greenAccent,
           ),
           UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
-            screen: NotificationsRoute(role: user),
+            screen: NotificationsRoute(role: this),
             color: Colors.green,
           ),
         ];
-      case UserRoleEnum.doctor:
+      case doctor:
         return [
           UserViewOnPermissionModel(
             title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: CustomersRoute(),
+            screen: CustomersRoute(role: this),
             color: Colors.red,
           ),
-        ];
-      case UserRoleEnum.coach:
-        return [
           UserViewOnPermissionModel(
-            title: "customers_administration",
-            icon: Icons.admin_panel_settings,
-            screen: CustomersRoute(),
-            color: Colors.red,
+            title: "notifications",
+            icon: FontAwesomeIcons.bell,
+            screen: NotificationsRoute(role: this),
+            color: Colors.green,
           ),
         ];
-      case UserRoleEnum.nutritionist:
+      case coach:
         return [
           UserViewOnPermissionModel(
             title: "customers_administration",
             icon: Icons.admin_panel_settings,
-            screen: CustomersRoute(),
+            screen: CustomersRoute(role: this),
             color: Colors.red,
+          ),
+          UserViewOnPermissionModel(
+            title: "notifications",
+            icon: FontAwesomeIcons.bell,
+            screen: NotificationsRoute(role: this),
+            color: Colors.green,
+          ),
+        ];
+      case dietitian:
+        return [
+          UserViewOnPermissionModel(
+            title: "customers_administration",
+            icon: Icons.admin_panel_settings,
+            screen: CustomersRoute(role: this),
+            color: Colors.red,
+          ),
+          UserViewOnPermissionModel(
+            title: "notifications",
+            icon: FontAwesomeIcons.bell,
+            screen: NotificationsRoute(role: this),
+            color: Colors.green,
           ),
         ];
     }

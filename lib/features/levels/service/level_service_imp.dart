@@ -28,10 +28,10 @@ class LevelsServiceImp implements LevelsService {
   @override
   Future<LevelModel> addLevel(
     AddLevelModel model, {
-    required bool isAdd,
     XFile? image,
     int? id,
   }) async {
+    final isAdd = id == null;
     final endpoint = isAdd ? "/v1/admin/levels" : "/v1/admin/levels/$id";
     try {
       final map = model.toJson();

@@ -18,6 +18,9 @@ abstract class AppConstants {
   static const borderRadius15 = BorderRadius.all(Radius.circular(15));
   static const borderRadius10 = BorderRadius.all(Radius.circular(10));
   static const borderRadius5 = BorderRadius.all(Radius.circular(5));
+  static const borderRadiusT20 = BorderRadius.vertical(
+    top: Radius.circular(20),
+  );
   static const borderRadiusL10 = BorderRadius.only(
     topLeft: Radius.circular(10),
     bottomLeft: Radius.circular(10),
@@ -37,6 +40,10 @@ abstract class AppConstants {
   static const borderRadiusTlBr20 = BorderRadius.only(
     topLeft: Radius.circular(20),
     bottomRight: Radius.circular(20),
+  );
+  static const borderRadiusTlTr = BorderRadius.only(
+    topLeft: Radius.circular(16),
+    topRight: Radius.circular(16),
   );
   static const paddingB10 = EdgeInsets.only(bottom: 10);
 
@@ -61,6 +68,7 @@ abstract class AppConstants {
   static const paddingH10 = EdgeInsets.symmetric(horizontal: 10);
   static const paddingH8 = EdgeInsets.symmetric(horizontal: 8);
   static const padding30 = EdgeInsets.all(30);
+  static const padding24 = EdgeInsets.all(24);
   static const padding20 = EdgeInsets.all(20);
   static const padding18 = EdgeInsets.all(18);
   static const padding16 = EdgeInsets.all(16);

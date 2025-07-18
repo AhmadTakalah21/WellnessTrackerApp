@@ -25,6 +25,12 @@ class CodesCubit extends Cubit<GeneralCodesState> {
   String lastQuery = '';
   String? lastStatus;
 
+  void setModel(CodeModel? code) {
+    setCode(code?.code);
+    setStartDate(code?.startDate);
+    setEndDate(code?.endDate);
+  }
+
   void setCode(String? code) {
     addCodeModel = addCodeModel.copyWith(code: () => code);
   }
@@ -92,11 +98,12 @@ class CodesCubit extends Cubit<GeneralCodesState> {
     }).toList();
   }
 
-  Future<void> addCode({required bool isAdd, int? id}) async {
+  Future<void> addCode({int? id}) async {
     emit(AddCodeLoading());
     try {
       final response =
-          await codeService.addCode(addCodeModel, isAdd: isAdd, id: id);
+          await codeService.addCode(addCodeModel, id: id);
+      final isAdd = id == null;
       final message = isAdd ? "code_added".tr() : "code_updated".tr();
       emit(AddCodeSuccess(response, message));
     } catch (e) {

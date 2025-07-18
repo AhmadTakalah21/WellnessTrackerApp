@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
@@ -59,5 +59,46 @@ abstract class Utils {
     } else {
       return null;
     }
+  }
+
+  static String? validateEmptyValue(String? val) {
+    if (val == null || val.trim().isEmpty) {
+      return 'required'.tr();
+    }
+    return null;
+  }
+
+  static String? validateEmail(String? val) {
+    final emailRegex =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    if (val == null || val.trim().isEmpty) {
+      return 'email_empty'.tr();
+    }
+    if (!emailRegex.hasMatch(val)) {
+      return 'email_invalid'.tr();
+    }
+    return null;
+  }
+
+  static String? validatePhone(String? val) {
+    if (val == null || val.trim().isEmpty) {
+      return 'required'.tr();
+    } else if (val.length != 10) {
+      return 'phone_number_10_digits'.tr();
+    } else if (!val.startsWith('09')) {
+      return 'phone_number_start_09'.tr();
+    } else {
+      return null;
+    }
+  }
+
+  static String? validatePassword(String? val) {
+    if (val == null || val.trim().isEmpty) {
+      return 'password_empty'.tr();
+    }
+    if (val.length < 8) {
+      return 'password_8_chars'.tr();
+    }
+    return null;
   }
 }

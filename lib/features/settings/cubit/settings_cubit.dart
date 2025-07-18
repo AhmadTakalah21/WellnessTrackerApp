@@ -17,6 +17,14 @@ class SettingsCubit extends Cubit<GeneralSettingsState> {
 
   UpdateSettingsModel updateSettingsModel = const UpdateSettingsModel();
 
+  void setModel(SettingsModel? model) {
+    setName(model?.name);
+    setEmail(model?.email);
+    setSupportPhoneNumber(model?.supportPhoneNumber);
+    setAppUrlAndroid(model?.appUrlAndroid);
+    setAppUrlIos(model?.appUrlIos);
+  }
+
   void setName(String? name) {
     updateSettingsModel = updateSettingsModel.copyWith(name: () => name);
   }

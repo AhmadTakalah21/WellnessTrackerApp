@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/codes/cubit/codes_cubit.dart';
 import 'package:wellnesstrackerapp/features/codes/model/code_model/code_model.dart';
+import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
@@ -13,14 +14,12 @@ import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 class AddCodeWidget extends StatefulWidget {
   const AddCodeWidget({
     super.key,
-    required this.isEdit,
     this.code,
     this.onSuccess,
     required this.codesCubit,
   });
 
   final CodesCubit codesCubit;
-  final bool isEdit;
   final CodeModel? code;
   final VoidCallback? onSuccess;
 
@@ -31,17 +30,11 @@ class AddCodeWidget extends StatefulWidget {
 class _AddCodeWidgetState extends State<AddCodeWidget> {
   late final CodesCubit codesCubit = context.read();
 
-  final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
     final code = widget.code;
-    if (widget.isEdit && code != null) {
-      widget.codesCubit.setCode(code.code);
-      widget.codesCubit.setStartDate(code.startDate);
-      widget.codesCubit.setEndDate(code.endDate);
-    }
+    widget.codesCubit.setModel(code);
   }
 
   void onCancelTap() => Navigator.pop(context);
@@ -62,7 +55,7 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
       widget.codesCubit.setEndDate(_formattedDate(date));
 
   void onSave() =>
-      widget.codesCubit.addCode(isAdd: !widget.isEdit, id: widget.code?.id);
+      widget.codesCubit.addCode(id: widget.code?.id);
 
   @override
   Widget build(BuildContext context) {
@@ -73,72 +66,76 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
           padding: MediaQuery.of(context).viewInsets,
           child: SingleChildScrollView(
             padding: AppConstants.padding20,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: Text(
-                      widget.isEdit ? 'edit_code'.tr() : 'add_code'.tr(),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  MainTextField2(
-                    initialText: widget.code?.code,
-                    onChanged: onCodeChanged,
-                    icon: Icons.qr_code,
-                    label: 'code'.tr(),
-                    validator: (val) =>
-                        val == null || val.isEmpty ? 'required_field'.tr() : null,
-                  ),
-                  const SizedBox(height: 12),
-                  MainDatePicker(
-                    isStart: true,
-                    initialDate: widget.code?.startDate,
-                    onDateSelected: onStartDateSelected,
-                  ),
-                  const SizedBox(height: 12),
-                  MainDatePicker(
-                    isEnd: true,
-                    initialDate: widget.code?.endDate,
-                    onDateSelected: onEndDateSelected,
-                  ),
-                  const SizedBox(height: 30),
-                  BlocConsumer<CodesCubit, GeneralCodesState>(
-                    bloc: widget.codesCubit,
-                    listener: (context, state) {
-                      if (state is AddCodeSuccess) {
-                        widget.onSuccess?.call();
-                        onCancelTap();
-                        MainSnackBar.showSuccessMessage(context, state.message);
-                      } else if (state is AddCodeFail) {
-                        MainSnackBar.showErrorMessage(context, state.error);
-                      }
-                    },
-                    builder: (context, state) {
-                      var onTap = onSave;
-                      Widget? child;
-                      if (state is AddCodeLoading) {
-                        onTap = () {};
-                        child = const LoadingIndicator(size: 30);
-                      }
-                      return MainActionButton(
-                        text: widget.isEdit ? 'update'.tr() : 'save'.tr(),
-                        onTap: onTap,
-                        child: child,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              spacing: 12,
+              children: [
+                _buildTitle(),
+                const SizedBox(height: 4),
+                _buildCodeTextField(),
+                _buildStartDatePicker(),
+                _buildEndDatePicker(),
+                const SizedBox(height: 6),
+                _buildSubmitButton(),
+              ],
             ),
           ),
         ),
       ),
     );
   }
+
+  Widget _buildTitle() => Center(
+        child: Text(
+          widget.code != null ? 'edit_code'.tr() : 'add_code'.tr(),
+          style: context.tt.titleLarge,
+        ),
+      );
+
+  Widget _buildCodeTextField() => MainTextField2(
+        initialText: widget.code?.code,
+        onChanged: onCodeChanged,
+        icon: Icons.qr_code,
+        label: 'code'.tr(),
+        validator: (v) => v == null || v.isEmpty ? 'required_field'.tr() : null,
+      );
+
+  Widget _buildStartDatePicker() => MainDatePicker(
+        isStart: true,
+        initialDate: widget.code?.startDate,
+        onDateSelected: onStartDateSelected,
+      );
+
+  Widget _buildEndDatePicker() => MainDatePicker(
+        isEnd: true,
+        initialDate: widget.code?.endDate,
+        onDateSelected: onEndDateSelected,
+      );
+
+  Widget _buildSubmitButton() => BlocConsumer<CodesCubit, GeneralCodesState>(
+        bloc: widget.codesCubit,
+        listener: (context, state) {
+          if (state is AddCodeSuccess) {
+            widget.onSuccess?.call();
+            onCancelTap();
+            MainSnackBar.showSuccessMessage(context, state.message);
+          } else if (state is AddCodeFail) {
+            MainSnackBar.showErrorMessage(context, state.error);
+          }
+        },
+        builder: (context, state) {
+          var onTap = onSave;
+          Widget? child;
+          if (state is AddCodeLoading) {
+            onTap = () {};
+            child = LoadingIndicator(size: 30, color: context.cs.surface);
+          }
+          return MainActionButton(
+            text: 'save'.tr(),
+            onTap: onTap,
+            child: child,
+          );
+        },
+      );
 }

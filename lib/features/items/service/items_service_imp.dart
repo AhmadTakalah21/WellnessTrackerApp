@@ -46,15 +46,11 @@ class ItemServiceImp implements ItemService {
   }
 
   @override
-  Future<ItemModel> addItem(
-    AddItemModel addItemModel, {
-    XFile? image,
-    required bool isAdd,
-    int? itemId,
-  }) async {
+  Future<ItemModel> addItem(AddItemModel model, {XFile? image, int? id}) async {
     try {
-      final endpoint = isAdd ? "/v1/admin/items" : "/v1/admin/items/$itemId";
-      final map = addItemModel.toJson();
+      final isAdd = id == null;
+      final endpoint = isAdd ? "/v1/admin/items" : "/v1/admin/items/$id";
+      final map = model.toJson();
       if (image != null) {
         map['image'] = await MultipartFile.fromFile(
           image.path,

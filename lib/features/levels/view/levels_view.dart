@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart';
+import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/features/levels/view/levels_page_item.dart';
 import 'package:wellnesstrackerapp/features/levels/view/widgets/add_level_widget.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
@@ -11,12 +12,15 @@ import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_add_floating_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_tab_bar.dart';
 
 abstract class LevelsViewCallBacks {
   void onAddTap();
+  void onEditTap(LevelModel level);
+  void onDeleteTap(LevelModel level);
   void onTabSelected(int index);
   void onTryAgainTap();
 }
@@ -82,6 +86,29 @@ class _LevelsPageState extends State<LevelsPage>
   void onAddTap() {
     showMaterialModalBottomSheet(
       context: context,
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      builder: (bottomSheetContext) => AddLevelView(
+        levelsCubit: levelsCubit,
+        onSuccess: () => levelsCubit.getLevels(widget.role),
+      ),
+    );
+  }
+
+  @override
+  void onDeleteTap(LevelModel level) {
+    showDialog(
+      context: context,
+      builder: (_) => InsureDeleteWidget(
+        item: level,
+        onSuccess: () => levelsCubit.getLevels(widget.role),
+      ),
+    );
+  }
+
+  @override
+  void onEditTap(LevelModel level) {
+    showMaterialModalBottomSheet(
+      context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -89,7 +116,7 @@ class _LevelsPageState extends State<LevelsPage>
       ),
       builder: (bottomSheetContext) => AddLevelView(
         levelsCubit: levelsCubit,
-        isEdit: false,
+        level: level,
         onSuccess: () => levelsCubit.getLevels(widget.role),
       ),
     );
@@ -104,8 +131,13 @@ class _LevelsPageState extends State<LevelsPage>
 
   @override
   Widget build(BuildContext context) {
+    final levelPage = LevelsPageItem(
+      onTryAgainTap: onTryAgainTap,
+      onEditTap: onEditTap,
+      onDeleteTap: onDeleteTap,
+    );
     final pages = DepartmentEnum.values.map((department) {
-      return LevelsPageItem(onTryAgainTap: onTryAgainTap);
+      return levelPage;
     }).toList();
     return Scaffold(
       appBar: AppBar(
@@ -138,10 +170,7 @@ class _LevelsPageState extends State<LevelsPage>
                 ),
               ],
             )
-          : Padding(
-              padding: AppConstants.padding16,
-              child: LevelsPageItem(onTryAgainTap: onTryAgainTap),
-            ),
+          : Padding(padding: AppConstants.padding16, child: levelPage),
       floatingActionButton:
           widget.role.isAdmin ? MainFloatingButton(onTap: onAddTap) : null,
     );

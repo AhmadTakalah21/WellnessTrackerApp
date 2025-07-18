@@ -7,6 +7,7 @@ import 'package:wellnesstrackerapp/features/customers/model/customer_model/custo
 import 'package:wellnesstrackerapp/features/customers/service/customers_service.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/customers_state.dart';
 //part 'states/approve_customer_state.dart';
@@ -50,11 +51,13 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     model = const AssignSubscriberModel();
   }
 
-  Future<void> getCustomers({int? page, int? perPage = 10}) async {
+  Future<void> getCustomers(UserRoleEnum role,
+    {int? page, int? perPage = 10}) async {
     emit(CustomersLoading());
     try {
       if (isClosed) return;
       final result = await customerService.getCustomers(
+        role,
         page: page,
         perPage: perPage,
       );

@@ -54,8 +54,8 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
     model = model.copyWith(type: () => type);
   }
 
-  Future<void> setImage(Future<XFile?>? image) async {
-    this.image = await image;
+  Future<void> setImage(XFile? image) async {
+    this.image = image;
   }
 
   void resetModel() {
@@ -88,16 +88,12 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
     }
   }
 
-  Future<void> addAdv({required bool isAdd, int? id}) async {
+  Future<void> addAdv({int? id}) async {
     emit(AddAdvLoading());
     try {
       if (isClosed) return;
-      await addsAndOffersService.addAdv(
-        model,
-        isAdd: isAdd,
-        id: id,
-        image: image,
-      );
+      await addsAndOffersService.addAdv(model, id: id, image: image);
+      final isAdd = id == null;
       final message = isAdd ? "added".tr() : "updated".tr();
       emit(AddAdvSuccess(message));
     } catch (e) {

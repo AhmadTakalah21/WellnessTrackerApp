@@ -7,18 +7,7 @@ import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model
 part 'users_service_imp.dart';
 
 abstract class UserService {
-  Future<PaginatedModel<UserModel>> getUsers({
-    int? perPage = 10,
-     int? page,
-  }); // get all users
-  
-  Future<UserModel> getUser(int userId); // get one user by id
-
-  Future<UserModel> addUser(
-    AddUserModel adduserModel, {
-    required bool isAdd,
-    int? userId,
-  }); // add or update user by id
-
-  // for delete user by id : it is implemented by delete service
+  Future<PaginatedModel<UserModel>> getUsers({int? perPage = 10, int? page});
+  Future<UserModel> getUser(int userId);
+  Future<UserModel> addUser(AddUserModel adduserModel, {int? userId});
 }

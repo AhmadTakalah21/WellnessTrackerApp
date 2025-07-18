@@ -8,7 +8,6 @@ import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.da
 import 'package:wellnesstrackerapp/features/items/view/widgets/add_item_view.dart';
 import 'package:wellnesstrackerapp/features/items/view/widgets/item_tile.dart';
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
-import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -36,14 +35,9 @@ class ItemsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              get<ItemsCubit>()..getItems(role, levelId: level?.id),
-        ),
-        BlocProvider(create: (context) => get<DeleteCubit>()),
-      ],
+    return BlocProvider(
+      create: (context) =>
+          get<ItemsCubit>()..getItems(role, levelId: level?.id),
       child: ItemsPage(role: role, level: level),
     );
   }
@@ -61,7 +55,6 @@ class ItemsPage extends StatefulWidget {
 
 class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
   late final ItemsCubit itemsCubit = context.read();
-  late final DeleteCubit deleteCubit = context.read();
 
   @override
   bool onNotification(ScrollNotification scrollInfo) {
@@ -75,8 +68,11 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => itemsCubit.getItems(widget.role,
-      isLoadMore: false, levelId: widget.level?.id);
+  void onTryAgainTap() => itemsCubit.getItems(
+        widget.role,
+        isLoadMore: false,
+        levelId: widget.level?.id,
+      );
 
   @override
   void onAddTap() {
@@ -86,7 +82,6 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
         builder: (context) => AddItemView(
           itemCubit: itemsCubit,
           level: widget.level,
-          isEdit: false,
           onSuccess: () => itemsCubit.getItems(
             widget.role,
             levelId: widget.level?.id,
@@ -102,9 +97,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
     showDialog(
       context: context,
       builder: (_) => InsureDeleteWidget(
-        deleteCubit: deleteCubit,
         item: item,
-        onSaveTap: (c) => deleteCubit.deleteItem<ItemModel>(item),
         onSuccess: () =>
             itemsCubit.getItems(widget.role, levelId: widget.level?.id),
       ),
@@ -120,7 +113,6 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
           itemCubit: itemsCubit,
           item: item,
           level: widget.level,
-          isEdit: true,
           onSuccess: () => itemsCubit.getItems(
             widget.role,
             levelId: widget.level?.id,
@@ -136,11 +128,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
       builder: (context) => Row(
         children: [
           Expanded(

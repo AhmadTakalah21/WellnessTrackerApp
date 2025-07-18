@@ -40,12 +40,9 @@ class UserServiceImp implements UserService {
   }
 
   @override
-  Future<UserModel> addUser(
-    AddUserModel adduserModel, {
-    required bool isAdd,
-    int? userId,
-  }) async {
+  Future<UserModel> addUser(AddUserModel adduserModel, {int? userId}) async {
     try {
+      final isAdd = userId == null;
       final endpoint = isAdd ? "/v1/admin/users" : "/v1/admin/users/$userId";
       final response = await dio.postOrPut(
         endpoint,

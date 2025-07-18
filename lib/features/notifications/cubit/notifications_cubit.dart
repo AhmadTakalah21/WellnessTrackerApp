@@ -62,7 +62,11 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
       notifications = result.data;
       meta = result.meta;
       final message = result.data.isEmpty ? "no_notifications".tr() : null;
-      emit(NotificationsSuccess(result, message));
+      if (result.data.isEmpty && result.meta.currentPage == 1) {
+        emit(NotificationsEmpty("no_notifications".tr()));
+      } else {
+        emit(NotificationsSuccess(result, message));
+      }
     } catch (e) {
       if (isClosed) return;
       emit(NotificationsFail(e.toString()));

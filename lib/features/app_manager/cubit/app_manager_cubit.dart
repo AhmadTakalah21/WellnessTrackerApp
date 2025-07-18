@@ -11,4 +11,8 @@ class AppManagerCubit extends Cubit<AppManagerState> {
   void emitLanuageChangedState() {
     emit(LanguageChanged());
   }
+
+  void emitInnerRouteChanged() {
+    emit(InnerRouteChanged());
+  }
 }

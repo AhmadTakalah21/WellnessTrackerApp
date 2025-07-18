@@ -18,10 +18,5 @@ abstract class ItemService {
     required UserRoleEnum role,
   });
   Future<ItemModel> getItem(int itemId);
-  Future<ItemModel> addItem(
-    AddItemModel addItemModel, {
-    XFile? image,
-    required bool isAdd,
-    int? itemId,
-  });
+  Future<ItemModel> addItem(AddItemModel model, {XFile? image, int? id});
 }

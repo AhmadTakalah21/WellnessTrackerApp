@@ -19,7 +19,7 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
   ItemsCubit(this.itemService) : super(GeneralItemsInitial());
 
   final ItemService itemService;
-  AddItemModel addItemModel = const AddItemModel();
+  AddItemModel model = const AddItemModel();
   EnArAddModel itemName = const EnArAddModel();
   EnArAddModel itemDescription = const EnArAddModel();
   XFile? image;
@@ -28,36 +28,46 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
   bool hasMore = true;
   List<ItemModel> items = [];
 
+  void setModel(ItemModel? item, LevelModel? level) {
+    setLevelId(level);
+    setNameAr(item?.name.ar);
+    setNameEn(item?.name.en);
+    setDescriptionAr(item?.description?.ar);
+    setDescriptionEn(item?.description?.en);
+    setLink(item?.link);
+    setPrice(item?.price.toString());
+  }
+
   void setNameAr(String? name) {
     itemName = itemName.copyWith(ar: () => name);
-    addItemModel = addItemModel.copyWith(name: () => itemName);
+    model = model.copyWith(name: () => itemName);
   }
 
   void setNameEn(String? name) {
     itemName = itemName.copyWith(en: () => name);
-    addItemModel = addItemModel.copyWith(name: () => itemName);
+    model = model.copyWith(name: () => itemName);
   }
 
   void setPrice(String? price) {
-    addItemModel = addItemModel.copyWith(price: () => price);
+    model = model.copyWith(price: () => price);
   }
 
   void setDescriptionEn(String? desc) {
     itemDescription = itemDescription.copyWith(en: () => desc);
-    addItemModel = addItemModel.copyWith(description: () => itemDescription);
+    model = model.copyWith(description: () => itemDescription);
   }
 
   void setDescriptionAr(String? desc) {
     itemDescription = itemDescription.copyWith(ar: () => desc);
-    addItemModel = addItemModel.copyWith(description: () => itemDescription);
+    model = model.copyWith(description: () => itemDescription);
   }
 
   void setLink(String? link) {
-    addItemModel = addItemModel.copyWith(link: () => link);
+    model = model.copyWith(link: () => link);
   }
 
   void setLevelId(LevelModel? level) {
-    addItemModel = addItemModel.copyWith(levelId: () => level?.id);
+    model = model.copyWith(levelId: () => level?.id);
   }
 
   void setImage(XFile? image) {
@@ -66,7 +76,7 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
 
   void resetModel() {
     image = null;
-    addItemModel = const AddItemModel();
+    model = const AddItemModel();
   }
 
   Future<void> getItems(
@@ -75,7 +85,6 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     bool isLoadMore = true,
     int? levelId,
   }) async {
-    print("object");
     if (!hasMore && isLoadMore) return;
     if (!isLoadMore) {
       page = 1;
@@ -111,15 +120,11 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     }
   }
 
-  Future<void> addItem({required bool isAdd, int? id}) async {
+  Future<void> addItem({int? id}) async {
     emit(AddItemLoading());
     try {
-      final item = await itemService.addItem(
-        addItemModel,
-        image: image,
-        isAdd: isAdd,
-        itemId: id,
-      );
+      final item = await itemService.addItem(model, image: image, id: id);
+      final isAdd = id == null;
       final message = isAdd ? "item_added".tr() : "item_updated".tr();
       emit(AddItemSuccess(item, message));
     } catch (e) {

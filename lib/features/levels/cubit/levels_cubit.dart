@@ -25,29 +25,36 @@ class LevelsCubit extends Cubit<GeneralLevelsState> {
   MetaModel? meta;
   LevelModel? selectedLevel;
 
-  AddLevelModel addLevelModel = const AddLevelModel();
+  AddLevelModel model = const AddLevelModel();
   XFile? image;
 
   DepartmentEnum? roleFilter;
 
+  void setModel(LevelModel? level) {
+    setName(level?.name);
+    setDescription(level?.description);
+    setType(level?.type);
+  }
+
   void setName(String? name) {
-    addLevelModel = addLevelModel.copyWith(name: () => name);
+    model = model.copyWith(name: () => name);
   }
 
   void setDescription(String? description) {
-    addLevelModel = addLevelModel.copyWith(description: () => description);
+    model = model.copyWith(description: () => description);
   }
 
   void setType(DepartmentEnum? type) {
-    addLevelModel = addLevelModel.copyWith(type: () => type);
+    model = model.copyWith(type: () => type);
   }
 
   void setImage(XFile? image) {
     this.image = image;
   }
 
-  void resetAddLevelModel() {
-    addLevelModel = const AddLevelModel();
+  void resetModel() {
+    model = const AddLevelModel();
+    image = null;
   }
 
   void setRoleFilter(DepartmentEnum? role) {
@@ -107,15 +114,11 @@ class LevelsCubit extends Cubit<GeneralLevelsState> {
     return filtered;
   }
 
-  Future<void> addLevel({required bool isAdd, int? id}) async {
+  Future<void> addLevel({int? id}) async {
     emit(AddLevelLoading());
     try {
-      final result = await levelsService.addLevel(
-        addLevelModel,
-        image: image,
-        isAdd: isAdd,
-        id: id,
-      );
+      final result = await levelsService.addLevel(model, image: image, id: id);
+      final isAdd = id == null;
       final message = isAdd ? "level_added".tr() : "level_updated".tr();
       emit(AddLevelSuccess(result, message));
     } catch (e) {

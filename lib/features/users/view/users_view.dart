@@ -6,9 +6,9 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/features/users/view/widgets/add_user_widget.dart';
-import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -24,7 +24,6 @@ abstract class UsersViewCallBacks {
   void onShowDetailsTap(UserModel user);
   void onEditTap(UserModel user);
   void onDeleteTap(UserModel user);
-  void onSaveDeleteTap(UserModel user);
   void onSelectPageTap(int page, int perPage);
   void onSearchChanged(String input);
   void onTryAgainTap();
@@ -36,11 +35,8 @@ class UsersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => get<UsersCubit>()),
-        BlocProvider(create: (context) => get<DeleteCubit>()),
-      ],
+    return BlocProvider(
+      create: (context) => get<UsersCubit>(),
       child: UsersPage(),
     );
   }
@@ -55,7 +51,6 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
   late final UsersCubit usersCubit = context.read();
-  late final DeleteCubit deleteCubit = context.read();
 
   int selectedPage = 1;
   int perPage = 10;
@@ -71,11 +66,9 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
       builder: (context) => AddUserView(
         usersCubit: usersCubit,
-        isEdit: false,
         selectedPage: selectedPage,
         onSuccess: onTryAgainTap,
       ),
@@ -84,39 +77,25 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
 
   @override
   void onShowDetailsTap(UserModel user) {
-    context.router.push(CustomersRoute());
+    context.router.push(CustomersRoute(role: UserRoleEnum.admin, user: user));
   }
 
   @override
   void onDeleteTap(UserModel user) {
     showDialog(
       context: context,
-      builder: (context) => InsureDeleteWidget(
-        deleteCubit: deleteCubit,
-        item: user,
-        onSaveTap: onSaveDeleteTap,
-        onSuccess: onTryAgainTap,
-      ),
+      builder: (_) => InsureDeleteWidget(item: user, onSuccess: onTryAgainTap),
     );
   }
-
-  @override
-  void onSaveDeleteTap(UserModel user) =>
-      deleteCubit.deleteItem<UserModel>(user);
 
   @override
   void onEditTap(UserModel user) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
       builder: (context) => AddUserView(
         usersCubit: usersCubit,
-        isEdit: true,
         user: user,
         selectedPage: selectedPage,
         onSuccess: onTryAgainTap,

@@ -16,10 +16,5 @@ abstract class LevelsService {
     int? perPage = 10,
     int? page,
   });
-  Future<LevelModel> addLevel(
-    AddLevelModel model, {
-    required bool isAdd,
-    XFile? image,
-    int? id,
-  });
+  Future<LevelModel> addLevel(AddLevelModel model, {XFile? image, int? id});
 }

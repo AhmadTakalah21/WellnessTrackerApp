@@ -93,7 +93,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   void initState() {
     super.initState();
     usersCubit.getUsers(perPage: 1000000);
-    levelsCubit.getLevels(UserRoleEnum.admin,perPage: 1000000);
+    levelsCubit.getLevels(UserRoleEnum.admin, perPage: 1000000);
     widget.customersCubit.setUserId(widget.customer.id);
   }
 
@@ -136,6 +136,35 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: SingleChildScrollView(
+        padding: AppConstants.padding20,
+        child: Column(
+          spacing: 10,
+          children: [
+            const SizedBox(height: 5),
+            _buildSubscriberInfoTable(),
+            const SizedBox(height: 10),
+            _buildDepartmentsDropDown(),
+            _buildUsersDropDown(),
+            _buildLevelsDropDown(),
+            const SizedBox(height: 10),
+            _buildSubmitButton(),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() => AppBar(
+        centerTitle: true,
+        elevation: 10,
+        title: Text('user_activation'.tr(), style: context.tt.titleLarge),
+      );
+
+  Widget _buildSubscriberInfoTable() {
     final customer = widget.customer;
     final info = customer.info;
     final data = [
@@ -154,137 +183,118 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
           info?.forearmCircumference.toString() ?? "-"),
       TitleValueModel("chronic_diseases", info?.chronicDiseases ?? "-"),
     ];
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 10,
-        title: Text(
-          'user_activation'.tr(),
-          style: context.tt.titleLarge,
-        ),
+    return Table(
+      border: TableBorder.all(
+        color: context.cs.primary,
+        width: 2,
+        borderRadius: AppConstants.borderRadius10,
       ),
-      body: SingleChildScrollView(
-        padding: AppConstants.padding20,
-        child: Column(
-          spacing: 10,
+      columnWidths: const {
+        0: FlexColumnWidth(1),
+        1: FlexColumnWidth(1),
+      },
+      children: data.map((entry) {
+        return TableRow(
           children: [
-            const SizedBox(height: 5),
-            Table(
-              border: TableBorder.all(
-                color: context.cs.primary,
-                width: 2,
-                borderRadius: AppConstants.borderRadius10,
+            Padding(
+              padding: AppConstants.padding12,
+              child: Text(entry.title.tr(), style: context.tt.titleMedium),
+            ),
+            Center(
+              child: Padding(
+                padding: AppConstants.padding12,
+                child: Text(
+                  entry.value,
+                  style: context.tt.titleSmall,
+                  textAlign: TextAlign.center,
+                ),
               ),
-              columnWidths: const {
-                0: FlexColumnWidth(1),
-                1: FlexColumnWidth(1),
-              },
-              children: data.map((entry) {
-                return TableRow(
-                  children: [
-                    Padding(
-                      padding: AppConstants.padding12,
-                      child: Text(
-                        entry.title.tr(),
-                        style: context.tt.titleMedium,
-                      ),
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: AppConstants.padding12,
-                        child: Text(
-                          entry.value,
-                          style: context.tt.titleSmall,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
             ),
-            const SizedBox(height: 10),
-            MainDropDownWidget(
-              items: DepartmentEnum.values,
-              prefixIcon: Icons.group,
-              hintText: "department".tr(),
-              labelText: "department".tr(),
-              errorMessage: "department_required".tr(),
-              onChanged: onDepartmentSelected,
-            ),
-            BlocBuilder<UsersCubit, GeneralUsersState>(
-              builder: (context, state) {
-                if (state is UsersLoading) {
-                  return LoadingIndicator();
-                } else if (state is UsersSuccess) {
-                  return MainDropDownWidget<UserModel>(
-                    items: state.users.data,
-                    prefixIcon: Icons.person,
-                    hintText: "employee".tr(),
-                    labelText: "employee".tr(),
-                    onChanged: onEmployeeSelected,
-                  );
-                } else if (state is UsersFail) {
-                  return MainErrorWidget(
-                    error: state.error,
-                    onTryAgainTap: onTryAgainTap,
-                  );
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
-            ),
-            BlocBuilder<LevelsCubit, GeneralLevelsState>(
-              builder: (context, state) {
-                if (state is LevelsLoading) {
-                  return LoadingIndicator();
-                } else if (state is LevelsSuccess) {
-                  return MainDropDownWidget(
-                    items: state.levels.data,
-                    prefixIcon: Icons.bar_chart,
-                    hintText: 'level'.tr(),
-                    labelText: 'level'.tr(),
-                    errorMessage: 'required_field'.tr(),
-                    onChanged: onLevelSelected,
-                  );
-                } else if (state is LevelsFail) {
-                  return MainErrorWidget(
-                    error: state.error,
-                    onTryAgainTap: onTryAgainTap,
-                  );
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
-            ),
-            const SizedBox(height: 10),
-            BlocConsumer<CustomersCubit, GeneralCustomersState>(
-              listener: (context, state) {
-                if (state is AssignSubscriberSuccess) {
-                  widget.onSuccess?.call();
-                  onCancelTap();
-                  MainSnackBar.showSuccessMessage(context, state.message);
-                } else if (state is AssignSubscriberFail) {
-                  MainSnackBar.showErrorMessage(context, state.error);
-                }
-              },
-              builder: (context, state) {
-                var onTap = onSave;
-                Widget? child;
-                if (state is AssignSubscriberLoading) {
-                  onTap = () {};
-                  child = const LoadingIndicator(size: 30);
-                }
-                return MainActionButton(
-                  text: 'save'.tr(),
-                  onTap: onTap,
-                  child: child,
-                );
-              },
-            ),
-            const SizedBox(height: 20),
           ],
-        ),
-      ),
+        );
+      }).toList(),
     );
   }
+
+  Widget _buildDepartmentsDropDown() => MainDropDownWidget(
+        items: DepartmentEnum.values,
+        prefixIcon: Icons.group,
+        hintText: "department".tr(),
+        labelText: "department".tr(),
+        errorMessage: "department_required".tr(),
+        onChanged: onDepartmentSelected,
+      );
+
+  Widget _buildUsersDropDown() => BlocBuilder<UsersCubit, GeneralUsersState>(
+        builder: (context, state) {
+          if (state is UsersLoading) {
+            return LoadingIndicator();
+          } else if (state is UsersSuccess) {
+            return MainDropDownWidget<UserModel>(
+              items: state.users.data,
+              prefixIcon: Icons.person,
+              hintText: "employee".tr(),
+              labelText: "employee".tr(),
+              onChanged: onEmployeeSelected,
+            );
+          } else if (state is UsersFail) {
+            return MainErrorWidget(
+              error: state.error,
+              onTryAgainTap: onTryAgainTap,
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      );
+
+  Widget _buildLevelsDropDown() => BlocBuilder<LevelsCubit, GeneralLevelsState>(
+        builder: (context, state) {
+          if (state is LevelsLoading) {
+            return LoadingIndicator();
+          } else if (state is LevelsSuccess) {
+            return MainDropDownWidget(
+              items: state.levels.data,
+              prefixIcon: Icons.bar_chart,
+              hintText: 'level'.tr(),
+              labelText: 'level'.tr(),
+              errorMessage: 'required_field'.tr(),
+              onChanged: onLevelSelected,
+            );
+          } else if (state is LevelsFail) {
+            return MainErrorWidget(
+              error: state.error,
+              onTryAgainTap: onTryAgainTap,
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      );
+
+  Widget _buildSubmitButton() =>
+      BlocConsumer<CustomersCubit, GeneralCustomersState>(
+        listener: (context, state) {
+          if (state is AssignSubscriberSuccess) {
+            widget.onSuccess?.call();
+            onCancelTap();
+            MainSnackBar.showSuccessMessage(context, state.message);
+          } else if (state is AssignSubscriberFail) {
+            MainSnackBar.showErrorMessage(context, state.error);
+          }
+        },
+        builder: (context, state) {
+          var onTap = onSave;
+          Widget? child;
+          if (state is AssignSubscriberLoading) {
+            onTap = () {};
+            child = LoadingIndicator(size: 30, color: context.cs.surface);
+          }
+          return MainActionButton(
+            text: 'save'.tr(),
+            onTap: onTap,
+            child: child,
+          );
+        },
+      );
 }

@@ -85,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage>
       padding: AppConstants.padding8,
       decoration: BoxDecoration(
         color: context.cs.surface,
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: AppConstants.borderRadius10,
         boxShadow: AppColors.firstShadow,
       ),
       child: SwitchListTile(
@@ -94,8 +94,8 @@ class _SettingsPageState extends State<SettingsPage>
         title: Text(title, style: context.tt.titleMedium),
         activeColor: context.cs.primary,
         inactiveThumbColor: context.cs.secondary,
-        activeTrackColor: context.cs.primary.withValues(alpha: 0.4),
-        inactiveTrackColor: context.cs.secondary.withValues(alpha: 0.2),
+        activeTrackColor: context.cs.primary.withAlpha((0.2 * 255).toInt()),
+        inactiveTrackColor: context.cs.secondary.withAlpha((0.2 * 255).toInt()),
         dense: true,
         visualDensity: VisualDensity.compact,
       ),
@@ -106,27 +106,28 @@ class _SettingsPageState extends State<SettingsPage>
     return InkWell(
       onTap: onTap,
       child: Container(
-          padding: AppConstants.padding8,
-          decoration: BoxDecoration(
-            color: context.cs.surface,
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: AppColors.firstShadow,
-          ),
-          child: ListTile(
-            leading: Text(title, style: context.tt.titleMedium),
-            dense: true,
-            visualDensity: VisualDensity.compact,
-            trailing: Container(
-              decoration: BoxDecoration(
-                color: context.cs.primary.withAlpha((0.2 * 255).toInt()),
-                shape: BoxShape.circle,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.info, color: context.cs.primary),
-              ),
+        padding: AppConstants.padding8,
+        decoration: BoxDecoration(
+          color: context.cs.surface,
+          borderRadius: AppConstants.borderRadius10,
+          boxShadow: AppColors.firstShadow,
+        ),
+        child: ListTile(
+          leading: Text(title, style: context.tt.titleMedium),
+          dense: true,
+          visualDensity: VisualDensity.compact,
+          trailing: Container(
+            decoration: BoxDecoration(
+              color: context.cs.primary.withAlpha((0.2 * 255).toInt()),
+              shape: BoxShape.circle,
             ),
-          )),
+            child: Padding(
+              padding: AppConstants.padding8,
+              child: Icon(Icons.info, color: context.cs.primary),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

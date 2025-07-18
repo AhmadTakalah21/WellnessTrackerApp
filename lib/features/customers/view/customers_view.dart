@@ -5,8 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/approve_customer_view.dart';
-import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart';
+import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -20,31 +21,31 @@ abstract class CustomersViewCallbacks {
   void onSelectPageTap(int page, int perPage);
   void onSearchChanged(String input);
   void onEditTap(CustomerModel customer);
-  void onSaveDeleteTap(CustomerModel customer);
   void onDeleteTap(CustomerModel customer);
   void onTryAgainTap();
 }
 
 @RoutePage()
 class CustomersView extends StatelessWidget {
-  const CustomersView({super.key});
+  const CustomersView({super.key, required this.role, this.user});
+
+  final UserRoleEnum role;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => get<CustomersCubit>()..getCustomers(page: 1),
-        ),
-        BlocProvider(create: (context) => get<DeleteCubit>()),
-      ],
-      child: const CustomersPage(),
+    return BlocProvider(
+      create: (context) => get<CustomersCubit>()..getCustomers(role, page: 1),
+      child: CustomersPage(role: role, user: user),
     );
   }
 }
 
 class CustomersPage extends StatefulWidget {
-  const CustomersPage({super.key});
+  const CustomersPage({super.key, required this.role, this.user});
+
+  final UserRoleEnum role;
+  final UserModel? user;
 
   @override
   CustomersPageState createState() => CustomersPageState();
@@ -53,7 +54,6 @@ class CustomersPage extends StatefulWidget {
 class CustomersPageState extends State<CustomersPage>
     implements CustomersViewCallbacks {
   late final CustomersCubit customersCubit = context.read();
-  late final DeleteCubit deleteCubit = context.read();
 
   int perPage = 10;
   int currentPage = 1;
@@ -64,7 +64,11 @@ class CustomersPageState extends State<CustomersPage>
       currentPage = page;
       this.perPage = perPage;
     });
-    customersCubit.getCustomers(page: currentPage, perPage: perPage);
+    customersCubit.getCustomers(
+      widget.role,
+      page: currentPage,
+      perPage: perPage,
+    );
   }
 
   @override
@@ -80,7 +84,11 @@ class CustomersPageState extends State<CustomersPage>
             customer: customer,
             customersCubit: customersCubit,
             onSuccess: () {
-              customersCubit.getCustomers(page: currentPage, perPage: perPage);
+              customersCubit.getCustomers(
+                widget.role,
+                page: currentPage,
+                perPage: perPage,
+              );
             },
           ),
         ),
@@ -92,24 +100,19 @@ class CustomersPageState extends State<CustomersPage>
   void onDeleteTap(CustomerModel customer) {
     showDialog(
       context: context,
-      builder: (context) => InsureDeleteWidget(
-        deleteCubit: deleteCubit,
+      builder: (_) => InsureDeleteWidget(
         item: customer,
-        onSaveTap: onSaveDeleteTap,
         onSuccess: onTryAgainTap,
       ),
     );
   }
 
   @override
-  void onSaveDeleteTap(CustomerModel customer) =>
-      deleteCubit.deleteItem<CustomerModel>(customer);
-
-  @override
   void onSearchChanged(String input) => customersCubit.searchCodes(input);
 
   @override
   void onTryAgainTap() => customersCubit.getCustomers(
+        widget.role,
         page: currentPage,
         perPage: perPage,
       );
@@ -117,6 +120,7 @@ class CustomersPageState extends State<CustomersPage>
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
+    bool isAdmin = widget.role.isAdmin;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -148,7 +152,7 @@ class CustomersPageState extends State<CustomersPage>
                       onPageChanged: onSelectPageTap,
                       emptyMessage: state.emptyMessage,
                       onEditTap: onEditTap,
-                      onDeleteTap: onDeleteTap,
+                      onDeleteTap: isAdmin ? onDeleteTap : null,
                       onSearchChanged: onSearchChanged,
                       searchHint: 'search_customer',
                     );

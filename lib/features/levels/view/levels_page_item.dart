@@ -6,12 +6,21 @@ import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model
 import 'package:wellnesstrackerapp/features/levels/view/widgets/level_item_widget.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
+import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/additional_options_bottom_sheet.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
 class LevelsPageItem extends StatelessWidget {
-  const LevelsPageItem({super.key, required this.onTryAgainTap});
+  const LevelsPageItem({
+    super.key,
+    required this.onTryAgainTap,
+    required this.onEditTap,
+    required this.onDeleteTap,
+  });
   final void Function() onTryAgainTap;
+  final void Function(LevelModel) onEditTap;
+  final void Function(LevelModel) onDeleteTap;
 
   Future<void> onRefresh() async => onTryAgainTap();
   void onTap(BuildContext context, LevelModel level) {
@@ -19,7 +28,16 @@ class LevelsPageItem extends StatelessWidget {
   }
 
   void onLongPress(BuildContext context, LevelModel level) {
-    // TODO
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      builder: (context) => AdditionalOptionsBottomSheet(
+        item: level,
+        onEditTap: onEditTap,
+        onDeleteTap: onDeleteTap,
+      ),
+    );
   }
 
   @override

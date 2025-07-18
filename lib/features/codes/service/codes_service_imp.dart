@@ -24,11 +24,8 @@ class CodesServiceImp implements CodesService {
   }
 
   @override
-  Future<CodeModel> addCode(
-    AddCodeModel addCodeModel, {
-    required bool isAdd,
-    int? id,
-  }) async {
+  Future<CodeModel> addCode(AddCodeModel addCodeModel, {int? id}) async {
+    final isAdd = id == null;
     final endpoint = isAdd ? "/v1/admin/codes" : "/v1/admin/codes/$id";
     try {
       final map = addCodeModel.toJson();

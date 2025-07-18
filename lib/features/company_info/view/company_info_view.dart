@@ -50,18 +50,15 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
   @override
   void onEditTap(SettingsModel settings) {
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
-        ),
-        builder: (bottomSheetContext) => UpdateCompanyInfoWidget(
-              settingsCubit: settingsCubit,
-              onSuccess: onTryAgainTap,
-              settings: settings,
-            ));
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      builder: (bottomSheetContext) => UpdateCompanyInfoWidget(
+        settingsCubit: settingsCubit,
+        onSuccess: onTryAgainTap,
+        settings: settings,
+      ),
+    );
   }
 
   @override
