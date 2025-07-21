@@ -93,6 +93,12 @@ class _AddAdvPageState extends State<AddAdvPage>
   void onCancelTap() => Navigator.pop(context);
 
   @override
+  void dispose() {
+    widget.advCubit.resetModel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final adv = widget.adv;
     final selectedType = AdvTypeEnum.values.firstWhereOrNull(
@@ -155,6 +161,7 @@ class _AddAdvPageState extends State<AddAdvPage>
                   ),
                   MainDatePicker(
                     initialDate: adv?.endDate,
+                    firstDate: DateTime.now(),
                     onDateSelected: (date) =>
                         widget.advCubit.setEndDate(date?.formatYYYYMMDD),
                     validator: (date) =>
@@ -163,9 +170,9 @@ class _AddAdvPageState extends State<AddAdvPage>
                   ChooseImageWidget(
                     initialImage: adv?.image,
                     onSetImage: widget.advCubit.setImage,
-                    // validator: (_) => widget.advCubit.image == null
-                    //     ? 'image_required'.tr()
-                    //     : null,
+                    validator: (_) => widget.advCubit.image == null
+                        ? 'image_required'.tr()
+                        : null,
                   ),
                   const SizedBox(height: 60),
                 ],

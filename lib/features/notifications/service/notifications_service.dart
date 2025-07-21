@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
+import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/model/add_notification_model/add_notification_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/model/notification_model/notification_model.dart';
 import 'package:wellnesstrackerapp/global/dio/dio_client.dart';
@@ -10,10 +13,14 @@ part 'notifications_service_imp.dart';
 
 abstract class NotificationsService {
   Future<PaginatedModel<NotificationModel>> getNotifications(
-    UserRoleEnum role,{
+    UserRoleEnum role, {
     int? perPage = 10,
     int? page,
   });
 
-  Future<NotificationModel> addNotification(AddNotificationModel model);
+  Future<NotificationModel> addNotification(
+    AddNotificationModel model, {
+    required List<CustomerModel> userIds,
+    XFile? image,
+  });
 }

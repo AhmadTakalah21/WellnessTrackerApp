@@ -9,13 +9,18 @@ class CustomersServiceImp implements CustomersService {
     UserRoleEnum role, {
     int? page,
     int? perPage = 10,
+    int? employeeId,
   }) async {
+    // TODO check employeeId
     try {
       final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
+      final idParam =
+          employeeId != null ? "filter[employee_id]=$employeeId" : "";
       const roleParam = "filter[role]=user";
-      final endpoint =
-          "/v1/${role.getApiRoute}/users/customers?$roleParam&$pageParam&$perPageParam";
+
+      final params = "$roleParam&$idParam&$pageParam&$perPageParam";
+      final endpoint = "/v1/${role.getApiRoute}/users/customers?$params";
       final response = await dio.get(endpoint);
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,

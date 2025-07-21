@@ -18,6 +18,7 @@ import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
 abstract class CustomersViewCallbacks {
+  void fetchCustomers();
   void onSelectPageTap(int page, int perPage);
   void onSearchChanged(String input);
   void onEditTap(CustomerModel customer);
@@ -35,7 +36,8 @@ class CustomersView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => get<CustomersCubit>()..getCustomers(role, page: 1),
+      create: (context) => get<CustomersCubit>()
+        ..getCustomers(role, employeeId: user?.id, page: 1),
       child: CustomersPage(role: role, user: user),
     );
   }
@@ -59,16 +61,22 @@ class CustomersPageState extends State<CustomersPage>
   int currentPage = 1;
 
   @override
+  void fetchCustomers() {
+    customersCubit.getCustomers(
+      widget.role,
+      page: currentPage,
+      perPage: perPage,
+      employeeId: widget.user?.id,
+    );
+  }
+
+  @override
   void onSelectPageTap(int page, int perPage) {
     setState(() {
       currentPage = page;
       this.perPage = perPage;
     });
-    customersCubit.getCustomers(
-      widget.role,
-      page: currentPage,
-      perPage: perPage,
-    );
+    fetchCustomers();
   }
 
   @override
@@ -83,13 +91,7 @@ class CustomersPageState extends State<CustomersPage>
           builder: (context) => ApproveCustomerView(
             customer: customer,
             customersCubit: customersCubit,
-            onSuccess: () {
-              customersCubit.getCustomers(
-                widget.role,
-                page: currentPage,
-                perPage: perPage,
-              );
-            },
+            onSuccess: fetchCustomers,
           ),
         ),
       );
@@ -111,11 +113,7 @@ class CustomersPageState extends State<CustomersPage>
   void onSearchChanged(String input) => customersCubit.searchCodes(input);
 
   @override
-  void onTryAgainTap() => customersCubit.getCustomers(
-        widget.role,
-        page: currentPage,
-        perPage: perPage,
-      );
+  void onTryAgainTap() => fetchCustomers();
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +128,7 @@ class CustomersPageState extends State<CustomersPage>
           style: context.tt.titleLarge,
         ),
       ),
-      backgroundColor: context.cs.onSurface,
+      backgroundColor: context.cs.surface,
       body: Padding(
         padding: AppConstants.padding16,
         child: Column(
@@ -145,8 +143,14 @@ class CustomersPageState extends State<CustomersPage>
                       height: height / 1.2,
                     );
                   } else if (state is CustomersSuccess) {
+                    String header;
+                    if (widget.user != null) {
+                      header = "";
+                    } else {
+                      header = CustomerModel.header;
+                    }
                     return MainDataTable<CustomerModel>(
-                      header: CustomerModel.header,
+                      header: header,
                       titles: CustomerModel.titles,
                       items: state.customers,
                       onPageChanged: onSelectPageTap,

@@ -8,13 +8,10 @@ part 'en_ar_model.g.dart';
 @JsonSerializable()
 @immutable
 class EnArModel {
-  const EnArModel({
-    required this.en,
-    required this.ar,
-  });
+  const EnArModel({this.en, this.ar});
 
-  final String en;
-  final String ar;
+  final String? en;
+  final String? ar;
 
   Map<String, dynamic> toJson() => _$EnArModelToJson(this);
 

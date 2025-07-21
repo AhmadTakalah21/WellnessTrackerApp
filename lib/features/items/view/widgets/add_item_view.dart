@@ -164,6 +164,8 @@ class _AddItemPageState extends State<AddItemPage>
         onChanged: widget.itemCubit.setDescriptionEn,
         label: 'description_en'.tr(),
         icon: Icons.description,
+        validator: (val) =>
+            val == null || val.isEmpty ? 'description_en_required'.tr() : null,
       );
 
   Widget _buildDescriptionArTextField(ItemModel? item) => MainTextField2(
@@ -171,6 +173,8 @@ class _AddItemPageState extends State<AddItemPage>
         onChanged: widget.itemCubit.setDescriptionAr,
         label: 'description_ar'.tr(),
         icon: Icons.description,
+        validator: (val) =>
+            val == null || val.isEmpty ? 'description_ar_required'.tr() : null,
       );
 
   Widget _buildLinkTextField(ItemModel? item) => MainTextField2(

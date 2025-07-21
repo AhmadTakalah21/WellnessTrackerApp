@@ -96,10 +96,11 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     showDialog(
       context: context,
       builder: (_) => InsureDeleteWidget(
-        item: adv,
-        onSuccess: () =>
-            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000),
-      ),
+          item: adv,
+          onSuccess: () {
+            Navigator.pop(context);
+            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000);
+          }),
     );
   }
 
@@ -151,6 +152,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
       body: Padding(
         padding: AppConstants.padding16,
         child: BlocBuilder<AddsAndOffersCubit, GeneralAddsAndOffersState>(
+          buildWhen: (previous, current) => current is AddsAndOffersState,
           builder: (context, state) {
             if (state is AddsAndOffersLoading) {
               return LoadingIndicator();

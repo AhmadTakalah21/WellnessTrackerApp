@@ -93,7 +93,7 @@ class _NotificationsPageState extends State<NotificationsPage>
           Container(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
             decoration: BoxDecoration(
-              color: context.cs.onSurface,
+              color: context.cs.surface,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(

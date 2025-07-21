@@ -33,7 +33,7 @@ class _InsureDeleteWidgetState<T extends DeleteModel>
     return BlocProvider(
       create: (context) => get<DeleteCubit>(),
       child: AlertDialog(
-        backgroundColor: context.cs.onSurface,
+        backgroundColor: context.cs.surface,
         insetPadding: AppConstants.padding16,
         contentPadding: AppConstants.padding16,
         content: Column(

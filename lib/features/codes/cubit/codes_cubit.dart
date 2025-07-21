@@ -58,7 +58,12 @@ class CodesCubit extends Cubit<GeneralCodesState> {
       final result = await codeService.getCodes(page: page, perPage: perPage);
       codes = result.data;
       meta = result.meta;
-      emit(CodesSuccess(result, result.data.isEmpty ? "no_users".tr() : null));
+      final message = result.data.isEmpty ? "no_codes".tr() : null;
+      if (page == 1 && result.data.isEmpty) {
+        emit(CodesEmpty("no_codes".tr()));
+      } else {
+        emit(CodesSuccess(result, message));
+      }
     } catch (e) {
       if (isClosed) return;
       emit(CodesFail(e.toString()));
@@ -101,8 +106,7 @@ class CodesCubit extends Cubit<GeneralCodesState> {
   Future<void> addCode({int? id}) async {
     emit(AddCodeLoading());
     try {
-      final response =
-          await codeService.addCode(addCodeModel, id: id);
+      final response = await codeService.addCode(addCodeModel, id: id);
       final isAdd = id == null;
       final message = isAdd ? "code_added".tr() : "code_updated".tr();
       emit(AddCodeSuccess(response, message));

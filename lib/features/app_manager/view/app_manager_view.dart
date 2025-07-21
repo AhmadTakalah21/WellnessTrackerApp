@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
+import 'package:wellnesstrackerapp/global/widgets/restart_app_widget.dart';
 
 @RoutePage()
 class AppManagerView extends StatelessWidget {
@@ -38,14 +39,16 @@ class _AppManagerPageState extends State<AppManagerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AutoRouter.declarative(
-      routes: (_) {
-        if (widget.isCustomer) {
-          return [const UserNavigationRoute()];
-        } else {
-          return [const DashboardRouter()];
-        }
-      },
+    return RestartAppWidget(
+      child: AutoRouter.declarative(
+        routes: (_) {
+          if (widget.isCustomer) {
+            return [const UserNavigationRoute()];
+          } else {
+            return [const DashboardRouter()];
+          }
+        },
+      ),
     );
   }
 }

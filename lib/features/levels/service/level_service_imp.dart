@@ -35,6 +35,9 @@ class LevelsServiceImp implements LevelsService {
     final endpoint = isAdd ? "/v1/admin/levels" : "/v1/admin/levels/$id";
     try {
       final map = model.toJson();
+      if (!isAdd) {
+        map["_method"] = "PUT";
+      }
       if (image != null) {
         map['image'] = await MultipartFile.fromFile(
           image.path,
@@ -43,11 +46,13 @@ class LevelsServiceImp implements LevelsService {
       }
       final formData = FormData.fromMap(map);
 
-      final response = await dio.postOrPut(
-        endpoint,
-        isAdd: isAdd,
-        data: formData,
-      );
+      final response = await dio.post(endpoint, data: formData);
+
+      // final response = await dio.postOrPut(
+      //   endpoint,
+      //   isAdd: isAdd,
+      //   data: formData,
+      // );
 
       final data = response.data["data"] as Map<String, dynamic>;
       return LevelModel.fromJson(data);

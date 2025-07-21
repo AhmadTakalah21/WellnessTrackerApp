@@ -53,7 +53,7 @@ class _DashboardState extends State<Dashboard>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.cs.onSurface,
+      backgroundColor: context.cs.surface,
       appBar: user.role == UserRoleEnum.user ? null : MainAppBar(),
       body: Padding(
         padding: AppConstants.padding10,

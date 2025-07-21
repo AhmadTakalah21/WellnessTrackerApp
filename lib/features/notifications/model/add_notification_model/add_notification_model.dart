@@ -10,35 +10,26 @@ part 'add_notification_model.g.dart';
 @immutable
 class AddNotificationModel {
   const AddNotificationModel({
-    int? customerId,
+    this.isAll = "false",
     String? title,
-    String? body,
-  })  : _customerId = customerId,
-        _title = title,
-        _body = body;
+    String? message,
+  })  : _title = title,
+        _message = message;
 
-  @JsonKey(name: "customer_id")
-  final int? _customerId;
+  final String isAll;
   final String? _title;
-  final String? _body;
+  final String? _message;
 
   AddNotificationModel copyWith({
-    int? Function()? customerId,
+    String?  isAll,
     String? Function()? title,
-    String? Function()? body,
+    String? Function()? message,
   }) {
     return AddNotificationModel(
-      customerId: customerId != null ? customerId() : _customerId,
+      isAll: isAll ?? this.isAll,
       title: title != null ? title() : _title,
-      body: body != null ? body() : _body,
+      message: message != null ? message() : _message,
     );
-  }
-
-  int get customerId {
-    if (_customerId == null) {
-      throw "customer_required".tr();
-    }
-    return _customerId;
   }
 
   String get title {
@@ -48,11 +39,11 @@ class AddNotificationModel {
     return _title;
   }
 
-  String get body {
-    if (_body == null || _body.isEmpty) {
-      throw "body_required".tr();
+  String get message {
+    if (_message == null || _message.isEmpty) {
+      throw "message_required".tr();
     }
-    return _body;
+    return _message;
   }
 
   factory AddNotificationModel.fromJson(Map<String, dynamic> json) =>

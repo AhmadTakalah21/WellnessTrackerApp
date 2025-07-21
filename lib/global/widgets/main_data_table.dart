@@ -203,17 +203,7 @@ class _MainDataTableState<T extends DataTableModel>
   Widget _buildEmptyWidget() {
     final emptyMessage = widget.emptyMessage;
     if (emptyMessage != null) {
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: 20),
-          MainErrorWidget(
-            error: emptyMessage,
-            onTryAgainTap: () => widget.onPageChanged(page, perPage),
-            isRefresh: true,
-          ),
-        ],
-      );
+      return MainErrorWidget(error: emptyMessage, isRefresh: true);
     }
     return SizedBox.shrink();
   }

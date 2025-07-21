@@ -1,13 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart';
 import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/restart_app_widget.dart';
 
 abstract class SettingsViewCallBacks {
   void onChangeLanguageTap();
@@ -33,7 +32,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage>
     implements SettingsViewCallBacks {
-  late final AppManagerCubit appManagerCubit = context.read();
   late bool isArabic = context.locale == SupportedLocales.arabic;
 
   @override
@@ -51,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage>
     } else {
       context.setLocale(SupportedLocales.english);
     }
-    appManagerCubit.emitLanuageChangedState();
+    RestartAppWidget.restartApp(context);
   }
 
   @override

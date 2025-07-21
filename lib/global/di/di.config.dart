@@ -32,6 +32,10 @@ import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart
     as _i935;
 import 'package:wellnesstrackerapp/features/customers/service/customers_service.dart'
     as _i299;
+import 'package:wellnesstrackerapp/features/ingredients/cubit/ingredients_cubit.dart'
+    as _i535;
+import 'package:wellnesstrackerapp/features/ingredients/service/ingredients_service.dart'
+    as _i85;
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart'
     as _i803;
 import 'package:wellnesstrackerapp/features/items/service/items_service.dart'
@@ -84,12 +88,12 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final appModule = _$AppModule();
-    gh.factory<_i533.AppManagerCubit>(() => _i533.AppManagerCubit());
     gh.factory<_i540.UploadImageCubit>(() => _i540.UploadImageCubit());
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => appModule.prefs,
       preResolve: true,
     );
+    gh.singleton<_i533.AppManagerCubit>(() => _i533.AppManagerCubit());
     gh.singleton<_i384.DioClient>(() => _i384.DioClient());
     gh.singleton<_i1023.NotaficationsService>(
         () => _i1023.NotaficationsService());
@@ -109,6 +113,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i959.NotificationsServiceImp());
     gh.singleton<_i435.AuthManagerBloc>(
         () => _i435.AuthManagerBloc(gh<_i128.UserRepo>()));
+    gh.factory<_i85.IngredientsService>(() => _i85.IngredientsServiceImp());
     gh.factory<_i963.DeleteService>(() => _i963.DeleteServiceImp());
     gh.factory<_i1053.NotificationsCubit>(
         () => _i1053.NotificationsCubit(gh<_i959.NotificationsService>()));
@@ -117,6 +122,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i457.CodesCubit>(
         () => _i457.CodesCubit(gh<_i249.CodesService>()));
     gh.factory<_i474.UserRoleService>(() => _i474.UserRoleServiceImp());
+    gh.factory<_i535.IngredientsCubit>(
+        () => _i535.IngredientsCubit(gh<_i85.IngredientsService>()));
     gh.factory<_i715.LevelsService>(() => _i715.LevelsServiceImp());
     gh.factory<_i1044.ItemService>(() => _i1044.ItemServiceImp());
     gh.factory<_i299.CustomersService>(() => _i299.CustomersServiceImp());

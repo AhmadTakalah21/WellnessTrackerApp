@@ -9,15 +9,15 @@ part of 'add_notification_model.dart';
 AddNotificationModel _$AddNotificationModelFromJson(
         Map<String, dynamic> json) =>
     AddNotificationModel(
-      customerId: (json['customerId'] as num?)?.toInt(),
+      isAll: json['isAll'] as String? ?? "false",
       title: json['title'] as String?,
-      body: json['body'] as String?,
+      message: json['message'] as String?,
     );
 
 Map<String, dynamic> _$AddNotificationModelToJson(
         AddNotificationModel instance) =>
     <String, dynamic>{
-      'customerId': instance.customerId,
+      'isAll': instance.isAll,
       'title': instance.title,
-      'body': instance.body,
+      'message': instance.message,
     };

@@ -62,24 +62,21 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       child: Scaffold(
-        body: Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: SingleChildScrollView(
-            padding: AppConstants.padding20,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              spacing: 12,
-              children: [
-                _buildTitle(),
-                const SizedBox(height: 4),
-                _buildCodeTextField(),
-                _buildStartDatePicker(),
-                _buildEndDatePicker(),
-                const SizedBox(height: 6),
-                _buildSubmitButton(),
-              ],
-            ),
+        body: SingleChildScrollView(
+          padding: AppConstants.padding20,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            spacing: 12,
+            children: [
+              _buildTitle(),
+              const SizedBox(height: 4),
+              _buildCodeTextField(),
+              _buildStartDatePicker(),
+              _buildEndDatePicker(),
+              const SizedBox(height: 6),
+              _buildSubmitButton(),
+            ],
           ),
         ),
       ),

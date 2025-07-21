@@ -49,9 +49,10 @@ class AdvDetailsWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 25),
+            if(adv.description.en != null && adv.description.en!.isNotEmpty)
             Center(
               child: Text(
-                adv.description.en,
+                adv.description.en!,
                 style: context.tt.titleMedium,
               ),
             ),

@@ -7,8 +7,8 @@ part of 'en_ar_model.dart';
 // **************************************************************************
 
 EnArModel _$EnArModelFromJson(Map<String, dynamic> json) => EnArModel(
-      en: json['en'] as String,
-      ar: json['ar'] as String,
+      en: json['en'] as String?,
+      ar: json['ar'] as String?,
     );
 
 Map<String, dynamic> _$EnArModelToJson(EnArModel instance) => <String, dynamic>{

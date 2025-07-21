@@ -19,8 +19,8 @@ AddAdvModel _$AddAdvModelFromJson(Map<String, dynamic> json) => AddAdvModel(
 
 Map<String, dynamic> _$AddAdvModelToJson(AddAdvModel instance) =>
     <String, dynamic>{
-      'title': instance.title.toJson(),
       'description': instance.description?.toJson(),
+      'title': instance.title.toJson(),
       'type': AdvTypeEnum.toJson(instance.type),
       'end_date': instance.endDate,
     };

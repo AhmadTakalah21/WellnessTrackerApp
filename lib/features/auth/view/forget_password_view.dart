@@ -109,7 +109,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                   Text(
                     'Health & Wellness App',
                     style: context.tt.headlineMedium?.copyWith(
-                      color: context.cs.onSurface,
+                      color: context.cs.surface,
                     ),
                   ),
                 ],
@@ -145,25 +145,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                               ),
                             ),
                           ),
-
                           const SizedBox(height: 20),
                           SlideTransition(
                             position: _slideAnimation,
                             child: BlocBuilder<AuthCubit, AuthState>(
                               bloc: widget.authCubit,
-                              buildWhen:
-                                  (previous, current) =>
-                                      (current is TextFieldState &&
-                                          current.type == TextFieldType.email),
+                              buildWhen: (previous, current) =>
+                                  (current is TextFieldState &&
+                                      current.type == TextFieldType.email),
                               builder: (context, state) {
                                 return MainTextField(
                                   initialText:
                                       widget.authCubit.postSignUpModel.getEmail,
-                                  errorText:
-                                      state is TextFieldState &&
-                                              state.type == TextFieldType.email
-                                          ? state.error
-                                          : null,
+                                  errorText: state is TextFieldState &&
+                                          state.type == TextFieldType.email
+                                      ? state.error
+                                      : null,
                                   prefixIcon: Icon(
                                     Icons.email,
                                     color: context.cs.onSecondary,

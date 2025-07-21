@@ -86,6 +86,7 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
                                     : selectedItems.add(item);
                                 setState(() {});
                                 menuSetState(() {});
+                                widget.onChanged(selectedItems);
                               },
                             ),
                             const SizedBox(width: 16),
@@ -105,7 +106,6 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
             }).toList(),
             value: selectedItems.isEmpty ? null : selectedItems.last,
             onChanged: (value) {
-              widget.onChanged(selectedItems);
             },
             selectedItemBuilder: (context) {
               return widget.items.map(

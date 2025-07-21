@@ -180,8 +180,7 @@ class _SignInPageState extends State<SignInPage>
 
   @override
   Future<void> onGetCodeTap(String? whatsappPhone) async {
-    final url =
-        "https://wa.me/$whatsappPhone?text=مرحباً، أحتاج كود الاشتراك";
+    final url = "https://wa.me/$whatsappPhone?text=مرحباً، أحتاج كود الاشتراك";
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -253,7 +252,7 @@ class _SignInPageState extends State<SignInPage>
                 position: _slideAnimation,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: context.cs.onSurface,
+                    color: context.cs.surface,
                     borderRadius: AppConstants.borderRadiusTlTr30,
                   ),
                   child: Padding(
@@ -309,7 +308,7 @@ class _SignInPageState extends State<SignInPage>
             Text(
               'Health & Wellness App',
               style: context.tt.headlineMedium?.copyWith(
-                color: context.cs.onSurface,
+                color: context.cs.surface,
               ),
             ),
           ],
@@ -538,7 +537,7 @@ class _SignInPageState extends State<SignInPage>
               value: _rememberMe,
               onChanged: onConfirmTermsAndConditionsTap,
               side: BorderSide(color: context.cs.secondary),
-              checkColor: context.cs.onSurface,
+              checkColor: context.cs.surface,
               activeColor: context.cs.primary,
             ),
             Text('accept_terms'.tr()),
@@ -553,6 +552,7 @@ class _SignInPageState extends State<SignInPage>
                     style: context.tt.labelLarge?.copyWith(
                       color: context.cs.primary,
                     ),
+                    overflow: TextOverflow.fade,
                   ),
                 )
               : SizedBox.shrink(),

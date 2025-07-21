@@ -27,11 +27,30 @@ class NotificationsServiceImp implements NotificationsService {
   }
 
   @override
-  Future<NotificationModel> addNotification(AddNotificationModel model) async {
+  Future<NotificationModel> addNotification(
+    AddNotificationModel model, {
+    required List<CustomerModel> userIds,
+    XFile? image,
+  }) async {
     final endpoint = "/v1/admin/notifications";
 
     try {
-      final response = await dio.post(endpoint, data: model.toJson());
+      final map = model.toJson();
+      if (userIds.isNotEmpty) {
+        for (var index = 0; index < userIds.length; index++) {
+          final id = userIds[index].id;
+          map.addAll({"userIds[$index]": id});
+        }
+      }
+      if (image != null) {
+        map['image'] = await MultipartFile.fromFile(
+          image.path,
+          filename: image.name,
+        );
+      }
+      final formData = FormData.fromMap(map);
+
+      final response = await dio.post(endpoint, data: formData);
       final data = response.data["data"] as Map<String, dynamic>;
       return NotificationModel.fromJson(data);
     } catch (e, stackTrace) {

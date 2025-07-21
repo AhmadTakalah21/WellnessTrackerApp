@@ -54,12 +54,13 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
     model = model.copyWith(type: () => type);
   }
 
-  Future<void> setImage(XFile? image) async {
+  void setImage(XFile? image) {
     this.image = image;
   }
 
   void resetModel() {
     model = const AddAdvModel();
+    setImage(null);
   }
 
   Future<void> getAddsAndOffers(
@@ -89,6 +90,11 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
   }
 
   Future<void> addAdv({int? id}) async {
+    final image = this.image;
+    if (image == null) {
+      emit(AddAdvFail("image_required".tr()));
+      return;
+    }
     emit(AddAdvLoading());
     try {
       if (isClosed) return;

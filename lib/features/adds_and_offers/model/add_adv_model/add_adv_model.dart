@@ -13,16 +13,15 @@ part 'add_adv_model.g.dart';
 class AddAdvModel {
   const AddAdvModel({
     EnArAddModel? title,
-    EnArAddModel? description,
+    this.description,
     AdvTypeEnum? type,
     String? endDate,
   })  : _title = title,
-        _description = description,
         _type = type,
         _endDate = endDate;
 
   final EnArAddModel? _title;
-  final EnArAddModel? _description;
+  final EnArAddModel? description;
   final AdvTypeEnum? _type;
   final String? _endDate;
 
@@ -34,7 +33,7 @@ class AddAdvModel {
   }) {
     return AddAdvModel(
       title: title != null ? title() : _title,
-      description: description != null ? description() : _description,
+      description: description != null ? description() : this.description,
       type: type != null ? type() : _type,
       endDate: endDate != null ? endDate() : _endDate,
     );
@@ -42,12 +41,10 @@ class AddAdvModel {
 
   EnArAddModel get title {
     if (_title == null) {
-      throw "title_en_required".tr();
+      throw "title_required".tr();
     }
     return _title;
   }
-
-  EnArAddModel? get description => _description;
 
   @JsonKey(fromJson: AdvTypeEnum.fromJson, toJson: AdvTypeEnum.toJson)
   AdvTypeEnum get type {

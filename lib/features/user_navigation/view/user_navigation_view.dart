@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -38,7 +39,8 @@ class UserNavigationPage extends StatefulWidget {
 class _UserNavigationPageState extends State<UserNavigationPage>
     implements UserNavigationViewCallbacks {
   int currentIndex = 0;
-  bool get isRtl => context.locale.languageCode == 'ar';
+  late final locale = context.locale;
+  bool get isRtl => locale == SupportedLocales.arabic;
 
   @override
   void onBottomTab(int currentIndex, TabsRouter tabsRouter) {
@@ -57,9 +59,9 @@ class _UserNavigationPageState extends State<UserNavigationPage>
   Widget build(BuildContext context) {
     final icons = [Icons.local_offer, Icons.home, Icons.person];
     final labels = ['adds_and_offers'.tr(), 'home'.tr(), 'profile'.tr()];
-
     final rtlIcons = icons.reversed.toList();
     final rtlLabels = labels.reversed.toList();
+
     return BlocListener<AppManagerCubit, AppManagerState>(
       listener: (context, state) {
         if (state is InnerRouteChanged) setState(() {});
@@ -88,12 +90,17 @@ class _UserNavigationPageState extends State<UserNavigationPage>
             return const MainAppBar();
           }
         },
-
-        routes: [
-          ProfileRoute(),
-          DashboardRouter(),
-          AddsAndOffersRoute(role: UserRoleEnum.user),
-        ],
+        routes: isRtl
+            ? [
+                ProfileRoute(),
+                DashboardRouter(),
+                AddsAndOffersRoute(role: UserRoleEnum.user),
+              ]
+            : [
+                AddsAndOffersRoute(role: UserRoleEnum.user),
+                DashboardRouter(),
+                ProfileRoute(),
+              ],
         extendBody: true,
         resizeToAvoidBottomInset: true,
         bottomNavigationBuilder: (context, tabsRouter) {
@@ -113,6 +120,9 @@ class _UserNavigationPageState extends State<UserNavigationPage>
               labels: isRtl ? rtlLabels : labels,
               icons: isRtl ? rtlIcons : icons,
               initialSelectedTab: isRtl ? rtlLabels[1] : labels[1],
+              // labels: labels,
+              // icons: icons,
+              // initialSelectedTab: labels[1],
               tabSize: 60,
               tabBarHeight: 65,
               textStyle: TextStyle(

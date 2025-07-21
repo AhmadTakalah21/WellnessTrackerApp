@@ -70,8 +70,11 @@ class UsersCubit extends Cubit<GeneralUsersState> {
       final users = await userService.getUsers(page: page, perPage: perPage);
       _allUsers = users.data;
       meta = users.meta;
-      //_applyFilters(_allUsers, query: query, role: roleFilter?.name);
-      emit(UsersSuccess(users, users.data.isEmpty ? "no_users".tr() : null));
+      if (page == 1 && users.data.isEmpty) {
+        emit(UsersEmpty("no_users".tr()));
+      } else {
+        emit(UsersSuccess(users, users.data.isEmpty ? "no_users".tr() : null));
+      }
     } catch (e) {
       if (isClosed) return;
       emit(UsersFail(e.toString()));

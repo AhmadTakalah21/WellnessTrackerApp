@@ -96,7 +96,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                 Text(
                   'Health & Wellness App',
                   style: context.tt.headlineMedium?.copyWith(
-                    color: context.cs.onSurface,
+                    color: context.cs.surface,
                   ),
                 ),
               ],

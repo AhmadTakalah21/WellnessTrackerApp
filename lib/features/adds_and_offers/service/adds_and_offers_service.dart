@@ -16,5 +16,5 @@ abstract class AddsAndOffersService {
     int? perPage = 10,
     int? page,
   });
-  Future<void> addAdv(AddAdvModel model, {XFile? image, int? id});
+  Future<void> addAdv(AddAdvModel model, {required XFile image, int? id});
 }

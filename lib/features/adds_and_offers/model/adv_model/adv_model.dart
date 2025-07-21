@@ -1,19 +1,17 @@
 import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:wellnesstrackerapp/global/models/adv_type_enum.dart';
 import 'package:wellnesstrackerapp/global/models/en_ar_model/en_ar_model.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
-import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 
 part 'adv_model.g.dart';
 
 @JsonSerializable()
 @immutable
-class AdvModel implements DeleteModel, DataTableModel {
+class AdvModel implements DeleteModel {
   const AdvModel({
     required this.id,
     required this.title,
@@ -39,30 +37,6 @@ class AdvModel implements DeleteModel, DataTableModel {
 
   @JsonKey(name: 'end_date')
   final String endDate;
-
-  static String get header => 'adv_management'.tr();
-
-  static List<String> get titles => [
-        '#',
-        'title'.tr(),
-        'description'.tr(),
-        'type'.tr(),
-        'image'.tr(),
-        'start_date'.tr(),
-        'end_date'.tr(),
-        'event'.tr(),
-      ];
-
-  @override
-  List<String> get values => [
-        '#$id',
-        title.en,
-        description.en,
-        type.displayName,
-        image,
-        startDate,
-        endDate,
-      ];
 
   factory AdvModel.fromString(String str) =>
       AdvModel.fromJson(jsonDecode(str) as Map<String, dynamic>);

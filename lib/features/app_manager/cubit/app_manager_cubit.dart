@@ -1,16 +1,16 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
 
 part 'app_manager_state.dart';
 
-@injectable
+@singleton
 class AppManagerCubit extends Cubit<AppManagerState> {
   AppManagerCubit() : super(AppManagerInitial());
 
-  void emitLanuageChangedState() {
-    emit(LanguageChanged());
-  }
+  // void emitLanuageChangedState(Locale locale) {
+  //   emit(LanguageChanged(locale));
+  // }
 
   void emitInnerRouteChanged() {
     emit(InnerRouteChanged());

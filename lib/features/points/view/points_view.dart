@@ -90,7 +90,7 @@ class _PointsPageState extends State<PointsPage>
     ];
 
     return Scaffold(
-      backgroundColor: context.cs.onSurface,
+      backgroundColor: context.cs.surface,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: context.cs.primary,

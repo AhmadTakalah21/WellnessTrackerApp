@@ -240,5 +240,13 @@
   "current_language" : "العربية",
   "customer_required": "المشترك مطلوب.",
   "added"  : "تم الإضافة بنجاح",
-  "updated" : "تم التعديل بنجاح"
+  "updated" : "تم التعديل بنجاح",
+  "yes" : "نعم",
+  "no" : "لا",
+  "message_required" : "الرسالة مطلوبة",
+  "no_codes" : "لا يوجد أكواد",
+  "unit_required": "الوحدة مطلوبة",
+  "calories_required": "السعرات الحرارية مطلوبة",
+  "carbs_required": "الكربوهيدرات مطلوبة",
+  "proteins_required": "البروتينات مطلوبة"
 }

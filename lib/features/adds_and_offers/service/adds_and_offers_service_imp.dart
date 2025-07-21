@@ -26,28 +26,25 @@ class AddsAndOffersServiceImp implements AddsAndOffersService {
   }
 
   @override
-  Future<void> addAdv(AddAdvModel model, {XFile? image, int? id}) async {
+  Future<void> addAdv(
+    AddAdvModel model, {
+    required XFile image,
+    int? id,
+  }) async {
     final isAdd = id == null;
     final endpoint = isAdd ? "" : "/$id";
     try {
       final map = model.toJson();
-
+      map['image'] = await MultipartFile.fromFile(
+        image.path,
+        filename: image.name,
+      );
       if (!isAdd) {
-        map["_method"] = "put";
+        map["_method"] = "PUT";
       }
-      if (image != null) {
-        map['image'] = await MultipartFile.fromFile(
-          image.path,
-          filename: image.name,
-        );
-      }
+
       final formData = FormData.fromMap(map);
       await dio.post("/v1/admin/advertisements$endpoint", data: formData);
-      // await dio.postOrPut(
-      //   "/v1/admin/advertisements$endpoint",
-      //   isAdd: isAdd,
-      //   data: formData,
-      // );
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;

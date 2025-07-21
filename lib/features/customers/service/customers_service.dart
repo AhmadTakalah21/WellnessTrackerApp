@@ -13,6 +13,7 @@ abstract class CustomersService {
     UserRoleEnum role,{
     int? page,
     int? perPage = 10,
+    int? employeeId,
   });
   Future<void> assignSubscriber(AssignSubscriberModel model);
 }

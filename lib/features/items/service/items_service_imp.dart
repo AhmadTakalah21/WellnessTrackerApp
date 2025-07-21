@@ -51,6 +51,9 @@ class ItemServiceImp implements ItemService {
       final isAdd = id == null;
       final endpoint = isAdd ? "/v1/admin/items" : "/v1/admin/items/$id";
       final map = model.toJson();
+      if (!isAdd) {
+        map["_method"] = "PUT";
+      }
       if (image != null) {
         map['image'] = await MultipartFile.fromFile(
           image.path,
@@ -59,11 +62,7 @@ class ItemServiceImp implements ItemService {
       }
       final formData = FormData.fromMap(map);
 
-      final response = await dio.postOrPut(
-        endpoint,
-        isAdd: isAdd,
-        data: formData,
-      );
+      final response = await dio.post(endpoint, data: formData);
       final item = response.data["data"] as Map<String, dynamic>;
       return ItemModel.fromJson(item);
     } catch (e, stackTrace) {

@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
+import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/model/add_notification_model/add_notification_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/model/notification_model/notification_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/service/notifications_service.dart';
@@ -23,19 +24,29 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   List<NotificationModel> notifications = [];
   MetaModel? meta;
   AddNotificationModel addNotificationModel = const AddNotificationModel();
+  List<CustomerModel> userIds = [];
   XFile? image;
 
-  void setCustomerId(int? customerId) {
-    addNotificationModel =
-        addNotificationModel.copyWith(customerId: () => customerId);
+  void setIsAll(String? isAll) {
+    addNotificationModel = addNotificationModel.copyWith(isAll: isAll);
+  }
+
+  void setUsers(List<CustomerModel> userIds) {
+    print(userIds);
+    this.userIds = userIds;
+  }
+
+  void clearUserIds() {
+    userIds.clear();
   }
 
   void setTitle(String? title) {
     addNotificationModel = addNotificationModel.copyWith(title: () => title);
   }
 
-  void setBody(String? body) {
-    addNotificationModel = addNotificationModel.copyWith(body: () => body);
+  void setMessage(String? message) {
+    addNotificationModel =
+        addNotificationModel.copyWith(message: () => message);
   }
 
   void setImage(XFile? image) {
@@ -76,8 +87,11 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   Future<void> addNotification() async {
     emit(AddNotificationLoading());
     try {
-      final response =
-          await notificationsService.addNotification(addNotificationModel);
+      final response = await notificationsService.addNotification(
+        addNotificationModel,
+        userIds: userIds,
+        image: image,
+      );
       final message = "notification_sent".tr();
       emit(AddNotificationSuccess(response, message));
     } catch (e) {

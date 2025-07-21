@@ -153,7 +153,7 @@ class _IntroPageState extends State<IntroPage> implements IntroViewCallBacks {
                   child: MainActionButton(
                     onTap: onNextTap,
                     text: 'skip'.tr(),
-                    buttonColor: context.cs.onSurface,
+                    buttonColor: context.cs.surface,
                     textColor: context.cs.primary,
                   ),
                 ),

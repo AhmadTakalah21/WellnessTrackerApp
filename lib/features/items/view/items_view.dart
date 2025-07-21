@@ -97,10 +97,15 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
     showDialog(
       context: context,
       builder: (_) => InsureDeleteWidget(
-        item: item,
-        onSuccess: () =>
-            itemsCubit.getItems(widget.role, levelId: widget.level?.id),
-      ),
+          item: item,
+          onSuccess: () {
+            Navigator.pop(context);
+            itemsCubit.getItems(
+              widget.role,
+              levelId: widget.level?.id,
+              isLoadMore: false,
+            );
+          }),
     );
   }
 

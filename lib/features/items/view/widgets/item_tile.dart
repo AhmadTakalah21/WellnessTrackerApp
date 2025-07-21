@@ -106,7 +106,7 @@ class ItemTile extends StatelessWidget {
                     ),
             const SizedBox(height: 10),
             Text(
-              item.name.en,
+              item.name.en ?? "Item",
               style: context.tt.titleMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
@@ -114,9 +114,9 @@ class ItemTile extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 4),
-            if (description != null)
+            if (description?.en != null && description!.en!.isNotEmpty)
               Text(
-                description.en,
+                description.en!,
                 style: context.tt.bodySmall?.copyWith(
                   color: Colors.white70,
                 ),

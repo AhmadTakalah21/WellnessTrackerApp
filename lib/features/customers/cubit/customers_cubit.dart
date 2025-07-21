@@ -51,20 +51,25 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     model = const AssignSubscriberModel();
   }
 
-  Future<void> getCustomers(UserRoleEnum role,
-    {int? page, int? perPage = 10}) async {
+  Future<void> getCustomers(
+    UserRoleEnum role, {
+    int? page,
+    int? perPage = 10,
+    int? employeeId,
+  }) async {
     emit(CustomersLoading());
     try {
       if (isClosed) return;
-      final result = await customerService.getCustomers(
-        role,
-        page: page,
-        perPage: perPage,
-      );
+      final result = await customerService.getCustomers(role,
+          page: page, perPage: perPage, employeeId: employeeId);
       customers = result.data;
       meta = result.meta;
       final message = result.data.isEmpty ? "no_customers".tr() : null;
-      emit(CustomersSuccess(result, message));
+      if (page == 1 && result.data.isEmpty) {
+        emit(CustomersEmpty("no_customers".tr()));
+      } else {
+        emit(CustomersSuccess(result, message));
+      }
     } catch (e) {
       if (isClosed) return;
       emit(CustomersFail(e.toString()));

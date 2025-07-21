@@ -135,7 +135,7 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
           style: context.tt.titleLarge,
         ),
       ),
-      backgroundColor: context.cs.onSurface,
+      backgroundColor: context.cs.surface,
       body: Padding(
         padding: AppConstants.padding16,
         child: Column(

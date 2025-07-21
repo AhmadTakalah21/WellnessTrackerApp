@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:wellnesstrackerapp/global/blocs/upload_image_cubit/cubit/upload_image_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
@@ -50,10 +51,12 @@ class ChooseImageWidget extends StatelessWidget {
         },
         builder: (context, state) {
           String? imagePath;
+          String? message;
           if (state is UploadImageSuccess) {
             imagePath = state.image.path;
+            message = basename(imagePath);
           } else if (state is UploadImageFail) {
-            imagePath = state.message;
+            message = state.message;
           }
           final hasImage = imagePath != null && File(imagePath).existsSync();
           final hintText =
@@ -70,7 +73,11 @@ class ChooseImageWidget extends StatelessWidget {
                   Text(label.tr(), style: context.tt.titleLarge),
                   const SizedBox(height: 10),
                   InkWell(
-                    onTap: readOnly ? null : () => upload(context),
+                    // onTap: readOnly ? null : () => upload(context),
+                    // onTap: context.read<UploadImageCubit>().uploadImage,
+                    onTap: readOnly
+                        ? null
+                        : () => context.read<UploadImageCubit>().uploadImage(),
                     child: Container(
                       padding: AppConstants.padding12,
                       decoration: BoxDecoration(
@@ -95,34 +102,36 @@ class ChooseImageWidget extends StatelessWidget {
                                   const SizedBox(width: 8),
                                 ],
                               ),
-                              if (imagePath != null)
-                                Expanded(child: Text(imagePath)),
+                              if (message != null)
+                                Expanded(child: Text(message)),
                             ],
                           ),
-                          hasImage
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.file(
-                                    File(imagePath!),
-                                    fit: BoxFit.cover,
-                                    width: 100,
-                                    height: 100,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                          if (initialImage != null && !hasImage)
+                          if (hasImage) ...[
+                            const SizedBox(height: 10),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.file(
+                                File(imagePath!),
+                                fit: BoxFit.cover,
+                                width: 100,
+                                height: 100,
+                              ),
+                            ),
+                          ],
+                          if (initialImage != null && !hasImage) ...[
+                            const SizedBox(height: 10),
                             AppImageWidget(
                               url: initialImage,
                               fit: BoxFit.cover,
                               width: 100,
                               height: 100,
-                              errorWidget: SizedBox.shrink(),
+                              errorWidget: const SizedBox.shrink(),
                               onImageLoaded: (p0) async {
                                 final networkImage =
                                     p0 as CachedNetworkImageProvider;
                                 final response = await NetworkAssetBundle(
-                                        Uri.parse(networkImage.url))
-                                    .load("");
+                                  Uri.parse(networkImage.url),
+                                ).load("");
                                 final bytes = response.buffer.asUint8List();
 
                                 final tempDir = await getTemporaryDirectory();
@@ -134,7 +143,8 @@ class ChooseImageWidget extends StatelessWidget {
 
                                 onSetImage(xfile);
                               },
-                            )
+                            ),
+                          ],
                         ],
                       ),
                     ),

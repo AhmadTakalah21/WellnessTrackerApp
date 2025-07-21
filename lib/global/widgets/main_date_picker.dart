@@ -15,6 +15,7 @@ class MainDatePicker extends StatefulWidget {
     this.isStart = false,
     this.isEnd = false,
     this.validator,
+    this.firstDate,
   });
 
   final String label;
@@ -22,6 +23,7 @@ class MainDatePicker extends StatefulWidget {
   final bool isStart;
   final bool isEnd;
   final void Function(DateTime? date) onDateSelected;
+  final DateTime? firstDate;
   final String? initialDate;
   final EdgeInsets? padding;
   final String? Function(DateTime?)? validator;
@@ -44,7 +46,7 @@ class _MainDatePickerState extends State<MainDatePicker> {
   Future<void> onPickDate(FormFieldState<DateTime?> field) async {
     final date = await showDatePicker(
       context: context,
-      firstDate: DateTime(1900),
+      firstDate: widget.firstDate ?? DateTime(1900),
       lastDate: DateTime(3000),
     );
     if (date != null) {

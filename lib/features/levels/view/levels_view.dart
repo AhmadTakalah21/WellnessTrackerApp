@@ -99,9 +99,11 @@ class _LevelsPageState extends State<LevelsPage>
     showDialog(
       context: context,
       builder: (_) => InsureDeleteWidget(
-        item: level,
-        onSuccess: () => levelsCubit.getLevels(widget.role),
-      ),
+          item: level,
+          onSuccess: () {
+            Navigator.pop(context);
+            levelsCubit.getLevels(widget.role);
+          }),
     );
   }
 

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
@@ -28,17 +27,17 @@ class EnArAddModel {
     );
   }
 
-  String get en {
-    if (_en == null || _en.isEmpty) {
-      throw "english_value_required".tr();
-    }
+  String? get en {
+    // if (_en == null || _en.isEmpty) {
+    //   throw "english_value_required".tr();
+    // }
     return _en;
   }
 
-  String get ar {
-    if (_ar == null || _ar.isEmpty) {
-      throw "arabic_value_required".tr();
-    }
+  String? get ar {
+    // if (_ar == null || _ar.isEmpty) {
+    //   throw "arabic_value_required".tr();
+    // }
     return _ar;
   }
 

@@ -44,7 +44,7 @@
 //                   borderRadius: AppConstants.borderRadius10,
 //                   color: selectedTab == index
 //                       ? context.cs.primary
-//                       : context.cs.onSurface,
+//                       : context.cs.surface,
 //                   boxShadow: [
 //                     BoxShadow(
 //                       color: Colors.black.withValues(alpha: 0.3),
@@ -61,7 +61,7 @@
 //                       fontSize: 18,
 //                       fontWeight: FontWeight.w700,
 //                       color: selectedTab == index
-//                           ? context.cs.onSurface
+//                           ? context.cs.surface
 //                           : context.cs.primary,
 //                     ),
 //                   ),
@@ -136,7 +136,7 @@ class MainTabBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: AppConstants.borderRadius10,
-        color: selectedTab == index ? context.cs.primary : context.cs.onSurface,
+        color: selectedTab == index ? context.cs.primary : context.cs.surface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.3),
@@ -151,9 +151,8 @@ class MainTabBar extends StatelessWidget {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: selectedTab == index
-                ? context.cs.onSurface
-                : context.cs.primary,
+            color:
+                selectedTab == index ? context.cs.surface : context.cs.primary,
           ),
         ),
       ),

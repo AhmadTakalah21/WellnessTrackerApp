@@ -5,19 +5,18 @@ import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 ThemeData darkTheme = ThemeData(
   primaryColor: AppColors.mainColor,
   colorScheme: ColorScheme(
-    brightness: Brightness.dark,
-    primary: AppColors.mainColor,
-    onPrimary: AppColors.mainColor,
-    secondary: AppColors.secondaryColor,
-    onSecondary: Colors.black54,
-    error: AppColors.red,
-    onError: AppColors.mainColor,
-    surface: AppColors.white,
-    onSurface: AppColors.white,
-    onTertiary: Colors.black,
-    onSecondaryFixed: AppColors.grey,
-    onPrimaryFixed: AppColors.blue
-  ),
+      brightness: Brightness.dark,
+      primary: AppColors.mainColor,
+      onPrimary: AppColors.mainColor,
+      secondary: AppColors.secondaryColor,
+      onSecondary: Colors.black54,
+      error: AppColors.red,
+      onError: AppColors.mainColor,
+      surface: AppColors.white,
+      onSurface: AppColors.secondaryColor,
+      onTertiary: Colors.black,
+      onSecondaryFixed: AppColors.grey,
+      onPrimaryFixed: AppColors.blue),
   textTheme: TextTheme(
     displayLarge: TextStyle(
       fontFamily: GoogleFonts.lexend().fontFamily,
@@ -108,19 +107,25 @@ ThemeData darkTheme = ThemeData(
           iconColor: WidgetStatePropertyAll(AppColors.secondaryColor))),
   iconTheme: IconThemeData(color: AppColors.secondaryColor),
   useMaterial3: true,
+  // textSelectionToolbarTheme: TextSelectionToolbarThemeData(
+  //   toolbarTextStyle: TextStyle(
+  //     color: AppColors.secondaryColor,  // Color of "Copy", "Paste" etc.
+  //     fontSize: 14,
+  //   ),
+  // ),
+  
+
   datePickerTheme: DatePickerThemeData(
     backgroundColor: AppColors.white,
     headerForegroundColor: AppColors.secondaryColor,
     headerBackgroundColor: AppColors.mainColor,
     dividerColor: AppColors.mainColor,
-
     weekdayStyle: TextStyle(
       color: AppColors.secondaryColor,
     ),
     yearStyle: TextStyle(
       color: AppColors.secondaryColor,
     ),
-
     todayForegroundColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
         return AppColors.white;
@@ -136,7 +141,6 @@ ThemeData darkTheme = ThemeData(
       }
       return null;
     }),
-
     dayForegroundColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
         return AppColors.white;
