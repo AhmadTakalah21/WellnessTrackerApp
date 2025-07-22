@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
+import 'package:wellnesstrackerapp/features/customers/model/add_points_model/add_points_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_subscriber_model/assign_subscriber_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/service/customers_service.dart';
@@ -10,9 +11,9 @@ import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/customers_state.dart';
-//part 'states/approve_customer_state.dart';
 part 'states/general_customers_state.dart';
 part 'states/assign_subscriber_state.dart';
+part 'states/add_points_state.dart';
 
 @injectable
 class CustomersCubit extends Cubit<GeneralCustomersState> {
@@ -22,6 +23,8 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   List<CustomerModel> customers = [];
   MetaModel? meta;
   AssignSubscriberModel model = const AssignSubscriberModel();
+  AddPointsModel addPointsModel = const AddPointsModel();
+  List<int> userIds = [];
 
   String lastQuery = '';
   String? lastStatus;
@@ -45,6 +48,28 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
 
   void setLevelId(int? id) {
     model = model.copyWith(levelId: () => id);
+  }
+
+  void setPoints(String? points) {
+    addPointsModel = addPointsModel.copyWith(points: () => points);
+  }
+
+  void updateUserIds(CustomerModel customer) {
+    final exists = userIds.any((id) => customer.id == id);
+    if (!exists) {
+      userIds.add(customer.id);
+    } else {
+      userIds.remove(customer.id);
+    }
+  }
+
+  // void clearUserIds() {
+  //   userIds.clear();
+  // }
+
+  void resetAddPointsModel() {
+    userIds.clear();
+    addPointsModel = const AddPointsModel();
   }
 
   void resetModel() {
@@ -120,6 +145,19 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     } catch (e) {
       if (isClosed) return;
       emit(AssignSubscriberFail(e.toString()));
+    }
+  }
+
+  Future<void> addPoints(UserRoleEnum role) async {
+    addPointsModel = addPointsModel.copyWith(subscribers: () => userIds);
+    emit(AddPointsLoading());
+    try {
+      if (isClosed) return;
+      await customerService.addPoints(role, addPointsModel);
+      emit(AddPointsSuccess("points_added".tr()));
+    } catch (e) {
+      if (isClosed) return;
+      emit(AddPointsFail(e.toString()));
     }
   }
 }

@@ -32,7 +32,6 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   }
 
   void setUsers(List<CustomerModel> userIds) {
-    print(userIds);
     this.userIds = userIds;
   }
 
@@ -84,10 +83,11 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
     }
   }
 
-  Future<void> addNotification() async {
+  Future<void> addNotification(UserRoleEnum role) async {
     emit(AddNotificationLoading());
     try {
       final response = await notificationsService.addNotification(
+        role,
         addNotificationModel,
         userIds: userIds,
         image: image,

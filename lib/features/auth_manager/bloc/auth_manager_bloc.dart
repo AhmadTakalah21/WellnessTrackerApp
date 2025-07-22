@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
-import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'auth_manager_event.dart';
@@ -35,12 +34,7 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
         if (profileForm) {
           emit(ProfileFormState());
         } else {
-          emit(
-            AuthenticatedState(
-              _userRepo.user!,
-              _userRepo.user!.role == UserRoleEnum.user,
-            ),
-          );
+          emit(AuthenticatedState(_userRepo.user!));
         }
       } else {
         emit(UnauthenticatedState());
@@ -66,12 +60,7 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
     if (!event.isSignIn) {
       emit(ProfileFormState());
     } else {
-      emit(
-        AuthenticatedState(
-          _userRepo.user!,
-          _userRepo.user!.role == UserRoleEnum.user,
-        ),
-      );
+      emit(AuthenticatedState(_userRepo.user!));
     }
   }
 
@@ -80,10 +69,7 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
     Emitter<GeneralAuthManagerState> emit,
   ) async {
     _userRepo.setKey(profileFormKey, false);
-    emit(AuthenticatedState(
-      _userRepo.user!,
-      _userRepo.user!.role == UserRoleEnum.user,
-    ));
+    emit(AuthenticatedState(_userRepo.user!));
   }
 
   Future<void> _signOut(

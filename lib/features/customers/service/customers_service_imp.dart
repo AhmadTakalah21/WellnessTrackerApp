@@ -11,7 +11,6 @@ class CustomersServiceImp implements CustomersService {
     int? perPage = 10,
     int? employeeId,
   }) async {
-    // TODO check employeeId
     try {
       final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
@@ -36,6 +35,17 @@ class CustomersServiceImp implements CustomersService {
   Future<void> assignSubscriber(AssignSubscriberModel model) async {
     try {
       await dio.post("/v1/admin/subscriptions/assign", data: model.toJson());
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addPoints(UserRoleEnum role, AddPointsModel model) async {
+    try {
+      final endpoint = "/v1/${role.getApiRoute}/points/add";
+      await dio.post(endpoint, data: model.toJson());
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;

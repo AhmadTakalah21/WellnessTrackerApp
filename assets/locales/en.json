@@ -248,5 +248,9 @@
   "unit_required": "Unit is required",
   "calories_required": "Calories are required",
   "carbs_required": "Carbohydrates are required",
-  "proteins_required": "Proteins are required"
+  "proteins_required": "Proteins are required",
+  "at_least_one_subscriber" : "At least one subscriber should be selected",
+  "points_required" : "Points are required",
+  "points_added" : "Points are added successfully",
+  "add_points" : "Add Points"
 }

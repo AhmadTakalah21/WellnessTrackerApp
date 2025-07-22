@@ -16,6 +16,7 @@ class NotificationModel implements DeleteModel, DataTableModel {
     required this.body,
   });
 
+  @override
   final int id;
   final String title;
   final String body;

@@ -248,5 +248,9 @@
   "unit_required": "الوحدة مطلوبة",
   "calories_required": "السعرات الحرارية مطلوبة",
   "carbs_required": "الكربوهيدرات مطلوبة",
-  "proteins_required": "البروتينات مطلوبة"
+  "proteins_required": "البروتينات مطلوبة",
+  "at_least_one_subscriber" : "يجب اختيار مشترك واحد على الأقل",
+  "points_required" : "النقاط مطلوبة",
+  "points_added" : "تم إضافة النقاط بنجاح",
+  "add_points" : "إضافة نقاط"
 }

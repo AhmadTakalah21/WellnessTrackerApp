@@ -20,9 +20,7 @@ class ProfileFormState extends GeneralAuthManagerState {}
 
 class AuthenticatedState extends GeneralAuthManagerState {
   final SignInModel user;
-  final bool isCustomer;
-
-  AuthenticatedState(this.user, this.isCustomer);
+  AuthenticatedState(this.user);
 }
 
 // class SignedUpState extends GeneralAuthManagerState {

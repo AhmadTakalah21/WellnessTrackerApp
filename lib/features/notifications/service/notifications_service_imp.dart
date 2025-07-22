@@ -28,11 +28,12 @@ class NotificationsServiceImp implements NotificationsService {
 
   @override
   Future<NotificationModel> addNotification(
+    UserRoleEnum role,
     AddNotificationModel model, {
     required List<CustomerModel> userIds,
     XFile? image,
   }) async {
-    final endpoint = "/v1/admin/notifications";
+    final endpoint = "/v1/${role.getApiRoute}/notifications";
 
     try {
       final map = model.toJson();

@@ -8,7 +8,7 @@ class MainTextField2 extends StatefulWidget {
   const MainTextField2({
     super.key,
     this.controller,
-    required this.label,
+    this.label,
     required this.icon,
     this.hint,
     this.validator,
@@ -18,11 +18,13 @@ class MainTextField2 extends StatefulWidget {
     this.initialText,
     this.keyboardType,
     this.inputFormatters,
+    this.isWithTitle = true,
   });
 
   final TextEditingController? controller;
   final String? initialText;
-  final String label;
+  final String? label;
+  final bool isWithTitle;
   final IconData icon;
   final bool isPassword;
   final String? hint;
@@ -50,8 +52,10 @@ class _MainTextField2State extends State<MainTextField2> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.label.tr(), style: context.tt.titleLarge),
-        SizedBox(height: 10),
+        if (widget.label != null && widget.isWithTitle) ...[
+          Text(widget.label!.tr(), style: context.tt.titleLarge),
+          SizedBox(height: 10),
+        ],
         TextFormField(
           inputFormatters: widget.inputFormatters,
           keyboardType: widget.keyboardType,
@@ -62,7 +66,7 @@ class _MainTextField2State extends State<MainTextField2> {
           style: context.tt.bodyMedium,
           decoration: InputDecoration(
             prefixIcon: Icon(widget.icon, color: context.cs.primary),
-            labelText: widget.label,
+            labelText: widget.label?.tr(),
             labelStyle: TextStyle(color: Colors.grey[500]),
             hintText: widget.hint,
             hintStyle: TextStyle(color: Colors.grey[500]),

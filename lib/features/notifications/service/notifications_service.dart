@@ -19,6 +19,7 @@ abstract class NotificationsService {
   });
 
   Future<NotificationModel> addNotification(
+    UserRoleEnum role,
     AddNotificationModel model, {
     required List<CustomerModel> userIds,
     XFile? image,

@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart' show DateFormat;
+import 'package:easy_localization/easy_localization.dart';
 
 extension StringX on String {
   String get formatYYYYMMDD {

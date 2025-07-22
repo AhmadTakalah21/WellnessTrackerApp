@@ -1,6 +1,8 @@
+import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
@@ -13,9 +15,11 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 
 abstract class CustomersViewCallbacks {
   void fetchCustomers();
@@ -23,6 +27,8 @@ abstract class CustomersViewCallbacks {
   void onSearchChanged(String input);
   void onEditTap(CustomerModel customer);
   void onDeleteTap(CustomerModel customer);
+  void onAddPoints();
+  void onSubmitAddPoints();
   void onTryAgainTap();
 }
 
@@ -59,6 +65,7 @@ class CustomersPageState extends State<CustomersPage>
 
   int perPage = 10;
   int currentPage = 1;
+  bool isAddPoints = false;
 
   @override
   void fetchCustomers() {
@@ -81,22 +88,37 @@ class CustomersPageState extends State<CustomersPage>
 
   @override
   void onEditTap(CustomerModel customer) {
-    if (customer.info == null) {
-      MainSnackBar.showMessage(context, "customer_not_fill_info".tr());
-      return;
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ApproveCustomerView(
-            customer: customer,
-            customersCubit: customersCubit,
-            onSuccess: fetchCustomers,
+    if (widget.role.isAdmin) {
+      if (customer.info == null) {
+        MainSnackBar.showMessage(context, "customer_not_fill_info".tr());
+        return;
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ApproveCustomerView(
+              customer: customer,
+              customersCubit: customersCubit,
+              onSuccess: fetchCustomers,
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
+
+  @override
+  void onAddPoints() {
+    setState(() {
+      isAddPoints = !isAddPoints;
+    });
+    if (!isAddPoints) {
+      customersCubit.resetAddPointsModel();
+    }
+  }
+
+  @override
+  void onSubmitAddPoints() => customersCubit.addPoints(widget.role);
 
   @override
   void onDeleteTap(CustomerModel customer) {
@@ -143,22 +165,87 @@ class CustomersPageState extends State<CustomersPage>
                       height: height / 1.2,
                     );
                   } else if (state is CustomersSuccess) {
-                    String header;
-                    if (widget.user != null) {
-                      header = "";
-                    } else {
-                      header = CustomerModel.header;
-                    }
-                    return MainDataTable<CustomerModel>(
-                      header: header,
-                      titles: CustomerModel.titles,
-                      items: state.customers,
-                      onPageChanged: onSelectPageTap,
-                      emptyMessage: state.emptyMessage,
-                      onEditTap: onEditTap,
-                      onDeleteTap: isAdmin ? onDeleteTap : null,
-                      onSearchChanged: onSearchChanged,
-                      searchHint: 'search_customer',
+                    return SingleChildScrollView(
+                      child: Column(
+                        //spacing: 16,
+                        children: [
+                          Row(
+                            spacing: 16,
+                            children: [
+                              Expanded(
+                                child: MainActionButton(
+                                  onTap: onAddPoints,
+                                  textColor: context.cs.secondary,
+                                  text: "add_points".tr(),
+                                  icon: Icon(Icons.add),
+                                ),
+                              ),
+                              Expanded(
+                                child: AnimatedSizeAndFade.showHide(
+                                  show: isAddPoints,
+                                  child: MainTextField2(
+                                    onChanged: customersCubit.setPoints,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    isWithTitle: false,
+                                    label: "points".tr(),
+                                    icon: Icons.point_of_sale,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          AnimatedSizeAndFade.showHide(
+                            show: isAddPoints,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 16),
+                                BlocConsumer<CustomersCubit,
+                                    GeneralCustomersState>(
+                                  listener: (context, state) {
+                                    if (state is AddPointsSuccess) {
+                                      MainSnackBar.showSuccessMessage(
+                                          context, state.message);
+                                    } else if (state is AddPointsFail) {
+                                      MainSnackBar.showErrorMessage(
+                                          context, state.error);
+                                    }
+                                  },
+                                  builder: (context, state) {
+                                    bool isLoading = state is AddPointsLoading;
+                                    return MainActionButton(
+                                      onTap:
+                                          isLoading ? () {} : onSubmitAddPoints,
+                                      text: "save".tr(),
+                                      child: isLoading
+                                          ? LoadingIndicator(
+                                              size: 20,
+                                              color: context.cs.surface)
+                                          : null,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          MainDataTable<CustomerModel>(
+                            titles: CustomerModel.titles,
+                            items: state.customers,
+                            onPageChanged: onSelectPageTap,
+                            emptyMessage: state.emptyMessage,
+                            onEditTap: onEditTap,
+                            onDeleteTap: isAdmin ? onDeleteTap : null,
+                            onSearchChanged: onSearchChanged,
+                            isSelectable: isAddPoints,
+                            onSelected: isAddPoints
+                                ? customersCubit.updateUserIds
+                                : null,
+                            searchHint: 'search_customer',
+                          ),
+                        ],
+                      ),
                     );
                   } else if (state is CustomersEmpty) {
                     return MainErrorWidget(

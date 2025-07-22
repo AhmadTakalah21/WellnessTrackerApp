@@ -46,8 +46,8 @@ class _DashboardState extends State<Dashboard>
 
   @override
   void onGridItemTap(PageRouteInfo page) {
+    //appManagerCubit.emitInnerRouteChanged();
     context.router.push(page);
-    appManagerCubit.emitInnerRouteChanged();
   }
 
   @override

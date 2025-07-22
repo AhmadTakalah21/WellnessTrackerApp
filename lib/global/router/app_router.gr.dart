@@ -392,15 +392,10 @@ class AppManagerRoute extends _i35.PageRouteInfo<AppManagerRouteArgs> {
   AppManagerRoute({
     _i36.Key? key,
     required _i44.SignInModel user,
-    required bool isCustomer,
     List<_i35.PageRouteInfo>? children,
   }) : super(
          AppManagerRoute.name,
-         args: AppManagerRouteArgs(
-           key: key,
-           user: user,
-           isCustomer: isCustomer,
-         ),
+         args: AppManagerRouteArgs(key: key, user: user),
          initialChildren: children,
        );
 
@@ -410,44 +405,32 @@ class AppManagerRoute extends _i35.PageRouteInfo<AppManagerRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<AppManagerRouteArgs>();
-      return _i6.AppManagerView(
-        key: args.key,
-        user: args.user,
-        isCustomer: args.isCustomer,
-      );
+      return _i6.AppManagerView(key: args.key, user: args.user);
     },
   );
 }
 
 class AppManagerRouteArgs {
-  const AppManagerRouteArgs({
-    this.key,
-    required this.user,
-    required this.isCustomer,
-  });
+  const AppManagerRouteArgs({this.key, required this.user});
 
   final _i36.Key? key;
 
   final _i44.SignInModel user;
 
-  final bool isCustomer;
-
   @override
   String toString() {
-    return 'AppManagerRouteArgs{key: $key, user: $user, isCustomer: $isCustomer}';
+    return 'AppManagerRouteArgs{key: $key, user: $user}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! AppManagerRouteArgs) return false;
-    return key == other.key &&
-        user == other.user &&
-        isCustomer == other.isCustomer;
+    return key == other.key && user == other.user;
   }
 
   @override
-  int get hashCode => key.hashCode ^ user.hashCode ^ isCustomer.hashCode;
+  int get hashCode => key.hashCode ^ user.hashCode;
 }
 
 /// generated route for

@@ -57,10 +57,7 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
       elevation: 4,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
       centerTitle: true,
-      title: Text(
-        widget.title,
-        style: context.tt.titleLarge?.copyWith(color: Colors.white.withOpacity(0.9)),
-      ),
+      title: Text(widget.title, style: context.tt.titleLarge),
       actions: [
         BlocConsumer<AuthCubit, AuthState>(
           listener: (context, state) {

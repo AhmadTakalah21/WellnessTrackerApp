@@ -104,7 +104,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
       customersCubit.getCustomers(widget.role, perPage: null);
 
   @override
-  void onSend() => widget.notificationsCubit.addNotification();
+  void onSend() => widget.notificationsCubit.addNotification(widget.role);
 
   @override
   void onCancelTap() => Navigator.pop(context);

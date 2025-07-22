@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
@@ -187,13 +186,14 @@ class _SignInPageState extends State<SignInPage>
     final message = Uri.encodeComponent("مرحباً، أحتاج كود الاشتراك");
     final url = "https://wa.me/$cleaned?text=$message";
 
-    final success = await launchUrlString(url, mode: LaunchMode.externalApplication);
+    final success =
+        await launchUrlString(url, mode: LaunchMode.externalApplication);
     if (!success && context.mounted) {
-      MainSnackBar.showErrorMessage(context, "لا يمكن فتح واتساب حالياً");
+      if (mounted) {
+        MainSnackBar.showErrorMessage(context, "لا يمكن فتح واتساب حالياً");
+      }
     }
   }
-
-
 
   @override
   void onShowPassword() => setState(() => isObsecure = !isObsecure);
@@ -509,7 +509,8 @@ class _SignInPageState extends State<SignInPage>
                         "assets/images/whatsapp.svg",
                         width: 24,
                         height: 24,
-                        colorFilter: ColorFilter.mode(context.cs.primary, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(
+                            context.cs.primary, BlendMode.srcIn),
                       ),
                       const SizedBox(width: 8),
                       Text(
@@ -522,8 +523,6 @@ class _SignInPageState extends State<SignInPage>
                       ),
                     ],
                   ),
-
-
                 ),
               );
             },

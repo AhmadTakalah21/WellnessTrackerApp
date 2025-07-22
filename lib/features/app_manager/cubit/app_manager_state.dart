@@ -11,4 +11,4 @@ final class AppManagerInitial extends AppManagerState {}
 //   LanguageChanged(this.locale);
 // }
 
-final class InnerRouteChanged extends AppManagerState {}
+//final class InnerRouteChanged extends AppManagerState {}

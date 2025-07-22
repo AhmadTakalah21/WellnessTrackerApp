@@ -19,6 +19,7 @@ class CodeModel implements DeleteModel, DataTableModel {
     // required this.department,
   });
 
+  @override
   final int id;
   final String code;
 

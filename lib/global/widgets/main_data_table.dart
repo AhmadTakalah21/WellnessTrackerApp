@@ -9,6 +9,7 @@ import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field.dart';
 
 abstract class DataTableModel {
+  int get id;
   List<String> get values;
 }
 
@@ -35,6 +36,9 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
     this.onSearchChanged,
     this.bottomHeight = 100,
     this.filters = const [],
+    this.customButtons = const [],
+    this.onSelected,
+    this.isSelectable = false,
   });
 
   final String? header;
@@ -44,8 +48,11 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
   final String searchHint;
   final double bottomHeight;
   final List<Widget> filters;
+  final List<Widget> customButtons;
+  final bool isSelectable;
   final void Function(String input)? onSearchChanged;
   final void Function(int page, int perPage) onPageChanged;
+  final void Function(T item)? onSelected;
   final void Function(T item)? onShowDetailsTap;
   final void Function(T item)? onEditTap;
   final void Function(T item)? onDeleteTap;
@@ -58,6 +65,17 @@ class _MainDataTableState<T extends DataTableModel>
     extends State<MainDataTable<T>> implements MainDataTableCallbacks {
   late int page = widget.items.meta.currentPage;
   late int perPage = widget.items.meta.perPage;
+
+  late List<bool> selected =
+      List.generate(widget.items.data.length, (index) => false);
+
+  @override
+  void didUpdateWidget(covariant MainDataTable<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!widget.isSelectable) {
+      selected = List.generate(widget.items.data.length, (index) => false);
+    }
+  }
 
   @override
   void onFirstPageTap() => widget.onPageChanged(1, perPage);
@@ -95,7 +113,7 @@ class _MainDataTableState<T extends DataTableModel>
         child: Column(
           spacing: 10,
           children: [
-            _buildHeader(),
+            if (widget.header != null) _buildHeader(),
             ...widget.filters,
             const SizedBox(height: 4),
             _buildSearch(),
@@ -111,11 +129,7 @@ class _MainDataTableState<T extends DataTableModel>
   }
 
   Widget _buildHeader() {
-    final header = widget.header;
-    if (header == null) {
-      return SizedBox.shrink();
-    }
-    return Text(header, style: context.tt.headlineSmall);
+    return Text(widget.header!, style: context.tt.headlineSmall);
   }
 
   Widget _buildSearch() {
@@ -144,6 +158,7 @@ class _MainDataTableState<T extends DataTableModel>
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
+        showCheckboxColumn: false,
         dividerThickness: 1,
         headingRowColor: WidgetStatePropertyAll(context.cs.primary),
         border: TableBorder.all(width: 1),
@@ -189,12 +204,27 @@ class _MainDataTableState<T extends DataTableModel>
                         onPressed: () => widget.onDeleteTap!(item),
                         icon: Icon(Icons.delete, color: context.cs.error),
                       ),
+                    ...widget.customButtons,
                   ],
                 ),
               ),
             ),
           );
-          return DataRow2(cells: cells);
+          return DataRow2(
+            color: WidgetStatePropertyAll(selected[index]
+                ? context.cs.secondary.withValues(alpha: 0.4)
+                : context.cs.surface),
+            onSelectChanged: (value) {
+              if (widget.onSelected != null) {
+                setState(() {
+                  selected[index] = !selected[index];
+                });
+                widget.onSelected?.call(item);
+              }
+            },
+            //selected: selected[index],
+            cells: cells,
+          );
         }),
       ),
     );

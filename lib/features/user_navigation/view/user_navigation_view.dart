@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart';
-import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
@@ -22,10 +21,7 @@ class UserNavigationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => get<AppManagerCubit>(),
-      child: const UserNavigationPage(),
-    );
+    return const UserNavigationPage();
   }
 }
 
@@ -72,7 +68,7 @@ class _UserNavigationPageState extends State<UserNavigationPage>
 
     return BlocListener<AppManagerCubit, AppManagerState>(
       listener: (context, state) {
-        if (state is InnerRouteChanged) setState(() {});
+       // if (state is InnerRouteChanged) setState(() {});
       },
       child: AutoTabsScaffold(
         appBarBuilder: (context, tabsRouter) {
