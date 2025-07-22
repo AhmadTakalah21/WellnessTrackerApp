@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
@@ -180,16 +181,19 @@ class _SignInPageState extends State<SignInPage>
 
   @override
   Future<void> onGetCodeTap(String? whatsappPhone) async {
-    final url = "https://wa.me/$whatsappPhone?text=مرحباً، أحتاج كود الاشتراك";
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      if (mounted) {
-        MainSnackBar.showErrorMessage(context, "لا يمكن فتح واتساب حالياً");
-      }
+    if (whatsappPhone == null || whatsappPhone.isEmpty) return;
+
+    final cleaned = whatsappPhone.replaceAll(RegExp(r'[^\d]'), '');
+    final message = Uri.encodeComponent("مرحباً، أحتاج كود الاشتراك");
+    final url = "https://wa.me/$cleaned?text=$message";
+
+    final success = await launchUrlString(url, mode: LaunchMode.externalApplication);
+    if (!success && context.mounted) {
+      MainSnackBar.showErrorMessage(context, "لا يمكن فتح واتساب حالياً");
     }
   }
+
+
 
   @override
   void onShowPassword() => setState(() => isObsecure = !isObsecure);
@@ -503,20 +507,23 @@ class _SignInPageState extends State<SignInPage>
                     children: [
                       SvgPicture.asset(
                         "assets/images/whatsapp.svg",
-                        // ignore: deprecated_member_use
-                        color: context.cs.primary,
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(context.cs.primary, BlendMode.srcIn),
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 8),
                       Text(
                         "get_code_via_whatsapp".tr(),
-                        style: context.tt.bodyMedium?.copyWith(
+                        style: context.tt.bodyLarge?.copyWith(
                           color: context.cs.primary,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,
                         ),
                       ),
                     ],
                   ),
+
+
                 ),
               );
             },

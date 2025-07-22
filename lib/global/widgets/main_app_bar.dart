@@ -7,7 +7,14 @@ import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainAppBar({super.key});
+  final String title;
+  final bool automaticallyImplyLeading;
+
+  const MainAppBar({
+    super.key,
+    this.title = 'Health & Wellness App',
+    this.automaticallyImplyLeading = false,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(60);
@@ -16,13 +23,23 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => get<AuthCubit>(),
-      child: const MainAppBarImp(),
+      child: MainAppBarImp(
+        title: title,
+        automaticallyImplyLeading: automaticallyImplyLeading,
+      ),
     );
   }
 }
 
 class MainAppBarImp extends StatefulWidget {
-  const MainAppBarImp({super.key});
+  final String title;
+  final bool automaticallyImplyLeading;
+
+  const MainAppBarImp({
+    super.key,
+    required this.title,
+    required this.automaticallyImplyLeading,
+  });
 
   @override
   State<MainAppBarImp> createState() => _MainAppBarImpState();
@@ -38,13 +55,11 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
     return AppBar(
       backgroundColor: context.cs.primary,
       elevation: 4,
-      automaticallyImplyLeading: false,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(width: 20),
-          Text('Health & Wellness App', style: context.tt.titleLarge),
-        ],
+      automaticallyImplyLeading: widget.automaticallyImplyLeading,
+      centerTitle: true,
+      title: Text(
+        widget.title,
+        style: context.tt.titleLarge?.copyWith(color: Colors.white.withOpacity(0.9)),
       ),
       actions: [
         BlocConsumer<AuthCubit, AuthState>(
@@ -61,7 +76,7 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
             }
             return IconButton(
               iconSize: 30,
-              color: context.cs.secondary,
+              color: Colors.white,
               onPressed: onLogoutTap,
               icon: const Icon(Icons.logout_rounded),
             );

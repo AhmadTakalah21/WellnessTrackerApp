@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
 import 'package:wellnesstrackerapp/features/settings/model/settings_model/settings_model.dart';
@@ -84,13 +85,23 @@ class _UpdateCompanyInfoWidgetState extends State<UpdateCompanyInfoWidget> {
       );
 
   Widget _buildPhoneTextField() => MainTextField2(
-        initialText: widget.settings.supportPhoneNumber,
-        onChanged: widget.settingsCubit.setSupportPhoneNumber,
-        icon: Icons.phone,
-        label: 'support_phone'.tr(),
-        validator: (v) =>
-            v == null || v.isEmpty ? 'support_phone_required'.tr() : null,
-      );
+    initialText: widget.settings.supportPhoneNumber,
+    onChanged: widget.settingsCubit.setSupportPhoneNumber,
+    icon: Icons.phone,
+    label: 'support_phone'.tr(),
+    keyboardType: TextInputType.phone,
+    inputFormatters: [
+      FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
+    ],
+    hint: '+963987654321',
+    validator: (v) {
+      if (v == null || v.isEmpty) return 'support_phone_required'.tr();
+      final cleaned = v.replaceAll(RegExp(r'[^\d+]'), '').replaceAll('+', '');
+      if (cleaned.length < 8) return 'رقم الهاتف غير صحيح';
+      return null;
+    },
+  );
+
 
   Widget _buildAndroidUrlTextField() => MainTextField2(
         initialText: widget.settings.appUrlAndroid,

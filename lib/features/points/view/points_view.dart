@@ -120,10 +120,15 @@ class _PointsPageState extends State<PointsPage>
           ),
         ],
       ),
-      floatingActionButton: MainFloatingButton(
-        icon: Icons.storefront_outlined,
-        onTap: onGoToStoreTap,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 45.0),
+        child: MainFloatingButton(
+          icon: Icons.storefront_outlined,
+          onTap: onGoToStoreTap,
+        ),
       ),
+
     );
   }
 

@@ -29,6 +29,13 @@ class UserNavigationView extends StatelessWidget {
   }
 }
 
+class _TabInfo {
+  final String translationKey;
+  final IconData icon;
+
+  const _TabInfo(this.translationKey, this.icon);
+}
+
 class UserNavigationPage extends StatefulWidget {
   const UserNavigationPage({super.key});
 
@@ -42,6 +49,12 @@ class _UserNavigationPageState extends State<UserNavigationPage>
   late final locale = context.locale;
   bool get isRtl => locale == SupportedLocales.arabic;
 
+  final List<_TabInfo> tabs = const [
+    _TabInfo('adds_and_offers', Icons.local_offer),
+    _TabInfo('home', Icons.home),
+    _TabInfo('profile', Icons.person),
+  ];
+
   @override
   void onBottomTab(int currentIndex, TabsRouter tabsRouter) {
     tabsRouter.setActiveIndex(currentIndex);
@@ -50,57 +63,53 @@ class _UserNavigationPageState extends State<UserNavigationPage>
     });
   }
 
-  Widget getBottomBarIcon(IconData icon, {required bool isSelected}) {
-    final color = isSelected ? context.cs.primary : context.cs.secondary;
-    return Icon(icon, color: color);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final icons = [Icons.local_offer, Icons.home, Icons.person];
-    final labels = ['adds_and_offers'.tr(), 'home'.tr(), 'profile'.tr()];
-    final rtlIcons = icons.reversed.toList();
+    final labels = tabs.map((e) => e.translationKey.tr()).toList();
+    final icons = tabs.map((e) => e.icon).toList();
     final rtlLabels = labels.reversed.toList();
+    final rtlIcons = icons.reversed.toList();
 
     return BlocListener<AppManagerCubit, AppManagerState>(
       listener: (context, state) {
         if (state is InnerRouteChanged) setState(() {});
       },
       child: AutoTabsScaffold(
-        // appBarBuilder: (context, tabsRouter) {
-        //   return MainAppBar();
-        // },
-
         appBarBuilder: (context, tabsRouter) {
-          if (tabsRouter.activeIndex == 1) {
-            final nestedRouter =
-                context.innerRouterOf<StackRouter>(DashboardRouter.name);
+          String titleKey = 'app_name';
 
+          if (tabsRouter.activeIndex == 1) {
+            final nestedRouter = context.innerRouterOf<StackRouter>(DashboardRouter.name);
             final nestedRouteName = nestedRouter?.current.name;
-            print("Nested route inside DashboardRouter: $nestedRouteName");
-            if (nestedRouteName == DashboardRoute.name) {
-              return const MainAppBar();
-            } else {
-              return const PreferredSize(
-                preferredSize: Size.fromHeight(0),
-                child: SizedBox.shrink(),
-              );
+
+            switch (nestedRouteName) {
+              case 'DashboardRoute':
+                titleKey = 'home';
+                break;
+              default:
+                titleKey = 'home';
             }
           } else {
-            return const MainAppBar();
+            final index = tabsRouter.activeIndex;
+            titleKey = isRtl
+                ? tabs.reversed.toList()[index].translationKey
+                : tabs[index].translationKey;
           }
+
+          return MainAppBar(title: titleKey.tr());
         },
+
         routes: isRtl
             ? [
-                ProfileRoute(),
-                DashboardRouter(),
-                AddsAndOffersRoute(role: UserRoleEnum.user),
-              ]
+          ProfileRoute(),
+          DashboardRouter(),
+          AddsAndOffersRoute(role: UserRoleEnum.user),
+        ]
             : [
-                AddsAndOffersRoute(role: UserRoleEnum.user),
-                DashboardRouter(),
-                ProfileRoute(),
-              ],
+          AddsAndOffersRoute(role: UserRoleEnum.user),
+          DashboardRouter(),
+          ProfileRoute(),
+        ],
         extendBody: true,
         resizeToAvoidBottomInset: true,
         bottomNavigationBuilder: (context, tabsRouter) {
@@ -111,7 +120,7 @@ class _UserNavigationPageState extends State<UserNavigationPage>
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 12,
-                  offset: Offset(0, -2),
+                  offset: const Offset(0, -2),
                 )
               ],
               borderRadius: AppConstants.borderRadiusTlTr,
@@ -120,9 +129,6 @@ class _UserNavigationPageState extends State<UserNavigationPage>
               labels: isRtl ? rtlLabels : labels,
               icons: isRtl ? rtlIcons : icons,
               initialSelectedTab: isRtl ? rtlLabels[1] : labels[1],
-              // labels: labels,
-              // icons: icons,
-              // initialSelectedTab: labels[1],
               tabSize: 60,
               tabBarHeight: 65,
               textStyle: TextStyle(
@@ -132,7 +138,7 @@ class _UserNavigationPageState extends State<UserNavigationPage>
               ),
               tabIconColor: Colors.grey.shade500,
               tabIconSelectedColor: context.cs.primary,
-              tabSelectedColor: context.cs.primary.withValues(alpha: 0.15),
+              tabSelectedColor: context.cs.primary.withOpacity(0.15),
               tabBarColor: context.cs.surface,
               useSafeArea: true,
               onTabItemSelected: (index) {
