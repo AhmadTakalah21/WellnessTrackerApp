@@ -51,4 +51,15 @@ class CustomersServiceImp implements CustomersService {
       rethrow;
     }
   }
+  
+  @override
+  Future<void> assignMealPlan(UserRoleEnum role, AssignMealPlanModel model)async {
+    try {
+      final endpoint = "/v1/${role.getApiRoute}/meal-plans/assign";
+      await dio.post(endpoint, data: model.toJson());
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
 }

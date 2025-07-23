@@ -135,6 +135,12 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   }
 
   @override
+  void dispose() {
+    widget.customersCubit.resetAssignSubscriberModel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),

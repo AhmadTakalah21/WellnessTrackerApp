@@ -1,23 +1,23 @@
-part of 'ingredients_service.dart';
+part of 'meal_plans_service.dart';
 
-@Injectable(as: IngredientsService)
-class IngredientsServiceImp implements IngredientsService {
+@Injectable(as: MealPlansService)
+class MealPlanServiceImp implements MealPlansService {
   final dio = DioClient();
 
   @override
-  Future<PaginatedModel<IngredientModel>> getIngredients({
+  Future<PaginatedModel<MealPlanModel>> getMealPlans({
     int? perPage = 10,
     int? page,
   }) async {
     try {
       final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
-      final endpoint = "/v1/dietitian/ingredients?$pageParam&$perPageParam";
+      final endpoint = "/v1/dietitian/meal-plans?$pageParam&$perPageParam";
 
       final response = await dio.get(endpoint);
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
-        (json) => IngredientModel.fromJson(json as Map<String, dynamic>),
+        (json) => MealPlanModel.fromJson(json as Map<String, dynamic>),
       );
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
@@ -26,13 +26,13 @@ class IngredientsServiceImp implements IngredientsService {
   }
 
   @override
-  Future<IngredientModel> addIngredient(
-    AddIngredientModel model, {
+  Future<MealPlanModel> addMealPlan(
+    AddMealPlanModel model, {
     int? id,
   }) async {
     final isAdd = id == null;
     final endpoint =
-        isAdd ? "/v1/dietitian/ingredients" : "/v1/dietitian/ingredients/$id";
+        isAdd ? "/v1/admin/meal-plans" : "/v1/admin/meal-plans/$id";
 
     try {
       final map = model.toJson();
@@ -42,7 +42,7 @@ class IngredientsServiceImp implements IngredientsService {
 
       final response = await dio.post(endpoint, data: map);
       final data = response.data["data"] as Map<String, dynamic>;
-      return IngredientModel.fromJson(data);
+      return MealPlanModel.fromJson(data);
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;

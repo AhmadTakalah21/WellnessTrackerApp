@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wellnesstrackerapp/features/ingredients/model/add_ingredient_model/add_ingredient_model.dart';
 import 'package:wellnesstrackerapp/features/ingredients/model/ingredient_model/ingredient_model.dart';

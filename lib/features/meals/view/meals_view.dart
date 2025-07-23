@@ -1,6 +1,11 @@
 import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:wellnesstrackerapp/features/ingredients/model/ingredient_model/ingredient_model.dart';
+import 'package:wellnesstrackerapp/features/meals/model/ingredient_with_quantity_model/ingredient_with_quantity_model.dart';
+import 'package:wellnesstrackerapp/features/meals/model/meal_model/meal_model.dart';
+import 'package:wellnesstrackerapp/global/models/ingredient_unit_enum.dart';
+import 'package:wellnesstrackerapp/global/models/meal_type_enum.dart';
 
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -29,46 +34,81 @@ class _MealsPageState extends State<MealsPage> implements MealsViewCallbacks {
   Widget build(BuildContext context) {
     final meals = [
       MealModel(
-          name: "الوجبة الأولى - الفطور",
-          icon: Icons.breakfast_dining,
-          ingredients: [
-            IngredientModel(
+        id: 1,
+        dietitianId: 1,
+        link: "https://www.google.com",
+        type: MealTypeEnum.breakfast,
+        name: "الوجبة الأولى - الفطور",
+        ingredients: [
+          IngredientWithQuantityModel(
+            id: 1,
+            ingredientId: 1,
+            quantity: 2,
+            ingredient: IngredientModel(
+              id: 1,
+              dietitianId: 2,
+              unit: IngredientUnitEnum.gram,
               name: 'حليب',
-              quantity: "كوب واحد",
               calories: "120",
-              protein: "8g",
+              proteins: "8g",
               carbs: "12g",
             ),
-            IngredientModel(
+          ),
+          IngredientWithQuantityModel(
+            id: 2,
+            ingredientId: 2,
+            quantity: 3,
+            ingredient: IngredientModel(
+              id: 2,
+              dietitianId: 2,
+              unit: IngredientUnitEnum.gram,
               name: 'بيض',
-              quantity: '2 حبات',
               calories: "140",
-              protein: "12g",
+              proteins: "12g",
               carbs: "1g",
             ),
-          ],
-          preparationMethod:
-              "اولا نقوم بفقس البيض في وعاء , ثم نضع القليل من الملح ونخلطهم خلطا جيدا  , ثم نضع المقلاة على النار ونضع عليها زيت الزيتون وننتظر حوالي دقيقتان, ثم نقوم بسكب البيض على المقلاة ونقوم بتحركهم قليلا وثانيا نضع الحليب على النار حتى يسخن و ممكن اضافة القليل من السكر "),
+          )
+        ],
+        description:
+            "اولا نقوم بفقس البيض في وعاء , ثم نضع القليل من الملح ونخلطهم خلطا جيدا  , ثم نضع المقلاة على النار ونضع عليها زيت الزيتون وننتظر حوالي دقيقتان, ثم نقوم بسكب البيض على المقلاة ونقوم بتحركهم قليلا وثانيا نضع الحليب على النار حتى يسخن و ممكن اضافة القليل من السكر ",
+      ),
       MealModel(
+          id: 2,
+          dietitianId: 2,
+          link: "https://www.google.com",
+          type: MealTypeEnum.lunch,
           name: "الوجبة الثانية - الغداء",
-          icon: Icons.lunch_dining,
           ingredients: [
-            IngredientModel(
-              name: 'دجاج',
-              quantity: "100g",
-              calories: "200",
-              protein: "30g",
-              carbs: "0g",
+            IngredientWithQuantityModel(
+              id: 1,
+              ingredientId: 1,
+              quantity: 2,
+              ingredient: IngredientModel(
+                id: 1,
+                dietitianId: 1,
+                unit: IngredientUnitEnum.gram,
+                name: 'دجاج',
+                calories: "200",
+                proteins: "30g",
+                carbs: "0g",
+              ),
             ),
-            IngredientModel(
-              name: 'رز',
-              quantity: 'كوب',
-              calories: "180",
-              protein: "4g",
-              carbs: "40g",
-            ),
+            IngredientWithQuantityModel(
+              id: 2,
+              ingredientId: 2,
+              quantity: 2,
+              ingredient: IngredientModel(
+                id: 2,
+                dietitianId: 2,
+                name: 'رز',
+                unit: IngredientUnitEnum.gram,
+                calories: "180",
+                proteins: "4g",
+                carbs: "40g",
+              ),
+            )
           ],
-          preparationMethod:
+          description:
               "اولا نقوم بفقس البيض في وعاء , ثم نضع القليل من الملح ونخلطهم خلطا جيدا  , ثم نضع المقلاة على النار ونضع عليها زيت الزيتون وننتظر حوالي دقيقتان, ثم نقوم بسكب البيض على المقلاة ونقوم بتحركهم قليلا وثانيا نضع الحليب على النار حتى يسخن و ممكن اضافة القليل من السكر "),
     ];
     return Scaffold(
@@ -86,8 +126,7 @@ class _MealsPageState extends State<MealsPage> implements MealsViewCallbacks {
           children: [
             Text(
               "وجبات اليوم بتاريخ ${DateFormat("dd/MM/yyyy").format(DateTime.now())}",
-              style:
-                  context.tt.titleLarge?.copyWith(color: context.cs.primary),
+              style: context.tt.titleLarge?.copyWith(color: context.cs.primary),
               textAlign: TextAlign.center,
             ),
             ...List.generate(meals.length, (index) {
@@ -115,8 +154,6 @@ class _MealsPageState extends State<MealsPage> implements MealsViewCallbacks {
           children: [
             Row(
               children: [
-                Icon(meal.icon, color: context.cs.primary),
-                const SizedBox(width: 10),
                 Text(
                   meal.name,
                   style: context.tt.titleLarge?.copyWith(
@@ -127,7 +164,8 @@ class _MealsPageState extends State<MealsPage> implements MealsViewCallbacks {
               ],
             ),
             const SizedBox(height: 16),
-            ...meal.ingredients.map((ingredient) {
+            ...meal.ingredients.map((ingredientWithQnt) {
+              final ingredient = ingredientWithQnt.ingredient;
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 padding: const EdgeInsets.all(12),
@@ -151,7 +189,7 @@ class _MealsPageState extends State<MealsPage> implements MealsViewCallbacks {
                         _buildNutrient(
                           icon: Icons.local_drink,
                           label: "الكمية",
-                          value: ingredient.quantity,
+                          value: ingredientWithQnt.quantity.toString(),
                         ),
                         _buildNutrient(
                           icon: Icons.local_fire_department,
@@ -161,7 +199,7 @@ class _MealsPageState extends State<MealsPage> implements MealsViewCallbacks {
                         _buildNutrient(
                           icon: Icons.fitness_center,
                           label: "البروتين",
-                          value: ingredient.protein,
+                          value: ingredient.proteins,
                         ),
                         _buildNutrient(
                           icon: Icons.bubble_chart,
@@ -187,7 +225,7 @@ class _MealsPageState extends State<MealsPage> implements MealsViewCallbacks {
                   ),
                 ),
                 SizedBox(height: 10),
-                Text(meal.preparationMethod, style: context.tt.bodyMedium),
+                Text(meal.description, style: context.tt.bodyMedium),
               ],
             )
           ],
@@ -210,32 +248,4 @@ class _MealsPageState extends State<MealsPage> implements MealsViewCallbacks {
       ],
     );
   }
-}
-
-class MealModel {
-  final String name;
-  final IconData icon;
-  final List<IngredientModel> ingredients;
-  final String preparationMethod;
-  MealModel({
-    required this.name,
-    required this.icon,
-    required this.ingredients,
-    required this.preparationMethod,
-  });
-}
-
-class IngredientModel {
-  final String name;
-  final String quantity;
-  final String calories;
-  final String protein;
-  final String carbs;
-  IngredientModel({
-    required this.name,
-    required this.quantity,
-    required this.calories,
-    required this.protein,
-    required this.carbs,
-  });
 }

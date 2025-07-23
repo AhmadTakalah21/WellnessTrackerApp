@@ -44,6 +44,14 @@ import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart'
     as _i726;
 import 'package:wellnesstrackerapp/features/levels/service/level_service.dart'
     as _i715;
+import 'package:wellnesstrackerapp/features/meal_plans/cubit/meal_plans_cubit.dart'
+    as _i744;
+import 'package:wellnesstrackerapp/features/meal_plans/service/meal_plans_service.dart'
+    as _i852;
+import 'package:wellnesstrackerapp/features/meals/cubit/meals_cubit.dart'
+    as _i826;
+import 'package:wellnesstrackerapp/features/meals/service/meals_service.dart'
+    as _i287;
 import 'package:wellnesstrackerapp/features/notifications/cubit/notifications_cubit.dart'
     as _i1053;
 import 'package:wellnesstrackerapp/features/notifications/service/notifications_service.dart'
@@ -108,17 +116,23 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i249.CodesService>(() => _i249.CodesServiceImp());
     gh.factory<_i985.PointsService>(() => _i985.PointsServiceImp());
     gh.factory<_i1054.SettingsService>(() => _i1054.SettingsServiceImp());
+    gh.factory<_i287.MealsService>(() => _i287.MealsServiceImp());
     gh.factory<_i936.UserService>(() => _i936.UserServiceImp());
+    gh.factory<_i852.MealPlansService>(() => _i852.MealPlanServiceImp());
     gh.factory<_i959.NotificationsService>(
         () => _i959.NotificationsServiceImp());
     gh.singleton<_i435.AuthManagerBloc>(
         () => _i435.AuthManagerBloc(gh<_i128.UserRepo>()));
     gh.factory<_i85.IngredientsService>(() => _i85.IngredientsServiceImp());
     gh.factory<_i963.DeleteService>(() => _i963.DeleteServiceImp());
+    gh.factory<_i826.MealsCubit>(
+        () => _i826.MealsCubit(gh<_i287.MealsService>()));
     gh.factory<_i1053.NotificationsCubit>(
         () => _i1053.NotificationsCubit(gh<_i959.NotificationsService>()));
     gh.factory<_i32.PointsCubit>(
         () => _i32.PointsCubit(gh<_i985.PointsService>()));
+    gh.factory<_i744.MealPlansCubit>(
+        () => _i744.MealPlansCubit(gh<_i852.MealPlansService>()));
     gh.factory<_i457.CodesCubit>(
         () => _i457.CodesCubit(gh<_i249.CodesService>()));
     gh.factory<_i474.UserRoleService>(() => _i474.UserRoleServiceImp());

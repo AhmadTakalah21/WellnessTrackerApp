@@ -1,25 +1,22 @@
-import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
+import 'package:wellnesstrackerapp/features/customers/view/widgets/add_points_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/approve_customer_view.dart';
+import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_meal_plan_widget.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
-
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
-import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
-import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 
 abstract class CustomersViewCallbacks {
   void fetchCustomers();
@@ -27,9 +24,12 @@ abstract class CustomersViewCallbacks {
   void onSearchChanged(String input);
   void onEditTap(CustomerModel customer);
   void onDeleteTap(CustomerModel customer);
+  void onLongPress(CustomerModel customer);
   void onAddPoints();
+  void onAssignDietPlan();
   void onSubmitAddPoints();
   void onTryAgainTap();
+  void onSelected(CustomerModel customer);
 }
 
 @RoutePage()
@@ -65,7 +65,6 @@ class CustomersPageState extends State<CustomersPage>
 
   int perPage = 10;
   int currentPage = 1;
-  bool isAddPoints = false;
 
   @override
   void fetchCustomers() {
@@ -108,13 +107,91 @@ class CustomersPageState extends State<CustomersPage>
   }
 
   @override
-  void onAddPoints() {
-    setState(() {
-      isAddPoints = !isAddPoints;
-    });
-    if (!isAddPoints) {
-      customersCubit.resetAddPointsModel();
+  void onSelected(CustomerModel customer) {
+    customersCubit.updateUserIds(customer);
+    setState(() {});
+  }
+
+  @override
+  void onLongPress(CustomerModel customer) {
+    if (customersCubit.isSelected(customer)) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape:
+            RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+        builder: (context) => Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: AppConstants.padding16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Center(
+                      child: Text(
+                        "additional_options".tr(),
+                        style: context.tt.headlineMedium,
+                      ),
+                    ),
+                    TextButton.icon(
+                      icon: Icon(Icons.add_circle_outline),
+                      onPressed: onAddPoints,
+                      label: Text(
+                        "add_points".tr(),
+                        style: context.tt.titleMedium?.copyWith(
+                          color: context.cs.primary,
+                        ),
+                      ),
+                    ),
+                    TextButton.icon(
+                      icon: Icon(Icons.edit),
+                      onPressed: onAssignDietPlan,
+                      label: Text(
+                        "assign_diet_plan".tr(),
+                        style: context.tt.titleMedium?.copyWith(
+                          color: context.cs.primary,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     }
+  }
+
+  @override
+  void onAddPoints() {
+    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AddPointsView(
+          customersCubit: customersCubit,
+          onSave: onSubmitAddPoints,
+        );
+      },
+    );
+  }
+
+  @override
+  void onAssignDietPlan() {
+    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AssignMealPlanView(
+          customersCubit: customersCubit,
+          onSave: onSubmitAddPoints,
+        );
+      },
+    );
   }
 
   @override
@@ -167,69 +244,7 @@ class CustomersPageState extends State<CustomersPage>
                   } else if (state is CustomersSuccess) {
                     return SingleChildScrollView(
                       child: Column(
-                        //spacing: 16,
                         children: [
-                          Row(
-                            spacing: 16,
-                            children: [
-                              Expanded(
-                                child: MainActionButton(
-                                  onTap: onAddPoints,
-                                  textColor: context.cs.secondary,
-                                  text: "add_points".tr(),
-                                  icon: Icon(Icons.add),
-                                ),
-                              ),
-                              Expanded(
-                                child: AnimatedSizeAndFade.showHide(
-                                  show: isAddPoints,
-                                  child: MainTextField2(
-                                    onChanged: customersCubit.setPoints,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    isWithTitle: false,
-                                    label: "points".tr(),
-                                    icon: Icons.point_of_sale,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          AnimatedSizeAndFade.showHide(
-                            show: isAddPoints,
-                            child: Column(
-                              children: [
-                                SizedBox(height: 16),
-                                BlocConsumer<CustomersCubit,
-                                    GeneralCustomersState>(
-                                  listener: (context, state) {
-                                    if (state is AddPointsSuccess) {
-                                      MainSnackBar.showSuccessMessage(
-                                          context, state.message);
-                                    } else if (state is AddPointsFail) {
-                                      MainSnackBar.showErrorMessage(
-                                          context, state.error);
-                                    }
-                                  },
-                                  builder: (context, state) {
-                                    bool isLoading = state is AddPointsLoading;
-                                    return MainActionButton(
-                                      onTap:
-                                          isLoading ? () {} : onSubmitAddPoints,
-                                      text: "save".tr(),
-                                      child: isLoading
-                                          ? LoadingIndicator(
-                                              size: 20,
-                                              color: context.cs.surface)
-                                          : null,
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
                           MainDataTable<CustomerModel>(
                             titles: CustomerModel.titles,
                             items: state.customers,
@@ -238,10 +253,10 @@ class CustomersPageState extends State<CustomersPage>
                             onEditTap: onEditTap,
                             onDeleteTap: isAdmin ? onDeleteTap : null,
                             onSearchChanged: onSearchChanged,
-                            isSelectable: isAddPoints,
-                            onSelected: isAddPoints
-                                ? customersCubit.updateUserIds
-                                : null,
+                            onSelected:
+                                widget.role.isDietitian ? onSelected : null,
+                            checkSelected: customersCubit.isSelected,
+                            onLongPress: onLongPress,
                             searchHint: 'search_customer',
                           ),
                         ],

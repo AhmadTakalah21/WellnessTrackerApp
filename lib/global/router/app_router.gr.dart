@@ -9,41 +9,41 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i35;
-import 'package:flutter/material.dart' as _i36;
+import 'package:auto_route/auto_route.dart' as _i34;
+import 'package:flutter/material.dart' as _i35;
 import 'package:wellnesstrackerapp/features/about_us/view/about_us_view.dart'
     as _i1;
 import 'package:wellnesstrackerapp/features/adds_and_offers/cubit/adds_and_offers_cubit.dart'
-    as _i37;
+    as _i36;
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart'
-    as _i38;
+    as _i37;
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/adds_and_offers_view.dart'
     as _i5;
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/add_adv_view.dart'
     as _i2;
 import 'package:wellnesstrackerapp/features/app_manager/view/app_manager_view.dart'
     as _i6;
-import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart' as _i48;
+import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart' as _i47;
+import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart'
-    as _i44;
+    as _i43;
 import 'package:wellnesstrackerapp/features/auth/view/auth_router.dart' as _i9;
-import 'package:wellnesstrackerapp/features/auth/view/forget_password_view.dart'
-    as _i17;
+import 'package:wellnesstrackerapp/features/auth/view/forget_password_view.dart';
 import 'package:wellnesstrackerapp/features/auth/view/profile_form_view.dart'
     as _i12;
 import 'package:wellnesstrackerapp/features/auth/view/reset_password_view.dart'
-    as _i27;
+    as _i26;
 import 'package:wellnesstrackerapp/features/auth/view/sign_in_view.dart'
-    as _i30;
+    as _i29;
 import 'package:wellnesstrackerapp/features/auth_manager/view/auth_manager_view.dart'
     as _i8;
 import 'package:wellnesstrackerapp/features/codes/view/codes_view.dart' as _i10;
 import 'package:wellnesstrackerapp/features/company_info/view/company_info_view.dart'
     as _i11;
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart'
-    as _i46;
-import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart'
     as _i45;
+import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart'
+    as _i44;
 import 'package:wellnesstrackerapp/features/customers/view/customers_view.dart'
     as _i13;
 import 'package:wellnesstrackerapp/features/customers/view/widgets/approve_customer_view.dart'
@@ -55,56 +55,56 @@ import 'package:wellnesstrackerapp/features/dashboard/view/dashboard_view.dart'
 import 'package:wellnesstrackerapp/features/exercises/view/exercises_view.dart'
     as _i16;
 import 'package:wellnesstrackerapp/features/health_assesment/view/health_assesment_view.dart'
-    as _i18;
-import 'package:wellnesstrackerapp/features/intro/view/into_view.dart' as _i19;
+    as _i17;
+import 'package:wellnesstrackerapp/features/intro/view/into_view.dart' as _i18;
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart'
-    as _i39;
+    as _i38;
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart'
-    as _i40;
-import 'package:wellnesstrackerapp/features/items/view/items_view.dart' as _i20;
+    as _i39;
+import 'package:wellnesstrackerapp/features/items/view/items_view.dart' as _i19;
 import 'package:wellnesstrackerapp/features/items/view/widgets/add_item_view.dart'
     as _i3;
 import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart'
-    as _i42;
-import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart'
     as _i41;
+import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart'
+    as _i40;
 import 'package:wellnesstrackerapp/features/levels/view/levels_view.dart'
-    as _i21;
+    as _i20;
 import 'package:wellnesstrackerapp/features/levels/view/widgets/add_level_widget.dart'
     as _i4;
-import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart' as _i22;
+import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart' as _i21;
 import 'package:wellnesstrackerapp/features/notifications/view/notifications_view.dart'
-    as _i23;
+    as _i22;
 import 'package:wellnesstrackerapp/features/points/view/points_view.dart'
-    as _i24;
+    as _i23;
 import 'package:wellnesstrackerapp/features/privacy_policy/view/privacy_policy_view.dart'
-    as _i25;
+    as _i24;
 import 'package:wellnesstrackerapp/features/profile/view/profile_view.dart'
-    as _i26;
+    as _i25;
 import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart'
-    as _i28;
+    as _i27;
 import 'package:wellnesstrackerapp/features/settings/view/settings_view.dart'
-    as _i29;
+    as _i28;
 import 'package:wellnesstrackerapp/features/splash/view/splash_view.dart'
-    as _i31;
+    as _i30;
 import 'package:wellnesstrackerapp/features/terms_and_conditions/view/terms_and_conditions_view.dart'
-    as _i32;
+    as _i31;
 import 'package:wellnesstrackerapp/features/user_navigation/view/user_navigation_view.dart'
-    as _i33;
+    as _i32;
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart'
-    as _i47;
-import 'package:wellnesstrackerapp/features/users/view/users_view.dart' as _i34;
-import 'package:wellnesstrackerapp/global/models/user_role_enum.dart' as _i43;
+    as _i46;
+import 'package:wellnesstrackerapp/features/users/view/users_view.dart' as _i33;
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart' as _i42;
 
 /// generated route for
 /// [_i1.AboutUsView]
-class AboutUsRoute extends _i35.PageRouteInfo<void> {
-  const AboutUsRoute({List<_i35.PageRouteInfo>? children})
+class AboutUsRoute extends _i34.PageRouteInfo<void> {
+  const AboutUsRoute({List<_i34.PageRouteInfo>? children})
     : super(AboutUsRoute.name, initialChildren: children);
 
   static const String name = 'AboutUsRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       return const _i1.AboutUsView();
@@ -114,13 +114,13 @@ class AboutUsRoute extends _i35.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.AddAdvView]
-class AddAdvRoute extends _i35.PageRouteInfo<AddAdvRouteArgs> {
+class AddAdvRoute extends _i34.PageRouteInfo<AddAdvRouteArgs> {
   AddAdvRoute({
-    _i36.Key? key,
-    required _i37.AddsAndOffersCubit advCubit,
-    _i38.AdvModel? adv,
-    _i36.VoidCallback? onSuccess,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i36.AddsAndOffersCubit advCubit,
+    _i37.AdvModel? adv,
+    _i35.VoidCallback? onSuccess,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          AddAdvRoute.name,
          args: AddAdvRouteArgs(
@@ -134,7 +134,7 @@ class AddAdvRoute extends _i35.PageRouteInfo<AddAdvRouteArgs> {
 
   static const String name = 'AddAdvRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddAdvRouteArgs>();
@@ -156,13 +156,13 @@ class AddAdvRouteArgs {
     this.onSuccess,
   });
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i37.AddsAndOffersCubit advCubit;
+  final _i36.AddsAndOffersCubit advCubit;
 
-  final _i38.AdvModel? adv;
+  final _i37.AdvModel? adv;
 
-  final _i36.VoidCallback? onSuccess;
+  final _i35.VoidCallback? onSuccess;
 
   @override
   String toString() {
@@ -186,14 +186,14 @@ class AddAdvRouteArgs {
 
 /// generated route for
 /// [_i3.AddItemView]
-class AddItemRoute extends _i35.PageRouteInfo<AddItemRouteArgs> {
+class AddItemRoute extends _i34.PageRouteInfo<AddItemRouteArgs> {
   AddItemRoute({
-    _i36.Key? key,
-    required _i39.ItemsCubit itemCubit,
-    _i40.ItemModel? item,
-    _i36.VoidCallback? onSuccess,
-    _i41.LevelModel? level,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i38.ItemsCubit itemCubit,
+    _i39.ItemModel? item,
+    _i35.VoidCallback? onSuccess,
+    _i40.LevelModel? level,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          AddItemRoute.name,
          args: AddItemRouteArgs(
@@ -208,7 +208,7 @@ class AddItemRoute extends _i35.PageRouteInfo<AddItemRouteArgs> {
 
   static const String name = 'AddItemRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddItemRouteArgs>();
@@ -232,15 +232,15 @@ class AddItemRouteArgs {
     this.level,
   });
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i39.ItemsCubit itemCubit;
+  final _i38.ItemsCubit itemCubit;
 
-  final _i40.ItemModel? item;
+  final _i39.ItemModel? item;
 
-  final _i36.VoidCallback? onSuccess;
+  final _i35.VoidCallback? onSuccess;
 
-  final _i41.LevelModel? level;
+  final _i40.LevelModel? level;
 
   @override
   String toString() {
@@ -269,13 +269,13 @@ class AddItemRouteArgs {
 
 /// generated route for
 /// [_i4.AddLevelView]
-class AddLevelRoute extends _i35.PageRouteInfo<AddLevelRouteArgs> {
+class AddLevelRoute extends _i34.PageRouteInfo<AddLevelRouteArgs> {
   AddLevelRoute({
-    _i36.Key? key,
-    required _i42.LevelsCubit levelsCubit,
-    _i36.VoidCallback? onSuccess,
-    _i41.LevelModel? level,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i41.LevelsCubit levelsCubit,
+    _i35.VoidCallback? onSuccess,
+    _i40.LevelModel? level,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          AddLevelRoute.name,
          args: AddLevelRouteArgs(
@@ -289,7 +289,7 @@ class AddLevelRoute extends _i35.PageRouteInfo<AddLevelRouteArgs> {
 
   static const String name = 'AddLevelRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddLevelRouteArgs>();
@@ -311,13 +311,13 @@ class AddLevelRouteArgs {
     this.level,
   });
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i42.LevelsCubit levelsCubit;
+  final _i41.LevelsCubit levelsCubit;
 
-  final _i36.VoidCallback? onSuccess;
+  final _i35.VoidCallback? onSuccess;
 
-  final _i41.LevelModel? level;
+  final _i40.LevelModel? level;
 
   @override
   String toString() {
@@ -341,11 +341,11 @@ class AddLevelRouteArgs {
 
 /// generated route for
 /// [_i5.AddsAndOffersView]
-class AddsAndOffersRoute extends _i35.PageRouteInfo<AddsAndOffersRouteArgs> {
+class AddsAndOffersRoute extends _i34.PageRouteInfo<AddsAndOffersRouteArgs> {
   AddsAndOffersRoute({
-    _i36.Key? key,
-    required _i43.UserRoleEnum role,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i42.UserRoleEnum role,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          AddsAndOffersRoute.name,
          args: AddsAndOffersRouteArgs(key: key, role: role),
@@ -354,7 +354,7 @@ class AddsAndOffersRoute extends _i35.PageRouteInfo<AddsAndOffersRouteArgs> {
 
   static const String name = 'AddsAndOffersRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddsAndOffersRouteArgs>();
@@ -366,9 +366,9 @@ class AddsAndOffersRoute extends _i35.PageRouteInfo<AddsAndOffersRouteArgs> {
 class AddsAndOffersRouteArgs {
   const AddsAndOffersRouteArgs({this.key, required this.role});
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i43.UserRoleEnum role;
+  final _i42.UserRoleEnum role;
 
   @override
   String toString() {
@@ -388,11 +388,11 @@ class AddsAndOffersRouteArgs {
 
 /// generated route for
 /// [_i6.AppManagerView]
-class AppManagerRoute extends _i35.PageRouteInfo<AppManagerRouteArgs> {
+class AppManagerRoute extends _i34.PageRouteInfo<AppManagerRouteArgs> {
   AppManagerRoute({
-    _i36.Key? key,
-    required _i44.SignInModel user,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i43.SignInModel user,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          AppManagerRoute.name,
          args: AppManagerRouteArgs(key: key, user: user),
@@ -401,7 +401,7 @@ class AppManagerRoute extends _i35.PageRouteInfo<AppManagerRouteArgs> {
 
   static const String name = 'AppManagerRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AppManagerRouteArgs>();
@@ -413,9 +413,9 @@ class AppManagerRoute extends _i35.PageRouteInfo<AppManagerRouteArgs> {
 class AppManagerRouteArgs {
   const AppManagerRouteArgs({this.key, required this.user});
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i44.SignInModel user;
+  final _i43.SignInModel user;
 
   @override
   String toString() {
@@ -436,13 +436,13 @@ class AppManagerRouteArgs {
 /// generated route for
 /// [_i7.ApproveCustomerView]
 class ApproveCustomerRoute
-    extends _i35.PageRouteInfo<ApproveCustomerRouteArgs> {
+    extends _i34.PageRouteInfo<ApproveCustomerRouteArgs> {
   ApproveCustomerRoute({
-    _i36.Key? key,
-    required _i45.CustomerModel customer,
-    required _i46.CustomersCubit customersCubit,
-    _i36.VoidCallback? onSuccess,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i44.CustomerModel customer,
+    required _i45.CustomersCubit customersCubit,
+    _i35.VoidCallback? onSuccess,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          ApproveCustomerRoute.name,
          args: ApproveCustomerRouteArgs(
@@ -456,7 +456,7 @@ class ApproveCustomerRoute
 
   static const String name = 'ApproveCustomerRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ApproveCustomerRouteArgs>();
@@ -478,13 +478,13 @@ class ApproveCustomerRouteArgs {
     this.onSuccess,
   });
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i45.CustomerModel customer;
+  final _i44.CustomerModel customer;
 
-  final _i46.CustomersCubit customersCubit;
+  final _i45.CustomersCubit customersCubit;
 
-  final _i36.VoidCallback? onSuccess;
+  final _i35.VoidCallback? onSuccess;
 
   @override
   String toString() {
@@ -511,13 +511,13 @@ class ApproveCustomerRouteArgs {
 
 /// generated route for
 /// [_i8.AuthManagerView]
-class AuthManagerRoute extends _i35.PageRouteInfo<void> {
-  const AuthManagerRoute({List<_i35.PageRouteInfo>? children})
+class AuthManagerRoute extends _i34.PageRouteInfo<void> {
+  const AuthManagerRoute({List<_i34.PageRouteInfo>? children})
     : super(AuthManagerRoute.name, initialChildren: children);
 
   static const String name = 'AuthManagerRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       return const _i8.AuthManagerView();
@@ -527,13 +527,13 @@ class AuthManagerRoute extends _i35.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i9.AuthRouterPage]
-class AuthRouter extends _i35.PageRouteInfo<void> {
-  const AuthRouter({List<_i35.PageRouteInfo>? children})
+class AuthRouter extends _i34.PageRouteInfo<void> {
+  const AuthRouter({List<_i34.PageRouteInfo>? children})
     : super(AuthRouter.name, initialChildren: children);
 
   static const String name = 'AuthRouter';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       return const _i9.AuthRouterPage();
@@ -543,13 +543,13 @@ class AuthRouter extends _i35.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i10.CodesView]
-class CodesRoute extends _i35.PageRouteInfo<void> {
-  const CodesRoute({List<_i35.PageRouteInfo>? children})
+class CodesRoute extends _i34.PageRouteInfo<void> {
+  const CodesRoute({List<_i34.PageRouteInfo>? children})
     : super(CodesRoute.name, initialChildren: children);
 
   static const String name = 'CodesRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       return const _i10.CodesView();
@@ -559,13 +559,13 @@ class CodesRoute extends _i35.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i11.CompanyInfoView]
-class CompanyInfoRoute extends _i35.PageRouteInfo<void> {
-  const CompanyInfoRoute({List<_i35.PageRouteInfo>? children})
+class CompanyInfoRoute extends _i34.PageRouteInfo<void> {
+  const CompanyInfoRoute({List<_i34.PageRouteInfo>? children})
     : super(CompanyInfoRoute.name, initialChildren: children);
 
   static const String name = 'CompanyInfoRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       return const _i11.CompanyInfoView();
@@ -575,13 +575,13 @@ class CompanyInfoRoute extends _i35.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i12.CompleteProfileFormView]
-class CompleteProfileFormRoute extends _i35.PageRouteInfo<void> {
-  const CompleteProfileFormRoute({List<_i35.PageRouteInfo>? children})
+class CompleteProfileFormRoute extends _i34.PageRouteInfo<void> {
+  const CompleteProfileFormRoute({List<_i34.PageRouteInfo>? children})
     : super(CompleteProfileFormRoute.name, initialChildren: children);
 
   static const String name = 'CompleteProfileFormRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       return const _i12.CompleteProfileFormView();
@@ -591,12 +591,12 @@ class CompleteProfileFormRoute extends _i35.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i13.CustomersView]
-class CustomersRoute extends _i35.PageRouteInfo<CustomersRouteArgs> {
+class CustomersRoute extends _i34.PageRouteInfo<CustomersRouteArgs> {
   CustomersRoute({
-    _i36.Key? key,
-    required _i43.UserRoleEnum role,
-    _i47.UserModel? user,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i42.UserRoleEnum role,
+    _i46.UserModel? user,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          CustomersRoute.name,
          args: CustomersRouteArgs(key: key, role: role, user: user),
@@ -605,7 +605,7 @@ class CustomersRoute extends _i35.PageRouteInfo<CustomersRouteArgs> {
 
   static const String name = 'CustomersRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<CustomersRouteArgs>();
@@ -621,11 +621,11 @@ class CustomersRoute extends _i35.PageRouteInfo<CustomersRouteArgs> {
 class CustomersRouteArgs {
   const CustomersRouteArgs({this.key, required this.role, this.user});
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i43.UserRoleEnum role;
+  final _i42.UserRoleEnum role;
 
-  final _i47.UserModel? user;
+  final _i46.UserModel? user;
 
   @override
   String toString() {
@@ -645,13 +645,13 @@ class CustomersRouteArgs {
 
 /// generated route for
 /// [_i14.DashboardRouter]
-class DashboardRouter extends _i35.PageRouteInfo<void> {
-  const DashboardRouter({List<_i35.PageRouteInfo>? children})
+class DashboardRouter extends _i34.PageRouteInfo<void> {
+  const DashboardRouter({List<_i34.PageRouteInfo>? children})
     : super(DashboardRouter.name, initialChildren: children);
 
   static const String name = 'DashboardRouter';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       return const _i14.DashboardRouter();
@@ -661,13 +661,13 @@ class DashboardRouter extends _i35.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i15.DashboardView]
-class DashboardRoute extends _i35.PageRouteInfo<void> {
-  const DashboardRoute({List<_i35.PageRouteInfo>? children})
+class DashboardRoute extends _i34.PageRouteInfo<void> {
+  const DashboardRoute({List<_i34.PageRouteInfo>? children})
     : super(DashboardRoute.name, initialChildren: children);
 
   static const String name = 'DashboardRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       return const _i15.DashboardView();
@@ -677,13 +677,13 @@ class DashboardRoute extends _i35.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i16.ExercisesView]
-class ExercisesRoute extends _i35.PageRouteInfo<void> {
-  const ExercisesRoute({List<_i35.PageRouteInfo>? children})
+class ExercisesRoute extends _i34.PageRouteInfo<void> {
+  const ExercisesRoute({List<_i34.PageRouteInfo>? children})
     : super(ExercisesRoute.name, initialChildren: children);
 
   static const String name = 'ExercisesRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       return const _i16.ExercisesView();
@@ -692,12 +692,12 @@ class ExercisesRoute extends _i35.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i17.ForgotPasswordView]
-class ForgotPasswordRoute extends _i35.PageRouteInfo<ForgotPasswordRouteArgs> {
+/// [ForgotPasswordView]
+class ForgotPasswordRoute extends _i34.PageRouteInfo<ForgotPasswordRouteArgs> {
   ForgotPasswordRoute({
-    _i36.Key? key,
-    required _i48.AuthCubit authCubit,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required AuthCubit authCubit,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          ForgotPasswordRoute.name,
          args: ForgotPasswordRouteArgs(key: key, authCubit: authCubit),
@@ -706,11 +706,11 @@ class ForgotPasswordRoute extends _i35.PageRouteInfo<ForgotPasswordRouteArgs> {
 
   static const String name = 'ForgotPasswordRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ForgotPasswordRouteArgs>();
-      return _i17.ForgotPasswordView(key: args.key, authCubit: args.authCubit);
+      return ForgotPasswordView(key: args.key, authCubit: args.authCubit);
     },
   );
 }
@@ -718,9 +718,9 @@ class ForgotPasswordRoute extends _i35.PageRouteInfo<ForgotPasswordRouteArgs> {
 class ForgotPasswordRouteArgs {
   const ForgotPasswordRouteArgs({this.key, required this.authCubit});
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i48.AuthCubit authCubit;
+  final AuthCubit authCubit;
 
   @override
   String toString() {
@@ -739,45 +739,45 @@ class ForgotPasswordRouteArgs {
 }
 
 /// generated route for
-/// [_i18.HealthAssesmentView]
-class HealthAssesmentRoute extends _i35.PageRouteInfo<void> {
-  const HealthAssesmentRoute({List<_i35.PageRouteInfo>? children})
+/// [_i17.HealthAssesmentView]
+class HealthAssesmentRoute extends _i34.PageRouteInfo<void> {
+  const HealthAssesmentRoute({List<_i34.PageRouteInfo>? children})
     : super(HealthAssesmentRoute.name, initialChildren: children);
 
   static const String name = 'HealthAssesmentRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i18.HealthAssesmentView();
+      return const _i17.HealthAssesmentView();
     },
   );
 }
 
 /// generated route for
-/// [_i19.IntroView]
-class IntroRoute extends _i35.PageRouteInfo<void> {
-  const IntroRoute({List<_i35.PageRouteInfo>? children})
+/// [_i18.IntroView]
+class IntroRoute extends _i34.PageRouteInfo<void> {
+  const IntroRoute({List<_i34.PageRouteInfo>? children})
     : super(IntroRoute.name, initialChildren: children);
 
   static const String name = 'IntroRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i19.IntroView();
+      return const _i18.IntroView();
     },
   );
 }
 
 /// generated route for
-/// [_i20.ItemsView]
-class ItemsRoute extends _i35.PageRouteInfo<ItemsRouteArgs> {
+/// [_i19.ItemsView]
+class ItemsRoute extends _i34.PageRouteInfo<ItemsRouteArgs> {
   ItemsRoute({
-    _i36.Key? key,
-    required _i43.UserRoleEnum role,
-    _i41.LevelModel? level,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i42.UserRoleEnum role,
+    _i40.LevelModel? level,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          ItemsRoute.name,
          args: ItemsRouteArgs(key: key, role: role, level: level),
@@ -786,11 +786,11 @@ class ItemsRoute extends _i35.PageRouteInfo<ItemsRouteArgs> {
 
   static const String name = 'ItemsRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ItemsRouteArgs>();
-      return _i20.ItemsView(key: args.key, role: args.role, level: args.level);
+      return _i19.ItemsView(key: args.key, role: args.role, level: args.level);
     },
   );
 }
@@ -798,11 +798,11 @@ class ItemsRoute extends _i35.PageRouteInfo<ItemsRouteArgs> {
 class ItemsRouteArgs {
   const ItemsRouteArgs({this.key, required this.role, this.level});
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i43.UserRoleEnum role;
+  final _i42.UserRoleEnum role;
 
-  final _i41.LevelModel? level;
+  final _i40.LevelModel? level;
 
   @override
   String toString() {
@@ -821,12 +821,12 @@ class ItemsRouteArgs {
 }
 
 /// generated route for
-/// [_i21.LevelsView]
-class LevelsRoute extends _i35.PageRouteInfo<LevelsRouteArgs> {
+/// [_i20.LevelsView]
+class LevelsRoute extends _i34.PageRouteInfo<LevelsRouteArgs> {
   LevelsRoute({
-    _i36.Key? key,
-    required _i43.UserRoleEnum role,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i42.UserRoleEnum role,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          LevelsRoute.name,
          args: LevelsRouteArgs(key: key, role: role),
@@ -835,11 +835,11 @@ class LevelsRoute extends _i35.PageRouteInfo<LevelsRouteArgs> {
 
   static const String name = 'LevelsRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<LevelsRouteArgs>();
-      return _i21.LevelsView(key: args.key, role: args.role);
+      return _i20.LevelsView(key: args.key, role: args.role);
     },
   );
 }
@@ -847,9 +847,9 @@ class LevelsRoute extends _i35.PageRouteInfo<LevelsRouteArgs> {
 class LevelsRouteArgs {
   const LevelsRouteArgs({this.key, required this.role});
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i43.UserRoleEnum role;
+  final _i42.UserRoleEnum role;
 
   @override
   String toString() {
@@ -868,28 +868,28 @@ class LevelsRouteArgs {
 }
 
 /// generated route for
-/// [_i22.MealsView]
-class MealsRoute extends _i35.PageRouteInfo<void> {
-  const MealsRoute({List<_i35.PageRouteInfo>? children})
+/// [_i21.MealsView]
+class MealsRoute extends _i34.PageRouteInfo<void> {
+  const MealsRoute({List<_i34.PageRouteInfo>? children})
     : super(MealsRoute.name, initialChildren: children);
 
   static const String name = 'MealsRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i22.MealsView();
+      return const _i21.MealsView();
     },
   );
 }
 
 /// generated route for
-/// [_i23.NotificationsView]
-class NotificationsRoute extends _i35.PageRouteInfo<NotificationsRouteArgs> {
+/// [_i22.NotificationsView]
+class NotificationsRoute extends _i34.PageRouteInfo<NotificationsRouteArgs> {
   NotificationsRoute({
-    _i36.Key? key,
-    required _i43.UserRoleEnum role,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i42.UserRoleEnum role,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          NotificationsRoute.name,
          args: NotificationsRouteArgs(key: key, role: role),
@@ -898,11 +898,11 @@ class NotificationsRoute extends _i35.PageRouteInfo<NotificationsRouteArgs> {
 
   static const String name = 'NotificationsRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<NotificationsRouteArgs>();
-      return _i23.NotificationsView(key: args.key, role: args.role);
+      return _i22.NotificationsView(key: args.key, role: args.role);
     },
   );
 }
@@ -910,9 +910,9 @@ class NotificationsRoute extends _i35.PageRouteInfo<NotificationsRouteArgs> {
 class NotificationsRouteArgs {
   const NotificationsRouteArgs({this.key, required this.role});
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i43.UserRoleEnum role;
+  final _i42.UserRoleEnum role;
 
   @override
   String toString() {
@@ -931,60 +931,60 @@ class NotificationsRouteArgs {
 }
 
 /// generated route for
-/// [_i24.PointsView]
-class PointsRoute extends _i35.PageRouteInfo<void> {
-  const PointsRoute({List<_i35.PageRouteInfo>? children})
+/// [_i23.PointsView]
+class PointsRoute extends _i34.PageRouteInfo<void> {
+  const PointsRoute({List<_i34.PageRouteInfo>? children})
     : super(PointsRoute.name, initialChildren: children);
 
   static const String name = 'PointsRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i24.PointsView();
+      return const _i23.PointsView();
     },
   );
 }
 
 /// generated route for
-/// [_i25.PrivacyPolicyView]
-class PrivacyPolicyRoute extends _i35.PageRouteInfo<void> {
-  const PrivacyPolicyRoute({List<_i35.PageRouteInfo>? children})
+/// [_i24.PrivacyPolicyView]
+class PrivacyPolicyRoute extends _i34.PageRouteInfo<void> {
+  const PrivacyPolicyRoute({List<_i34.PageRouteInfo>? children})
     : super(PrivacyPolicyRoute.name, initialChildren: children);
 
   static const String name = 'PrivacyPolicyRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i25.PrivacyPolicyView();
+      return const _i24.PrivacyPolicyView();
     },
   );
 }
 
 /// generated route for
-/// [_i26.ProfileView]
-class ProfileRoute extends _i35.PageRouteInfo<void> {
-  const ProfileRoute({List<_i35.PageRouteInfo>? children})
+/// [_i25.ProfileView]
+class ProfileRoute extends _i34.PageRouteInfo<void> {
+  const ProfileRoute({List<_i34.PageRouteInfo>? children})
     : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i26.ProfileView();
+      return const _i25.ProfileView();
     },
   );
 }
 
 /// generated route for
-/// [_i27.ResetPasswordView]
-class ResetPasswordRoute extends _i35.PageRouteInfo<ResetPasswordRouteArgs> {
+/// [_i26.ResetPasswordView]
+class ResetPasswordRoute extends _i34.PageRouteInfo<ResetPasswordRouteArgs> {
   ResetPasswordRoute({
-    _i36.Key? key,
-    required _i48.AuthCubit authCubit,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    required _i47.AuthCubit authCubit,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          ResetPasswordRoute.name,
          args: ResetPasswordRouteArgs(key: key, authCubit: authCubit),
@@ -993,11 +993,11 @@ class ResetPasswordRoute extends _i35.PageRouteInfo<ResetPasswordRouteArgs> {
 
   static const String name = 'ResetPasswordRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ResetPasswordRouteArgs>();
-      return _i27.ResetPasswordView(key: args.key, authCubit: args.authCubit);
+      return _i26.ResetPasswordView(key: args.key, authCubit: args.authCubit);
     },
   );
 }
@@ -1005,9 +1005,9 @@ class ResetPasswordRoute extends _i35.PageRouteInfo<ResetPasswordRouteArgs> {
 class ResetPasswordRouteArgs {
   const ResetPasswordRouteArgs({this.key, required this.authCubit});
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i48.AuthCubit authCubit;
+  final _i47.AuthCubit authCubit;
 
   @override
   String toString() {
@@ -1026,44 +1026,44 @@ class ResetPasswordRouteArgs {
 }
 
 /// generated route for
-/// [_i28.SelectPlanView]
-class SelectPlanRoute extends _i35.PageRouteInfo<void> {
-  const SelectPlanRoute({List<_i35.PageRouteInfo>? children})
+/// [_i27.SelectPlanView]
+class SelectPlanRoute extends _i34.PageRouteInfo<void> {
+  const SelectPlanRoute({List<_i34.PageRouteInfo>? children})
     : super(SelectPlanRoute.name, initialChildren: children);
 
   static const String name = 'SelectPlanRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i28.SelectPlanView();
+      return const _i27.SelectPlanView();
     },
   );
 }
 
 /// generated route for
-/// [_i29.SettingsView]
-class SettingsRoute extends _i35.PageRouteInfo<void> {
-  const SettingsRoute({List<_i35.PageRouteInfo>? children})
+/// [_i28.SettingsView]
+class SettingsRoute extends _i34.PageRouteInfo<void> {
+  const SettingsRoute({List<_i34.PageRouteInfo>? children})
     : super(SettingsRoute.name, initialChildren: children);
 
   static const String name = 'SettingsRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i29.SettingsView();
+      return const _i28.SettingsView();
     },
   );
 }
 
 /// generated route for
-/// [_i30.SignInView]
-class SignInRoute extends _i35.PageRouteInfo<SignInRouteArgs> {
+/// [_i29.SignInView]
+class SignInRoute extends _i34.PageRouteInfo<SignInRouteArgs> {
   SignInRoute({
-    _i36.Key? key,
-    _i36.VoidCallback? onSignedIn,
-    List<_i35.PageRouteInfo>? children,
+    _i35.Key? key,
+    _i35.VoidCallback? onSignedIn,
+    List<_i34.PageRouteInfo>? children,
   }) : super(
          SignInRoute.name,
          args: SignInRouteArgs(key: key, onSignedIn: onSignedIn),
@@ -1072,13 +1072,13 @@ class SignInRoute extends _i35.PageRouteInfo<SignInRouteArgs> {
 
   static const String name = 'SignInRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<SignInRouteArgs>(
         orElse: () => const SignInRouteArgs(),
       );
-      return _i30.SignInView(key: args.key, onSignedIn: args.onSignedIn);
+      return _i29.SignInView(key: args.key, onSignedIn: args.onSignedIn);
     },
   );
 }
@@ -1086,9 +1086,9 @@ class SignInRoute extends _i35.PageRouteInfo<SignInRouteArgs> {
 class SignInRouteArgs {
   const SignInRouteArgs({this.key, this.onSignedIn});
 
-  final _i36.Key? key;
+  final _i35.Key? key;
 
-  final _i36.VoidCallback? onSignedIn;
+  final _i35.VoidCallback? onSignedIn;
 
   @override
   String toString() {
@@ -1107,65 +1107,65 @@ class SignInRouteArgs {
 }
 
 /// generated route for
-/// [_i31.SplashView]
-class SplashRoute extends _i35.PageRouteInfo<void> {
-  const SplashRoute({List<_i35.PageRouteInfo>? children})
+/// [_i30.SplashView]
+class SplashRoute extends _i34.PageRouteInfo<void> {
+  const SplashRoute({List<_i34.PageRouteInfo>? children})
     : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i31.SplashView();
+      return const _i30.SplashView();
     },
   );
 }
 
 /// generated route for
-/// [_i32.TermsAndConditionsView]
-class TermsAndConditionsRoute extends _i35.PageRouteInfo<void> {
-  const TermsAndConditionsRoute({List<_i35.PageRouteInfo>? children})
+/// [_i31.TermsAndConditionsView]
+class TermsAndConditionsRoute extends _i34.PageRouteInfo<void> {
+  const TermsAndConditionsRoute({List<_i34.PageRouteInfo>? children})
     : super(TermsAndConditionsRoute.name, initialChildren: children);
 
   static const String name = 'TermsAndConditionsRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i32.TermsAndConditionsView();
+      return const _i31.TermsAndConditionsView();
     },
   );
 }
 
 /// generated route for
-/// [_i33.UserNavigationView]
-class UserNavigationRoute extends _i35.PageRouteInfo<void> {
-  const UserNavigationRoute({List<_i35.PageRouteInfo>? children})
+/// [_i32.UserNavigationView]
+class UserNavigationRoute extends _i34.PageRouteInfo<void> {
+  const UserNavigationRoute({List<_i34.PageRouteInfo>? children})
     : super(UserNavigationRoute.name, initialChildren: children);
 
   static const String name = 'UserNavigationRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i33.UserNavigationView();
+      return const _i32.UserNavigationView();
     },
   );
 }
 
 /// generated route for
-/// [_i34.UsersView]
-class UsersRoute extends _i35.PageRouteInfo<void> {
-  const UsersRoute({List<_i35.PageRouteInfo>? children})
+/// [_i33.UsersView]
+class UsersRoute extends _i34.PageRouteInfo<void> {
+  const UsersRoute({List<_i34.PageRouteInfo>? children})
     : super(UsersRoute.name, initialChildren: children);
 
   static const String name = 'UsersRoute';
 
-  static _i35.PageInfo page = _i35.PageInfo(
+  static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i34.UsersView();
+      return const _i33.UsersView();
     },
   );
 }

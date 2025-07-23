@@ -1,23 +1,23 @@
-part of 'ingredients_service.dart';
+part of 'meals_service.dart';
 
-@Injectable(as: IngredientsService)
-class IngredientsServiceImp implements IngredientsService {
+@Injectable(as: MealsService)
+class MealsServiceImp implements MealsService {
   final dio = DioClient();
 
   @override
-  Future<PaginatedModel<IngredientModel>> getIngredients({
+  Future<PaginatedModel<MealModel>> getMeals({
     int? perPage = 10,
     int? page,
   }) async {
     try {
       final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
-      final endpoint = "/v1/dietitian/ingredients?$pageParam&$perPageParam";
+      final endpoint = "/v1/dietitian/meals?$pageParam&$perPageParam";
 
       final response = await dio.get(endpoint);
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
-        (json) => IngredientModel.fromJson(json as Map<String, dynamic>),
+        (json) => MealModel.fromJson(json as Map<String, dynamic>),
       );
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
@@ -26,13 +26,12 @@ class IngredientsServiceImp implements IngredientsService {
   }
 
   @override
-  Future<IngredientModel> addIngredient(
-    AddIngredientModel model, {
+  Future<MealModel> addMeal(
+    AddMealModel model, {
     int? id,
   }) async {
     final isAdd = id == null;
-    final endpoint =
-        isAdd ? "/v1/dietitian/ingredients" : "/v1/dietitian/ingredients/$id";
+    final endpoint = isAdd ? "/v1/admin/dietitian" : "/v1/dietitian/meals/$id";
 
     try {
       final map = model.toJson();
@@ -42,7 +41,7 @@ class IngredientsServiceImp implements IngredientsService {
 
       final response = await dio.post(endpoint, data: map);
       final data = response.data["data"] as Map<String, dynamic>;
-      return IngredientModel.fromJson(data);
+      return MealModel.fromJson(data);
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;

@@ -38,7 +38,8 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
     this.filters = const [],
     this.customButtons = const [],
     this.onSelected,
-    this.isSelectable = false,
+    this.onLongPress,
+    this.checkSelected,
   });
 
   final String? header;
@@ -49,9 +50,10 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
   final double bottomHeight;
   final List<Widget> filters;
   final List<Widget> customButtons;
-  final bool isSelectable;
   final void Function(String input)? onSearchChanged;
   final void Function(int page, int perPage) onPageChanged;
+  final void Function(T item)? onLongPress;
+  final bool Function(T item)? checkSelected;
   final void Function(T item)? onSelected;
   final void Function(T item)? onShowDetailsTap;
   final void Function(T item)? onEditTap;
@@ -65,17 +67,6 @@ class _MainDataTableState<T extends DataTableModel>
     extends State<MainDataTable<T>> implements MainDataTableCallbacks {
   late int page = widget.items.meta.currentPage;
   late int perPage = widget.items.meta.perPage;
-
-  late List<bool> selected =
-      List.generate(widget.items.data.length, (index) => false);
-
-  @override
-  void didUpdateWidget(covariant MainDataTable<T> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!widget.isSelectable) {
-      selected = List.generate(widget.items.data.length, (index) => false);
-    }
-  }
 
   @override
   void onFirstPageTap() => widget.onPageChanged(1, perPage);
@@ -211,18 +202,13 @@ class _MainDataTableState<T extends DataTableModel>
             ),
           );
           return DataRow2(
-            color: WidgetStatePropertyAll(selected[index]
-                ? context.cs.secondary.withValues(alpha: 0.4)
-                : context.cs.surface),
-            onSelectChanged: (value) {
-              if (widget.onSelected != null) {
-                setState(() {
-                  selected[index] = !selected[index];
-                });
-                widget.onSelected?.call(item);
-              }
-            },
-            //selected: selected[index],
+            color: WidgetStatePropertyAll(
+              widget.checkSelected?.call(item) ?? false
+                  ? context.cs.secondary.withValues(alpha: 0.4)
+                  : context.cs.surface,
+            ),
+            onLongPress: () => widget.onLongPress?.call(item),
+            onSelectChanged: (value) => widget.onSelected?.call(item),
             cells: cells,
           );
         }),

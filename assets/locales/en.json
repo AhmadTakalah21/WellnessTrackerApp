@@ -252,5 +252,18 @@
   "at_least_one_subscriber" : "At least one subscriber should be selected",
   "points_required" : "Points are required",
   "points_added" : "Points are added successfully",
-  "add_points" : "Add Points"
+  "add_points" : "Add Points",
+  "assign_diet_plan" : "Assign diet plan",
+  "description_required": "Description is required",
+  "ingredients_required": "Ingredients are required",
+  "plan_days_required": "Plan days are required",
+  "no_ingredients": "No ingredients found",
+  "ingredient_added": "Ingredient added successfully",
+  "ingredient_updated": "Ingredient updated successfully",
+  "no_meals": "No meals found",
+  "meal_added": "Meal added successfully",
+  "meal_updated": "Meal updated successfully",
+  "no_meal_plans": "No meal plans found",
+  "meal_plan_added": "Meal plan added successfully",
+  "meal_plan_updated": "Meal plan updated successfully"
 }

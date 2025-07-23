@@ -252,5 +252,18 @@
   "at_least_one_subscriber" : "يجب اختيار مشترك واحد على الأقل",
   "points_required" : "النقاط مطلوبة",
   "points_added" : "تم إضافة النقاط بنجاح",
-  "add_points" : "إضافة نقاط"
+  "add_points" : "إضافة نقاط",
+  "assign_diet_plan" : "إضافة برنامج غذائي",
+  "description_required": "الوصف مطلوب",
+  "ingredients_required": "المكونات مطلوبة",
+  "plan_days_required": "أيام الخطة مطلوبة",
+  "no_ingredients": "لا توجد مكونات",
+  "ingredient_added": "تم إضافة المكون بنجاح",
+  "ingredient_updated": "تم تحديث المكون بنجاح",
+  "no_meals": "لا توجد وجبات",
+  "meal_added": "تم إضافة الوجبة بنجاح",
+  "meal_updated": "تم تحديث الوجبة بنجاح",
+  "no_meal_plans": "لا توجد خطط وجبات",
+  "meal_plan_added": "تم إضافة خطة الوجبات بنجاح",
+  "meal_plan_updated": "تم تحديث خطة الوجبات بنجاح"
 }
