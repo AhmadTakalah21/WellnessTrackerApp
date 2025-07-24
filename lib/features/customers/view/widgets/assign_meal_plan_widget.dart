@@ -14,6 +14,8 @@ import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
+import '../../../meal_plans/view/add_meal_plans.dart';
+
 class AssignMealPlanView extends StatelessWidget {
   const AssignMealPlanView({
     super.key,
@@ -71,42 +73,73 @@ class _AssignMealPlanWidgetState extends State<AssignMealPlanWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: SingleChildScrollView(
-        padding: AppConstants.padding16,
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      insetPadding: const EdgeInsets.all(24),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        constraints: const BoxConstraints(minWidth: 400, maxWidth: 600),
         child: Column(
-          spacing: 20,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
-                Spacer(),
-                SizedBox(width: 16),
-                Text(
-                  "assign_meal_plan".tr(),
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
+                Expanded(
+                  child: Text(
+                    "assign_meal_plan".tr(),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                Spacer(),
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.close, color: AppColors.greyShade),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close, color: AppColors.greyShade),
                 ),
               ],
             ),
+            const SizedBox(height: 24),
             BlocBuilder<MealPlansCubit, GeneralMealPlansState>(
               builder: (context, state) {
                 if (state is MealPlansLoading) {
-                  return LoadingIndicator();
+                  return const Center(child: LoadingIndicator());
                 } else if (state is MealPlansSuccess) {
-                  return MainDropDownWidget(
-                    items: state.mealPlans.data,
-                    prefixIcon: Icons.food_bank,
-                    hintText: "select_meal_plan".tr(),
-                    labelText: "meal_plans".tr(),
-                    onChanged: widget.customersCubit.setPlanId,
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: MainDropDownWidget(
+                          items: state.mealPlans.data,
+                          prefixIcon: Icons.food_bank,
+                          hintText: "select_meal_plan".tr(),
+                          labelText: "meal_plans".tr(),
+                          onChanged: widget.customersCubit.setPlanId,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Tooltip(
+                        message: "add_meal_plan".tr(),
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => const AddMealPlanDialog(),
+                            ).then((_) {
+                              mealPlansCubit.getMealPlans(UserRoleEnum.dietitian);
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: AppColors.secondaryColor,
+                            ),
+                            child: const Icon(Icons.add, color: Colors.white, size: 24),
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 } else if (state is MealPlansEmpty) {
                   return MainErrorWidget(
@@ -120,10 +153,11 @@ class _AssignMealPlanWidgetState extends State<AssignMealPlanWidget> {
                     onTryAgainTap: onTryAgainTap,
                   );
                 } else {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
               },
             ),
+            const SizedBox(height: 32),
             BlocConsumer<CustomersCubit, GeneralCustomersState>(
               listener: (context, state) {
                 if (state is AssignMealPlanSuccess) {
@@ -134,13 +168,16 @@ class _AssignMealPlanWidgetState extends State<AssignMealPlanWidget> {
                 }
               },
               builder: (context, state) {
-                bool isLoading = state is AssignMealPlanLoading;
-                return MainActionButton(
-                  onTap: isLoading ? () {} : () => widget.onSave(),
-                  text: "save".tr(),
-                  child: isLoading
-                      ? LoadingIndicator(size: 20, color: context.cs.surface)
-                      : null,
+                final isLoading = state is AssignMealPlanLoading;
+                return SizedBox(
+                  width: double.infinity,
+                  child: MainActionButton(
+                    onTap: isLoading ? () {} : () => widget.onSave(),
+                    text: "save".tr(),
+                    child: isLoading
+                        ? LoadingIndicator(size: 20, color: context.cs.surface)
+                        : null,
+                  ),
                 );
               },
             ),
@@ -150,3 +187,6 @@ class _AssignMealPlanWidgetState extends State<AssignMealPlanWidget> {
     );
   }
 }
+
+
+

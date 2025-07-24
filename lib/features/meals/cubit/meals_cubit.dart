@@ -7,7 +7,6 @@ import 'package:wellnesstrackerapp/features/meals/model/meal_model/meal_model.da
 import 'package:wellnesstrackerapp/features/meals/model/add_meal_model/add_meal_model.dart';
 import 'package:wellnesstrackerapp/features/meals/service/meals_service.dart';
 import 'package:wellnesstrackerapp/global/models/meal_type_enum.dart';
-
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
@@ -61,10 +60,10 @@ class MealsCubit extends Cubit<GeneralMealsState> {
   }
 
   Future<void> getMeals(
-    UserRoleEnum role, {
-    int? perPage = 10,
-    int? page,
-  }) async {
+      UserRoleEnum role, {
+        int? perPage = 10,
+        int? page,
+      }) async {
     emit(MealsLoading());
     try {
       if (isClosed) return;
@@ -95,6 +94,17 @@ class MealsCubit extends Cubit<GeneralMealsState> {
       emit(AddMealSuccess(result, message));
     } catch (e) {
       emit(AddMealFail(e.toString()));
+    }
+  }
+
+  /// ✅ دالة جديدة: جلب جميع الوجبات دفعة واحدة (لاستخدامها في التخطيط)
+  Future<List<MealModel>> getAllMeals() async {
+    try {
+      final result = await mealService.getMeals(page: 1, perPage: 1000);
+      _allMeals = result.data;
+      return _allMeals;
+    } catch (e) {
+      return [];
     }
   }
 }

@@ -9,7 +9,7 @@ part of 'add_meal_model.dart';
 AddMealModel _$AddMealModelFromJson(Map<String, dynamic> json) => AddMealModel(
       name: json['name'] as String?,
       description: json['description'] as String?,
-      type: MealTypeEnum.fromJson((json['type'] as num).toInt()),
+      type: MealTypeEnum.fromJson(json['type']),
       link: json['link'] as String?,
       ingredients: (json['ingredients'] as List<dynamic>?)
           ?.map((e) => IngredientItemModel.fromJson(e as Map<String, dynamic>))

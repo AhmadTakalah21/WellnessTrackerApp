@@ -10,13 +10,14 @@ MealModel _$MealModelFromJson(Map<String, dynamic> json) => MealModel(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String,
-      type: MealTypeEnum.fromJson((json['type'] as num).toInt()),
+      type: MealTypeEnum.fromJson(json['type']),
       link: json['link'] as String,
       dietitianId: (json['dietitian_id'] as num).toInt(),
-      ingredients: (json['ingredients'] as List<dynamic>)
-          .map((e) =>
-              IngredientWithQuantityModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      ingredients: (json['ingredients'] as List<dynamic>?)
+              ?.map((e) => IngredientWithQuantityModel.fromJson(
+                  e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$MealModelToJson(MealModel instance) => <String, dynamic>{

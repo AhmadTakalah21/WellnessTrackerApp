@@ -21,5 +21,11 @@ enum DayEnum implements DropDownItemModel {
 
   static int toJson(DayEnum day) => day.id;
 
-  static DayEnum fromJson(int id) => values[id - 1];
+  static DayEnum fromJson(dynamic id) {
+    final int? value = int.tryParse(id.toString());
+    if (value != null && value >= 1 && value <= values.length) {
+      return values[value - 1];
+    }
+    throw Exception("Invalid DayEnum value: $id");
+  }
 }

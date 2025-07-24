@@ -265,5 +265,16 @@
   "meal_updated": "Meal updated successfully",
   "no_meal_plans": "No meal plans found",
   "meal_plan_added": "Meal plan added successfully",
-  "meal_plan_updated": "Meal plan updated successfully"
+  "meal_plan_updated": "Meal plan updated successfully",
+  "assign_meal_plan" : "Assign meal plan",
+  "select_meal_plan" : "Select meal plan",
+  "meal_plans" : "meal plans",
+  "day" : "day",
+  "add_meal_plan": "Add meal plan",
+  "meal_plan_name": "meal plan name",
+  "meal_plan_name_required": "meal plan name required",
+  "select_meals_for": "select meals for {}",
+  "meals_selected": "meals selected"
+
+
 }

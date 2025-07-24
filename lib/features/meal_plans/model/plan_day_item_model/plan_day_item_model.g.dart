@@ -8,7 +8,7 @@ part of 'plan_day_item_model.dart';
 
 PlanDayItemModel _$PlanDayItemModelFromJson(Map<String, dynamic> json) =>
     PlanDayItemModel(
-      day: DayEnum.fromJson((json['day'] as num).toInt()),
+      day: DayEnum.fromJson(json['day']),
       meals: (json['meals'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),

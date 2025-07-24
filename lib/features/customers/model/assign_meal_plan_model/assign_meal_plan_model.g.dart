@@ -12,12 +12,12 @@ AssignMealPlanModel _$AssignMealPlanModelFromJson(Map<String, dynamic> json) =>
               ?.map((e) => (e as num).toInt())
               .toList() ??
           const [],
-      planId: (json['planId'] as num?)?.toInt(),
+      planId: (json['plan_id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$AssignMealPlanModelToJson(
         AssignMealPlanModel instance) =>
     <String, dynamic>{
       'users': instance.users,
-      'planId': instance.planId,
+      'plan_id': instance.planId,
     };

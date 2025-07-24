@@ -24,15 +24,13 @@ import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/add_adv
 import 'package:wellnesstrackerapp/features/app_manager/view/app_manager_view.dart'
     as _i6;
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart' as _i47;
-import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart'
     as _i43;
 import 'package:wellnesstrackerapp/features/auth/view/auth_router.dart' as _i9;
-import 'package:wellnesstrackerapp/features/auth/view/forget_password_view.dart';
+import 'package:wellnesstrackerapp/features/auth/view/forget_password_view.dart'
+    as _i17;
 import 'package:wellnesstrackerapp/features/auth/view/profile_form_view.dart'
     as _i12;
-import 'package:wellnesstrackerapp/features/auth/view/reset_password_view.dart'
-    as _i26;
 import 'package:wellnesstrackerapp/features/auth/view/sign_in_view.dart'
     as _i29;
 import 'package:wellnesstrackerapp/features/auth_manager/view/auth_manager_view.dart'
@@ -55,13 +53,13 @@ import 'package:wellnesstrackerapp/features/dashboard/view/dashboard_view.dart'
 import 'package:wellnesstrackerapp/features/exercises/view/exercises_view.dart'
     as _i16;
 import 'package:wellnesstrackerapp/features/health_assesment/view/health_assesment_view.dart'
-    as _i17;
-import 'package:wellnesstrackerapp/features/intro/view/into_view.dart' as _i18;
+    as _i18;
+import 'package:wellnesstrackerapp/features/intro/view/into_view.dart' as _i19;
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart'
     as _i38;
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart'
     as _i39;
-import 'package:wellnesstrackerapp/features/items/view/items_view.dart' as _i19;
+import 'package:wellnesstrackerapp/features/items/view/items_view.dart' as _i20;
 import 'package:wellnesstrackerapp/features/items/view/widgets/add_item_view.dart'
     as _i3;
 import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart'
@@ -69,18 +67,18 @@ import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart'
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart'
     as _i40;
 import 'package:wellnesstrackerapp/features/levels/view/levels_view.dart'
-    as _i20;
+    as _i21;
 import 'package:wellnesstrackerapp/features/levels/view/widgets/add_level_widget.dart'
     as _i4;
-import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart' as _i21;
+import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart' as _i22;
 import 'package:wellnesstrackerapp/features/notifications/view/notifications_view.dart'
-    as _i22;
-import 'package:wellnesstrackerapp/features/points/view/points_view.dart'
     as _i23;
-import 'package:wellnesstrackerapp/features/privacy_policy/view/privacy_policy_view.dart'
+import 'package:wellnesstrackerapp/features/points/view/points_view.dart'
     as _i24;
-import 'package:wellnesstrackerapp/features/profile/view/profile_view.dart'
+import 'package:wellnesstrackerapp/features/privacy_policy/view/privacy_policy_view.dart'
     as _i25;
+import 'package:wellnesstrackerapp/features/profile/view/profile_view.dart'
+    as _i26;
 import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart'
     as _i27;
 import 'package:wellnesstrackerapp/features/settings/view/settings_view.dart'
@@ -95,6 +93,8 @@ import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.da
     as _i46;
 import 'package:wellnesstrackerapp/features/users/view/users_view.dart' as _i33;
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart' as _i42;
+
+import '../../features/auth/view/reset_password_view.dart';
 
 /// generated route for
 /// [_i1.AboutUsView]
@@ -692,11 +692,11 @@ class ExercisesRoute extends _i34.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ForgotPasswordView]
+/// [_i17.ForgotPasswordView]
 class ForgotPasswordRoute extends _i34.PageRouteInfo<ForgotPasswordRouteArgs> {
   ForgotPasswordRoute({
     _i35.Key? key,
-    required AuthCubit authCubit,
+    required _i47.AuthCubit authCubit,
     List<_i34.PageRouteInfo>? children,
   }) : super(
          ForgotPasswordRoute.name,
@@ -710,7 +710,7 @@ class ForgotPasswordRoute extends _i34.PageRouteInfo<ForgotPasswordRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ForgotPasswordRouteArgs>();
-      return ForgotPasswordView(key: args.key, authCubit: args.authCubit);
+      return _i17.ForgotPasswordView(key: args.key, authCubit: args.authCubit);
     },
   );
 }
@@ -720,7 +720,7 @@ class ForgotPasswordRouteArgs {
 
   final _i35.Key? key;
 
-  final AuthCubit authCubit;
+  final _i47.AuthCubit authCubit;
 
   @override
   String toString() {
@@ -739,7 +739,7 @@ class ForgotPasswordRouteArgs {
 }
 
 /// generated route for
-/// [_i17.HealthAssesmentView]
+/// [_i18.HealthAssesmentView]
 class HealthAssesmentRoute extends _i34.PageRouteInfo<void> {
   const HealthAssesmentRoute({List<_i34.PageRouteInfo>? children})
     : super(HealthAssesmentRoute.name, initialChildren: children);
@@ -749,13 +749,13 @@ class HealthAssesmentRoute extends _i34.PageRouteInfo<void> {
   static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i17.HealthAssesmentView();
+      return const _i18.HealthAssesmentView();
     },
   );
 }
 
 /// generated route for
-/// [_i18.IntroView]
+/// [_i19.IntroView]
 class IntroRoute extends _i34.PageRouteInfo<void> {
   const IntroRoute({List<_i34.PageRouteInfo>? children})
     : super(IntroRoute.name, initialChildren: children);
@@ -765,13 +765,13 @@ class IntroRoute extends _i34.PageRouteInfo<void> {
   static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i18.IntroView();
+      return const _i19.IntroView();
     },
   );
 }
 
 /// generated route for
-/// [_i19.ItemsView]
+/// [_i20.ItemsView]
 class ItemsRoute extends _i34.PageRouteInfo<ItemsRouteArgs> {
   ItemsRoute({
     _i35.Key? key,
@@ -790,7 +790,7 @@ class ItemsRoute extends _i34.PageRouteInfo<ItemsRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ItemsRouteArgs>();
-      return _i19.ItemsView(key: args.key, role: args.role, level: args.level);
+      return _i20.ItemsView(key: args.key, role: args.role, level: args.level);
     },
   );
 }
@@ -821,7 +821,7 @@ class ItemsRouteArgs {
 }
 
 /// generated route for
-/// [_i20.LevelsView]
+/// [_i21.LevelsView]
 class LevelsRoute extends _i34.PageRouteInfo<LevelsRouteArgs> {
   LevelsRoute({
     _i35.Key? key,
@@ -839,7 +839,7 @@ class LevelsRoute extends _i34.PageRouteInfo<LevelsRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<LevelsRouteArgs>();
-      return _i20.LevelsView(key: args.key, role: args.role);
+      return _i21.LevelsView(key: args.key, role: args.role);
     },
   );
 }
@@ -868,7 +868,7 @@ class LevelsRouteArgs {
 }
 
 /// generated route for
-/// [_i21.MealsView]
+/// [_i22.MealsView]
 class MealsRoute extends _i34.PageRouteInfo<void> {
   const MealsRoute({List<_i34.PageRouteInfo>? children})
     : super(MealsRoute.name, initialChildren: children);
@@ -878,13 +878,13 @@ class MealsRoute extends _i34.PageRouteInfo<void> {
   static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i21.MealsView();
+      return const _i22.MealsView();
     },
   );
 }
 
 /// generated route for
-/// [_i22.NotificationsView]
+/// [_i23.NotificationsView]
 class NotificationsRoute extends _i34.PageRouteInfo<NotificationsRouteArgs> {
   NotificationsRoute({
     _i35.Key? key,
@@ -902,7 +902,7 @@ class NotificationsRoute extends _i34.PageRouteInfo<NotificationsRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<NotificationsRouteArgs>();
-      return _i22.NotificationsView(key: args.key, role: args.role);
+      return _i23.NotificationsView(key: args.key, role: args.role);
     },
   );
 }
@@ -931,7 +931,7 @@ class NotificationsRouteArgs {
 }
 
 /// generated route for
-/// [_i23.PointsView]
+/// [_i24.PointsView]
 class PointsRoute extends _i34.PageRouteInfo<void> {
   const PointsRoute({List<_i34.PageRouteInfo>? children})
     : super(PointsRoute.name, initialChildren: children);
@@ -941,13 +941,13 @@ class PointsRoute extends _i34.PageRouteInfo<void> {
   static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i23.PointsView();
+      return const _i24.PointsView();
     },
   );
 }
 
 /// generated route for
-/// [_i24.PrivacyPolicyView]
+/// [_i25.PrivacyPolicyView]
 class PrivacyPolicyRoute extends _i34.PageRouteInfo<void> {
   const PrivacyPolicyRoute({List<_i34.PageRouteInfo>? children})
     : super(PrivacyPolicyRoute.name, initialChildren: children);
@@ -957,13 +957,13 @@ class PrivacyPolicyRoute extends _i34.PageRouteInfo<void> {
   static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i24.PrivacyPolicyView();
+      return const _i25.PrivacyPolicyView();
     },
   );
 }
 
 /// generated route for
-/// [_i25.ProfileView]
+/// [_i26.ProfileView]
 class ProfileRoute extends _i34.PageRouteInfo<void> {
   const ProfileRoute({List<_i34.PageRouteInfo>? children})
     : super(ProfileRoute.name, initialChildren: children);
@@ -973,13 +973,13 @@ class ProfileRoute extends _i34.PageRouteInfo<void> {
   static _i34.PageInfo page = _i34.PageInfo(
     name,
     builder: (data) {
-      return const _i25.ProfileView();
+      return const _i26.ProfileView();
     },
   );
 }
 
 /// generated route for
-/// [_i26.ResetPasswordView]
+/// [ResetPasswordView]
 class ResetPasswordRoute extends _i34.PageRouteInfo<ResetPasswordRouteArgs> {
   ResetPasswordRoute({
     _i35.Key? key,
@@ -997,7 +997,7 @@ class ResetPasswordRoute extends _i34.PageRouteInfo<ResetPasswordRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ResetPasswordRouteArgs>();
-      return _i26.ResetPasswordView(key: args.key, authCubit: args.authCubit);
+      return ResetPasswordView(key: args.key, authCubit: args.authCubit);
     },
   );
 }

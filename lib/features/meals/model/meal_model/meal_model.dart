@@ -17,7 +17,7 @@ class MealModel {
     required this.type,
     required this.link,
     required this.dietitianId,
-    required this.ingredients,
+    this.ingredients = const [],
   });
 
   final int id;
@@ -31,6 +31,7 @@ class MealModel {
   @JsonKey(name: 'dietitian_id')
   final int dietitianId;
 
+  @JsonKey(defaultValue: [])
   final List<IngredientWithQuantityModel> ingredients;
 
   factory MealModel.fromString(String str) =>

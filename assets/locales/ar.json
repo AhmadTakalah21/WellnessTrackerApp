@@ -265,5 +265,17 @@
   "meal_updated": "تم تحديث الوجبة بنجاح",
   "no_meal_plans": "لا توجد خطط وجبات",
   "meal_plan_added": "تم إضافة خطة الوجبات بنجاح",
-  "meal_plan_updated": "تم تحديث خطة الوجبات بنجاح"
+  "meal_plan_updated": "تم تحديث خطة الوجبات بنجاح",
+  "assign_meal_plan" : "اضافة برنامج غذائي",
+  "select_meal_plan" : "اختيار برنامج غذائي",
+  "meal_plans" : "خطة غذائية",
+  "day" : "اليوم",
+  "add_meal_plan": "إضافة برنامج غذائي",
+  "meal_plan_name": "اسم البرنامج الغذائي",
+  "meal_plan_name_required": "يرجى إدخال اسم البرنامج الغذائي",
+  "select_meals_for": "اختر الوجبات ليوم {}",
+  "meals_selected": "وجبة مختارة"
+
+
+
 }
