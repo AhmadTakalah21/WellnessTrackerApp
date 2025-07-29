@@ -33,7 +33,7 @@ class NotificationsServiceImp implements NotificationsService {
     required List<CustomerModel> userIds,
     XFile? image,
   }) async {
-    final endpoint = "/v1/${role.getApiRoute}/notifications";
+    final endpoint = "/v1/${role.getApiRoute}/notifications/send";
 
     try {
       final map = model.toJson();
