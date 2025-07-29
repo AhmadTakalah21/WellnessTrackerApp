@@ -274,7 +274,29 @@
   "meal_plan_name": "meal plan name",
   "meal_plan_name_required": "meal plan name required",
   "select_meals_for": "select meals for {}",
-  "meals_selected": "meals selected"
+  "meals_selected": "meals selected",
+  "add_meal": "Add Meal",
+  "meal_name": "Meal Name",
+  "meal_type": "Meal Type",
+  "breakfast": "Breakfast",
+  "lunch": "Lunch",
+  "dinner": "Dinner",
+  "snack": "Snack",
+  "video_instruction": "Video Instruction",
+  "video_link": "Video Link",
+  "upload_file": "Upload File",
+  "ingredients": "Ingredients",
+  "add_ingredient": "Add Ingredient",
+  "sunday": "Sunday",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday",
+  "choose_meals_days": "Choose Meals for Each Day",
+  "choose_meals": "Choose Meals"
+
 
 
 }
