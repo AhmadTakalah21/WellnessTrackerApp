@@ -15,6 +15,7 @@ import 'package:wellnesstrackerapp/global/widgets/additional_options_bottom_shee
 import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
 abstract class AddsAndOffersViewCallBacks {
@@ -141,14 +142,11 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: widget.role == UserRoleEnum.admin
-          ? AppBar(
-              centerTitle: true,
-              backgroundColor: context.cs.primary,
-              elevation: 10,
-              title: Text('adds_and_offers'.tr(), style: context.tt.titleLarge),
-            )
-          : null,
+      appBar: MainAppBar(
+        automaticallyImplyLeading: !widget.role.isUser,
+        title: 'adds_and_offers'.tr(),
+        hasLogout: widget.role.isUser,
+      ),
       body: Padding(
         padding: AppConstants.padding16,
         child: BlocBuilder<AddsAndOffersCubit, GeneralAddsAndOffersState>(

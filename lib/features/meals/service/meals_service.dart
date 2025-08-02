@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wellnesstrackerapp/features/meals/model/add_meal_model/add_meal_model.dart';

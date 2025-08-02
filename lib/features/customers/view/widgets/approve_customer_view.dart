@@ -112,14 +112,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
 
   @override
   void onEmployeeSelected(UserModel? employee) {
-    // TODO check this
-    if (selectedDepartment == DepartmentEnum.coach) {
-      widget.customersCubit.setCoachId(employee?.id);
-    } else if (selectedDepartment == DepartmentEnum.dietitian) {
-      widget.customersCubit.setDietitianId(employee?.id);
-    } else {
-      widget.customersCubit.setDoctorId(employee?.id);
-    }
+    widget.customersCubit.setEmployeeId(employee);
   }
 
   @override
@@ -147,6 +140,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
       body: SingleChildScrollView(
         padding: AppConstants.padding20,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: [
             const SizedBox(height: 5),
@@ -154,6 +148,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
             const SizedBox(height: 10),
             _buildDepartmentsDropDown(),
             _buildUsersDropDown(),
+           _buildSelectedEmployees(),
             _buildLevelsDropDown(),
             const SizedBox(height: 10),
             _buildSubmitButton(),
@@ -253,6 +248,36 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
           }
         },
       );
+
+  Widget _buildSelectedEmployees() {
+    return BlocBuilder<CustomersCubit, GeneralCustomersState>(
+      buildWhen: (previous, current) => current is SelectedSpecialistsState,
+      builder: (context, state) {
+        if (state is SelectedSpecialistsState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 10,
+            children: [
+              if (state.selectedDietitian != null)
+                Text(
+                  "selected dietitian :${state.selectedDietitian?.name} ",
+                ),
+              if (state.selectedCoach != null)
+                Text(
+                  "selected coach :${state.selectedCoach?.name} ",
+                ),
+              if (state.selectedDoctor != null)
+                Text(
+                  "selected doctor :${state.selectedDoctor?.name} ",
+                ),
+            ],
+          );
+        } else {
+          return SizedBox.shrink();
+        }
+      },
+    );
+  }
 
   Widget _buildLevelsDropDown() => BlocBuilder<LevelsCubit, GeneralLevelsState>(
         builder: (context, state) {

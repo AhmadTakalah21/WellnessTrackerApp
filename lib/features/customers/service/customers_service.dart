@@ -19,5 +19,6 @@ abstract class CustomersService {
   });
   Future<void> assignSubscriber(AssignSubscriberModel model);
   Future<void> addPoints(UserRoleEnum role,AddPointsModel model);
-  Future<void> assignMealPlan(UserRoleEnum role,AssignMealPlanModel model);
+  Future<void> assignMealPlan(AssignPlanModel model);
+  Future<void> assignExercisePlan(AssignPlanModel model);
 }

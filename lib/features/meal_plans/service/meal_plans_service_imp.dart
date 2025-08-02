@@ -5,14 +5,16 @@ class MealPlanServiceImp implements MealPlansService {
   final dio = DioClient();
 
   @override
-  Future<PaginatedModel<MealPlanModel>> getMealPlans({
+  Future<PaginatedModel<MealPlanModel>> getMealPlans(
+    UserRoleEnum role, {
     int? perPage = 10,
     int? page,
   }) async {
     try {
       final perPageParam = perPage != null ? "per_page=$perPage" : "";
       final pageParam = page != null ? "page=$page" : "";
-      final endpoint = "/v1/dietitian/meal-plans?$pageParam&$perPageParam";
+      final endpoint =
+          "/v1/${role.getApiRoute}/meal-plans?$pageParam&$perPageParam";
 
       final response = await dio.get(endpoint);
       return PaginatedModel.fromJson(
@@ -32,7 +34,7 @@ class MealPlanServiceImp implements MealPlansService {
   }) async {
     final isAdd = id == null;
     final endpoint =
-        isAdd ? "/v1/admin/meal-plans" : "/v1/admin/meal-plans/$id";
+        isAdd ? "/v1/dietitian/meal-plans" : "/v1/dietitian/meal-plans/$id";
 
     try {
       final map = model.toJson();

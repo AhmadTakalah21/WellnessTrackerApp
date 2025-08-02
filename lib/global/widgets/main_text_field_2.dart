@@ -14,11 +14,14 @@ class MainTextField2 extends StatefulWidget {
     this.validator,
     this.floatingLabelBehavior = FloatingLabelBehavior.auto,
     this.isPassword = false,
+    this.readOnly = false,
     this.onChanged,
     this.initialText,
     this.keyboardType,
     this.inputFormatters,
     this.isWithTitle = true,
+    this.suffix,
+    this.maxLines = 1,
   });
 
   final TextEditingController? controller;
@@ -27,12 +30,15 @@ class MainTextField2 extends StatefulWidget {
   final bool isWithTitle;
   final IconData icon;
   final bool isPassword;
+  final bool readOnly;
+  final int? maxLines;
   final String? hint;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
   final FloatingLabelBehavior floatingLabelBehavior;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final Widget? suffix;
 
   @override
   State<MainTextField2> createState() => _MainTextField2State();
@@ -57,12 +63,14 @@ class _MainTextField2State extends State<MainTextField2> {
           SizedBox(height: 10),
         ],
         TextFormField(
+          maxLines: widget.maxLines,
           inputFormatters: widget.inputFormatters,
           keyboardType: widget.keyboardType,
           initialValue: widget.initialText,
           controller: widget.controller,
           onChanged: widget.onChanged,
           obscureText: isVisible,
+          readOnly: widget.readOnly,
           style: context.tt.bodyMedium,
           decoration: InputDecoration(
             prefixIcon: Icon(widget.icon, color: context.cs.primary),
@@ -86,6 +94,7 @@ class _MainTextField2State extends State<MainTextField2> {
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: context.cs.primary, width: 2),
             ),
+            //suffix: widget.suffix,
             suffixIcon: widget.isPassword
                 ? IconButton(
                     onPressed: setVisible,
@@ -96,7 +105,7 @@ class _MainTextField2State extends State<MainTextField2> {
                       color: context.cs.primary,
                     ),
                   )
-                : null,
+                : widget.suffix,
           ),
           validator: widget.validator,
         ),

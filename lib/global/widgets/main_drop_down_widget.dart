@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -21,10 +22,12 @@ class MainDropDownWidget<T extends DropDownItemModel> extends StatefulWidget {
     this.icon,
     required this.onChanged,
     this.isEntityName = false,
+    this.onLongPress,
   });
 
   final List<T> items;
-  final ValueSetter<T?> onChanged;
+  final void Function(T?) onChanged;
+  final void Function(T)? onLongPress;
   final String hintText;
   final String labelText;
   final IconData prefixIcon;
@@ -131,9 +134,12 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
           items: widget.items.map((item) {
             return DropdownMenuItem(
               value: item,
-              child: Text(
-                isEntityName ? item.displayEntityName : item.displayName,
-                style: context.tt.bodyMedium,
+              child: InkWell(
+                onLongPress: () => widget.onLongPress?.call(item),
+                child: Text(
+                  isEntityName ? item.displayEntityName : item.displayName,
+                  style: context.tt.bodyMedium,
+                ),
               ),
             );
           }).toList(),
@@ -141,7 +147,8 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
             setState(() => selectedValue = value);
             widget.onChanged(value);
           },
-          validator: (value) => value == null ? widget.errorMessage : null,
+          validator: (value) =>
+              value == null ? widget.errorMessage?.tr() : null,
         ),
       ],
     );

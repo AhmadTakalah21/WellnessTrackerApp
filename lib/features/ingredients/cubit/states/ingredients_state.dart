@@ -7,9 +7,10 @@ class IngredientsLoading extends IngredientsState {}
 
 class IngredientsSuccess extends IngredientsState {
   final PaginatedModel<IngredientModel> ingredients;
+  final List<IngredientWithQuantityModel>? selected;
   final String? emptyMessage;
 
-  IngredientsSuccess(this.ingredients, this.emptyMessage);
+  IngredientsSuccess(this.ingredients, this.selected, this.emptyMessage);
 }
 
 class IngredientsEmpty extends IngredientsState {

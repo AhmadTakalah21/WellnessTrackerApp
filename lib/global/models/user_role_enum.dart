@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wellnesstrackerapp/global/models/user_view_on_permission_model.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 
-enum UserRoleEnum {
+enum UserRoleEnum implements DropDownItemModel {
   admin,
   user,
   doctor,
   coach,
   dietitian;
 
+  @override
   String get displayName => name.tr();
 
   static UserRoleEnum fromJson(String role) =>
@@ -109,13 +111,13 @@ enum UserRoleEnum {
           UserViewOnPermissionModel(
             title: "meals",
             icon: Icons.restaurant_menu_rounded,
-            screen: MealsRoute(),
+            screen: MealsRoute(role: this),
             color: Colors.green.shade400,
           ),
           UserViewOnPermissionModel(
             title: "exercises",
             icon: Icons.fitness_center_rounded,
-            screen: ExercisesRoute(),
+            screen: ExercisesRoute(role: this),
             color: Colors.blue.shade400,
           ),
           UserViewOnPermissionModel(
@@ -184,4 +186,23 @@ enum UserRoleEnum {
         ];
     }
   }
+
+  @override
+  String get displayEntityName {
+    switch (this) {
+      case UserRoleEnum.dietitian:
+        return "nutrition".tr();
+      case UserRoleEnum.coach:
+        return "sport".tr();
+      case UserRoleEnum.doctor:
+        return "medicine".tr();
+      case UserRoleEnum.admin:
+        return "admin".tr();
+      case UserRoleEnum.user:
+        return "user".tr();
+    }
+  }
+
+  @override
+  int get id => throw UnimplementedError();
 }

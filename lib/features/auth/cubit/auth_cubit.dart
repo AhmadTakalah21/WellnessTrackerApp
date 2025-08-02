@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl_phone_field/phone_number.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wellnesstrackerapp/features/auth/model/add_info_model/add_info_model.dart';
@@ -40,8 +41,9 @@ class AuthCubit extends Cubit<AuthState> {
     emit(TextFieldState(TextFieldType.email));
   }
 
-  void setPhone(String phone) {
-    postSignUpModel = postSignUpModel.copyWith(phoneNumber: () => phone);
+  void setPhone(PhoneNumber? phone) {
+    postSignUpModel =
+        postSignUpModel.copyWith(phoneNumber: () => phone?.completeNumber);
     emit(TextFieldState(TextFieldType.phone));
   }
 
@@ -76,6 +78,18 @@ class AuthCubit extends Cubit<AuthState> {
     emit(TextFieldState(TextFieldType.confirmPassword));
   }
 
+  void setInitialFormData() {
+    setGender(GenderEnum.male);
+    setAge(12);
+    setWeight(30);
+    setLength(120);
+    setWaistCircumference(10);
+    setChest(20);
+    setShoulder(10);
+    setThighCircumference(10);
+    setForearmCircumference(10);
+  }
+
   void setGender(GenderEnum? gender) {
     addInfoModel = addInfoModel.copyWith(gender: () => gender);
   }
@@ -84,40 +98,43 @@ class AuthCubit extends Cubit<AuthState> {
     addInfoModel = addInfoModel.copyWith(birthday: () => birthday);
   }
 
-  void setAge(String? age) {
-    addInfoModel = addInfoModel.copyWith(age: () => age);
+  void setAge(int age) {
+    addInfoModel = addInfoModel.copyWith(age: () => age.toString());
   }
 
-  void setWeight(String? weight) {
-    addInfoModel = addInfoModel.copyWith(weight: () => weight);
+  void setWeight(int weight) {
+    addInfoModel = addInfoModel.copyWith(weight: () => weight.toString());
   }
 
-  void setLength(String? length) {
-    addInfoModel = addInfoModel.copyWith(length: () => length);
+  void setLength(int length) {
+    addInfoModel = addInfoModel.copyWith(length: () => length.toString());
   }
 
   void setChronicDiseases(String? value) {
     addInfoModel = addInfoModel.copyWith(chronicDiseases: () => value);
   }
 
-  void setWaistCircumference(String? value) {
-    addInfoModel = addInfoModel.copyWith(waistCircumference: () => value);
+  void setWaistCircumference(int value) {
+    addInfoModel =
+        addInfoModel.copyWith(waistCircumference: () => value.toString());
   }
 
-  void setChest(String? value) {
-    addInfoModel = addInfoModel.copyWith(chest: () => value);
+  void setChest(int value) {
+    addInfoModel = addInfoModel.copyWith(chest: () => value.toString());
   }
 
-  void setShoulder(String? value) {
-    addInfoModel = addInfoModel.copyWith(shoulder: () => value);
+  void setShoulder(int value) {
+    addInfoModel = addInfoModel.copyWith(shoulder: () => value.toString());
   }
 
-  void setThighCircumference(String? value) {
-    addInfoModel = addInfoModel.copyWith(thighCircumference: () => value);
+  void setThighCircumference(int value) {
+    addInfoModel =
+        addInfoModel.copyWith(thighCircumference: () => value.toString());
   }
 
-  void setForearmCircumference(String? value) {
-    addInfoModel = addInfoModel.copyWith(forearmCircumference: () => value);
+  void setForearmCircumference(int value) {
+    addInfoModel =
+        addInfoModel.copyWith(forearmCircumference: () => value.toString());
   }
 
   void resetAddInfoModel() {

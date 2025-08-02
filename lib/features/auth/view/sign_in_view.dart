@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl_phone_field/phone_number.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
@@ -17,13 +18,15 @@ import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field.dart';
+import 'package:wellnesstrackerapp/global/widgets/phone_text_field.dart';
 
 abstract class SignInViewCallbacks {
   void onEmailChanged(String email);
   void onEmailSubmitted(String email);
   void onUsernameChanged(String username);
   void onUsernameSubmitted(String username);
-  void onPhoneChanged(String phone);
+  void onPhoneChanged(PhoneNumber? phone);
+  //void onPhoneChanged(String phone);
   void onPhoneSubmitted(String phone);
   void onPasswordChanged(String password);
   void onPasswordSubmitted(String password);
@@ -172,8 +175,11 @@ class _SignInPageState extends State<SignInPage>
   @override
   void onUsernameSubmitted(String username) => phoneFocusNode.requestFocus();
 
+  // @override
+  // void onPhoneChanged(String phone) => authCubit.setPhone(phone);
+
   @override
-  void onPhoneChanged(String phone) => authCubit.setPhone(phone);
+  void onPhoneChanged(PhoneNumber? phone) => authCubit.setPhone(phone);
 
   @override
   void onPhoneSubmitted(String phone) => passwordFocusNode.requestFocus();
@@ -269,7 +275,8 @@ class _SignInPageState extends State<SignInPage>
                           const SizedBox(height: 20),
                           _buildEmailTextField(),
                           _buildUsernameTextField(),
-                          _buildPhoneTextField(),
+                          _buildMobileNumebrField(),
+                          //_buildPhoneTextField(),
                           SizedBox(height: 10),
                           _buildPasswordTextField(),
                           _buildConfirmPasswordTextField(),
@@ -378,7 +385,7 @@ class _SignInPageState extends State<SignInPage>
     );
   }
 
-  Widget _buildPhoneTextField() {
+  Widget _buildMobileNumebrField() {
     return AnimatedSizeAndFade.showHide(
       show: !isShowSignIn,
       child: Column(
@@ -390,13 +397,13 @@ class _SignInPageState extends State<SignInPage>
             builder: (context, state) {
               final isBuild =
                   state is TextFieldState && state.type == TextFieldType.phone;
-              return MainTextField(
+              return PhoneTextField(
+                focusNode: phoneFocusNode,
+                onChanged: onPhoneChanged,
+                onSubmitted: onPhoneSubmitted,
                 errorText: isBuild ? state.error : null,
                 prefixIcon: Icon(Icons.phone, color: context.cs.onSecondary),
                 labelText: "phone_number".tr(),
-                onChanged: onPhoneChanged,
-                onSubmitted: onPhoneSubmitted,
-                focusNode: phoneFocusNode,
                 textInputType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               );

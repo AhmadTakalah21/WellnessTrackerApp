@@ -32,6 +32,14 @@ import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart
     as _i935;
 import 'package:wellnesstrackerapp/features/customers/service/customers_service.dart'
     as _i299;
+import 'package:wellnesstrackerapp/features/exercise_plans/cubit/exercise_plans_cubit.dart'
+    as _i371;
+import 'package:wellnesstrackerapp/features/exercise_plans/service/exercise_plans_service.dart'
+    as _i738;
+import 'package:wellnesstrackerapp/features/exercises/cubit/exercises_cubit.dart'
+    as _i279;
+import 'package:wellnesstrackerapp/features/exercises/service/exercises_service.dart'
+    as _i750;
 import 'package:wellnesstrackerapp/features/ingredients/cubit/ingredients_cubit.dart'
     as _i535;
 import 'package:wellnesstrackerapp/features/ingredients/service/ingredients_service.dart'
@@ -70,6 +78,8 @@ import 'package:wellnesstrackerapp/features/users/service/users_service.dart'
     as _i936;
 import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart'
     as _i396;
+import 'package:wellnesstrackerapp/global/blocs/upload_file_cubit/cubit/upload_file_cubit.dart'
+    as _i188;
 import 'package:wellnesstrackerapp/global/blocs/upload_image_cubit/cubit/upload_image_cubit.dart'
     as _i540;
 import 'package:wellnesstrackerapp/global/blocs/user_roles_cubit/cubit/user_roles_cubit.dart'
@@ -96,6 +106,7 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final appModule = _$AppModule();
+    gh.factory<_i188.UploadFileCubit>(() => _i188.UploadFileCubit());
     gh.factory<_i540.UploadImageCubit>(() => _i540.UploadImageCubit());
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => appModule.prefs,
@@ -129,6 +140,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i826.MealsCubit(gh<_i287.MealsService>()));
     gh.factory<_i1053.NotificationsCubit>(
         () => _i1053.NotificationsCubit(gh<_i959.NotificationsService>()));
+    gh.factory<_i750.ExercisesService>(() => _i750.ExercisesServiceImp());
     gh.factory<_i32.PointsCubit>(
         () => _i32.PointsCubit(gh<_i985.PointsService>()));
     gh.factory<_i744.MealPlansCubit>(
@@ -136,10 +148,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i457.CodesCubit>(
         () => _i457.CodesCubit(gh<_i249.CodesService>()));
     gh.factory<_i474.UserRoleService>(() => _i474.UserRoleServiceImp());
+    gh.factory<_i738.ExercisePlansService>(
+        () => _i738.ExercisePlansServiceImp());
     gh.factory<_i535.IngredientsCubit>(
         () => _i535.IngredientsCubit(gh<_i85.IngredientsService>()));
     gh.factory<_i715.LevelsService>(() => _i715.LevelsServiceImp());
     gh.factory<_i1044.ItemService>(() => _i1044.ItemServiceImp());
+    gh.factory<_i279.ExercisesCubit>(
+        () => _i279.ExercisesCubit(gh<_i750.ExercisesService>()));
     gh.factory<_i299.CustomersService>(() => _i299.CustomersServiceImp());
     gh.factory<_i602.AddsAndOffersService>(
         () => _i602.AddsAndOffersServiceImp());
@@ -157,6 +173,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i253.UsersCubit(gh<_i936.UserService>()));
     gh.factory<_i972.AddsAndOffersCubit>(
         () => _i972.AddsAndOffersCubit(gh<_i602.AddsAndOffersService>()));
+    gh.factory<_i371.ExercisePlansCubit>(
+        () => _i371.ExercisePlansCubit(gh<_i738.ExercisePlansService>()));
     gh.factory<_i803.ItemsCubit>(
         () => _i803.ItemsCubit(gh<_i1044.ItemService>()));
     gh.factory<_i726.LevelsCubit>(

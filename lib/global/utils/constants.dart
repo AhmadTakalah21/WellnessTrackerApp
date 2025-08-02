@@ -16,6 +16,7 @@ abstract class AppConstants {
   static const borderRadius30 = BorderRadius.all(Radius.circular(30));
   static const borderRadius20 = BorderRadius.all(Radius.circular(20));
   static const borderRadius15 = BorderRadius.all(Radius.circular(15));
+  static const borderRadius12 = BorderRadius.all(Radius.circular(12));
   static const borderRadius10 = BorderRadius.all(Radius.circular(10));
   static const borderRadius5 = BorderRadius.all(Radius.circular(5));
   static const borderRadiusT20 = BorderRadius.vertical(

@@ -8,8 +8,8 @@ part of 'ingredient_item_model.dart';
 
 IngredientItemModel _$IngredientItemModelFromJson(Map<String, dynamic> json) =>
     IngredientItemModel(
-      ingredientId: (json['ingredient_id'] as num).toInt(),
-      quantity: (json['quantity'] as num).toInt(),
+      ingredientId: (json['ingredient_id'] as num?)?.toInt(),
+      quantity: (json['quantity'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$IngredientItemModelToJson(

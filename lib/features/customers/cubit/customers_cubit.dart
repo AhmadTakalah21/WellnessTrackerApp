@@ -7,7 +7,7 @@ import 'package:wellnesstrackerapp/features/customers/model/assign_meal_plan_mod
 import 'package:wellnesstrackerapp/features/customers/model/assign_subscriber_model/assign_subscriber_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/service/customers_service.dart';
-import 'package:wellnesstrackerapp/features/meal_plans/model/meal_plan_model/meal_plan_model.dart';
+import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
@@ -16,6 +16,7 @@ part 'states/customers_state.dart';
 part 'states/general_customers_state.dart';
 part 'states/assign_subscriber_state.dart';
 part 'states/assign_meal_plan_state.dart';
+//part 'states/assign_exercise_plan_state.dart';
 part 'states/add_points_state.dart';
 
 @injectable
@@ -27,8 +28,12 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   MetaModel? meta;
   AssignSubscriberModel model = const AssignSubscriberModel();
   AddPointsModel addPointsModel = const AddPointsModel();
-  AssignMealPlanModel assignMealPlanModel = const AssignMealPlanModel();
+  AssignPlanModel assignPlanModel = const AssignPlanModel();
   List<int> userIds = [];
+
+  UserModel? selectedDietitian;
+  UserModel? selectedCoach;
+  UserModel? selectedDoctor;
 
   String lastQuery = '';
   String? lastStatus;
@@ -38,16 +43,26 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     model = model.copyWith(userId: () => id);
   }
 
-  void setCoachId(int? id) {
-    model = model.copyWith(coachId: () => id);
-  }
-
-  void setDoctorId(int? id) {
-    model = model.copyWith(doctorId: () => id);
-  }
-
-  void setDietitianId(int? id) {
-    model = model.copyWith(dietitianId: () => id);
+  void setEmployeeId(UserModel? user) {
+    if (user != null) {
+      if (user.role.isCoach) {
+        model = model.copyWith(coachId: () => user.id);
+        selectedCoach = user;
+      } else if (user.role.isDietitian) {
+        model = model.copyWith(dietitianId: () => user.id);
+        selectedDietitian = user;
+      } else if (user.role.isDoctor) {
+        model = model.copyWith(doctorId: () => user.id);
+        selectedDoctor = user;
+      } else {
+        return;
+      }
+      emit(SelectedSpecialistsState(
+        selectedDietitian,
+        selectedCoach,
+        selectedDoctor,
+      ));
+    }
   }
 
   void setLevelId(int? id) {
@@ -71,8 +86,8 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     }
   }
 
-  void setPlanId(MealPlanModel? plan) {
-    assignMealPlanModel = assignMealPlanModel.copyWith(planId: () => plan?.id);
+  void setPlanId(int? planId) {
+    assignPlanModel = assignPlanModel.copyWith(planId: () => planId);
   }
 
   void clearUserIds() => userIds.clear();
@@ -82,11 +97,19 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   }
 
   void resetAssignSubscriberModel() {
+    selectedDietitian = null;
+    selectedCoach = null;
+    selectedDoctor = null;
+    emit(SelectedSpecialistsState(
+      selectedDietitian,
+      selectedCoach,
+      selectedDoctor,
+    ));
     model = const AssignSubscriberModel();
   }
 
-  void resetAssignMealPlanModel() {
-    assignMealPlanModel = const AssignMealPlanModel();
+  void resetAssignPlanModel() {
+    assignPlanModel = const AssignPlanModel();
   }
 
   Future<void> getCustomers(
@@ -150,6 +173,9 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   }
 
   Future<void> assignSubscriber() async {
+    print(model.coachId);
+    print(model.dietitianId);
+    print(model.doctorId);
     emit(AssignSubscriberLoading());
     try {
       if (isClosed) return;
@@ -174,16 +200,29 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     }
   }
 
-  Future<void> assignMealPlan(UserRoleEnum role) async {
-    assignMealPlanModel = assignMealPlanModel.copyWith(users: () => userIds);
-    emit(AssignMealPlanLoading());
+  Future<void> assignMealPlan() async {
+    assignPlanModel = assignPlanModel.copyWith(users: () => userIds);
+    emit(AssignPlanLoading());
     try {
       if (isClosed) return;
-      await customerService.assignMealPlan(role, assignMealPlanModel);
-      emit(AssignMealPlanSuccess("meal_plan_assigned".tr()));
+      await customerService.assignMealPlan(assignPlanModel);
+      emit(AssignPlanSuccess("meal_plan_assigned".tr()));
     } catch (e) {
       if (isClosed) return;
-      emit(AssignMealPlanFail(e.toString()));
+      emit(AssignPlanFail(e.toString()));
+    }
+  }
+
+  Future<void> assignExercisePlan() async {
+    assignPlanModel = assignPlanModel.copyWith(users: () => userIds);
+    emit(AssignPlanLoading());
+    try {
+      if (isClosed) return;
+      await customerService.assignExercisePlan(assignPlanModel);
+      emit(AssignPlanSuccess("exercise_plan_assigned".tr()));
+    } catch (e) {
+      if (isClosed) return;
+      emit(AssignPlanFail(e.toString()));
     }
   }
 }

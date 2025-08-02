@@ -28,11 +28,17 @@ abstract class AppColors {
   static const greenShade = Color(0xFF198754);
   static const yellow = Colors.yellow;
 
-  static  List<BoxShadow> firstShadow = [
+  static List<BoxShadow> firstShadow = [
     BoxShadow(
-      color: black.withValues(alpha: 0.3),
-      offset: Offset(0, 4),
-      blurRadius: 4
+        color: black.withValues(alpha: 0.3),
+        offset: Offset(0, 4),
+        blurRadius: 4),
+  ];
+  static List<BoxShadow> secondShadow = [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.05),
+      blurRadius: 8,
+      offset: const Offset(0, 4),
     ),
   ];
 

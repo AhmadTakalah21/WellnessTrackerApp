@@ -8,6 +8,7 @@ import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_
 import 'package:wellnesstrackerapp/global/extensions/date_x.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/utils/utils.dart';
 import 'package:wellnesstrackerapp/global/widgets/choose_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
@@ -125,18 +126,15 @@ class _AddAdvPageState extends State<AddAdvPage>
                     onChanged: widget.advCubit.setTitleEn,
                     label: 'title_en'.tr(),
                     icon: Icons.title,
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'title_en_required'.tr()
-                        : null,
+                    validator: (val) =>
+                        Utils.validateInput(val, InputTextType.none),
                   ),
                   MainTextField2(
                     initialText: adv?.title.ar,
                     onChanged: widget.advCubit.setTitleAr,
                     label: 'title_ar'.tr(),
                     icon: Icons.title,
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'title_ar_required'.tr()
-                        : null,
+                    validator: (val) => Utils.validateInput(val, InputTextType.none),
                   ),
                   MainTextField2(
                     initialText: adv?.description.en,

@@ -13,19 +13,23 @@ class MutliSelectorDropDown<T extends DropDownItemModel>
     required this.hintText,
     required this.labelText,
     required this.prefixIcon,
+    this.selectedValues,
     this.errorMessage,
-    this.selectedValue,
     this.icon,
+    this.validator,
+    this.onLongPress,
   });
 
   final List<T> items;
-  final ValueSetter<List<T>> onChanged;
+  final void Function(List<T>) onChanged;
+  final void Function(T)? onLongPress;
   final String hintText;
   final String labelText;
   final IconData prefixIcon;
   final String? errorMessage;
-  final T? selectedValue;
+  final List<T>? selectedValues;
   final IconData? icon;
+  final String? Function(T? value)? validator;
 
   @override
   State<MutliSelectorDropDown<T>> createState() =>
@@ -34,7 +38,7 @@ class MutliSelectorDropDown<T extends DropDownItemModel>
 
 class _MutliSelectorDropDownState<T extends DropDownItemModel>
     extends State<MutliSelectorDropDown<T>> {
-  List<T> selectedItems = [];
+  late List<T> selectedItems = widget.selectedValues ?? [];
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +67,7 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
                   builder: (context, menuSetState) {
                     final isSelected = selectedItems.contains(item);
                     return InkWell(
+                      onLongPress: () => widget.onLongPress?.call(item),
                       onTap: () {
                         isSelected
                             ? selectedItems.remove(item)
@@ -105,8 +110,7 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
               );
             }).toList(),
             value: selectedItems.isEmpty ? null : selectedItems.last,
-            onChanged: (value) {
-            },
+            onChanged: (value) {},
             selectedItemBuilder: (context) {
               return widget.items.map(
                 (item) {
@@ -116,11 +120,8 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
                       (selectedItems.map((item) => item.displayName))
                           .toList()
                           .join(', '),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      maxLines: 1,
+                      style: const TextStyle(fontSize: 14),
+                      maxLines: null,
                     ),
                   );
                 },

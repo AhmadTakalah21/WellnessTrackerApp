@@ -122,7 +122,7 @@ class _PointsPageState extends State<PointsPage>
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 45.0),
+        padding: const EdgeInsets.only(bottom: 75),
         child: MainFloatingButton(
           icon: Icons.storefront_outlined,
           onTap: onGoToStoreTap,

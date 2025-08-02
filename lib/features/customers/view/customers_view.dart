@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/add_points_widget.dart';
+import 'package:wellnesstrackerapp/features/customers/view/widgets/additional_customer_options_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/approve_customer_view.dart';
+import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_exercise_plan_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_meal_plan_widget.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
@@ -27,7 +29,10 @@ abstract class CustomersViewCallbacks {
   void onLongPress(CustomerModel customer);
   void onAddPoints();
   void onAssignDietPlan();
+  void onAssignExercisePlan();
   void onSubmitAddPoints();
+  void onSubmitDietPlan();
+  void onSubmitExercisePlan();
   void onTryAgainTap();
   void onSelected(CustomerModel customer);
 }
@@ -103,7 +108,10 @@ class CustomersPageState extends State<CustomersPage>
           ),
         );
       }
-    }
+    } else if (widget.role.isDietitian) {
+    } else if (widget.role.isCoach) {
+    } else if (widget.role.isDoctor) {
+    } else {}
   }
 
   @override
@@ -113,54 +121,30 @@ class CustomersPageState extends State<CustomersPage>
   }
 
   @override
+  void onSubmitExercisePlan() => customersCubit.assignExercisePlan();
+
+  @override
+  void onSubmitDietPlan() => customersCubit.assignMealPlan();
+
+  @override
   void onLongPress(CustomerModel customer) {
     if (customersCubit.isSelected(customer)) {
+      var onAssignPlan = onAssignDietPlan;
+      String text = "assign_diet_plan";
+      if (widget.role.isDietitian) {
+      } else if (widget.role.isCoach) {
+        onAssignPlan = onAssignExercisePlan;
+        text = "assign_exercise_plan";
+      } else if (widget.role.isDoctor) {}
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         shape:
             RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
-        builder: (context) => Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: AppConstants.padding16,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Center(
-                      child: Text(
-                        "additional_options".tr(),
-                        style: context.tt.headlineMedium,
-                      ),
-                    ),
-                    TextButton.icon(
-                      icon: Icon(Icons.add_circle_outline),
-                      onPressed: onAddPoints,
-                      label: Text(
-                        "add_points".tr(),
-                        style: context.tt.titleMedium?.copyWith(
-                          color: context.cs.primary,
-                        ),
-                      ),
-                    ),
-                    TextButton.icon(
-                      icon: Icon(Icons.edit),
-                      onPressed: onAssignDietPlan,
-                      label: Text(
-                        "assign_diet_plan".tr(),
-                        style: context.tt.titleMedium?.copyWith(
-                          color: context.cs.primary,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            ),
-          ],
+        builder: (context) => AdditionalCustomerOptionsWidget(
+          onAddPoints: onAddPoints,
+          assignPlanText: text,
+          onAssignPlan: onAssignPlan,
         ),
       );
     }
@@ -181,6 +165,20 @@ class CustomersPageState extends State<CustomersPage>
   }
 
   @override
+  void onAssignExercisePlan() {
+    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AssignExercisePlanView(
+          customersCubit: customersCubit,
+          onSave: onSubmitExercisePlan,
+        );
+      },
+    );
+  }
+
+  @override
   void onAssignDietPlan() {
     Navigator.pop(context);
     showDialog(
@@ -188,7 +186,7 @@ class CustomersPageState extends State<CustomersPage>
       builder: (context) {
         return AssignMealPlanView(
           customersCubit: customersCubit,
-          onSave: onSubmitAddPoints,
+          onSave: onSubmitDietPlan,
         );
       },
     );
@@ -254,7 +252,7 @@ class CustomersPageState extends State<CustomersPage>
                             onDeleteTap: isAdmin ? onDeleteTap : null,
                             onSearchChanged: onSearchChanged,
                             onSelected:
-                                widget.role.isDietitian ? onSelected : null,
+                                !widget.role.isAdmin ? onSelected : null,
                             checkSelected: customersCubit.isSelected,
                             onLongPress: onLongPress,
                             searchHint: 'search_customer',

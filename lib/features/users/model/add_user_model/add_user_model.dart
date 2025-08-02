@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'add_user_model.g.dart';
 
@@ -14,7 +15,7 @@ class AddUserModel {
     String? email,
     String? password,
     String? phone,
-    String? role,
+    UserRoleEnum? role,
     //bool? isActive,
   })  : _name = name,
         _email = email,
@@ -27,7 +28,7 @@ class AddUserModel {
   final String? _email;
   final String? _password;
   final String? _phone;
-  final String? _role;
+  final UserRoleEnum? _role;
 
   // @JsonKey(name: 'is_active')
   // final bool? _isActive;
@@ -37,7 +38,7 @@ class AddUserModel {
     String? Function()? email,
     String? Function()? password,
     String? Function()? phone,
-    String? Function()? role,
+    UserRoleEnum? Function()? role,
     //bool? Function()? isActive,
   }) {
     return AddUserModel(
@@ -46,7 +47,7 @@ class AddUserModel {
       password: password != null ? password() : _password,
       phone: phone != null ? phone() : _phone,
       role: role != null ? role() : _role,
-     // isActive: isActive != null ? isActive() : _isActive,
+      // isActive: isActive != null ? isActive() : _isActive,
     );
   }
 
@@ -78,8 +79,9 @@ class AddUserModel {
     return _phone;
   }
 
-  String get role {
-    if (_role == null || _role.isEmpty) {
+  @JsonKey(fromJson: UserRoleEnum.fromJson, toJson: UserRoleEnum.toJson)
+  UserRoleEnum get role {
+    if (_role == null) {
       throw "role_required".tr();
     }
     return _role;

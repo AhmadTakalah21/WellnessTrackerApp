@@ -11,6 +11,7 @@ AddMealModel _$AddMealModelFromJson(Map<String, dynamic> json) => AddMealModel(
       description: json['description'] as String?,
       type: MealTypeEnum.fromJson(json['type']),
       link: json['link'] as String?,
+      file: json['link_file'] as String?,
       ingredients: (json['ingredients'] as List<dynamic>?)
           ?.map((e) => IngredientItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -22,5 +23,5 @@ Map<String, dynamic> _$AddMealModelToJson(AddMealModel instance) =>
       'description': instance.description,
       'type': MealTypeEnum.toJson(instance.type),
       'link': instance.link,
-      'ingredients': instance.ingredients,
+      'link_file': Utils.nullableFileToJson(instance.file),
     };

@@ -9,6 +9,7 @@ import 'package:wellnesstrackerapp/features/terms_and_conditions/view/terms_and_
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 
 abstract class ProfileViewCallbacks {
   void onSettingsTap();
@@ -79,6 +80,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MainAppBar(title: 'profile'.tr()),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),

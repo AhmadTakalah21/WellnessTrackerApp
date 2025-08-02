@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:wellnesstrackerapp/global/models/department_enum.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:wellnesstrackerapp/global/utils/utils.dart';
@@ -73,7 +73,7 @@ class _AddUserWidgetState extends State<AddUserWidget> {
     }
   }
 
-  void selectRole(DepartmentEnum? role) => usersCubit.setRole(role?.name);
+  void selectRole(UserRoleEnum? role) => usersCubit.setRole(role);
 
   void onCancelTap() => Navigator.pop(context);
 
@@ -132,7 +132,7 @@ class _AddUserWidgetState extends State<AddUserWidget> {
         icon: LucideIcons.user,
         hint: 'John Doe',
         onChanged: usersCubit.setName,
-        validator: Utils.validateEmptyValue,
+        validator: (val) => Utils.validateInput(val, InputTextType.none),
       );
 
   Widget _buildEmailTextField(UserModel? user) => MainTextField2(
@@ -142,14 +142,14 @@ class _AddUserWidgetState extends State<AddUserWidget> {
         hint: 'example@mail.com',
         keyboardType: TextInputType.emailAddress,
         onChanged: usersCubit.setEmail,
-        validator: Utils.validateEmail,
+        validator: (val) => Utils.validateInput(val, InputTextType.email),
       );
 
   Widget _buildPasswordTextField() => MainTextField2(
         label: 'password'.tr(),
         icon: LucideIcons.lock,
         onChanged: usersCubit.setPassword,
-        validator: Utils.validatePassword,
+        validator: (val) => Utils.validateInput(val, InputTextType.password),
       );
 
   Widget _buildPhoneTextField(UserModel? user) => MainTextField2(
@@ -157,14 +157,14 @@ class _AddUserWidgetState extends State<AddUserWidget> {
         label: 'phone'.tr(),
         icon: LucideIcons.phone,
         onChanged: usersCubit.setPhone,
-        validator: Utils.validatePhone,
+        validator: (val) => Utils.validateInput(val, InputTextType.phone),
       );
 
   Widget _buildRoleDropDown(UserModel? user) {
-    final selectedRole = DepartmentEnum.values
-        .firstWhereOrNull((role) => role.name == user?.role);
+    final selectedRole = UserRoleEnum.values
+        .firstWhereOrNull((role) => role.name == user?.role.name);
     return MainDropDownWidget(
-      items: DepartmentEnum.values,
+      items: UserRoleEnum.values,
       selectedValue: selectedRole,
       onChanged: selectRole,
       hintText: 'select_role'.tr(),

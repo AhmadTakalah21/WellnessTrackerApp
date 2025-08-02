@@ -1,24 +1,24 @@
 part of '../meals_cubit.dart';
 
 @immutable
-sealed class MealState extends GeneralMealsState {}
+sealed class MealsState extends GeneralMealsState {}
 
-class MealsLoading extends MealState {}
+class MealsLoading extends MealsState {}
 
-class MealsSuccess extends MealState {
+class MealsSuccess extends MealsState {
   final PaginatedModel<MealModel> meals;
   final String? emptyMessage;
 
   MealsSuccess(this.meals, this.emptyMessage);
 }
 
-class MealsEmpty extends MealState {
+class MealsEmpty extends MealsState {
   final String message;
 
   MealsEmpty(this.message);
 }
 
-class MealsFail extends MealState {
+class MealsFail extends MealsState {
   final String error;
 
   MealsFail(this.error);

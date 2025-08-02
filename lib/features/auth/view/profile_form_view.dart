@@ -2,7 +2,6 @@ import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
@@ -12,23 +11,13 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_date_picker.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 
 abstract class CompleteProfileFormViewCallBacks {
-  void onGenderChanged(GenderEnum gender);
-  void onBirthdayChanged(DateTime? birthday);
-  void onAgeChanged(String age);
-  void onWeightChanged(String weight);
-  void onLengthChanged(String length);
-  void onChronicDiseasesChanged(String chronicDiseases);
-  void onWaistCircumferenceChanged(String waistCircumference);
-  void onChestChanged(String chest);
-  void onShoulderChanged(String shoulder);
-  void onThighCircumferenceChanged(String thighCircumference);
-  void onForearmCircumferenceChanged(String forearmCircumference);
   void onSubmit();
 }
 
@@ -54,54 +43,21 @@ class CompleteProfileFormPage extends StatefulWidget {
 
 class _CompleteProfileFormState extends State<CompleteProfileFormPage>
     implements CompleteProfileFormViewCallBacks {
-  //late final AuthManagerBloc authManagerBloc = context.read();
   late final AuthCubit authCubit = context.read();
 
   final _formKey = GlobalKey<FormState>();
 
   @override
-  void onGenderChanged(GenderEnum? gender) => authCubit.setGender(gender);
-
-  @override
-  void onBirthdayChanged(DateTime? birthday) =>
-      authCubit.setBirthday(birthday?.formatYYYYMMDD);
-
-  @override
-  void onAgeChanged(String age) => authCubit.setAge(age);
-
-  @override
-  void onWeightChanged(String weight) => authCubit.setWeight(weight);
-
-  @override
-  void onLengthChanged(String length) => authCubit.setLength(length);
-
-  @override
-  void onChronicDiseasesChanged(String chronicDiseases) =>
-      authCubit.setChronicDiseases(chronicDiseases);
-
-  @override
-  void onWaistCircumferenceChanged(String waistCircumference) =>
-      authCubit.setWaistCircumference(waistCircumference);
-
-  @override
-  void onChestChanged(String chest) => authCubit.setChest(chest);
-
-  @override
-  void onShoulderChanged(String shoulder) => authCubit.setShoulder(shoulder);
-
-  @override
-  void onThighCircumferenceChanged(String thighCircumference) =>
-      authCubit.setThighCircumference(thighCircumference);
-
-  @override
-  void onForearmCircumferenceChanged(String forearmCircumference) =>
-      authCubit.setForearmCircumference(forearmCircumference);
+  void initState() {
+    super.initState();
+    authCubit.setInitialFormData();
+  }
 
   @override
   void onSubmit() {
-    //if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       authCubit.addInfo();
-    //}
+    }
   }
 
   @override
@@ -131,105 +87,85 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                   ),
                   const SizedBox(height: 10),
                   MainDropDownWidget(
+                    selectedValue: GenderEnum.male,
                     items: GenderEnum.values,
                     prefixIcon: Icons.person,
                     hintText: 'gender'.tr(),
                     labelText: 'gender'.tr(),
                     errorMessage: 'required_field'.tr(),
-                    onChanged: onGenderChanged,
+                    onChanged: authCubit.setGender,
                   ),
                   MainDatePicker(
-                    onDateSelected: onBirthdayChanged,
+                    onDateSelected: (date) =>
+                        authCubit.setBirthday(date?.formatYYYYMMDD),
+                    label: "birth_date",
+                    hintText: "select_birth_date",
                     validator: (date) =>
                         date == null ? 'required_field'.tr() : null,
                   ),
-                  MainTextField2(
-                    onChanged: onAgeChanged,
-                    icon: Icons.calendar_today,
+                  MainCounterWidget(
+                    maxCount: 150,
+                    minCount: 12,
+                    onChanged: authCubit.setAge,
                     label: 'age'.tr(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    icon: Icons.calendar_today,
                   ),
-                  MainTextField2(
-                    onChanged: onWeightChanged,
-                    icon: Icons.monitor_weight,
+                  MainCounterWidget(
+                    maxCount: 200,
+                    minCount: 30,
+                    onChanged: authCubit.setWeight,
                     label: 'weight'.tr(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    icon: Icons.monitor_weight,
                   ),
-                  MainTextField2(
-                    onChanged: onLengthChanged,
-                    icon: Icons.height,
+                  MainCounterWidget(
+                    maxCount: 220,
+                    minCount: 120,
+                    onChanged: authCubit.setLength,
                     label: 'length'.tr(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    icon: Icons.height,
                   ),
                   MainTextField2(
-                    onChanged: onChronicDiseasesChanged,
+                    onChanged: authCubit.setChronicDiseases,
                     icon: Icons.healing,
                     label: 'chronic_diseases'.tr(),
                     validator: (val) => val == null || val.isEmpty
                         ? 'required_field'.tr()
                         : null,
                   ),
-                  MainTextField2(
-                    onChanged: onWaistCircumferenceChanged,
-                    icon: Icons.line_weight,
+                  MainCounterWidget(
+                    maxCount: 100,
+                    minCount: 10,
+                    onChanged: authCubit.setWaistCircumference,
                     label: 'waist_circumference'.tr(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    icon: Icons.line_weight,
                   ),
-                  MainTextField2(
-                    onChanged: onChestChanged,
-                    icon: Icons.accessibility_new,
+                  MainCounterWidget(
+                    maxCount: 100,
+                    minCount: 20,
+                    onChanged: authCubit.setChest,
                     label: 'chest'.tr(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    icon: Icons.accessibility_new,
                   ),
-                  MainTextField2(
-                    onChanged: onShoulderChanged,
-                    icon: Icons.accessibility,
+                  MainCounterWidget(
+                    maxCount: 100,
+                    minCount: 10,
+                    onChanged: authCubit.setShoulder,
                     label: 'shoulder'.tr(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    icon: Icons.accessibility,
                   ),
-                  MainTextField2(
-                    onChanged: onThighCircumferenceChanged,
-                    icon: Icons.directions_walk,
+                  MainCounterWidget(
+                    maxCount: 100,
+                    minCount: 10,
+                    onChanged: authCubit.setThighCircumference,
                     label: 'thigh_circumference'.tr(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    icon: Icons.directions_walk,
                   ),
-                  MainTextField2(
-                    onChanged: onForearmCircumferenceChanged,
-                    icon: Icons.pan_tool,
+                  MainCounterWidget(
+                    maxCount: 100,
+                    minCount: 10,
+                    onChanged: authCubit.setForearmCircumference,
                     label: 'forearm_circumference'.tr(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    icon: Icons.pan_tool,
                   ),
                   const SizedBox(height: 60),
                 ],

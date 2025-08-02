@@ -1,22 +1,16 @@
 part of 'upload_image_cubit.dart';
 
 @immutable
-sealed class UploadImageState{}
+sealed class UploadImageState {}
 
 final class UploadImageInitial extends UploadImageState {}
 
 final class UploadImageLoading extends UploadImageState {}
 
 final class UploadImageSuccess extends UploadImageState {
-  UploadImageSuccess({
-    required this.image,
-    // required this.imagePath, required this.imageName
-    });
+  UploadImageSuccess({required this.image});
 
-    final XFile image;
-
-  // final String imagePath;
-  // final String imageName;
+  final XFile image;
 }
 
 final class UploadImageFail extends UploadImageState {
@@ -24,4 +18,3 @@ final class UploadImageFail extends UploadImageState {
 
   final String message;
 }
-

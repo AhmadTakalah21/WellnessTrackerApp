@@ -9,23 +9,25 @@ class LoadingIndicator extends StatelessWidget {
     this.width,
     this.height,
     this.size = 40,
+    this.isInBtn = false,
   });
 
   final Color? color;
   final double? width;
   final double? height;
   final double size;
+  final bool isInBtn;
 
   @override
   Widget build(BuildContext context) {
+    final size = isInBtn ? 20.0 : this.size;
+    final color =
+        isInBtn ? context.cs.secondary : this.color ?? context.cs.primary;
     return Container(
       width: width,
       height: height,
       alignment: Alignment.center,
-      child: SpinKitFadingCircle(
-        size: size,
-        color: color ?? context.cs.primary,
-      ),
+      child: SpinKitFadingCircle(size: size, color: color),
     );
   }
 }

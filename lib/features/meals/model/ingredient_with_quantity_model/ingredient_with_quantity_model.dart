@@ -11,18 +11,12 @@ part 'ingredient_with_quantity_model.g.dart';
 class IngredientWithQuantityModel {
   const IngredientWithQuantityModel({
     required this.id,
-    required this.ingredientId,
     required this.quantity,
     required this.ingredient,
   });
 
   final int id;
-
-  @JsonKey(name: 'ingredient_id')
-  final int ingredientId;
-
   final int quantity;
-
   final IngredientModel ingredient;
 
   factory IngredientWithQuantityModel.fromString(String str) =>

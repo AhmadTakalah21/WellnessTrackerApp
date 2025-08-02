@@ -5,6 +5,8 @@ import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/ingredients/model/add_ingredient_model/add_ingredient_model.dart';
 import 'package:wellnesstrackerapp/features/ingredients/model/ingredient_model/ingredient_model.dart';
 import 'package:wellnesstrackerapp/features/ingredients/service/ingredients_service.dart';
+import 'package:wellnesstrackerapp/features/meals/model/ingredient_with_quantity_model/ingredient_with_quantity_model.dart';
+import 'package:wellnesstrackerapp/features/meals/model/meal_model/meal_model.dart';
 import 'package:wellnesstrackerapp/global/models/ingredient_unit_enum.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
@@ -62,6 +64,7 @@ class IngredientsCubit extends Cubit<GeneralIngredientsState> {
     UserRoleEnum role, {
     int? perPage = 10,
     int? page,
+    MealModel? meal,
   }) async {
     emit(IngredientsLoading());
     try {
@@ -76,7 +79,23 @@ class IngredientsCubit extends Cubit<GeneralIngredientsState> {
       if (_allIngredients.isEmpty) {
         emit(IngredientsEmpty("no_ingredients".tr()));
       } else {
-        emit(IngredientsSuccess(result, null));
+        List<IngredientWithQuantityModel>? mealIngredientsInResult;
+
+        if (meal != null) {
+          mealIngredientsInResult = [];
+          for (var ingredient in meal.ingredients) {
+            final selected = result.data.firstWhere(
+              (element) => ingredient.ingredient.id == element.id,
+            );
+            mealIngredientsInResult.add(IngredientWithQuantityModel(
+              id: 1,
+              quantity: ingredient.quantity,
+              ingredient: selected,
+            ));
+          }
+        }
+
+        emit(IngredientsSuccess(result, mealIngredientsInResult, null));
       }
     } catch (e) {
       if (isClosed) return;
@@ -89,7 +108,8 @@ class IngredientsCubit extends Cubit<GeneralIngredientsState> {
     try {
       final result = await ingredientService.addIngredient(model, id: id);
       final isAdd = id == null;
-      final message = isAdd ? "ingredient_added".tr() : "ingredient_updated".tr();
+      final message =
+          isAdd ? "ingredient_added".tr() : "ingredient_updated".tr();
       emit(AddIngredientSuccess(result, message));
     } catch (e) {
       emit(AddIngredientFail(e.toString()));

@@ -66,14 +66,6 @@ class PostSignUpModel {
       return null;
     }
 
-    if (_phoneNumber.length != 10) {
-      return 'phone_number_10_digits'.tr();
-    }
-
-    if (!_phoneNumber.startsWith('09')) {
-      return 'phone_number_start_09'.tr();
-    }
-
     return null;
   }
 

@@ -9,13 +9,23 @@ part 'ingredient_item_model.g.dart';
 @immutable
 class IngredientItemModel {
   const IngredientItemModel({
-    required this.ingredientId,
-    required this.quantity,
+    this.ingredientId,
+    this.quantity,
   });
 
   @JsonKey(name: 'ingredient_id')
-  final int ingredientId;
-  final int quantity;
+  final int? ingredientId;
+  final int? quantity;
+
+  IngredientItemModel copyWith({
+    int? Function()? ingredientId,
+    int? Function()? quantity
+  }) {
+    return IngredientItemModel(
+      ingredientId: ingredientId != null ? ingredientId() : this.ingredientId,
+      quantity: quantity != null ? quantity() : this.quantity,
+    );
+  }
 
   factory IngredientItemModel.fromString(String str) =>
       IngredientItemModel.fromJson(jsonDecode(str) as Map<String, dynamic>);

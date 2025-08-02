@@ -4,3 +4,8 @@ part of '../meal_plans_cubit.dart';
 abstract class GeneralMealPlansState {}
 
 class GeneralMealPlansInitial extends GeneralMealPlansState {}
+
+class MealPlanDaysState extends GeneralMealPlansState {
+  MealPlanDaysState(this.planDays);
+  final List<PlanDayItemToShowModel> planDays;
+}

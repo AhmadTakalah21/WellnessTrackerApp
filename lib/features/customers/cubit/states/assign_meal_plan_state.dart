@@ -1,20 +1,20 @@
 part of '../customers_cubit.dart';
 
 @immutable
-sealed class AssignMealPlanState extends GeneralCustomersState {}
+sealed class AssignPlanState extends GeneralCustomersState {}
 
-final class AssignMealPlanInitial extends AssignMealPlanState {}
+final class AssignPlanInitial extends AssignPlanState {}
 
-final class AssignMealPlanLoading extends AssignMealPlanState {}
+final class AssignPlanLoading extends AssignPlanState {}
 
-final class AssignMealPlanSuccess extends AssignMealPlanState {
+final class AssignPlanSuccess extends AssignPlanState {
   final String message;
 
-  AssignMealPlanSuccess(this.message);
+  AssignPlanSuccess(this.message);
 }
 
-final class AssignMealPlanFail extends AssignMealPlanState {
+final class AssignPlanFail extends AssignPlanState {
   final String error;
 
-  AssignMealPlanFail(this.error);
+  AssignPlanFail(this.error);
 }

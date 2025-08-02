@@ -5,6 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/meals/model/ingredient_item_model/ingredient_item_model.dart';
 import 'package:wellnesstrackerapp/global/models/meal_type_enum.dart';
+import 'package:wellnesstrackerapp/global/utils/utils.dart';
 
 part 'add_meal_model.g.dart';
 
@@ -16,17 +17,20 @@ class AddMealModel {
     String? description,
     MealTypeEnum? type,
     String? link,
+    String? file,
     List<IngredientItemModel>? ingredients,
   })  : _name = name,
         _description = description,
         _type = type,
         _link = link,
+        _file = file,
         _ingredients = ingredients;
 
   final String? _name;
   final String? _description;
   final MealTypeEnum? _type;
   final String? _link;
+  final String? _file;
   final List<IngredientItemModel>? _ingredients;
 
   AddMealModel copyWith({
@@ -34,6 +38,7 @@ class AddMealModel {
     String? Function()? description,
     MealTypeEnum? Function()? type,
     String? Function()? link,
+    String? Function()? file,
     List<IngredientItemModel>? Function()? ingredients,
   }) {
     return AddMealModel(
@@ -41,6 +46,7 @@ class AddMealModel {
       description: description != null ? description() : _description,
       type: type != null ? type() : _type,
       link: link != null ? link() : _link,
+      file: file != null ? file() : _file,
       ingredients: ingredients != null ? ingredients() : _ingredients,
     );
   }
@@ -70,13 +76,16 @@ class AddMealModel {
     return _type;
   }
 
-  String get link {
-    if (_link == null || _link.isEmpty) {
-      throw "link_required".tr();
-    }
+  String? get link {
     return _link;
   }
 
+  @JsonKey(name: "link_file", toJson: Utils.nullableFileToJson)
+  String? get file {
+    return _file;
+  }
+
+  @JsonKey(includeToJson: false)
   List<IngredientItemModel> get ingredients {
     if (_ingredients == null || _ingredients.isEmpty) {
       throw "ingredients_required".tr();

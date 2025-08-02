@@ -6,9 +6,9 @@ import 'package:wellnesstrackerapp/features/users/model/add_user_model/add_user_
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/features/users/service/users_service.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
+import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
-
-import '../../../global/models/meta_model/meta_model.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/users_state.dart';
 part 'states/general_users_state.dart';
@@ -49,7 +49,7 @@ class UsersCubit extends Cubit<GeneralUsersState> {
     addUserModel = addUserModel.copyWith(phone: () => phone);
   }
 
-  void setRole(String? role) {
+  void setRole(UserRoleEnum? role) {
     addUserModel = addUserModel.copyWith(role: () => role);
   }
 
@@ -90,7 +90,7 @@ class UsersCubit extends Cubit<GeneralUsersState> {
       final matchesQuery = query == null ||
           user.name.toLowerCase().contains(query.toLowerCase());
       final matchesRole =
-          role == null || user.role.toLowerCase() == role.toLowerCase();
+          role == null || user.role.name.toLowerCase() == role.toLowerCase();
       return matchesQuery && matchesRole;
     }).toList();
 

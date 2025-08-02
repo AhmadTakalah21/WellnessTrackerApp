@@ -73,8 +73,6 @@ class ChooseImageWidget extends StatelessWidget {
                   Text(label.tr(), style: context.tt.titleLarge),
                   const SizedBox(height: 10),
                   InkWell(
-                    // onTap: readOnly ? null : () => upload(context),
-                    // onTap: context.read<UploadImageCubit>().uploadImage,
                     onTap: readOnly
                         ? null
                         : () => context.read<UploadImageCubit>().uploadImage(),

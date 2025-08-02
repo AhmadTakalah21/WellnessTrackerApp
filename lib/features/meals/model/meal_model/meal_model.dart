@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wellnesstrackerapp/features/meals/model/ingredient_with_quantity_model/ingredient_with_quantity_model.dart';
 import 'package:wellnesstrackerapp/global/models/meal_type_enum.dart';
+import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 
 part 'meal_model.g.dart';
 
 @JsonSerializable()
 @immutable
-class MealModel {
+class MealModel implements DropDownItemModel, DeleteModel {
   const MealModel({
     required this.id,
     required this.name,
@@ -20,6 +22,7 @@ class MealModel {
     this.ingredients = const [],
   });
 
+  @override
   final int id;
   final String name;
   final String description;
@@ -44,4 +47,13 @@ class MealModel {
 
   @override
   String toString() => jsonEncode(toJson());
+
+  @override
+  String get displayEntityName => name;
+
+  @override
+  String get displayName => name;
+
+  @override
+  String get apiDeleteUrl => "v1/dietitian/meals/$id";
 }

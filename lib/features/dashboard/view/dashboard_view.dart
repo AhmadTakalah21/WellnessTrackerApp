@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
-import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_view_on_permission_model.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -46,7 +45,6 @@ class _DashboardState extends State<Dashboard>
 
   @override
   void onGridItemTap(PageRouteInfo page) {
-    //appManagerCubit.emitInnerRouteChanged();
     context.router.push(page);
   }
 
@@ -54,7 +52,7 @@ class _DashboardState extends State<Dashboard>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.cs.surface,
-      appBar: user.role == UserRoleEnum.user ? null : MainAppBar(),
+      appBar: MainAppBar(title: 'home'.tr(),),
       body: Padding(
         padding: AppConstants.padding10,
         child: Column(

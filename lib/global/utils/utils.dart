@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 abstract class Utils {
   static Color? stringToColor(String color) {
@@ -38,44 +40,45 @@ abstract class Utils {
     return (size / 390) * screenWidth;
   }
 
-  static String? validateEmptyValue(String? val) {
+  static String? validateInput(String? val, InputTextType type) {
     if (val == null || val.trim().isEmpty) {
       return 'required'.tr();
     }
+    if (type == InputTextType.email) {
+      final emailRegex = RegExp(
+        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+      );
+      if (!emailRegex.hasMatch(val)) {
+        return 'email_invalid'.tr();
+      }
+    } else if (type == InputTextType.phone) {
+      if (val.length != 10) {
+        return 'phone_number_10_digits'.tr();
+      } else if (!val.startsWith('09')) {
+        return 'phone_number_start_09'.tr();
+      }
+    } else if (type == InputTextType.password) {
+      if (val.length < 8) {
+        return 'password_8_chars'.tr();
+      }
+    }
     return null;
   }
 
-  static String? validateEmail(String? val) {
-    final emailRegex =
-        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    if (val == null || val.trim().isEmpty) {
-      return 'email_empty'.tr();
-    }
-    if (!emailRegex.hasMatch(val)) {
-      return 'email_invalid'.tr();
-    }
-    return null;
+  static MultipartFile fileToJson(String path) {
+    return MultipartFile.fromFileSync(
+      path,
+      filename: basename(path),
+    );
   }
 
-  static String? validatePhone(String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'required'.tr();
-    } else if (val.length != 10) {
-      return 'phone_number_10_digits'.tr();
-    } else if (!val.startsWith('09')) {
-      return 'phone_number_start_09'.tr();
-    } else {
-      return null;
-    }
-  }
-
-  static String? validatePassword(String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'password_empty'.tr();
-    }
-    if (val.length < 8) {
-      return 'password_8_chars'.tr();
-    }
-    return null;
+  static MultipartFile? nullableFileToJson(String? path) {
+    if (path == null) return null;
+    return MultipartFile.fromFileSync(
+      path,
+      filename: basename(path),
+    );
   }
 }
+
+enum InputTextType { email, phone, password, none }

@@ -8,8 +8,8 @@ part "assign_meal_plan_model.g.dart";
 
 @JsonSerializable()
 @immutable
-class AssignMealPlanModel {
-  const AssignMealPlanModel({
+class AssignPlanModel {
+  const AssignPlanModel({
     List<int>? users = const [],
     int? planId,
   })  : _users = users,
@@ -18,11 +18,11 @@ class AssignMealPlanModel {
   final List<int>? _users;
   final int? _planId;
 
-  AssignMealPlanModel copyWith({
+  AssignPlanModel copyWith({
     List<int>? Function()? users,
     int? Function()? planId,
   }) {
-    return AssignMealPlanModel(
+    return AssignPlanModel(
       users: users != null ? users() : _users,
       planId: planId != null ? planId() : _planId,
     );
@@ -38,18 +38,18 @@ class AssignMealPlanModel {
   @JsonKey(name: "plan_id")
   int get planId {
     if (_planId == null) {
-      throw "planId_required".tr();
+      throw "plan_required".tr();
     }
     return _planId;
   }
 
-  factory AssignMealPlanModel.fromJson(Map<String, dynamic> json) =>
-      _$AssignMealPlanModelFromJson(json);
+  factory AssignPlanModel.fromJson(Map<String, dynamic> json) =>
+      _$AssignPlanModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AssignMealPlanModelToJson(this);
+  Map<String, dynamic> toJson() => _$AssignPlanModelToJson(this);
 
-  factory AssignMealPlanModel.fromString(String jsonString) =>
-      AssignMealPlanModel.fromJson(json.decode(jsonString));
+  factory AssignPlanModel.fromString(String jsonString) =>
+      AssignPlanModel.fromJson(json.decode(jsonString));
 
   @override
   String toString() => jsonEncode(toJson());

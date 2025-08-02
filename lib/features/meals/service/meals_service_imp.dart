@@ -31,15 +31,19 @@ class MealsServiceImp implements MealsService {
     int? id,
   }) async {
     final isAdd = id == null;
-    final endpoint = isAdd ? "/v1/admin/dietitian" : "/v1/dietitian/meals/$id";
+    final endpoint = isAdd ? "/v1/dietitian/meals" : "/v1/dietitian/meals/$id";
 
     try {
       final map = model.toJson();
       if (!isAdd) {
         map["_method"] = "PUT";
       }
-
-      final response = await dio.post(endpoint, data: map);
+      for (var index = 0; index < model.ingredients.length; index++) {
+        final ingredient = model.ingredients[index];
+        map.addAll({"ingredients[$index][ingredient_id]": ingredient.ingredientId});
+        map.addAll({"ingredients[$index][quantity]": ingredient.quantity});
+      }
+      final response = await dio.post(endpoint, data: FormData.fromMap(map));
       final data = response.data["data"] as Map<String, dynamic>;
       return MealModel.fromJson(data);
     } catch (e, stackTrace) {

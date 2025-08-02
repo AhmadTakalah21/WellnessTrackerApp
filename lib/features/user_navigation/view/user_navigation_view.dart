@@ -1,15 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
-import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart';
 import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 
 abstract class UserNavigationViewCallbacks {
   void onBottomTab(int currentIndex, TabsRouter tabsRouter);
@@ -66,35 +63,7 @@ class _UserNavigationPageState extends State<UserNavigationPage>
     final rtlLabels = labels.reversed.toList();
     final rtlIcons = icons.reversed.toList();
 
-    return BlocListener<AppManagerCubit, AppManagerState>(
-      listener: (context, state) {
-       // if (state is InnerRouteChanged) setState(() {});
-      },
-      child: AutoTabsScaffold(
-        appBarBuilder: (context, tabsRouter) {
-          String titleKey = 'app_name';
-
-          if (tabsRouter.activeIndex == 1) {
-            final nestedRouter = context.innerRouterOf<StackRouter>(DashboardRouter.name);
-            final nestedRouteName = nestedRouter?.current.name;
-
-            switch (nestedRouteName) {
-              case 'DashboardRoute':
-                titleKey = 'home';
-                break;
-              default:
-                titleKey = 'home';
-            }
-          } else {
-            final index = tabsRouter.activeIndex;
-            titleKey = isRtl
-                ? tabs.reversed.toList()[index].translationKey
-                : tabs[index].translationKey;
-          }
-
-          return MainAppBar(title: titleKey.tr());
-        },
-
+    return AutoTabsScaffold(
         routes: isRtl
             ? [
           ProfileRoute(),
@@ -143,7 +112,6 @@ class _UserNavigationPageState extends State<UserNavigationPage>
             ),
           );
         },
-      ),
-    );
+      );
   }
 }
