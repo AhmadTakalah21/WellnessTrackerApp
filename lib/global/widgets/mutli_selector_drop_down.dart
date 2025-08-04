@@ -74,6 +74,7 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
                             : selectedItems.add(item);
                         setState(() {});
                         menuSetState(() {});
+                        widget.onChanged(selectedItems);
                       },
                       child: Container(
                         height: double.infinity,

@@ -146,6 +146,10 @@ class _AddExercisePlanPageState extends State<AddExercisePlanPage>
       buildWhen: (previous, current) => current is PlanDaysState,
       builder: (context, state) {
         if (state is PlanDaysState) {
+          // for (var element in state.planDays) {
+          //    print(element.day);
+          //   print(element.exercises);
+          // }
           return Wrap(
             spacing: 18,
             runSpacing: 18,

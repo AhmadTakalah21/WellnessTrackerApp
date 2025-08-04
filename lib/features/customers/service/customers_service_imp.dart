@@ -66,7 +66,7 @@ class CustomersServiceImp implements CustomersService {
   @override
   Future<void> assignExercisePlan(AssignPlanModel model) async{
     try {
-      final endpoint = "/v1/coach/execise-plans/assign";
+      final endpoint = "/v1/coach/exercise-plans/assign";
       await dio.post(endpoint, data: model.toJson());
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);

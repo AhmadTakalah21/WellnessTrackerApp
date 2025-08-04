@@ -70,7 +70,7 @@ class NotaficationsService {
 
   Future<void> initialize() async {
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-    await firebaseMessaging.subscribeToTopic("menu-admin-new");
+    await firebaseMessaging.subscribeToTopic("wellness-tracker-app-d8def");
 
     //initLocalNotifications();
 
