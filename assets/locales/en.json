@@ -337,5 +337,7 @@
   "meal_plan_assigned" : "Meal plan is assigned successfully",
   "invalid_phone" : "Invalid Mobile Number",
   "birth_date" : "Birth Date",
-  "select_birth_date" : "Select Birth Date"
+  "select_birth_date" : "Select Birth Date",
+  "psychological_phone_required" : "Psychological support phone is required",
+  "phycological_support_phone" : "Phycological Support Phone"
 }

@@ -218,9 +218,11 @@ class _AssignExercisePlanWidgetState extends State<AssignExercisePlanWidget>
             onTryAgainTap: onTryAgainTap,
           );
         } else if (state is ExercisePlansFail) {
-          return MainErrorWidget(
-            error: state.error,
-            onTryAgainTap: onTryAgainTap,
+          return Expanded(
+            child: MainErrorWidget(
+              error: state.error,
+              onTryAgainTap: onTryAgainTap,
+            ),
           );
         } else {
           return const SizedBox.shrink();

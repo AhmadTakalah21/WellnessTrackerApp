@@ -17,27 +17,32 @@ class LevelsPageItem extends StatelessWidget {
     required this.onTryAgainTap,
     required this.onEditTap,
     required this.onDeleteTap,
+    required this.role,
   });
+  final UserRoleEnum role;
   final void Function() onTryAgainTap;
   final void Function(LevelModel) onEditTap;
   final void Function(LevelModel) onDeleteTap;
 
   Future<void> onRefresh() async => onTryAgainTap();
   void onTap(BuildContext context, LevelModel level) {
-    context.router.push(ItemsRoute(role: UserRoleEnum.admin, level: level));
+    context.router.push(ItemsRoute(role: role, level: level));
   }
 
   void onLongPress(BuildContext context, LevelModel level) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
-      builder: (context) => AdditionalOptionsBottomSheet(
-        item: level,
-        onEditTap: onEditTap,
-        onDeleteTap: onDeleteTap,
-      ),
-    );
+    if (role.isAdmin) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape:
+            RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+        builder: (context) => AdditionalOptionsBottomSheet(
+          item: level,
+          onEditTap: onEditTap,
+          onDeleteTap: onDeleteTap,
+        ),
+      );
+    }
   }
 
   @override
@@ -65,7 +70,7 @@ class LevelsPageItem extends StatelessWidget {
                           onLongPress(context, level);
                         },
                       )),
-                  SizedBox(height: 80),
+                  SizedBox(height: role.isUser ? 100 : 40),
                 ],
               ),
             ),

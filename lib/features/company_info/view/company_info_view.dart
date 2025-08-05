@@ -120,6 +120,12 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
                       title: 'support_phone',
                       value: settings.supportPhoneNumber,
                     ),
+                    _buildInfoCard(
+                      icon: Icons.phone,
+                      title: 'phycological_support_phone',
+                      value: settings.psychologicalPhoneNumber ??
+                          'not_provided'.tr(),
+                    ),
                     SizedBox(height: 300),
                   ],
                 ),

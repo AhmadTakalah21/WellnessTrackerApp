@@ -27,9 +27,11 @@ class AddIngredientView extends StatelessWidget {
     super.key,
     required this.ingredientsCubit,
     this.ingredient,
+    this.onSuccess,
   });
   final IngredientsCubit ingredientsCubit;
   final IngredientModel? ingredient;
+  final void Function()? onSuccess;
 
   @override
   Widget build(BuildContext context) {

@@ -175,13 +175,13 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
       TitleValueModel("weight", info?.weight.toString() ?? "-"),
       TitleValueModel("length", info?.length.toString() ?? "-"),
       TitleValueModel(
-          "waist_circumference", info?.waistCircumference.toString() ?? "-"),
-      TitleValueModel("chest", info?.chest.toString() ?? "-"),
-      TitleValueModel("shoulder", info?.shoulder.toString() ?? "-"),
+          "waist_circumference", info?.waistCircumference?.toString() ?? "-"),
+      TitleValueModel("chest", info?.chest?.toString() ?? "-"),
+      TitleValueModel("shoulder", info?.shoulder?.toString() ?? "-"),
       TitleValueModel(
-          "thigh_circumference", info?.thighCircumference.toString() ?? "-"),
+          "thigh_circumference", info?.thighCircumference?.toString() ?? "-"),
       TitleValueModel("forearm_circumference",
-          info?.forearmCircumference.toString() ?? "-"),
+          info?.forearmCircumference?.toString() ?? "-"),
       TitleValueModel("chronic_diseases", info?.chronicDiseases ?? "-"),
     ];
     return Table(

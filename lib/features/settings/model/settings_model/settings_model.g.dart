@@ -13,6 +13,7 @@ SettingsModel _$SettingsModelFromJson(Map<String, dynamic> json) =>
       appUrlIos: json['app_url_ios'] as String?,
       email: json['email'] as String,
       supportPhoneNumber: json['support_phone_number'] as String,
+      psychologicalPhoneNumber: json['psychological_support_number'] as String?,
     );
 
 Map<String, dynamic> _$SettingsModelToJson(SettingsModel instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$SettingsModelToJson(SettingsModel instance) =>
       'app_url_ios': instance.appUrlIos,
       'email': instance.email,
       'support_phone_number': instance.supportPhoneNumber,
+      'psychological_support_number': instance.psychologicalPhoneNumber,
     };

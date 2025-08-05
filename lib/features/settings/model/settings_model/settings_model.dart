@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -13,6 +14,7 @@ class SettingsModel {
     this.appUrlIos,
     required this.email,
     required this.supportPhoneNumber,
+    this.psychologicalPhoneNumber,
   });
 
   final String name;
@@ -27,6 +29,9 @@ class SettingsModel {
 
   @JsonKey(name: 'support_phone_number')
   final String supportPhoneNumber;
+
+  @JsonKey(name: 'psychological_support_number')
+  final String? psychologicalPhoneNumber;
 
   factory SettingsModel.fromString(String str) =>
       SettingsModel.fromJson(jsonDecode(str) as Map<String, dynamic>);

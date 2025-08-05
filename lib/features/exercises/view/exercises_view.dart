@@ -77,29 +77,6 @@ class _ExercisesPageState extends State<ExercisesPage>
 
   @override
   Widget build(BuildContext context) {
-    // final exercises = List.generate(
-    //   6,
-    //   (index) => ExerciseModel(
-    //     createdAt: "",
-    //     id: index + 1,
-    //     name: "تمرين إحماء كامل الجسم",
-    //     coach: CustomerModel(
-    //       id: index + 1,
-    //       name: "name",
-    //       email: "email",
-    //       status: "active",
-    //       role: UserRoleEnum.user,
-    //       createdAt: "createdAt",
-    //     ),
-    //     link: "https://www.google.com",
-    //     description: ExerciseDescriptionModel(
-    //       rounds: 3,
-    //       explain:
-    //           "هذا التمرين يقوم بتشغيل عضلات الفخذ بالنشبة الاكبر بالاضافة الى عضلات الظهر , يجب الانتباه الى تادية التمرين بالشكل الصحيح لكيلا يحدث اي اصابة",
-    //       repeats: [8, 10, 12],
-    //     ),
-    //   ),
-    // );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -189,8 +166,8 @@ class _ExercisesPageState extends State<ExercisesPage>
           children: [
            // _buildTitle(),
             ...List.generate(planDay.exercises.length, (index) {
-              final meal = planDay.exercises[index];
-              return _buildExerciseTile(meal);
+              final exercise = planDay.exercises[index];
+              return _buildExerciseTile(exercise);
             }),
             SizedBox(height: 100)
           ],

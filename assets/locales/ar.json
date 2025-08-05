@@ -337,5 +337,7 @@
   "meal_plan_assigned" : "تم إرسال البرنامج الغذائي بنجاح",
   "invalid_phone" : "رقم الهاتف غير صالح",
   "birth_date" : "تاريخ الميلاد",
-  "select_birth_date" : "حدد تاريخ الميلاد"
+  "select_birth_date" : "حدد تاريخ الميلاد",
+  "psychological_phone_required" : "رقم الدعم النفسي مطلوب",
+  "phycological_support_phone" : "رقم الدعم النفسي"
 }

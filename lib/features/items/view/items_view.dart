@@ -329,7 +329,8 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
                         },
                       ),
                     ),
-                  )
+                  ),
+                  SizedBox(height: widget.role.isUser ? 100 : 40)
                 ],
               ),
             );

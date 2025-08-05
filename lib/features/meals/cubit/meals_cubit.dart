@@ -162,14 +162,4 @@ class MealsCubit extends Cubit<GeneralMealsState> {
       emit(AddMealFail(e.toString()));
     }
   }
-
-  Future<List<MealModel>> getAllMeals() async {
-    try {
-      final result = await mealService.getMeals(page: 1, perPage: 1000);
-      _allMeals = result.data;
-      return _allMeals;
-    } catch (e) {
-      return [];
-    }
-  }
 }

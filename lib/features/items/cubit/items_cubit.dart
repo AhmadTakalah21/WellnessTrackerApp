@@ -100,6 +100,9 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
         role: role,
         levelId: levelId,
       );
+      if (newItems.meta.count == newItems.meta.total) {
+        hasMore = false;
+      }
       if (newItems.data.isEmpty) {
         hasMore = false;
         if (page == 1) {

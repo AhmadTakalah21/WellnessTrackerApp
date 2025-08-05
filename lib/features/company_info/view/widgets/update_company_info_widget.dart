@@ -54,6 +54,7 @@ class _UpdateCompanyInfoWidgetState extends State<UpdateCompanyInfoWidget> {
             _buildNameTextField(),
             _buildEmailTextField(),
             _buildPhoneTextField(),
+            _buildPsycologicalPhoneTextField(),
             _buildAndroidUrlTextField(),
             _buildIosUrlTextField(),
             const SizedBox(height: 6),
@@ -85,23 +86,44 @@ class _UpdateCompanyInfoWidgetState extends State<UpdateCompanyInfoWidget> {
       );
 
   Widget _buildPhoneTextField() => MainTextField2(
-    initialText: widget.settings.supportPhoneNumber,
-    onChanged: widget.settingsCubit.setSupportPhoneNumber,
-    icon: Icons.phone,
-    label: 'support_phone'.tr(),
-    keyboardType: TextInputType.phone,
-    inputFormatters: [
-      FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
-    ],
-    hint: '+963987654321',
-    validator: (v) {
-      if (v == null || v.isEmpty) return 'support_phone_required'.tr();
-      final cleaned = v.replaceAll(RegExp(r'[^\d+]'), '').replaceAll('+', '');
-      if (cleaned.length < 8) return 'رقم الهاتف غير صحيح';
-      return null;
-    },
-  );
+        initialText: widget.settings.supportPhoneNumber,
+        onChanged: widget.settingsCubit.setSupportPhoneNumber,
+        icon: Icons.phone,
+        label: 'support_phone'.tr(),
+        keyboardType: TextInputType.phone,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
+        ],
+        hint: '+963987654321',
+        validator: (v) {
+          if (v == null || v.isEmpty) return 'support_phone_required'.tr();
+          final cleaned =
+              v.replaceAll(RegExp(r'[^\d+]'), '').replaceAll('+', '');
+          if (cleaned.length < 8) return 'رقم الهاتف غير صحيح';
+          return null;
+        },
+      );
 
+  Widget _buildPsycologicalPhoneTextField() => MainTextField2(
+        initialText: widget.settings.psychologicalPhoneNumber,
+        onChanged: widget.settingsCubit.setPsychologicalPhoneNumber,
+        icon: Icons.phone,
+        label: 'phycological_support_phone'.tr(),
+        keyboardType: TextInputType.phone,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
+        ],
+        hint: '+963987654321',
+        validator: (v) {
+          if (v == null || v.isEmpty) {
+            return 'psychological_phone_required'.tr();
+          }
+          final cleaned =
+              v.replaceAll(RegExp(r'[^\d+]'), '').replaceAll('+', '');
+          if (cleaned.length < 8) return 'رقم الهاتف غير صحيح';
+          return null;
+        },
+      );
 
   Widget _buildAndroidUrlTextField() => MainTextField2(
         initialText: widget.settings.appUrlAndroid,

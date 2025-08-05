@@ -15,17 +15,20 @@ class UpdateSettingsModel {
     String? appUrlIos,
     String? email,
     String? supportPhoneNumber,
+    String? psychologicalPhoneNumber,
   })  : _name = name,
         _appUrlAndroid = appUrlAndroid,
         _appUrlIos = appUrlIos,
         _email = email,
-        _supportPhoneNumber = supportPhoneNumber;
+        _supportPhoneNumber = supportPhoneNumber,
+        _psychologicalPhoneNumber = psychologicalPhoneNumber;
 
   final String? _name;
   final String? _appUrlAndroid;
   final String? _appUrlIos;
   final String? _email;
   final String? _supportPhoneNumber;
+  final String? _psychologicalPhoneNumber;
 
   UpdateSettingsModel copyWith({
     String? Function()? name,
@@ -33,6 +36,7 @@ class UpdateSettingsModel {
     String? Function()? appUrlIos,
     String? Function()? email,
     String? Function()? supportPhoneNumber,
+    String? Function()? psychologicalPhoneNumber,
   }) {
     return UpdateSettingsModel(
       name: name != null ? name() : _name,
@@ -42,6 +46,9 @@ class UpdateSettingsModel {
       supportPhoneNumber: supportPhoneNumber != null
           ? supportPhoneNumber()
           : _supportPhoneNumber,
+      psychologicalPhoneNumber: psychologicalPhoneNumber != null
+          ? psychologicalPhoneNumber()
+          : _psychologicalPhoneNumber,
     );
   }
 
@@ -71,6 +78,14 @@ class UpdateSettingsModel {
       throw "support_phone_required".tr();
     }
     return _supportPhoneNumber;
+  }
+
+  @JsonKey(name: 'psychological_support_number')
+  String get psychologicalPhoneNumber {
+    if (_psychologicalPhoneNumber == null || _psychologicalPhoneNumber.isEmpty) {
+      throw "psychological_phone_required".tr();
+    }
+    return _psychologicalPhoneNumber;
   }
 
   factory UpdateSettingsModel.fromJson(Map<String, dynamic> json) =>

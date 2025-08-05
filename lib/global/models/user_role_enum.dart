@@ -96,12 +96,6 @@ enum UserRoleEnum implements DropDownItemModel {
             screen: SelectPlanRoute(),
             color: Colors.blue,
           ),
-          // UserViewOnPermissionModel(
-          //   title: "daily_goals",
-          //   icon: FontAwesomeIcons.listCheck,
-          //   screen: DailyGoalsScreen(),
-          //   color: Colors.green,
-          // ),
           UserViewOnPermissionModel(
             title: "points",
             icon: Icons.stacked_bar_chart,
@@ -163,6 +157,12 @@ enum UserRoleEnum implements DropDownItemModel {
             color: Colors.red,
           ),
           UserViewOnPermissionModel(
+            title: "exercises",
+            icon: Icons.fitness_center_rounded,
+            screen: ExercisesCoachRoute(role: this),
+            color: Colors.blue.shade400,
+          ),
+          UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
             screen: NotificationsRoute(role: this),
@@ -176,6 +176,18 @@ enum UserRoleEnum implements DropDownItemModel {
             icon: Icons.admin_panel_settings,
             screen: CustomersRoute(role: this),
             color: Colors.red,
+          ),
+          UserViewOnPermissionModel(
+            title: "meals",
+            icon: Icons.restaurant_menu_rounded,
+            screen: MealsDietitianRoute(),
+            color: Colors.green.shade400,
+          ),
+          UserViewOnPermissionModel(
+            title: "ingredients",
+            icon: Icons.kitchen,
+            screen: IngredientsRoute(),
+            color: Colors.blueAccent,
           ),
           UserViewOnPermissionModel(
             title: "notifications",

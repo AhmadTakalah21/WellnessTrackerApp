@@ -12,11 +12,11 @@ class CustomerInfoModel {
     required this.age,
     required this.weight,
     required this.length,
-    required this.chronicDiseases,
-    required this.waistCircumference,
-    required this.chest,
-    required this.shoulder,
-    required this.thighCircumference,
+    this.chronicDiseases,
+    this.waistCircumference,
+    this.chest,
+    this.shoulder,
+    this.thighCircumference,
     required this.forearmCircumference,
     required this.createdAt,
   });
@@ -27,19 +27,19 @@ class CustomerInfoModel {
   final int length;
 
   @JsonKey(name: 'chronic_diseases')
-  final String chronicDiseases;
+  final String? chronicDiseases;
 
   @JsonKey(name: 'waist_circumference')
-  final int waistCircumference;
+  final int? waistCircumference;
 
-  final int chest;
-  final int shoulder;
+  final int? chest;
+  final int? shoulder;
 
   @JsonKey(name: 'thigh_circumference')
-  final int thighCircumference;
+  final int? thighCircumference;
 
   @JsonKey(name: 'forearm_circumference')
-  final int forearmCircumference;
+  final int? forearmCircumference;
 
   @JsonKey(name: 'created_at')
   final String createdAt;

@@ -134,6 +134,7 @@ class _LevelsPageState extends State<LevelsPage>
   @override
   Widget build(BuildContext context) {
     final levelPage = LevelsPageItem(
+      role: widget.role,
       onTryAgainTap: onTryAgainTap,
       onEditTap: onEditTap,
       onDeleteTap: onDeleteTap,
