@@ -339,5 +339,14 @@
   "birth_date" : "تاريخ الميلاد",
   "select_birth_date" : "حدد تاريخ الميلاد",
   "psychological_phone_required" : "رقم الدعم النفسي مطلوب",
-  "phycological_support_phone" : "رقم الدعم النفسي"
+  "phycological_support_phone" : "رقم الدعم النفسي",
+  "info_updated_successfully" : "تم تحديث المعلومات بنجاح",
+  "complete_information" : "استكمال المعلومات",
+  "update_information" : "تحديث المعلومات",
+  "customer_info" : "معلومات المشترك",
+  "not_existed" : "لا يوجد",
+  "statistics" : "الإحصائيات",
+  "points_managements" : "إدارة النقاط",
+  "contact_customer_service" : "التواصل مع خدمة العملاء",
+  "contact_psycological_support" : "التواصل مع الدعم النفسي"
 }

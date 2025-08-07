@@ -10,18 +10,19 @@ part 'add_notification_model.g.dart';
 @immutable
 class AddNotificationModel {
   const AddNotificationModel({
-    this.isAll = "false",
+    this.isAll = "0",
     String? title,
     String? message,
   })  : _title = title,
         _message = message;
 
+  @JsonKey(name: 'is_all')
   final String isAll;
   final String? _title;
   final String? _message;
 
   AddNotificationModel copyWith({
-    String?  isAll,
+    String? isAll,
     String? Function()? title,
     String? Function()? message,
   }) {

@@ -107,7 +107,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                 children: [
                   SizedBox(height: 100),
                   Text(
-                    'Health & Wellness App',
+                    AppConstants.appName,
                     style: context.tt.headlineMedium?.copyWith(
                       color: context.cs.surface,
                     ),

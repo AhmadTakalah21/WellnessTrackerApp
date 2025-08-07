@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
@@ -15,16 +16,18 @@ abstract class SettingsViewCallBacks {
 
 @RoutePage()
 class SettingsView extends StatelessWidget {
-  const SettingsView({super.key});
+  const SettingsView({super.key, required this.role});
+  final UserRoleEnum role;
 
   @override
   Widget build(BuildContext context) {
-    return const SettingsPage();
+    return SettingsPage(role: role);
   }
 }
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  const SettingsPage({super.key, required this.role});
+  final UserRoleEnum role;
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -36,7 +39,7 @@ class _SettingsPageState extends State<SettingsPage>
 
   @override
   void onInfoTap() {
-    context.router.push(CompanyInfoRoute());
+    context.router.push(CompanyInfoRoute(role: widget.role));
   }
 
   @override

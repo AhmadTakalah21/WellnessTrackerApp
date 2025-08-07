@@ -69,4 +69,6 @@ final dashboardAutoRoutes = [
   AutoRoute(page: ExercisesRoute.page),
   AutoRoute(page: ExercisesCoachRoute.page),
   AutoRoute(page: NotificationsRoute.page),
+  AutoRoute(page: UpdateCustomerInfoRoute.page),
+  AutoRoute(page: ApproveCustomerRoute.page),
 ];

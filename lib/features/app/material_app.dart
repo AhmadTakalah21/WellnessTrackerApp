@@ -20,7 +20,7 @@ class _AppMaterialAppState extends State<AppMaterialApp> {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      title: 'Health & Wellness App',
+      title: 's App',
       theme: darkTheme,
     );
   }

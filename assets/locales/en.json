@@ -339,5 +339,14 @@
   "birth_date" : "Birth Date",
   "select_birth_date" : "Select Birth Date",
   "psychological_phone_required" : "Psychological support phone is required",
-  "phycological_support_phone" : "Phycological Support Phone"
+  "phycological_support_phone" : "Phycological Support Phone",
+  "info_updated_successfully" : "Information is updated successfully",
+  "complete_information" : "Complete information",
+  "update_information" : "Update information",
+  "customer_info" : "Customer Information",
+  "not_existed" : "Not existed",
+  "statistics" : "Statistics",
+  "points_managements" : "Points managements",
+  "contact_customer_service" : "Contact with customer service",
+  "contact_psycological_support" : "Contact with psycological support"
 }

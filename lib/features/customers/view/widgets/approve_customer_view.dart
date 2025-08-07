@@ -1,4 +1,4 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,9 +92,11 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   @override
   void initState() {
     super.initState();
-    usersCubit.getUsers(perPage: 1000000);
-    levelsCubit.getLevels(UserRoleEnum.admin, perPage: 1000000);
-    widget.customersCubit.setUserId(widget.customer.id);
+    if (widget.customer.status != "active") {
+      usersCubit.getUsers(perPage: 1000000);
+      levelsCubit.getLevels(UserRoleEnum.admin, perPage: 1000000);
+      widget.customersCubit.setUserId(widget.customer.id);
+    }
   }
 
   @override
@@ -116,7 +118,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   }
 
   @override
-  void onCancelTap() => Navigator.pop(context);
+  void onCancelTap() => context.router.pop();
 
   @override
   void onSave() => widget.customersCubit.assignSubscriber();
@@ -145,25 +147,32 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
           children: [
             const SizedBox(height: 5),
             _buildSubscriberInfoTable(),
-            const SizedBox(height: 10),
-            _buildDepartmentsDropDown(),
-            _buildUsersDropDown(),
-           _buildSelectedEmployees(),
-            _buildLevelsDropDown(),
-            const SizedBox(height: 10),
-            _buildSubmitButton(),
-            const SizedBox(height: 20),
+            if (widget.customer.status != "active") ...[
+              const SizedBox(height: 10),
+              _buildDepartmentsDropDown(),
+              _buildUsersDropDown(),
+              _buildSelectedEmployees(),
+              _buildLevelsDropDown(),
+              const SizedBox(height: 10),
+              _buildSubmitButton(),
+              const SizedBox(height: 20),
+            ]
           ],
         ),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() => AppBar(
-        centerTitle: true,
-        elevation: 10,
-        title: Text('user_activation'.tr(), style: context.tt.titleLarge),
-      );
+  PreferredSizeWidget _buildAppBar() {
+    final text = widget.customer.status == "active"
+        ? "customer_info".tr()
+        : 'user_activation'.tr();
+    return AppBar(
+      centerTitle: true,
+      elevation: 10,
+      title: Text(text, style: context.tt.titleLarge),
+    );
+  }
 
   Widget _buildSubscriberInfoTable() {
     final customer = widget.customer;

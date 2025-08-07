@@ -1,0 +1,150 @@
+import 'dart:convert';
+
+import 'package:easy_localization/easy_localization.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
+
+part 'update_customer_info_model.g.dart';
+
+@JsonSerializable()
+@immutable
+class UpdateCustomerInfoModel {
+  const UpdateCustomerInfoModel({
+    String? age,
+    String? weight,
+    String? length,
+    String? chronicDiseases,
+    String? waistCircumference,
+    String? chest,
+    String? shoulder,
+    // String? thighCircumference,
+    // String? forearmCircumference,
+  })  : _age = age,
+        _weight = weight,
+        _length = length,
+        _chronicDiseases = chronicDiseases,
+        _waistCircumference = waistCircumference,
+        _chest = chest,
+        _shoulder = shoulder;
+  // _thighCircumference = thighCircumference,
+  // _forearmCircumference = forearmCircumference;
+
+  final String? _age;
+  final String? _weight;
+  final String? _length;
+  final String? _chronicDiseases;
+  final String? _waistCircumference;
+  final String? _chest;
+  final String? _shoulder;
+  // final String? _thighCircumference;
+  // final String? _forearmCircumference;
+
+  UpdateCustomerInfoModel copyWith({
+    String? Function()? age,
+    String? Function()? weight,
+    String? Function()? length,
+    String? Function()? chronicDiseases,
+    String? Function()? waistCircumference,
+    String? Function()? chest,
+    String? Function()? shoulder,
+    // String? Function()? thighCircumference,
+    // String? Function()? forearmCircumference,
+  }) {
+    return UpdateCustomerInfoModel(
+      age: age != null ? age() : _age,
+      weight: weight != null ? weight() : _weight,
+      length: length != null ? length() : _length,
+      chronicDiseases:
+          chronicDiseases != null ? chronicDiseases() : _chronicDiseases,
+      waistCircumference: waistCircumference != null
+          ? waistCircumference()
+          : _waistCircumference,
+      chest: chest != null ? chest() : _chest,
+      shoulder: shoulder != null ? shoulder() : _shoulder,
+      // thighCircumference: thighCircumference != null
+      //     ? thighCircumference()
+      //     : _thighCircumference,
+      // forearmCircumference: forearmCircumference != null
+      //     ? forearmCircumference()
+      //     : _forearmCircumference,
+    );
+  }
+
+  String get age {
+    if (_age == null || _age.isEmpty) {
+      throw "age_required".tr();
+    }
+    return _age;
+  }
+
+  String get weight {
+    if (_weight == null || _weight.isEmpty) {
+      throw "weight_required".tr();
+    }
+    return _weight;
+  }
+
+  String get length {
+    if (_length == null || _length.isEmpty) {
+      throw "length_required".tr();
+    }
+    return _length;
+  }
+
+  @JsonKey(name: "chronic_diseases")
+  String get chronicDiseases {
+    if (_chronicDiseases == null || _chronicDiseases.isEmpty) {
+      throw "chronic_diseases_required".tr();
+    }
+    return _chronicDiseases;
+  }
+
+  @JsonKey(name: "waist_circumference")
+  String get waistCircumference {
+    if (_waistCircumference == null || _waistCircumference.isEmpty) {
+      throw "waist_required".tr();
+    }
+    return _waistCircumference;
+  }
+
+  String get chest {
+    if (_chest == null || _chest.isEmpty) {
+      throw "chest_required".tr();
+    }
+    return _chest;
+  }
+
+  String get shoulder {
+    if (_shoulder == null || _shoulder.isEmpty) {
+      throw "shoulder_required".tr();
+    }
+    return _shoulder;
+  }
+
+  // @JsonKey(name: "thigh_circumference")
+  // String get thighCircumference {
+  //   if (_thighCircumference == null || _thighCircumference.isEmpty) {
+  //     throw "thigh_required".tr();
+  //   }
+  //   return _thighCircumference;
+  // }
+
+  // @JsonKey(name: "forearm_circumference")
+  // String get forearmCircumference {
+  //   if (_forearmCircumference == null || _forearmCircumference.isEmpty) {
+  //     throw "forearm_required".tr();
+  //   }
+  //   return _forearmCircumference;
+  // }
+
+  factory UpdateCustomerInfoModel.fromJson(Map<String, dynamic> json) =>
+      _$UpdateCustomerInfoModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateCustomerInfoModelToJson(this);
+
+  factory UpdateCustomerInfoModel.fromString(String jsonString) =>
+      UpdateCustomerInfoModel.fromJson(json.decode(jsonString));
+
+  @override
+  String toString() => jsonEncode(toJson());
+}

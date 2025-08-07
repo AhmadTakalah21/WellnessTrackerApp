@@ -63,6 +63,7 @@ class _MainTextField2State extends State<MainTextField2> {
           SizedBox(height: 10),
         ],
         TextFormField(
+          //onTapOutside: (event) => FocusScope.of(context).unfocus(),
           maxLines: widget.maxLines,
           inputFormatters: widget.inputFormatters,
           keyboardType: widget.keyboardType,

@@ -6,6 +6,7 @@ import 'package:wellnesstrackerapp/features/company_info/view/widgets/update_com
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
 import 'package:wellnesstrackerapp/features/settings/model/settings_model/settings_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
@@ -19,19 +20,21 @@ abstract class CompanyInfoViewCallBacks {
 
 @RoutePage()
 class CompanyInfoView extends StatelessWidget {
-  const CompanyInfoView({super.key});
+  const CompanyInfoView({super.key, required this.role});
+  final UserRoleEnum role;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => get<SettingsCubit>()..getSettings(),
-      child: const CompanyInfoPage(),
+      child: CompanyInfoPage(role: role),
     );
   }
 }
 
 class CompanyInfoPage extends StatefulWidget {
-  const CompanyInfoPage({super.key});
+  const CompanyInfoPage({super.key, required this.role});
+  final UserRoleEnum role;
 
   @override
   State<CompanyInfoPage> createState() => _CompanyInfoPageState();
@@ -70,7 +73,9 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
         elevation: 10,
         title: Text('company_info'.tr(), style: context.tt.titleLarge),
         actions: [
-          if (localState != null && localState is SettingsSuccess)
+          if (widget.role.isAdmin &&
+              localState != null &&
+              localState is SettingsSuccess)
             IconButton(
               onPressed: () => onEditTap(localState!.settings),
               icon: Icon(Icons.edit),

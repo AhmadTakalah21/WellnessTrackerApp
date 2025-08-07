@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class AppConstants {
-  static const appName = "MedFit";
+  static const appName = "MedFit App";
   static const languages = ["EN", "AR"];
 
   static const duration15s = Duration(seconds: 15);

@@ -99,10 +99,13 @@ class _DashboardState extends State<Dashboard>
               child: Icon(module.icon, size: 37, color: module.color),
             ),
             const SizedBox(height: 6),
-            Text(
-              module.title.tr(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            Padding(
+              padding: AppConstants.paddingH4,
+              child: Text(
+                module.title.tr(),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+              ),
             ),
           ],
         ),

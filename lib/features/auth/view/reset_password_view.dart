@@ -94,7 +94,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
               children: [
                 SizedBox(height: 100),
                 Text(
-                  'Health & Wellness App',
+                  AppConstants.appName,
                   style: context.tt.headlineMedium?.copyWith(
                     color: context.cs.surface,
                   ),

@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
+import 'package:wellnesstrackerapp/features/settings/model/settings_model/settings_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -26,7 +27,6 @@ abstract class SignInViewCallbacks {
   void onUsernameChanged(String username);
   void onUsernameSubmitted(String username);
   void onPhoneChanged(PhoneNumber? phone);
-  //void onPhoneChanged(String phone);
   void onPhoneSubmitted(String phone);
   void onPasswordChanged(String password);
   void onPasswordSubmitted(String password);
@@ -35,7 +35,8 @@ abstract class SignInViewCallbacks {
   void onCodeChanged(String code);
   void onCodeSubmitted(String code);
   void onConfirmTermsAndConditionsTap(bool? isChecked);
-  Future<void> onGetCodeTap(String? whatsappPhone);
+  void onGetCodeTap(SettingsModel? setting);
+  Future<void> onLaunchPhoneTap(String? whatsappPhone);
   void onForgetPasswordTap();
   void onShowPassword();
   void onMainAction();
@@ -185,7 +186,60 @@ class _SignInPageState extends State<SignInPage>
   void onPhoneSubmitted(String phone) => passwordFocusNode.requestFocus();
 
   @override
-  Future<void> onGetCodeTap(String? whatsappPhone) async {
+  void onGetCodeTap(SettingsModel? setting) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      builder: (context) => Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: AppConstants.padding16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Text(
+                      "additional_options".tr(),
+                      style: context.tt.headlineMedium,
+                    ),
+                  ),
+                  TextButton.icon(
+                    icon: Icon(Icons.phone),
+                    onPressed: () =>
+                        onLaunchPhoneTap(setting?.supportPhoneNumber),
+                    label: Text(
+                      "contact_customer_service".tr(),
+                      style: context.tt.titleMedium?.copyWith(
+                        color: context.cs.primary,
+                      ),
+                    ),
+                  ),
+                  TextButton.icon(
+                    icon: Icon(Icons.phone),
+                    onPressed: () =>
+                        onLaunchPhoneTap(setting?.psychologicalPhoneNumber),
+                    label: Text(
+                      "contact_psycological_support".tr(),
+                      style: context.tt.titleMedium?.copyWith(
+                        color: context.cs.primary,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Future<void> onLaunchPhoneTap(String? whatsappPhone) async {
     if (whatsappPhone == null || whatsappPhone.isEmpty) return;
 
     final cleaned = whatsappPhone.replaceAll(RegExp(r'[^\d]'), '');
@@ -317,7 +371,7 @@ class _SignInPageState extends State<SignInPage>
           children: [
             SizedBox(height: 100),
             Text(
-              'Health & Wellness App',
+              AppConstants.appName,
               style: context.tt.headlineMedium?.copyWith(
                 color: context.cs.surface,
               ),
@@ -502,13 +556,13 @@ class _SignInPageState extends State<SignInPage>
           BlocBuilder<SettingsCubit, GeneralSettingsState>(
             buildWhen: (previous, current) => current is SettingsState,
             builder: (context, state) {
-              String? whatsappPhone;
+              SettingsModel? settings;
               if (state is SettingsSuccess) {
-                whatsappPhone = state.settings.supportPhoneNumber;
+                settings = state.settings;
               }
               return Center(
                 child: InkWell(
-                  onTap: () => onGetCodeTap(whatsappPhone),
+                  onTap: () => onGetCodeTap(settings),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -517,7 +571,9 @@ class _SignInPageState extends State<SignInPage>
                         width: 24,
                         height: 24,
                         colorFilter: ColorFilter.mode(
-                            context.cs.primary, BlendMode.srcIn),
+                          context.cs.primary,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       const SizedBox(width: 8),
                       Text(

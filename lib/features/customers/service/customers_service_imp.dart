@@ -51,9 +51,9 @@ class CustomersServiceImp implements CustomersService {
       rethrow;
     }
   }
-  
+
   @override
-  Future<void> assignMealPlan(AssignPlanModel model)async {
+  Future<void> assignMealPlan(AssignPlanModel model) async {
     try {
       final endpoint = "/v1/dietitian/meal-plans/assign";
       await dio.post(endpoint, data: model.toJson());
@@ -62,12 +62,29 @@ class CustomersServiceImp implements CustomersService {
       rethrow;
     }
   }
-  
+
   @override
-  Future<void> assignExercisePlan(AssignPlanModel model) async{
+  Future<void> assignExercisePlan(AssignPlanModel model) async {
     try {
       final endpoint = "/v1/coach/exercise-plans/assign";
       await dio.post(endpoint, data: model.toJson());
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateCustomerInfo(
+    UserRoleEnum role,
+    UpdateCustomerInfoModel model,
+    int id,
+  ) async {
+    try {
+      final endpoint = "/v1/${role.getApiRoute}/subscribers/$id";
+      final data = model.toJson();
+      data.addAll({"_method": "PUT"});
+      await dio.post(endpoint, data: data);
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;

@@ -6,6 +6,7 @@ import 'package:wellnesstrackerapp/features/about_us/view/about_us_view.dart';
 import 'package:wellnesstrackerapp/features/privacy_policy/view/privacy_policy_view.dart';
 import 'package:wellnesstrackerapp/features/settings/view/settings_view.dart';
 import 'package:wellnesstrackerapp/features/terms_and_conditions/view/terms_and_conditions_view.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -62,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SettingsView(),
+        builder: (context) => SettingsView(role: UserRoleEnum.user),
       ),
     );
   }
@@ -149,11 +150,11 @@ class _ProfilePageState extends State<ProfilePage>
               title: "about_us".tr(),
               onTap: onAboutUsTap,
             ),
-             SizedBox(height: 16),
+            SizedBox(height: 16),
             ProfileOptionWidget(
               icon: Icons.star,
               title: "rate_us".tr(),
-              onTap: (){},
+              onTap: () {},
             ),
             SizedBox(height: 16),
             ProfileOptionWidget(

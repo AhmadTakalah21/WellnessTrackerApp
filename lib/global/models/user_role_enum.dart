@@ -70,10 +70,22 @@ enum UserRoleEnum implements DropDownItemModel {
             color: Colors.indigo,
           ),
           UserViewOnPermissionModel(
+            title: "points_managements",
+            icon: Icons.stacked_bar_chart,
+            screen: LevelsRoute(role: this),
+            color: Colors.brown,
+          ),
+          UserViewOnPermissionModel(
             title: "adds_and_offers",
             icon: Icons.campaign,
             screen: AddsAndOffersRoute(role: this),
             color: Colors.orange,
+          ),
+          UserViewOnPermissionModel(
+            title: "statistics",
+            icon: Icons.bar_chart,
+            screen: AddsAndOffersRoute(role: this),
+            color: Colors.teal,
           ),
           UserViewOnPermissionModel(
             title: "notifications",
@@ -84,7 +96,7 @@ enum UserRoleEnum implements DropDownItemModel {
           UserViewOnPermissionModel(
             title: "settings",
             icon: Icons.settings,
-            screen: SettingsRoute(),
+            screen: SettingsRoute(role: this),
             color: Colors.black,
           ),
         ];
@@ -147,6 +159,12 @@ enum UserRoleEnum implements DropDownItemModel {
             screen: NotificationsRoute(role: this),
             color: Colors.green,
           ),
+          UserViewOnPermissionModel(
+            title: "settings",
+            icon: Icons.settings,
+            screen: SettingsRoute(role: this),
+            color: Colors.black,
+          ),
         ];
       case coach:
         return [
@@ -167,6 +185,12 @@ enum UserRoleEnum implements DropDownItemModel {
             icon: FontAwesomeIcons.bell,
             screen: NotificationsRoute(role: this),
             color: Colors.green,
+          ),
+          UserViewOnPermissionModel(
+            title: "settings",
+            icon: Icons.settings,
+            screen: SettingsRoute(role: this),
+            color: Colors.black,
           ),
         ];
       case dietitian:
@@ -194,6 +218,12 @@ enum UserRoleEnum implements DropDownItemModel {
             icon: FontAwesomeIcons.bell,
             screen: NotificationsRoute(role: this),
             color: Colors.green,
+          ),
+          UserViewOnPermissionModel(
+            title: "settings",
+            icon: Icons.settings,
+            screen: SettingsRoute(role: this),
+            color: Colors.black,
           ),
         ];
     }

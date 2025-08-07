@@ -89,7 +89,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
     if (isAll) {
       widget.notificationsCubit.clearUserIds();
     }
-    widget.notificationsCubit.setIsAll(isAll.toString());
+    widget.notificationsCubit.setIsAll(isAll ? "1" : "0");
   }
 
   @override

@@ -5,7 +5,9 @@ import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/customers/model/add_points_model/add_points_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_meal_plan_model/assign_meal_plan_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_subscriber_model/assign_subscriber_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/customer_info_model/customer_info_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/update_customer_info_model/update_customer_info_model.dart';
 import 'package:wellnesstrackerapp/features/customers/service/customers_service.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
@@ -18,6 +20,7 @@ part 'states/assign_subscriber_state.dart';
 part 'states/assign_meal_plan_state.dart';
 //part 'states/assign_exercise_plan_state.dart';
 part 'states/add_points_state.dart';
+part 'states/update_customer_info_state.dart';
 
 @injectable
 class CustomersCubit extends Cubit<GeneralCustomersState> {
@@ -26,6 +29,8 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
 
   List<CustomerModel> customers = [];
   MetaModel? meta;
+  UpdateCustomerInfoModel updateCustomerInfoModel =
+      const UpdateCustomerInfoModel();
   AssignSubscriberModel model = const AssignSubscriberModel();
   AddPointsModel addPointsModel = const AddPointsModel();
   AssignPlanModel assignPlanModel = const AssignPlanModel();
@@ -41,6 +46,51 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
 
   void setUserId(int? id) {
     model = model.copyWith(userId: () => id);
+  }
+
+  void setInitailCustomerInfo(CustomerInfoModel info) {
+    setAge(info.age);
+    setWeight(info.weight);
+    setLength(info.length);
+    setChronicDiseases(info.chronicDiseases);
+    setWaistCircumference(info.waistCircumference);
+    setChest(info.chest);
+    setShoulder(info.shoulder);
+  }
+
+  void setAge(int age) {
+    updateCustomerInfoModel =
+        updateCustomerInfoModel.copyWith(age: () => age.toString());
+  }
+
+  void setWeight(int weight) {
+    updateCustomerInfoModel =
+        updateCustomerInfoModel.copyWith(weight: () => weight.toString());
+  }
+
+  void setLength(int length) {
+    updateCustomerInfoModel =
+        updateCustomerInfoModel.copyWith(length: () => length.toString());
+  }
+
+  void setChronicDiseases(String? value) {
+    updateCustomerInfoModel =
+        updateCustomerInfoModel.copyWith(chronicDiseases: () => value);
+  }
+
+  void setWaistCircumference(int? value) {
+    updateCustomerInfoModel = updateCustomerInfoModel.copyWith(
+        waistCircumference: () => value.toString());
+  }
+
+  void setChest(int? value) {
+    updateCustomerInfoModel =
+        updateCustomerInfoModel.copyWith(chest: () => value.toString());
+  }
+
+  void setShoulder(int? value) {
+    updateCustomerInfoModel =
+        updateCustomerInfoModel.copyWith(shoulder: () => value.toString());
   }
 
   void setEmployeeId(UserModel? user) {
@@ -112,6 +162,10 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     assignPlanModel = const AssignPlanModel();
   }
 
+  void resetUpdateCustomerInfoModel() {
+    updateCustomerInfoModel = const UpdateCustomerInfoModel();
+  }
+
   Future<void> getCustomers(
     UserRoleEnum role, {
     int? page,
@@ -137,7 +191,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     }
   }
 
-  void searchCodes(String query, {String? status, String? departmentName}) {
+  void searchCustomers(String query, {String? status, String? departmentName}) {
     lastQuery = query;
     lastStatus = status;
     lastDepartment = departmentName;
@@ -172,10 +226,23 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     }).toList();
   }
 
+  Future<void> updateCustomerInfo(UserRoleEnum role, int id) async {
+    emit(UpdateCustomerInfoLoading());
+    try {
+      if (isClosed) return;
+      await customerService.updateCustomerInfo(
+        role,
+        updateCustomerInfoModel,
+        id,
+      );
+      emit(UpdateCustomerInfoSuccess("info_updated_successfully".tr()));
+    } catch (e) {
+      if (isClosed) return;
+      emit(UpdateCustomerInfoFail(e.toString()));
+    }
+  }
+
   Future<void> assignSubscriber() async {
-    print(model.coachId);
-    print(model.dietitianId);
-    print(model.doctorId);
     emit(AssignSubscriberLoading());
     try {
       if (isClosed) return;

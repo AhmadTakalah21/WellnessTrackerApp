@@ -6,12 +6,12 @@ import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/add_points_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/additional_customer_options_widget.dart';
-import 'package:wellnesstrackerapp/features/customers/view/widgets/approve_customer_view.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_exercise_plan_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_meal_plan_widget.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
@@ -97,21 +97,23 @@ class CustomersPageState extends State<CustomersPage>
         MainSnackBar.showMessage(context, "customer_not_fill_info".tr());
         return;
       } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ApproveCustomerView(
-              customer: customer,
-              customersCubit: customersCubit,
-              onSuccess: fetchCustomers,
-            ),
+        context.router.push(
+          ApproveCustomerRoute(
+            customer: customer,
+            customersCubit: customersCubit,
+            onSuccess: fetchCustomers,
           ),
         );
       }
-    } else if (widget.role.isDietitian) {
-    } else if (widget.role.isCoach) {
-    } else if (widget.role.isDoctor) {
-    } else {}
+    } else {
+      context.router.push(
+        UpdateCustomerInfoRoute(
+          customersCubit: customersCubit,
+          customer: customer,
+          role: widget.role,
+        ),
+      );
+    }
   }
 
   @override
@@ -207,7 +209,7 @@ class CustomersPageState extends State<CustomersPage>
   }
 
   @override
-  void onSearchChanged(String input) => customersCubit.searchCodes(input);
+  void onSearchChanged(String input) => customersCubit.searchCustomers(input);
 
   @override
   void onTryAgainTap() => fetchCustomers();

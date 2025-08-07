@@ -83,7 +83,7 @@ class _SplashPageState extends State<SplashPage>
               child: Padding(
                 padding: AppConstants.paddingH4,
                 child: Text(
-                  "Welcome to Health & Wellness App",
+                  "Welcome to ${AppConstants.appName}",
                   textAlign: TextAlign.center,
                   style: context.tt.headlineMedium,
                 ),

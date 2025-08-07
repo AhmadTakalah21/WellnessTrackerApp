@@ -20,6 +20,10 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
           ? null
           : CustomerInfoModel.fromJson(
               json['information'] as Map<String, dynamic>),
+      subscription: json['subscription'] == null
+          ? null
+          : CustomerSubscriptionModel.fromJson(
+              json['subscription'] as Map<String, dynamic>),
       createdAt: json['created_at'] as String,
     );
 
@@ -34,5 +38,6 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
       'status': instance.status,
       'role': UserRoleEnum.toJson(instance.role),
       'information': instance.info,
+      'subscription': instance.subscription,
       'created_at': instance.createdAt,
     };

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:wellnesstrackerapp/features/customers/model/customer_info_model/customer_info_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/customer_subscription_model/customer_subscription_model.dart';
 import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
@@ -26,6 +27,7 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
     required this.status,
     required this.role,
     this.info,
+    this.subscription,
     required this.createdAt,
   });
 
@@ -50,6 +52,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
   @JsonKey(name: "information")
   final CustomerInfoModel? info;
 
+  final CustomerSubscriptionModel? subscription;
+
   @JsonKey(name: 'created_at')
   final String createdAt;
 
@@ -60,6 +64,9 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
         'name'.tr(),
         'email'.tr(),
         'phone'.tr(),
+        'dietitian'.tr(),
+        'coach'.tr(),
+        'doctor'.tr(),
         'status'.tr(),
         'event'.tr(),
       ];
@@ -70,6 +77,9 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
         name,
         email,
         phone ?? '_',
+        subscription?.dietitian?.name ?? 'not_existed'.tr(),
+        subscription?.coach?.name ?? 'not_existed'.tr(),
+        subscription?.doctor?.name ?? 'not_existed'.tr(),
         status,
       ];
 

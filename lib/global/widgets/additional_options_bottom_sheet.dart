@@ -14,7 +14,7 @@ class AdditionalOptionsBottomSheet<T> extends StatelessWidget {
   final T item;
   final void Function(T) onEditTap;
   final void Function(T) onDeleteTap;
-
+  
   @override
   Widget build(BuildContext context) {
     return Row(
