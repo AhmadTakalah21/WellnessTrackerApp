@@ -167,11 +167,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
     final text = widget.customer.status == "active"
         ? "customer_info".tr()
         : 'user_activation'.tr();
-    return AppBar(
-      centerTitle: true,
-      elevation: 10,
-      title: Text(text, style: context.tt.titleLarge),
-    );
+    return AppBar(title: Text(text));
   }
 
   Widget _buildSubscriberInfoTable() {

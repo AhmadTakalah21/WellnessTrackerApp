@@ -1,11 +1,11 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wellnesstrackerapp/features/codes/cubit/codes_cubit.dart';
 import 'package:wellnesstrackerapp/features/codes/model/code_model/code_model.dart';
 import 'package:wellnesstrackerapp/features/codes/view/widgets/add_code_widget.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
@@ -50,11 +50,9 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
 
   @override
   void onAddTap() {
-    showModalBottomSheet(
+    showMaterialModalBottomSheet(
       context: context,
-      isScrollControlled: true,
       shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
-      constraints: BoxConstraints(maxHeight: 500),
       builder: (bottomSheetContext) => AddCodeWidget(
         codesCubit: codesCubit,
         onSuccess: () => codesCubit.getCodes(page: 1, perPage: 10),
@@ -110,18 +108,8 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text(
-          CodeModel.header,
-          style: context.tt.titleLarge,
-        ),
-      ),
-      backgroundColor: context.cs.surface,
+      appBar: AppBar(title: Text(CodeModel.header)),
       body: Padding(
         padding: AppConstants.padding16,
         child: Column(
@@ -131,10 +119,7 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
                 buildWhen: (previous, current) => current is CodesState,
                 builder: (context, state) {
                   if (state is CodesLoading) {
-                    return LoadingIndicator(
-                      color: context.cs.primary,
-                      height: height / 1.2,
-                    );
+                    return LoadingIndicator();
                   } else if (state is CodesSuccess) {
                     return MainDataTable<CodeModel>(
                       titles: CodeModel.titles,
@@ -166,9 +151,7 @@ class _CodesPageState extends State<CodesPage> implements UsersViewCallBacks {
           ],
         ),
       ),
-      floatingActionButton: MainFloatingButton(
-        onTap: onAddTap,
-      ),
+      floatingActionButton: MainFloatingButton(onTap: onAddTap),
     );
   }
 }

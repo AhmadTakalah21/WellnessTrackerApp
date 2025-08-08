@@ -10,7 +10,6 @@ import 'package:wellnesstrackerapp/features/levels/view/widgets/add_level_widget
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
@@ -143,12 +142,7 @@ class _LevelsPageState extends State<LevelsPage>
       return levelPage;
     }).toList();
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('levels'.tr(), style: context.tt.titleLarge),
-      ),
+      appBar: AppBar(title: Text('levels'.tr())),
       body: widget.role.isAdmin
           ? Column(
               children: [

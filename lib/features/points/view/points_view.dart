@@ -5,7 +5,6 @@ import 'package:wellnesstrackerapp/features/items/view/items_view.dart';
 import 'package:wellnesstrackerapp/features/points/view/pages/current_points_view.dart';
 import 'package:wellnesstrackerapp/features/points/view/pages/earn_points_ways_view.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_add_floating_button.dart';
@@ -90,13 +89,7 @@ class _PointsPageState extends State<PointsPage>
     ];
 
     return Scaffold(
-      backgroundColor: context.cs.surface,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('points'.tr(), style: context.tt.titleLarge),
-      ),
+      appBar: AppBar(title: Text('points'.tr())),
       body: Column(
         children: [
           MainTabBar(
@@ -128,7 +121,6 @@ class _PointsPageState extends State<PointsPage>
           onTap: onGoToStoreTap,
         ),
       ),
-
     );
   }
 

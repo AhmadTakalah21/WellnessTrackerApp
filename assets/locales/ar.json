@@ -348,5 +348,10 @@
   "statistics" : "الإحصائيات",
   "points_managements" : "إدارة النقاط",
   "contact_customer_service" : "التواصل مع خدمة العملاء",
-  "contact_psycological_support" : "التواصل مع الدعم النفسي"
+  "contact_psycological_support" : "التواصل مع الدعم النفسي",
+  "cant_open_whatsapp" : "لا يمكن فتح واتساب حالياً",
+  "validity_days" : "مدة الصلاحية",
+  "validity_days_required" : "حقل مدة الصلاحية مطلوب",
+  "days" : "أيام",
+  "ratings" : "التقييمات"
 }

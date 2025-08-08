@@ -11,25 +11,20 @@ part 'add_code_model.g.dart';
 class AddCodeModel {
   const AddCodeModel({
     String? code,
-    String? startDate,
-    String? endDate,
+    int? validityDays,
   })  : _code = code,
-        _startDate = startDate,
-        _endDate = endDate;
+        _validityDays = validityDays;
 
   final String? _code;
-  final String? _startDate;
-  final String? _endDate;
+  final int? _validityDays;
 
   AddCodeModel copyWith({
     String? Function()? code,
-    String? Function()? startDate,
-    String? Function()? endDate,
+    int? Function()? validityDays,
   }) {
     return AddCodeModel(
       code: code != null ? code() : _code,
-      startDate: startDate != null ? startDate() : _startDate,
-      endDate: endDate != null ? endDate() : _endDate,
+      validityDays: validityDays != null ? validityDays() : _validityDays,
     );
   }
 
@@ -40,20 +35,12 @@ class AddCodeModel {
     return _code;
   }
 
-  @JsonKey(name: "start_date")
-  String get startDate {
-    if (_startDate == null || _startDate.isEmpty) {
-      throw "start_date_required".tr();
+  @JsonKey(name: "validity_days")
+  int get validityDays {
+    if (_validityDays == null) {
+      throw "validity_days_required".tr();
     }
-    return _startDate;
-  }
-
-  @JsonKey(name: "end_date")
-  String get endDate {
-    if (_endDate == null || _endDate.isEmpty) {
-      throw "end_date_required".tr();
-    }
-    return _endDate;
+    return _validityDays;
   }
 
   factory AddCodeModel.fromJson(Map<String, dynamic> json) =>

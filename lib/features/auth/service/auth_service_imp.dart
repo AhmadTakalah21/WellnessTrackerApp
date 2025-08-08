@@ -5,17 +5,15 @@ class AuthServiceImp implements AuthService {
   final dio = DioClient();
 
   @override
-  Future<SignInModel> signIn(
-    String email,
-    String password,
-    String? fcmToken,
-  ) async {
+  Future<SignInModel> signIn(String email, String password, String? fcmToken,
+      {String? code}) async {
     try {
       final data = {
         'email': email,
         'password': password,
         'fcm_token': fcmToken,
       };
+      if (code != null && code.isNotEmpty) data.addAll({"code": code});
       final response = await dio.post('/v1/auth/login', data: data);
 
       final body = response.data["data"] as Map<String, dynamic>;

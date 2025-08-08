@@ -31,7 +31,7 @@ class AppInterceptor extends Interceptor {
       'Type: ${err.type}\n'
       'Response: ${err.response?.data}',
     );
-    if (err.response?.statusCode == 401) {
+    if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
       get<AuthManagerBloc>().add(SignOutRequested());
       throw UnauthorizedException(err.requestOptions);
     }

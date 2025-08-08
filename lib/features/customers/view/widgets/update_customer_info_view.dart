@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
@@ -74,11 +73,7 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
   Widget build(BuildContext context) {
     final info = widget.customer.info;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("update_information".tr()),
-        backgroundColor: context.cs.primary,
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text("update_information".tr())),
       body: Stack(
         children: [
           SingleChildScrollView(

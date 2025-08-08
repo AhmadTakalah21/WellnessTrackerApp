@@ -69,6 +69,7 @@ enum UserRoleEnum implements DropDownItemModel {
             screen: LevelsRoute(role: this),
             color: Colors.indigo,
           ),
+          // TODO create view
           UserViewOnPermissionModel(
             title: "points_managements",
             icon: Icons.stacked_bar_chart,
@@ -84,8 +85,14 @@ enum UserRoleEnum implements DropDownItemModel {
           UserViewOnPermissionModel(
             title: "statistics",
             icon: Icons.bar_chart,
-            screen: AddsAndOffersRoute(role: this),
+            screen: StatisticsRoute(),
             color: Colors.teal,
+          ),
+          UserViewOnPermissionModel(
+            title: "ratings",
+            icon: Icons.star_rate,
+            screen: RatingsRoute(),
+            color: Colors.amber,
           ),
           UserViewOnPermissionModel(
             title: "notifications",

@@ -126,15 +126,7 @@ class _UsersPageState extends State<UsersPage> implements UsersViewCallBacks {
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text(
-          'employees_administration'.tr(),
-          style: context.tt.titleLarge,
-        ),
-      ),
+      appBar: AppBar(title: Text('employees_administration'.tr())),
       backgroundColor: context.cs.surface,
       body: Padding(
         padding: AppConstants.padding16,

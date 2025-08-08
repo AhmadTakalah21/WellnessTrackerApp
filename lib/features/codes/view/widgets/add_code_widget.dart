@@ -7,7 +7,7 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
-import 'package:wellnesstrackerapp/global/widgets/main_date_picker.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 
@@ -33,51 +33,32 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
   @override
   void initState() {
     super.initState();
-    final code = widget.code;
-    widget.codesCubit.setModel(code);
+    widget.codesCubit.setModel(widget.code);
   }
 
   void onCancelTap() => Navigator.pop(context);
 
-  String? _formattedDate(DateTime? date) {
-    if (date == null) {
-      return null;
-    }
-    return DateFormat("yyyy-MM-dd").format(date);
-  }
-
-  void onCodeChanged(String code) => widget.codesCubit.setCode(code);
-
-  void onStartDateSelected(DateTime? date) =>
-      widget.codesCubit.setStartDate(_formattedDate(date));
-
-  void onEndDateSelected(DateTime? date) =>
-      widget.codesCubit.setEndDate(_formattedDate(date));
-
-  void onSave() =>
-      widget.codesCubit.addCode(id: widget.code?.id);
+  void onSave() => widget.codesCubit.addCode(id: widget.code?.id);
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: AppConstants.padding20,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            spacing: 12,
-            children: [
-              _buildTitle(),
-              const SizedBox(height: 4),
-              _buildCodeTextField(),
-              _buildStartDatePicker(),
-              _buildEndDatePicker(),
-              const SizedBox(height: 6),
-              _buildSubmitButton(),
-            ],
-          ),
+    return SingleChildScrollView(
+      padding: MediaQuery.of(context).viewInsets,
+      child: Padding(
+        padding: AppConstants.padding20,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          spacing: 12,
+          children: [
+            _buildTitle(),
+            const SizedBox(height: 4),
+            _buildCodeTextField(),
+            _buildValidityDaysConter(),
+            const SizedBox(height: 6),
+            _buildSubmitButton(),
+            SizedBox(height: 20),
+          ],
         ),
       ),
     );
@@ -92,22 +73,17 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
 
   Widget _buildCodeTextField() => MainTextField2(
         initialText: widget.code?.code,
-        onChanged: onCodeChanged,
+        onChanged: widget.codesCubit.setCode,
         icon: Icons.qr_code,
         label: 'code'.tr(),
         validator: (v) => v == null || v.isEmpty ? 'required_field'.tr() : null,
       );
 
-  Widget _buildStartDatePicker() => MainDatePicker(
-        isStart: true,
-        initialDate: widget.code?.startDate,
-        onDateSelected: onStartDateSelected,
-      );
-
-  Widget _buildEndDatePicker() => MainDatePicker(
-        isEnd: true,
-        initialDate: widget.code?.endDate,
-        onDateSelected: onEndDateSelected,
+  Widget _buildValidityDaysConter() => MainCounterWidget(
+        initialCount: widget.code?.validityDays,
+        label: "validity_days".tr(),
+        icon: Icons.timer,
+        onChanged: widget.codesCubit.setValidityDays,
       );
 
   Widget _buildSubmitButton() => BlocConsumer<CodesCubit, GeneralCodesState>(

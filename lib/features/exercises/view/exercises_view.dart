@@ -78,12 +78,7 @@ class _ExercisesPageState extends State<ExercisesPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('exercises'.tr(), style: context.tt.titleLarge),
-      ),
+      appBar: AppBar(title: Text('exercises'.tr())),
       body: BlocBuilder<ExercisePlansCubit, GeneralExercisePlansState>(
         buildWhen: (previous, current) => current is ExercisePlansState,
         builder: (context, state) {
@@ -164,7 +159,7 @@ class _ExercisesPageState extends State<ExercisesPage>
         child: Column(
           spacing: 20,
           children: [
-           // _buildTitle(),
+            // _buildTitle(),
             ...List.generate(planDay.exercises.length, (index) {
               final exercise = planDay.exercises[index];
               return _buildExerciseTile(exercise);

@@ -19,6 +19,7 @@ part 'states/auth_state.dart';
 part 'states/text_field_state.dart';
 part 'states/sign_in_state.dart';
 part 'states/add_info_state.dart';
+part 'states/subscription_expired_state.dart';
 
 @injectable
 class AuthCubit extends Cubit<AuthState> {
@@ -30,6 +31,7 @@ class AuthCubit extends Cubit<AuthState> {
   ResetPasswordPostModel resetPasswordPostModel =
       const ResetPasswordPostModel();
   AddInfoModel addInfoModel = const AddInfoModel();
+  String? code;
 
   void setUsername(String username) {
     postSignUpModel = postSignUpModel.copyWith(username: () => username);
@@ -59,8 +61,9 @@ class AuthCubit extends Cubit<AuthState> {
     emit(TextFieldState(TextFieldType.confirmPassword));
   }
 
-  void setSubscriptionCode(String code) {
+  void setSubscriptionCode(String? code) {
     postSignUpModel = postSignUpModel.copyWith(code: () => code);
+    this.code = code;
     emit(TextFieldState(TextFieldType.code));
   }
 
@@ -174,12 +177,16 @@ class AuthCubit extends Cubit<AuthState> {
       final response = await authRepo.signIn(
         postSignUpModel.email,
         postSignUpModel.password,
+        code: code,
         fcmToken,
       );
       emit(SignInSuccess(response, "login_success".tr()));
       authManagerBloc?.add(SignInRequested(response, onSuccess: onSuccess));
     } catch (e) {
       emit(SignInFail(e.toString()));
+      if (e.toString().contains("Your subscription has expired")) {
+        emit(SubscriptionExpiredState());
+      }
     }
   }
 

@@ -59,11 +59,9 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: context.cs.primary,
       elevation: 4,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
-      centerTitle: true,
-      title: Text(widget.title, style: context.tt.titleLarge),
+      title: Text(widget.title,),
       actions: [
         if (widget.hasLogout)
           BlocConsumer<AuthCubit, AuthState>(

@@ -82,7 +82,6 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(title: 'profile'.tr()),
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         padding: AppConstants.padding16,

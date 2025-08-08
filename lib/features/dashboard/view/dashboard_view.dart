@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_view_on_permission_model.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 
@@ -51,7 +50,6 @@ class _DashboardState extends State<Dashboard>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.cs.surface,
       appBar: MainAppBar(title: 'home'.tr(),),
       body: Padding(
         padding: AppConstants.padding10,

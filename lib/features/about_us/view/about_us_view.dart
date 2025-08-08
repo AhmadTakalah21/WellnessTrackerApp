@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
-abstract class AboutUsViewCallBacks{}
+abstract class AboutUsViewCallBacks {}
 
 @RoutePage()
 class AboutUsView extends StatelessWidget {
@@ -23,36 +23,32 @@ class AboutUsPage extends StatefulWidget {
   State<AboutUsPage> createState() => _AboutUsPageState();
 }
 
-class _AboutUsPageState extends State<AboutUsPage> implements AboutUsViewCallBacks{
+class _AboutUsPageState extends State<AboutUsPage>
+    implements AboutUsViewCallBacks {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('about_us'.tr(), style: context.tt.titleLarge),
-      ),
+    return Scaffold(
+      appBar: AppBar(title: Text('about_us'.tr())),
       body: Padding(
         padding: AppConstants.padding16,
         child: Column(
           children: [
             Text("خدماتنا", style: context.tt.headlineLarge),
-              const SizedBox(height: 16),
-              _WorkoutItem(
-                title: 'Lose your weight',
-                subtitle: '10 workouts / Level 1 Newbie',
-              ),
-              const SizedBox(height: 12),
-              _WorkoutItem(
-                title: 'Quick full body stretches',
-                subtitle: '10 workouts / Level 1 Newbie',
-              ),
-              const SizedBox(height: 12),
-              _WorkoutItem(
-                title: 'Morning Yoga',
-                subtitle: '10 workouts / Level 1 Newbie',
-              ),
+            const SizedBox(height: 16),
+            _WorkoutItem(
+              title: 'Lose your weight',
+              subtitle: '10 workouts / Level 1 Newbie',
+            ),
+            const SizedBox(height: 12),
+            _WorkoutItem(
+              title: 'Quick full body stretches',
+              subtitle: '10 workouts / Level 1 Newbie',
+            ),
+            const SizedBox(height: 12),
+            _WorkoutItem(
+              title: 'Morning Yoga',
+              subtitle: '10 workouts / Level 1 Newbie',
+            ),
           ],
         ),
       ),

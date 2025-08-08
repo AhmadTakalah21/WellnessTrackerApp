@@ -119,12 +119,7 @@ class _ExercisesCoachPageState extends State<ExercisesCoachPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('exercises'.tr(), style: context.tt.titleLarge),
-      ),
+      appBar: AppBar(title: Text('exercises'.tr())),
       body: BlocBuilder<ExercisesCubit, GeneralExercisesState>(
         buildWhen: (previous, current) => current is ExercisesState,
         builder: (context, state) {
@@ -193,8 +188,8 @@ class _ExercisesCoachPageState extends State<ExercisesCoachPage>
                         final repeat = exercise.description.repeats[index];
                         return Text(
                           "repeats for round ${index + 1} is $repeat",
-                          style:
-                              context.tt.bodySmall?.copyWith(color: Colors.grey),
+                          style: context.tt.bodySmall
+                              ?.copyWith(color: Colors.grey),
                         );
                       },
                     )),
@@ -211,7 +206,8 @@ class _ExercisesCoachPageState extends State<ExercisesCoachPage>
                     Expanded(
                       child: Text(
                         "اضغط هنا لمشاهدة كيفية أداء التمرين",
-                        style: context.tt.bodySmall?.copyWith(color: Colors.grey),
+                        style:
+                            context.tt.bodySmall?.copyWith(color: Colors.grey),
                       ),
                     ),
                     Icon(Icons.play_circle, color: context.cs.error)

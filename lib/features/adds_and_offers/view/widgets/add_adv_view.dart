@@ -107,10 +107,7 @@ class _AddAdvPageState extends State<AddAdvPage>
     );
     final title = widget.adv != null ? "edit" : "add";
     return Scaffold(
-      appBar: AppBar(
-        title: Text("${title}_adv".tr(), style: context.tt.titleLarge),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text("${title}_adv".tr())),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -134,7 +131,8 @@ class _AddAdvPageState extends State<AddAdvPage>
                     onChanged: widget.advCubit.setTitleAr,
                     label: 'title_ar'.tr(),
                     icon: Icons.title,
-                    validator: (val) => Utils.validateInput(val, InputTextType.none),
+                    validator: (val) =>
+                        Utils.validateInput(val, InputTextType.none),
                   ),
                   MainTextField2(
                     initialText: adv?.description.en,

@@ -7,7 +7,6 @@ import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/extensions/date_x.dart';
 import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
@@ -63,11 +62,7 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("complete_information".tr()),
-        backgroundColor: context.cs.primary,
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text("complete_information".tr())),
       body: Stack(
         children: [
           SingleChildScrollView(

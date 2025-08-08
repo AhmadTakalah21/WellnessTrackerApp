@@ -9,15 +9,13 @@ part of 'code_model.dart';
 CodeModel _$CodeModelFromJson(Map<String, dynamic> json) => CodeModel(
       id: (json['id'] as num).toInt(),
       code: json['code'] as String,
-      startDate: json['start_date'] as String,
-      endDate: json['end_date'] as String,
+      validityDays: (json['validity_days'] as num).toInt(),
       status: json['status'] as String,
     );
 
 Map<String, dynamic> _$CodeModelToJson(CodeModel instance) => <String, dynamic>{
       'id': instance.id,
       'code': instance.code,
-      'start_date': instance.startDate,
-      'end_date': instance.endDate,
+      'validity_days': instance.validityDays,
       'status': instance.status,
     };

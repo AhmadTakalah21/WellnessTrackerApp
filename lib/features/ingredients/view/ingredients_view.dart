@@ -115,12 +115,7 @@ class _IngredientsPageState extends State<IngredientsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('ingredients'.tr(), style: context.tt.titleLarge),
-      ),
+      appBar: AppBar(title: Text('ingredients'.tr())),
       body: BlocBuilder<IngredientsCubit, GeneralIngredientsState>(
         buildWhen: (previous, current) => current is IngredientsState,
         builder: (context, state) {

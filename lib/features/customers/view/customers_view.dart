@@ -219,14 +219,7 @@ class CustomersPageState extends State<CustomersPage>
     final height = MediaQuery.sizeOf(context).height;
     bool isAdmin = widget.role.isAdmin;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 10,
-        title: Text(
-          'customers_administration'.tr(),
-          style: context.tt.titleLarge,
-        ),
-      ),
+      appBar: AppBar(title: Text('customers_administration'.tr())),
       backgroundColor: context.cs.surface,
       body: Padding(
         padding: AppConstants.padding16,

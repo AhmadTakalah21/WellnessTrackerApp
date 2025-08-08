@@ -17,7 +17,7 @@ MealModel _$MealModelFromJson(Map<String, dynamic> json) => MealModel(
               ?.map((e) => IngredientWithQuantityModel.fromJson(
                   e as Map<String, dynamic>))
               .toList() ??
-          [],
+          const [],
     );
 
 Map<String, dynamic> _$MealModelToJson(MealModel instance) => <String, dynamic>{

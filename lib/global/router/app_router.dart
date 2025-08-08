@@ -65,6 +65,8 @@ final dashboardAutoRoutes = [
   AutoRoute(page: MealsDietitianRoute.page),
   AutoRoute(page: IngredientsRoute.page),
   AutoRoute(page: LevelsRoute.page),
+  AutoRoute(page: StatisticsRoute.page),
+  AutoRoute(page: RatingsRoute.page),
   AutoRoute(page: ItemsRoute.page),
   AutoRoute(page: ExercisesRoute.page),
   AutoRoute(page: ExercisesCoachRoute.page),

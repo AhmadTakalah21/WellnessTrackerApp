@@ -293,12 +293,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
             ? onTap
             : (item) {};
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('store'.tr(), style: context.tt.titleLarge),
-      ),
+      appBar: AppBar(title: Text('store'.tr())),
       body: BlocBuilder<ItemsCubit, GeneralItemsState>(
         buildWhen: (previous, current) => current is ItemsState,
         builder: (context, state) {

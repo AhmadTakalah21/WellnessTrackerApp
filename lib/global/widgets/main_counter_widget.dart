@@ -30,11 +30,13 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
   late int counter = widget.initialCount ?? widget.minCount ?? 0;
 
   void onIncreaseTap() {
-    if (widget.maxCount != null && counter < widget.maxCount!) {
-      setState(() {
-        counter++;
-      });
+    if (widget.maxCount != null && counter == widget.maxCount!) {
+      return;
     }
+    setState(() {
+      counter++;
+    });
+
     controller.text = counter.toString();
     widget.onChanged(counter);
   }

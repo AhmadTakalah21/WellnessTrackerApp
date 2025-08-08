@@ -85,10 +85,7 @@ class _NotificationsPageState extends State<NotificationsPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('notifications'.tr(), style: context.tt.titleLarge),
+        title: Text('notifications'.tr()),
         actions: [
           Container(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),

@@ -9,7 +9,8 @@ import 'package:wellnesstrackerapp/global/dio/dio_client.dart';
 part 'auth_service_imp.dart';
 
 abstract class AuthService {
-  Future<SignInModel> signIn(String email, String password, String? fcmToken);
+  Future<SignInModel> signIn(String email, String password, String? fcmToken,
+      {String? code});
   Future<SignInModel> signUp(PostSignUpModel postSignUpModel);
   Future<CustomerModel> addInfo(AddInfoModel addInfoModel);
   Future<void> logout();

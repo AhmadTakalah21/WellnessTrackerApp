@@ -348,5 +348,10 @@
   "statistics" : "Statistics",
   "points_managements" : "Points managements",
   "contact_customer_service" : "Contact with customer service",
-  "contact_psycological_support" : "Contact with psycological support"
+  "contact_psycological_support" : "Contact with psycological support",
+  "cant_open_whatsapp" : "Can't open Whatsapp",
+  "validity_days" : "Validity Days",
+  "validity_days_required" : "Validity days is required",
+  "days" : "Days",
+  "ratings" : "Ratings"
 }

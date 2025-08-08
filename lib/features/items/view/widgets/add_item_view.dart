@@ -134,12 +134,7 @@ class _AddItemPageState extends State<AddItemPage>
   }
 
   PreferredSizeWidget _buildAppBar() => AppBar(
-        title: Text(
-          widget.item != null ? 'edit_item'.tr() : 'add_item'.tr(),
-          style: context.tt.titleLarge,
-        ),
-        centerTitle: true,
-      );
+      title: Text(widget.item != null ? 'edit_item'.tr() : 'add_item'.tr()));
 
   Widget _buildNameEnTextField(ItemModel? item) => MainTextField2(
         initialText: item?.name.en,

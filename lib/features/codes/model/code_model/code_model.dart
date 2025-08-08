@@ -1,7 +1,9 @@
 import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 
@@ -13,34 +15,26 @@ class CodeModel implements DeleteModel, DataTableModel {
   const CodeModel({
     required this.id,
     required this.code,
-    required this.startDate,
-    required this.endDate,
+    required this.validityDays,
     required this.status,
-    // required this.department,
   });
 
   @override
   final int id;
   final String code;
 
-  @JsonKey(name: 'start_date')
-  final String startDate;
-
-  @JsonKey(name: 'end_date')
-  final String endDate;
+  @JsonKey(name: "validity_days")
+  final int validityDays;
 
   final String status;
-  //final DepartmentModel department;
 
   static String get header => 'codes_management'.tr();
 
   static List<String> get titles => [
         '#',
         'code'.tr(),
-        'start'.tr(),
-        'end'.tr(),
+        'validity_days'.tr(),
         'status'.tr(),
-       // 'department'.tr(),
         'event'.tr(),
       ];
 
@@ -48,10 +42,8 @@ class CodeModel implements DeleteModel, DataTableModel {
   List<String> get values => [
         '#$id',
         code,
-        startDate,
-        endDate,
+        "${validityDays.toString()} ${"days".tr()}",
         status,
-       // department.name,
       ];
 
   factory CodeModel.fromString(String str) =>

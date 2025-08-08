@@ -99,6 +99,15 @@ ThemeData darkTheme = ThemeData(
   ),
   scaffoldBackgroundColor: AppColors.white,
   appBarTheme: AppBarTheme(
+    titleTextStyle: TextStyle(
+      fontFamily: GoogleFonts.lexend().fontFamily,
+      color: AppColors.secondaryColor,
+      height: 1.26,
+      fontWeight: FontWeight.w700,
+      fontSize: 20,
+    ),
+    centerTitle: true,
+    elevation: 10,
     backgroundColor: AppColors.mainColor,
     iconTheme: IconThemeData(color: AppColors.secondaryColor),
   ),
@@ -113,7 +122,6 @@ ThemeData darkTheme = ThemeData(
   //     fontSize: 14,
   //   ),
   // ),
-  
 
   datePickerTheme: DatePickerThemeData(
     backgroundColor: AppColors.white,

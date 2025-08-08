@@ -79,12 +79,7 @@ class _MealsPageState extends State<MealsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('meals'.tr(), style: context.tt.titleLarge),
-      ),
+      appBar: AppBar(title: Text('meals'.tr())),
       body: BlocBuilder<MealPlansCubit, GeneralMealPlansState>(
         buildWhen: (previous, current) => current is MealPlansState,
         builder: (context, state) {

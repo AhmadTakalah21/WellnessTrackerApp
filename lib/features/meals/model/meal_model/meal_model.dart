@@ -34,7 +34,6 @@ class MealModel implements DropDownItemModel, DeleteModel {
   @JsonKey(name: 'dietitian_id')
   final int dietitianId;
 
-  @JsonKey(defaultValue: [])
   final List<IngredientWithQuantityModel> ingredients;
 
   factory MealModel.fromString(String str) =>

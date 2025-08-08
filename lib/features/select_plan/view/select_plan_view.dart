@@ -29,12 +29,7 @@ class _SelectPlanPageState extends State<SelectPlanPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('follow_up'.tr(), style: context.tt.titleLarge),
-      ),
+      appBar: AppBar(title: Text('follow_up'.tr())),
       body: SingleChildScrollView(
         padding: AppConstants.padding20,
         physics: BouncingScrollPhysics(),

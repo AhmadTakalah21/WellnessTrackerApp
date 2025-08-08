@@ -27,25 +27,16 @@ class CodesCubit extends Cubit<GeneralCodesState> {
 
   void setModel(CodeModel? code) {
     setCode(code?.code);
-    setStartDate(code?.startDate);
-    setEndDate(code?.endDate);
+    setValidityDays(code?.validityDays);
   }
 
   void setCode(String? code) {
     addCodeModel = addCodeModel.copyWith(code: () => code);
   }
 
-  void setStartDate(String? startDate) {
-    addCodeModel = addCodeModel.copyWith(startDate: () => startDate);
+  void setValidityDays(int? validityDays) {
+    addCodeModel = addCodeModel.copyWith(validityDays: () => validityDays);
   }
-
-  void setEndDate(String? endDate) {
-    addCodeModel = addCodeModel.copyWith(endDate: () => endDate);
-  }
-
-  // void setDepartment(DepartmentEnum? department) {
-  //   addCodeModel = addCodeModel.copyWith(department: () => department);
-  // }
 
   void resetAddCodeModel() {
     addCodeModel = const AddCodeModel();

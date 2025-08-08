@@ -58,12 +58,7 @@ class _SettingsPageState extends State<SettingsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: context.cs.primary,
-        elevation: 10,
-        title: Text('settings'.tr(), style: context.tt.titleLarge),
-      ),
+      appBar: AppBar(title: Text('settings'.tr())),
       body: Padding(
         padding: AppConstants.padding16,
         child: Column(
