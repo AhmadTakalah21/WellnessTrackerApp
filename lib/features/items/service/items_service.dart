@@ -19,4 +19,5 @@ abstract class ItemService {
   });
   Future<ItemModel> getItem(int itemId);
   Future<ItemModel> addItem(AddItemModel model, {XFile? image, int? id});
+  Future<void> buyItem(int id);
 }

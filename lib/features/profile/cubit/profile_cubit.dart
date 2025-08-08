@@ -1,0 +1,62 @@
+import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:injectable/injectable.dart';
+import 'package:meta/meta.dart';
+import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
+import 'package:wellnesstrackerapp/features/profile/service/profile_service.dart';
+import 'package:wellnesstrackerapp/features/ratings/model/add_rate_model/add_rate_model.dart';
+import 'package:wellnesstrackerapp/features/ratings/model/rating_model/rating_model.dart';
+
+part 'states/profile_state.dart';
+part 'states/general_profile_state.dart';
+part 'states/add_rating_state.dart';
+
+@injectable
+class ProfileCubit extends Cubit<GeneralProfileState> {
+  ProfileCubit(this.profileService) : super(GeneralProfileInitial());
+  final ProfileService profileService;
+  AddRateModel addRateModel = const AddRateModel();
+
+  void setModel(RatingModel? rating) {
+    setRating(rating?.rating);
+    setComment(rating?.comment);
+  }
+
+  void setRating(int? rating) {
+    addRateModel = addRateModel.copyWith(rating: () => rating);
+  }
+
+  void setComment(String? comment) {
+    addRateModel = addRateModel.copyWith(comment: () => comment);
+  }
+
+  void resetAddRateModel() {
+    addRateModel = const AddRateModel();
+  }
+
+  Future<void> addRating({int? id}) async {
+    emit(AddRatingLoading());
+    try {
+      if (isClosed) return;
+      final response = await profileService.addRating(addRateModel, id: id);
+      final isAdd = id == null;
+      final message = isAdd ? "rating_added".tr() : "rating_updated".tr();
+      emit(AddRatingSuccess(response, message));
+    } catch (e) {
+      if (isClosed) return;
+      emit(AddRatingFail(e.toString()));
+    }
+  }
+
+  Future<void> getProfile() async {
+    emit(ProfileLoading());
+    try {
+      if (isClosed) return;
+      final response = await profileService.getProfile();
+      emit(ProfileSuccess(response));
+    } catch (e) {
+      if (isClosed) return;
+      emit(ProfileFail(e.toString()));
+    }
+  }
+}

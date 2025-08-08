@@ -1,39 +1,104 @@
+import 'package:auto_route/annotations.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart';
+import 'package:wellnesstrackerapp/features/points/model/points_chart_model/points_chart_model.dart';
 import 'package:wellnesstrackerapp/features/points/view/points_view.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
+abstract class CurrentPointsViewCallBacks {
+  Future<void> onRefresh();
+  void onTryAgainTap();
+}
+
+@RoutePage()
 class CurrentPointsView extends StatelessWidget {
   const CurrentPointsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildStepCounter(context),
-          const SizedBox(height: 32),
-          _buildChart(context),
-          SizedBox(height: 110),
-        ],
+    return const CurrentPointsPage();
+  }
+}
+
+class CurrentPointsPage extends StatefulWidget {
+  const CurrentPointsPage({super.key});
+
+  @override
+  State<CurrentPointsPage> createState() => _CurrentPointsPageState();
+}
+
+class _CurrentPointsPageState extends State<CurrentPointsPage>
+    implements CurrentPointsViewCallBacks {
+  late final PointsCubit pointsCubit = context.read();
+
+  @override
+  void initState() {
+    super.initState();
+    pointsCubit.getPoints();
+  }
+
+  @override
+  Future<void> onRefresh() async => onTryAgainTap();
+
+  @override
+  void onTryAgainTap() => pointsCubit.getPoints();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocBuilder<PointsCubit, GeneralPointsState>(
+        buildWhen: (previous, current) => current is PointsState,
+        builder: (context, state) {
+          if (state is PointsLoading) {
+            return LoadingIndicator();
+          } else if (state is PointsSuccess) {
+            return RefreshIndicator(
+              onRefresh: onRefresh,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildStepCounter(context, state.points.totalPoints),
+                    const SizedBox(height: 32),
+                    _buildChart(context, state.points.chartData),
+                    SizedBox(height: 110),
+                  ],
+                ),
+              ),
+            );
+          } else if (state is PointsFail) {
+            return MainErrorWidget(
+              error: state.error,
+              onTryAgainTap: onTryAgainTap,
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
       ),
     );
   }
 
-  Widget _buildChart(BuildContext context) {
-    final List<ChartModel> data = [
-      ChartModel(xAxisProperty: "Jan", yAxisProperty: [100]),
-      ChartModel(xAxisProperty: "Feb", yAxisProperty: [300]),
-      ChartModel(xAxisProperty: "Mar", yAxisProperty: [350]),
-      ChartModel(xAxisProperty: "May", yAxisProperty: [500]),
-      ChartModel(xAxisProperty: "Jun", yAxisProperty: [700]),
-      ChartModel(xAxisProperty: "Jul", yAxisProperty: [700]),
-      ChartModel(xAxisProperty: "Aug", yAxisProperty: [1000]),
-    ];
+  Widget _buildChart(BuildContext context, List<PointsChartModel> data) {
+    final List<ChartModel> chartData = data
+        .map((e) => ChartModel(
+              xAxisProperty: e.month,
+              yAxisProperty: [e.points.toDouble()],
+            ))
+        .toList();
+    final points = data.map((e) => e.points).toList();
+    int? maxNumber;
+    if (points.isNotEmpty) {
+      maxNumber = points.reduce((a, b) => a > b ? a : b) * 2;
+    }
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 6,
@@ -48,8 +113,10 @@ class CurrentPointsView extends StatelessWidget {
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
             minimum: 0,
-            maximum: 1200,
-            interval: 200,
+            maximum: maxNumber?.toDouble() ?? 1200,
+            interval: maxNumber == null
+                ? 200
+                : (maxNumber.toDouble() / 6).ceilToDouble(),
             majorGridLines: const MajorGridLines(width: 0.5),
             labelStyle: context.tt.bodyMedium,
           ),
@@ -60,14 +127,14 @@ class CurrentPointsView extends StatelessWidget {
           tooltipBehavior: TooltipBehavior(enable: true),
           series: [
             LineSeries<ChartModel, String>(
-              dataSource: data,
+              dataSource: chartData,
               color: context.cs.primary,
               width: 3,
               animationDuration: 1000,
               xValueMapper: (point, _) => point.xAxisProperty,
               yValueMapper: (point, _) => point.yAxisProperty[0],
               markerSettings: const MarkerSettings(isVisible: true),
-              name: 'النقاط',
+              name: 'points'.tr(),
             ),
           ],
         ),
@@ -75,7 +142,7 @@ class CurrentPointsView extends StatelessWidget {
     );
   }
 
-  Widget buildStepCounter(BuildContext context) {
+  Widget buildStepCounter(BuildContext context, int totalPoints) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 800),
       curve: Curves.easeOutBack,
@@ -95,6 +162,7 @@ class CurrentPointsView extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Row(),
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -109,7 +177,7 @@ class CurrentPointsView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    "1000",
+                    totalPoints.toString(),
                     style: GoogleFonts.poppins(
                       fontSize: 40,
                       fontWeight: FontWeight.w900,
@@ -125,22 +193,22 @@ class CurrentPointsView extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  LinearProgressIndicator(
-                    value: 0.5,
-                    backgroundColor: Colors.grey.shade200,
-                    color: context.cs.primary,
-                    minHeight: 8,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "أنت في منتصف الطريق نحو هدفك 💪",
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      color: context.cs.primary,
-                    ),
-                  ),
+                  // const SizedBox(height: 16),
+                  // LinearProgressIndicator(
+                  //   value: 0.5,
+                  //   backgroundColor: Colors.grey.shade200,
+                  //   color: context.cs.primary,
+                  //   minHeight: 8,
+                  //   borderRadius: BorderRadius.circular(20),
+                  // ),
+                  // const SizedBox(height: 8),
+                  // Text(
+                  //   "أنت في منتصف الطريق نحو هدفك 💪",
+                  //   style: GoogleFonts.poppins(
+                  //     fontSize: 14,
+                  //     color: context.cs.primary,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

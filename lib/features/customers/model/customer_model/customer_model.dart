@@ -6,6 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:wellnesstrackerapp/features/customers/model/customer_info_model/customer_info_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_subscription_model/customer_subscription_model.dart';
+import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
@@ -28,6 +29,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
     required this.role,
     this.info,
     this.subscription,
+    this.level,
+    this.totalPoints,
     required this.createdAt,
   });
 
@@ -53,6 +56,11 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
   final CustomerInfoModel? info;
 
   final CustomerSubscriptionModel? subscription;
+
+  final LevelModel? level;
+
+  @JsonKey(name: "total_points")
+  final int? totalPoints;
 
   @JsonKey(name: 'created_at')
   final String createdAt;

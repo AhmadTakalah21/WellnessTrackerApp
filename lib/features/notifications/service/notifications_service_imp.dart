@@ -27,7 +27,7 @@ class NotificationsServiceImp implements NotificationsService {
   }
 
   @override
-  Future<NotificationModel> addNotification(
+  Future<void> addNotification(
     UserRoleEnum role,
     AddNotificationModel model, {
     required List<CustomerModel> userIds,
@@ -51,9 +51,7 @@ class NotificationsServiceImp implements NotificationsService {
       }
       final formData = FormData.fromMap(map);
 
-      final response = await dio.post(endpoint, data: formData);
-      final data = response.data["data"] as Map<String, dynamic>;
-      return NotificationModel.fromJson(data);
+      await dio.post(endpoint, data: formData);
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;

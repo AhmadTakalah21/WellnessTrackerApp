@@ -66,9 +66,17 @@ class ItemServiceImp implements ItemService {
       final item = response.data["data"] as Map<String, dynamic>;
       return ItemModel.fromJson(item);
     } catch (e, stackTrace) {
-      if (kDebugMode) {
-        print(stackTrace);
-      }
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> buyItem(int id) async {
+    try {
+      await dio.post("/v1/users/items/purchase", data: {"item_id": id});
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
       rethrow;
     }
   }

@@ -37,7 +37,14 @@ class AppRouter extends RootStackRouter {
                       children: dashboardAutoRoutes,
                     ),
                     AutoRoute(page: AddsAndOffersRoute.page),
-                    AutoRoute(page: ProfileRoute.page),
+                    AutoRoute(
+                      page: ProfileRouter.page,
+                      children: [
+                        AutoRoute(initial: true, page: ProfileRoute.page),
+                        AutoRoute(page: SettingsRoute.page),
+                        AutoRoute(page: AddRateRoute.page),
+                      ],
+                    ),
                   ],
                 ),
                 AutoRoute(
@@ -65,6 +72,7 @@ final dashboardAutoRoutes = [
   AutoRoute(page: MealsDietitianRoute.page),
   AutoRoute(page: IngredientsRoute.page),
   AutoRoute(page: LevelsRoute.page),
+  AutoRoute(page: EarnPointsWaysRoute.page),
   AutoRoute(page: StatisticsRoute.page),
   AutoRoute(page: RatingsRoute.page),
   AutoRoute(page: ItemsRoute.page),

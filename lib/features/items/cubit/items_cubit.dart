@@ -13,6 +13,7 @@ import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 part 'states/items_state.dart';
 part 'states/general_items_state.dart';
 part 'states/add_item_state.dart';
+part 'states/buy_item_state.dart';
 
 @injectable
 class ItemsCubit extends Cubit<GeneralItemsState> {
@@ -126,12 +127,26 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
   Future<void> addItem({int? id}) async {
     emit(AddItemLoading());
     try {
+      if (isClosed) return;
       final item = await itemService.addItem(model, image: image, id: id);
       final isAdd = id == null;
       final message = isAdd ? "item_added".tr() : "item_updated".tr();
       emit(AddItemSuccess(item, message));
     } catch (e) {
+      if (isClosed) return;
       emit(AddItemFail(e.toString()));
+    }
+  }
+
+  Future<void> buyItem(int id) async {
+    emit(BuyItemLoading());
+    try {
+      if (isClosed) return;
+      await itemService.buyItem(id);
+      emit(BuyItemSuccess("item_bought".tr()));
+    } catch (e) {
+      if (isClosed) return;
+      emit(BuyItemFail(e.toString()));
     }
   }
 }

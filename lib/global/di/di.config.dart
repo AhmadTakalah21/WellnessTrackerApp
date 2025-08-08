@@ -68,10 +68,22 @@ import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart'
     as _i32;
 import 'package:wellnesstrackerapp/features/points/service/points_service.dart'
     as _i985;
+import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart'
+    as _i680;
+import 'package:wellnesstrackerapp/features/profile/service/profile_service.dart'
+    as _i593;
+import 'package:wellnesstrackerapp/features/ratings/cubit/ratings_cubit.dart'
+    as _i167;
+import 'package:wellnesstrackerapp/features/ratings/service/ratings_service.dart'
+    as _i307;
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart'
     as _i264;
 import 'package:wellnesstrackerapp/features/settings/service/settings_service.dart'
     as _i1054;
+import 'package:wellnesstrackerapp/features/statistics/cubit/statistics_cubit.dart'
+    as _i718;
+import 'package:wellnesstrackerapp/features/statistics/service/statistics_service.dart'
+    as _i911;
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart'
     as _i253;
 import 'package:wellnesstrackerapp/features/users/service/users_service.dart'
@@ -132,6 +144,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i852.MealPlansService>(() => _i852.MealPlanServiceImp());
     gh.factory<_i959.NotificationsService>(
         () => _i959.NotificationsServiceImp());
+    gh.factory<_i911.StatisticsService>(() => _i911.StatisticsServiceImp());
     gh.singleton<_i435.AuthManagerBloc>(
         () => _i435.AuthManagerBloc(gh<_i128.UserRepo>()));
     gh.factory<_i85.IngredientsService>(() => _i85.IngredientsServiceImp());
@@ -143,10 +156,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i750.ExercisesService>(() => _i750.ExercisesServiceImp());
     gh.factory<_i32.PointsCubit>(
         () => _i32.PointsCubit(gh<_i985.PointsService>()));
+    gh.factory<_i593.ProfileService>(() => _i593.ProfileServiceImp());
     gh.factory<_i744.MealPlansCubit>(
         () => _i744.MealPlansCubit(gh<_i852.MealPlansService>()));
     gh.factory<_i457.CodesCubit>(
         () => _i457.CodesCubit(gh<_i249.CodesService>()));
+    gh.factory<_i680.ProfileCubit>(
+        () => _i680.ProfileCubit(gh<_i593.ProfileService>()));
     gh.factory<_i474.UserRoleService>(() => _i474.UserRoleServiceImp());
     gh.factory<_i738.ExercisePlansService>(
         () => _i738.ExercisePlansServiceImp());
@@ -154,6 +170,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i535.IngredientsCubit(gh<_i85.IngredientsService>()));
     gh.factory<_i715.LevelsService>(() => _i715.LevelsServiceImp());
     gh.factory<_i1044.ItemService>(() => _i1044.ItemServiceImp());
+    gh.factory<_i307.RatingsService>(() => _i307.RatingsServiceImp());
     gh.factory<_i279.ExercisesCubit>(
         () => _i279.ExercisesCubit(gh<_i750.ExercisesService>()));
     gh.factory<_i299.CustomersService>(() => _i299.CustomersServiceImp());
@@ -161,6 +178,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i602.AddsAndOffersServiceImp());
     gh.factory<_i935.CustomersCubit>(
         () => _i935.CustomersCubit(gh<_i299.CustomersService>()));
+    gh.factory<_i718.StatisticsCubit>(
+        () => _i718.StatisticsCubit(gh<_i911.StatisticsService>()));
     gh.factory<_i396.DeleteCubit>(
         () => _i396.DeleteCubit(gh<_i963.DeleteService>()));
     gh.factory<_i883.AuthCubit>(() => _i883.AuthCubit(
@@ -177,6 +196,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i371.ExercisePlansCubit(gh<_i738.ExercisePlansService>()));
     gh.factory<_i803.ItemsCubit>(
         () => _i803.ItemsCubit(gh<_i1044.ItemService>()));
+    gh.factory<_i167.RatingsCubit>(
+        () => _i167.RatingsCubit(gh<_i307.RatingsService>()));
     gh.factory<_i726.LevelsCubit>(
         () => _i726.LevelsCubit(gh<_i715.LevelsService>()));
     gh.factory<_i633.UserRolesCubit>(

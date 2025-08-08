@@ -1,6 +1,20 @@
 part of '../points_cubit.dart';
 
 @immutable
-sealed class PointsState {}
+class PointsState extends GeneralPointsState {}
 
 final class PointsInitial extends PointsState {}
+
+final class PointsLoading extends PointsState {}
+
+final class PointsSuccess extends PointsState {
+  final PointsModel points;
+
+  PointsSuccess(this.points);
+}
+
+final class PointsFail extends PointsState {
+  final String error;
+
+  PointsFail(this.error);
+}

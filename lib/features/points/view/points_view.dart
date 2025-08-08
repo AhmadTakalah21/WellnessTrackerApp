@@ -1,9 +1,12 @@
 import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/items/view/items_view.dart';
+import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart';
 import 'package:wellnesstrackerapp/features/points/view/pages/current_points_view.dart';
 import 'package:wellnesstrackerapp/features/points/view/pages/earn_points_ways_view.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
@@ -27,16 +30,21 @@ abstract class PointsViewCallBacks {
 
 @RoutePage()
 class PointsView extends StatelessWidget {
-  const PointsView({super.key});
+  const PointsView({super.key, required this.role});
+  final UserRoleEnum role;
 
   @override
   Widget build(BuildContext context) {
-    return const PointsPage();
+    return BlocProvider(
+      create: (context) => get<PointsCubit>(),
+      child: PointsPage(role: role),
+    );
   }
 }
 
 class PointsPage extends StatefulWidget {
-  const PointsPage({super.key});
+  const PointsPage({super.key, required this.role});
+  final UserRoleEnum role;
 
   @override
   State<PointsPage> createState() => _PointsPageState();
@@ -85,7 +93,7 @@ class _PointsPageState extends State<PointsPage>
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       CurrentPointsView(),
-      EarnPointsWaysView(),
+      EarnPointsWaysView(role: widget.role),
     ];
 
     return Scaffold(

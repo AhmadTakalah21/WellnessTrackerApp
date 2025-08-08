@@ -6,10 +6,9 @@ class AddNotificationState extends GeneralNotificationsState {}
 final class AddNotificationLoading extends AddNotificationState {}
 
 final class AddNotificationSuccess extends AddNotificationState {
-  final NotificationModel notification;
   final String message;
 
-  AddNotificationSuccess(this.notification, this.message);
+  AddNotificationSuccess(this.message);
 }
 
 final class AddNotificationFail extends AddNotificationState {

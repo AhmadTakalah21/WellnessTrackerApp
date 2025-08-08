@@ -86,14 +86,14 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   Future<void> addNotification(UserRoleEnum role) async {
     emit(AddNotificationLoading());
     try {
-      final response = await notificationsService.addNotification(
+      await notificationsService.addNotification(
         role,
         addNotificationModel,
         userIds: userIds,
         image: image,
       );
       final message = "notification_sent".tr();
-      emit(AddNotificationSuccess(response, message));
+      emit(AddNotificationSuccess(message));
     } catch (e) {
       emit(AddNotificationFail(e.toString()));
     }

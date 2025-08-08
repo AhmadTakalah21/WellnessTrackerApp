@@ -66,14 +66,14 @@ class _UserNavigationPageState extends State<UserNavigationPage>
     return AutoTabsScaffold(
         routes: isRtl
             ? [
-          ProfileRoute(),
+          ProfileRouter(),
           DashboardRouter(),
           AddsAndOffersRoute(role: UserRoleEnum.user),
         ]
             : [
           AddsAndOffersRoute(role: UserRoleEnum.user),
           DashboardRouter(),
-          ProfileRoute(),
+          ProfileRouter(),
         ],
         extendBody: true,
         resizeToAvoidBottomInset: true,

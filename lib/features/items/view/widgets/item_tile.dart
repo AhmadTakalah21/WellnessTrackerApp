@@ -55,7 +55,7 @@ class ItemTile extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (role.isUser)
+            if (role.isUser && item.link == null)
               Align(
                 alignment: Alignment.topRight,
                 child: Icon(Icons.lock_outline, color: Colors.white, size: 20),

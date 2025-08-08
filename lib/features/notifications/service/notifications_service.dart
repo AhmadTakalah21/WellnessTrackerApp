@@ -18,7 +18,7 @@ abstract class NotificationsService {
     int? page,
   });
 
-  Future<NotificationModel> addNotification(
+  Future<void> addNotification(
     UserRoleEnum role,
     AddNotificationModel model, {
     required List<CustomerModel> userIds,
