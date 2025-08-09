@@ -239,7 +239,20 @@ class CustomersPageState extends State<CustomersPage>
                       child: Column(
                         children: [
                           MainDataTable<CustomerModel>(
-                            titles: CustomerModel.titles,
+                            //titles: CustomerModel.titles,
+                            titles: [
+                              '#',
+                              'name'.tr(),
+                              'email'.tr(),
+                              'phone'.tr(),
+                              if (isAdmin && widget.user == null) ...[
+                                'dietitian'.tr(),
+                                'coach'.tr(),
+                                'doctor'.tr(),
+                              ],
+                              'status'.tr(),
+                              'event'.tr(),
+                            ],
                             items: state.customers,
                             onPageChanged: onSelectPageTap,
                             emptyMessage: state.emptyMessage,

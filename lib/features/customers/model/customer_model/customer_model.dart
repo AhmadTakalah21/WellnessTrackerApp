@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -32,6 +33,7 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
     this.level,
     this.totalPoints,
     required this.createdAt,
+    this.isAdmin = false,
   });
 
   @override
@@ -59,6 +61,9 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   final LevelModel? level;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool isAdmin;
+
   @JsonKey(name: "total_points")
   final int? totalPoints;
 
@@ -67,14 +72,16 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   static String get header => 'customers_administration'.tr();
 
-  static List<String> get titles => [
+  List<String> get titles => [
         '#',
         'name'.tr(),
         'email'.tr(),
         'phone'.tr(),
-        'dietitian'.tr(),
-        'coach'.tr(),
-        'doctor'.tr(),
+        if (isAdmin) ...[
+          'dietitian'.tr(),
+          'coach'.tr(),
+          'doctor'.tr(),
+        ],
         'status'.tr(),
         'event'.tr(),
       ];
@@ -85,9 +92,11 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
         name,
         email,
         phone ?? '_',
-        subscription?.dietitian?.name ?? 'not_existed'.tr(),
-        subscription?.coach?.name ?? 'not_existed'.tr(),
-        subscription?.doctor?.name ?? 'not_existed'.tr(),
+        if (isAdmin) ...[
+          subscription?.dietitian?.name ?? 'not_existed'.tr(),
+          subscription?.coach?.name ?? 'not_existed'.tr(),
+          subscription?.doctor?.name ?? 'not_existed'.tr(),
+        ],
         status,
       ];
 
@@ -110,4 +119,25 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   @override
   String get displayEntityName => name;
+
+  CustomerModel copyWith({
+    bool? isAdmin,
+  }) {
+    return CustomerModel(
+      id: id,
+      name: name,
+      email: email,
+      phone: phone,
+      gender: gender,
+      birthday: birthday,
+      status: status,
+      role: role,
+      info: info,
+      subscription: subscription,
+      level: level,
+      isAdmin: isAdmin ?? this.isAdmin,
+      totalPoints: totalPoints,
+      createdAt: createdAt,
+    );
+  }
 }

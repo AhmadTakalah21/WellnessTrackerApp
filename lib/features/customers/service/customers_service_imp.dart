@@ -23,7 +23,13 @@ class CustomersServiceImp implements CustomersService {
       final response = await dio.get(endpoint);
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
-        (json) => CustomerModel.fromJson(json as Map<String, dynamic>),
+        (json) {
+          CustomerModel customer =
+              CustomerModel.fromJson(json as Map<String, dynamic>);
+          customer =
+              customer.copyWith(isAdmin: role.isAdmin && employeeId == null);
+          return customer;
+        },
       );
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
