@@ -15,10 +15,12 @@ part 'states/general_notifications_state.dart';
 part 'states/notifications_state.dart';
 part 'states/add_notification_state.dart';
 
+
 @injectable
 class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   NotificationsCubit(this.notificationsService)
       : super(GeneralNotificationsInitial());
+
   final NotificationsService notificationsService;
 
   List<NotificationModel> notifications = [];
@@ -26,6 +28,21 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   AddNotificationModel addNotificationModel = const AddNotificationModel();
   List<CustomerModel> userIds = [];
   XFile? image;
+
+  bool scheduleByTime = false;
+
+  void setScheduleByTime(bool value) {
+    scheduleByTime = value;
+
+    if (!scheduleByTime) {
+      addNotificationModel = addNotificationModel.copyWith(
+        time: () => null,
+        tz: () => null,
+      );
+    }
+
+
+  }
 
   void setIsAll(String? isAll) {
     addNotificationModel = addNotificationModel.copyWith(isAll: isAll);
@@ -52,15 +69,26 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
     this.image = image;
   }
 
+  void setTime(String? time) {
+    addNotificationModel = addNotificationModel.copyWith(time: () => time);
+  }
+
+  void setTz(String? tz) {
+    addNotificationModel = addNotificationModel.copyWith(tz: () => tz);
+  }
+
   void resetAddNotificationModel() {
     addNotificationModel = const AddNotificationModel();
+    scheduleByTime = false;
+    image = null;
+    userIds.clear();
   }
 
   Future<void> getNotifications(
-    UserRoleEnum role, {
-    int? perPage = 10,
-    int? page,
-  }) async {
+      UserRoleEnum role, {
+        int? perPage = 10,
+        int? page,
+      }) async {
     emit(NotificationsLoading());
     try {
       if (isClosed) return;
@@ -86,14 +114,27 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   Future<void> addNotification(UserRoleEnum role) async {
     emit(AddNotificationLoading());
     try {
+      if (scheduleByTime) {
+        final t = (addNotificationModel.toJson()['time'] as String?);
+        final valid = t != null && RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$').hasMatch(t);
+        if (!valid) {
+          throw "time_invalid_format".tr();
+        }
+      } else {
+        addNotificationModel = addNotificationModel.copyWith(
+          time: () => null,
+          tz: () => null,
+        );
+      }
+
       await notificationsService.addNotification(
         role,
         addNotificationModel,
         userIds: userIds,
         image: image,
       );
-      final message = "notification_sent".tr();
-      emit(AddNotificationSuccess(message));
+
+      emit(AddNotificationSuccess("notification_sent".tr()));
     } catch (e) {
       emit(AddNotificationFail(e.toString()));
     }

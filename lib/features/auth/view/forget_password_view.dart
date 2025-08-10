@@ -7,6 +7,10 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field.dart';
+import '../../../../global/router/app_router.gr.dart';
+
+
+
 
 abstract class ForgotPasswordViewCallBacks {
   void onEmailChanged(String email);
@@ -80,10 +84,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
 
   @override
   void onMainActionTap() {
-    // TODO ..
-    widget.authCubit.forgetPassword();
-    //context.router.push(ResetPasswordRoute(authCubit: widget.authCubit));
+    widget.authCubit.sendResetCode();
   }
+
 
   @override
   void dispose() {
@@ -176,12 +179,44 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                           const SizedBox(height: 20),
                           FadeTransition(
                             opacity: _fadeAnimation,
-                            child: MainActionButton(
-                              padding: AppConstants.padding8,
-                              onTap: onMainActionTap,
-                              text: 'reset_password'.tr(),
+                            child: BlocConsumer<AuthCubit, AuthState>(
+                              bloc: widget.authCubit,
+                              listenWhen: (prev, curr) =>
+                              curr is ForgotPasswordSuccess || curr is ForgotPasswordFail,
+                              listener: (context, state) {
+                                if (state is ForgotPasswordSuccess) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(state.message)),
+                                  );
+                                   context.router.push(VerifyResetCodeRoute(authCubit: widget.authCubit));
+                                } else if (state is ForgotPasswordFail) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(state.error), backgroundColor: Colors.red),
+                                  );
+                                }
+                              },
+                              buildWhen: (prev, curr) =>
+                              curr is ForgotPasswordLoading ||
+                                  curr is ForgotPasswordSuccess ||
+                                  curr is ForgotPasswordFail,
+                              builder: (context, state) {
+                                final isLoading = state is ForgotPasswordLoading;
+                                return MainActionButton(
+                                  padding: AppConstants.padding8,
+                                  onTap: isLoading ? () {} : onMainActionTap,
+                                  text: 'reset_password'.tr(),
+                                  child: isLoading
+                                      ? const SizedBox(
+                                    height: 22,
+                                    width: 22,
+                                    child: CircularProgressIndicator(strokeWidth: 2.4),
+                                  )
+                                      : null,
+                                );
+                              },
                             ),
                           ),
+
                           const SizedBox(height: 20),
                           FadeTransition(
                             opacity: _fadeAnimation,

@@ -7,23 +7,14 @@ import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_mod
 
 @singleton
 class UserRepo {
-  @factoryMethod
-  factory UserRepo() {
-    return _instance;
-  }
-
-  UserRepo._() : properties = <String, dynamic>{};
-
-  @factoryMethod
-  static final UserRepo _instance = UserRepo._();
+  UserRepo() : properties = <String, dynamic>{};
 
   final flutterSecureStorage = const FlutterSecureStorage();
 
   SignInModel? _user;
-
   SignInModel? get user => _user;
 
-  Map<String, dynamic> properties;
+  final Map<String, dynamic> properties;
 
   @PostConstruct(preResolve: true)
   Future<void> init() async {
@@ -32,43 +23,32 @@ class UserRepo {
   }
 
   Future<void> _checkIfFirstRunForIOS() async {
-    if (!Platform.isIOS) {
-      return;
-    }
-
+    if (!Platform.isIOS) return;
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('first_run') ?? true) {
-      const storage = FlutterSecureStorage();
-      await storage.deleteAll();
-      prefs.setBool('first_run', false);
+      await flutterSecureStorage.deleteAll();
+      await prefs.setBool('first_run', false);
     }
   }
 
   Future<SignInModel?> getUser() async {
     try {
       final json = await flutterSecureStorage.read(key: _userKey);
-      if (json != null) {
-        _user = SignInModel.fromString(json);
-      }
+      if (json != null) _user = SignInModel.fromString(json);
       return _user;
-    } catch (e, stackTrace) {
-      debugPrint('Error: $e');
-      debugPrint(stackTrace.toString());
+    } catch (e, s) {
+      debugPrint('Error: $e\n$s');
       throw Exception("Can't get the user");
     }
   }
 
   Future<bool> setUser(SignInModel user) async {
     try {
-      await flutterSecureStorage.write(
-        key: _userKey,
-        value: user.toString(),
-      );
+      await flutterSecureStorage.write(key: _userKey, value: user.toString());
       _user = user;
       return true;
-    } catch (e, stackTrace) {
-      debugPrint('Error: $e');
-      debugPrint(stackTrace.toString());
+    } catch (e, s) {
+      debugPrint('Error: $e\n$s');
       throw Exception("Can't set the user");
     }
   }
@@ -78,16 +58,15 @@ class UserRepo {
       await flutterSecureStorage.delete(key: _userKey);
       _user = null;
       return true;
-    } catch (e, stackTrace) {
-      debugPrint('Error: $e');
-      debugPrint(stackTrace.toString());
+    } catch (e, s) {
+      debugPrint('Error: $e\n$s');
       throw Exception("Can't delete the user");
     }
   }
 
-  bool get isSignedIn {
-    return _user != null;
-  }
+  bool get isSignedIn => _user != null;
+
+
 
   Future<bool> setKey<T>(String key, T value) async {
     final prefs = await SharedPreferences.getInstance();

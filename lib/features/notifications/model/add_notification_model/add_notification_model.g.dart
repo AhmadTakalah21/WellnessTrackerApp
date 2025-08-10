@@ -12,6 +12,8 @@ AddNotificationModel _$AddNotificationModelFromJson(
       isAll: json['is_all'] as String? ?? "0",
       title: json['title'] as String?,
       message: json['message'] as String?,
+      time: json['time'] as String?,
+      tz: json['tz'] as String?,
     );
 
 Map<String, dynamic> _$AddNotificationModelToJson(
@@ -20,4 +22,6 @@ Map<String, dynamic> _$AddNotificationModelToJson(
       'is_all': instance.isAll,
       'title': instance.title,
       'message': instance.message,
+      'time': instance.time,
+      'tz': instance.tz,
     };

@@ -380,5 +380,13 @@
   "female_users": "المستخدمات الإناث",
   "avg_ages": "متوسط الأعمار",
   "avg_weights": "متوسط الأوزان",
-  "avg_lenghts": "متوسط الأطوال"
+  "avg_lenghts": "متوسط الأطوال",
+  "scheduled_notifications_on": "الإشعارات المجدولة: مفعّلة",
+  "scheduled_notifications_off": "الإشعارات المجدولة: غير مفعّلة",
+  "schedule_by_time": "تفعيل الإشعارات المجدولة",
+  "time": "الوقت",
+  "time_invalid_format": "صيغة الوقت غير صحيحة. استخدم HH:mm",
+  "time_required": "الوقت مطلوب"
+
+
 }

@@ -14,4 +14,12 @@ abstract class AuthService {
   Future<SignInModel> signUp(PostSignUpModel postSignUpModel);
   Future<CustomerModel> addInfo(AddInfoModel addInfoModel);
   Future<void> logout();
+  Future<void> requestPasswordReset({required String email});
+  Future<void> verifyPasswordResetCode({required String email, required String code});
+  Future<void> resetPassword({
+    required String email,
+    required String code,
+    required String password,
+    required String passwordConfirmation,
+  });
 }

@@ -16,6 +16,7 @@ class MainTextField2 extends StatefulWidget {
     this.isPassword = false,
     this.readOnly = false,
     this.onChanged,
+    this.onTap,
     this.initialText,
     this.keyboardType,
     this.inputFormatters,
@@ -35,6 +36,7 @@ class MainTextField2 extends StatefulWidget {
   final String? hint;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
+  final VoidCallback? onTap;               // ⬅️ جديد
   final FloatingLabelBehavior floatingLabelBehavior;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
@@ -55,27 +57,29 @@ class _MainTextField2State extends State<MainTextField2> {
 
   @override
   Widget build(BuildContext context) {
+    final labelText = widget.label?.tr();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.label != null && widget.isWithTitle) ...[
-          Text(widget.label!.tr(), style: context.tt.titleLarge),
-          SizedBox(height: 10),
+          Text(labelText!, style: context.tt.titleLarge),
+          const SizedBox(height: 10),
         ],
         TextFormField(
-          //onTapOutside: (event) => FocusScope.of(context).unfocus(),
           maxLines: widget.maxLines,
           inputFormatters: widget.inputFormatters,
           keyboardType: widget.keyboardType,
           initialValue: widget.initialText,
           controller: widget.controller,
           onChanged: widget.onChanged,
+          onTap: widget.onTap,              // ⬅️ يمرّر نداء النقر
           obscureText: isVisible,
           readOnly: widget.readOnly,
           style: context.tt.bodyMedium,
           decoration: InputDecoration(
             prefixIcon: Icon(widget.icon, color: context.cs.primary),
-            labelText: widget.label?.tr(),
+            labelText: labelText,
             labelStyle: TextStyle(color: Colors.grey[500]),
             hintText: widget.hint,
             hintStyle: TextStyle(color: Colors.grey[500]),
@@ -83,7 +87,7 @@ class _MainTextField2State extends State<MainTextField2> {
             filled: true,
             fillColor: context.cs.surfaceVariant,
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+            const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -95,17 +99,16 @@ class _MainTextField2State extends State<MainTextField2> {
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: context.cs.primary, width: 2),
             ),
-            //suffix: widget.suffix,
             suffixIcon: widget.isPassword
                 ? IconButton(
-                    onPressed: setVisible,
-                    icon: Icon(
-                      isVisible
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      color: context.cs.primary,
-                    ),
-                  )
+              onPressed: setVisible,
+              icon: Icon(
+                isVisible
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: context.cs.primary,
+              ),
+            )
                 : widget.suffix,
           ),
           validator: widget.validator,

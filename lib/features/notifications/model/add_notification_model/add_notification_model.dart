@@ -13,39 +13,71 @@ class AddNotificationModel {
     this.isAll = "0",
     String? title,
     String? message,
+    String? time,
+    String? tz,
   })  : _title = title,
-        _message = message;
+        _message = message,
+        _time = time,
+        _tz = tz;
 
   @JsonKey(name: 'is_all')
   final String isAll;
   final String? _title;
   final String? _message;
 
+  /// صيغة متوقعة: HH:mm (24h) مثل "09:30" أو "22:05"
+  @JsonKey(name: 'time')
+  final String? _time;
+
+  /// IANA Time Zone مثل "Europe/Bucharest" أو "Asia/Damascus"
+  /// هذا اختياري لكنه يضمن تحويل صحيح إلى UTC في السيرفر
+  @JsonKey(name: 'tz')
+  final String? _tz;
+
   AddNotificationModel copyWith({
     String? isAll,
     String? Function()? title,
     String? Function()? message,
+    String? Function()? time,
+    String? Function()? tz,
   }) {
     return AddNotificationModel(
       isAll: isAll ?? this.isAll,
       title: title != null ? title() : _title,
       message: message != null ? message() : _message,
+      time: time != null ? time() : _time,
+      tz: tz != null ? tz() : _tz,
     );
   }
 
   String get title {
-    if (_title == null || _title.isEmpty) {
+    if (_title == null || _title!.isEmpty) {
       throw "title_required".tr();
     }
-    return _title;
+    return _title!;
   }
 
   String get message {
-    if (_message == null || _message.isEmpty) {
+    if (_message == null || _message!.isEmpty) {
       throw "message_required".tr();
     }
-    return _message;
+    return _message!;
   }
+
+  /// يتحقق من وجود الوقت وصحّة الصيغة HH:mm
+  String get time {
+    if (_time == null || _time!.isEmpty) {
+      throw "time_required".tr();
+    }
+    final regex = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
+    if (!regex.hasMatch(_time!)) {
+      throw "time_invalid_format".tr();
+    }
+    return _time!;
+  }
+
+  /// اختياري: المنطقة الزمنية إن أردت فرضها
+  String? get tz => _tz;
 
   factory AddNotificationModel.fromJson(Map<String, dynamic> json) =>
       _$AddNotificationModelFromJson(json);

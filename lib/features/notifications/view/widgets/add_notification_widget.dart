@@ -74,6 +74,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
 
   bool isAll = false;
   DepartmentEnum? selectedDepartment;
+  final _timeController = TextEditingController();
 
   @override
   void initState() {
@@ -82,21 +83,24 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
   }
 
   @override
+  void dispose() {
+    _timeController.dispose();
+    super.dispose();
+  }
+
+  @override
   void onIsAllSelected(bool? value) {
-    setState(() {
-      isAll = !isAll;
-    });
-    if (isAll) {
+    final newVal = value ?? false;
+    setState(() => isAll = newVal);
+    if (newVal) {
       widget.notificationsCubit.clearUserIds();
     }
-    widget.notificationsCubit.setIsAll(isAll ? "1" : "0");
+    widget.notificationsCubit.setIsAll(newVal ? "1" : "0");
   }
 
   @override
   void onDepartmentSelected(DepartmentEnum? department) {
-    setState(() {
-      selectedDepartment = department;
-    });
+    setState(() => selectedDepartment = department);
   }
 
   @override
@@ -104,7 +108,10 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
       customersCubit.getCustomers(widget.role, perPage: null);
 
   @override
-  void onSend() => widget.notificationsCubit.addNotification(widget.role);
+  void onSend() {
+    if (!_formKey.currentState!.validate()) return;
+    widget.notificationsCubit.addNotification(widget.role);
+  }
 
   @override
   void onCancelTap() => Navigator.pop(context);
@@ -112,6 +119,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
   @override
   Widget build(BuildContext context) {
     final isAdmin = widget.role.isAdmin;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -127,35 +135,89 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                     children: [
                       IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: Icon(Icons.arrow_back),
+                        icon: const Icon(Icons.arrow_back),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         'send_notification'.tr(),
                         style: context.tt.headlineSmall,
                       ),
-                      Spacer(),
-                      SizedBox(width: 30)
+                      const Spacer(),
+                      const SizedBox(width: 30),
                     ],
                   ),
                   const SizedBox(height: 24),
+
+                  /// سويتش: الإرسال للجميع / محددين
                   SwitchListTile(
                     value: isAll,
                     onChanged: onIsAllSelected,
                     title: Text(
-                      isAll
-                          ? "all_subscribers".tr()
-                          : "certain_subscribers".tr(),
+                      isAll ? "all_subscribers".tr() : "certain_subscribers".tr(),
                       style: context.tt.bodyLarge,
                     ),
                     activeColor: context.cs.primary,
                     inactiveThumbColor: context.cs.secondary,
                     activeTrackColor: context.cs.primary.withValues(alpha: 0.4),
                     inactiveTrackColor:
-                        context.cs.secondary.withValues(alpha: 0.2),
+                    context.cs.secondary.withValues(alpha: 0.2),
                     dense: true,
                     visualDensity: VisualDensity.compact,
                   ),
+
+                  /// سويتش: الإشعارات المجدولة
+                  SwitchListTile(
+                    value: widget.notificationsCubit.scheduleByTime,
+                    onChanged: (v) {
+                      setState(() {
+                        widget.notificationsCubit.setScheduleByTime(v);
+                      });
+                      if (!v) {
+                        _timeController.clear();
+                      }
+                    },
+                    title: Text(
+                      widget.notificationsCubit.scheduleByTime
+                          ? "scheduled_notifications_on".tr()
+                          : "scheduled_notifications_off".tr(),
+                      style: context.tt.bodyLarge,
+                    ),
+                    activeColor: context.cs.primary,
+                    inactiveThumbColor: context.cs.secondary,
+                    activeTrackColor: context.cs.primary.withValues(alpha: 0.4),
+                    inactiveTrackColor:
+                    context.cs.secondary.withValues(alpha: 0.2),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+
+                  /// حقل الوقت يظهر فقط عند التفعيل
+                  AnimatedSizeAndFade.showHide(
+                    show: widget.notificationsCubit.scheduleByTime,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: MainTextField2(
+                        controller: _timeController,
+                        icon: Icons.access_time,
+                        label: "time".tr(),
+                        readOnly: true,
+                        onTap: () => _pickTime(context),
+                        validator: (val) {
+                          if (!widget.notificationsCubit.scheduleByTime) {
+                            return null;
+                          }
+                          if (val == null || val.isEmpty) {
+                            return 'required_field'.tr();
+                          }
+                          final ok = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$')
+                              .hasMatch(val);
+                          return ok ? null : "time_invalid_format".tr();
+                        },
+                      ),
+                    ),
+                  ),
+
+                  /// اختيار القسم + المشتركين (إذا لم يكن للجميع)
                   AnimatedSizeAndFade.showHide(
                     show: !isAll,
                     child: Column(
@@ -176,16 +238,13 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                         BlocBuilder<CustomersCubit, GeneralCustomersState>(
                           builder: (context, state) {
                             if (state is CustomersLoading) {
-                              return LoadingIndicator();
+                              return const LoadingIndicator();
                             } else if (state is CustomersSuccess) {
-                              // TODO filter depending on department
-                              //inal data = state.customers.data;
+                              // TODO: filter حسب القسم إن رغبت
+                              // final data = state.customers.data;
                               // final items = selectedDepartment == null
                               //     ? data
-                              //     : data.where((customer) {
-                              //         return customer.department.id ==
-                              //             selectedDepartment?.id;
-                              //       }).toList();
+                              //     : data.where((c) => c.department.id == selectedDepartment?.id).toList();
                               return MutliSelectorDropDown(
                                 items: state.customers.data,
                                 prefixIcon: Icons.subscriptions,
@@ -205,42 +264,48 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                                 onTryAgainTap: onTryAgainTap,
                               );
                             } else {
-                              return SizedBox.shrink();
+                              return const SizedBox.shrink();
                             }
                           },
                         ),
                       ],
                     ),
                   ),
+
                   const SizedBox(height: 16),
+
                   MainTextField2(
                     onChanged: widget.notificationsCubit.setTitle,
                     icon: Icons.title,
                     label: 'title'.tr(),
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    validator: (val) =>
+                    val == null || val.isEmpty ? 'required_field'.tr() : null,
                   ),
+
                   const SizedBox(height: 12),
+
                   MainTextField2(
                     onChanged: widget.notificationsCubit.setMessage,
                     icon: Icons.message,
                     label: 'message'.tr(),
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    validator: (val) =>
+                    val == null || val.isEmpty ? 'required_field'.tr() : null,
                   ),
+
                   const SizedBox(height: 12),
+
                   ChooseImageWidget(
                     onSetImage: widget.notificationsCubit.setImage,
                     validator: (i) => i == null ? 'image_required'.tr() : null,
                   ),
+
                   const SizedBox(height: 30),
                   const SizedBox(height: 12),
                 ],
               ),
             ),
           ),
+
           Padding(
             padding: AppConstants.padding20,
             child: Column(
@@ -274,12 +339,28 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                     );
                   },
                 ),
-                SizedBox(height: 20)
+                const SizedBox(height: 20),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _pickTime(BuildContext context) async {
+    final now = TimeOfDay.now();
+    final result = await showTimePicker(
+      context: context,
+      initialTime: now,
+      builder: (ctx, child) => child!,
+    );
+    if (result != null) {
+      final hh = result.hour.toString().padLeft(2, '0');
+      final mm = result.minute.toString().padLeft(2, '0');
+      final value = "$hh:$mm";
+      _timeController.text = value;
+      widget.notificationsCubit.setTime(value);
+    }
   }
 }

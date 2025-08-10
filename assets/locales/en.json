@@ -379,5 +379,11 @@
   "female_users": "Female Users",
   "avg_ages": "Average Ages",
   "avg_weights": "Average Weights",
-  "avg_lenghts": "Average Heights"
+  "avg_lenghts": "Average Heights",
+  "scheduled_notifications_on": "Scheduled notifications: Enabled",
+  "scheduled_notifications_off": "Scheduled notifications: Disabled",
+  "schedule_by_time": "Enable scheduled notifications",
+  "time": "Time",
+  "time_invalid_format": "Invalid time format. Use HH:mm",
+  "time_required": "Time is required"
 }

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -47,9 +48,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
 
   @override
   void dispose() {
-    super.dispose();
     passwordFocusNode.dispose();
     confirmPasswordFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -61,7 +62,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
       confirmPasswordFocusNode.unfocus();
 
   @override
-  void onLoginTap() => context.router.push(SignInRoute());
+  void onLoginTap() => context.router.replace(SignInRoute());
 
   @override
   void onMainActionTap() => widget.authCubit.resetPassword();
@@ -76,9 +77,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
 
   @override
   void onShowPassword() {
-    setState(() {
-      isObsecurePassword = !isObsecurePassword;
-    });
+    setState(() => isObsecurePassword = !isObsecurePassword);
   }
 
   @override
@@ -92,7 +91,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
                 Text(
                   AppConstants.appName,
                   style: context.tt.headlineMedium?.copyWith(
@@ -127,75 +126,126 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                           ),
                         ),
                         const SizedBox(height: 20),
-                        // const CustomTextField(
-                        //   label: 'New Password',
-                        //   icon: Icons.lock,
-                        //   icon2: Icons.visibility,
-                        // ),
-                        MainTextField(
-                          obscureText: isObsecurePassword,
-                          // errorText:
-                          //     state is TextFieldState &&
-                          //             state.type == TextFieldType.password
-                          //         ? state.error
-                          //         : null,
-                          labelText: "password".tr(),
-                          onChanged: onPasswordChanged,
-                          onSubmitted: onPasswordSubmitted,
-                          focusNode: passwordFocusNode,
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: context.cs.onSecondary,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              isObsecurePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: context.cs.onSecondary,
-                            ),
-                            onPressed: onShowPassword,
-                          ),
+
+                        BlocBuilder<AuthCubit, AuthState>(
+                          bloc: widget.authCubit,
+                          buildWhen: (prev, curr) =>
+                          curr is TextFieldState &&
+                              curr.type == TextFieldType.password,
+                          builder: (context, state) {
+                            final errorText = state is TextFieldState &&
+                                state.type == TextFieldType.password
+                                ? state.error
+                                : null;
+                            return MainTextField(
+                              obscureText: isObsecurePassword,
+                              labelText: "password".tr(),
+                              onChanged: onPasswordChanged,
+                              onSubmitted: onPasswordSubmitted,
+                              focusNode: passwordFocusNode,
+                              errorText: errorText,
+                              prefixIcon: Icon(
+                                Icons.lock,
+                                color: context.cs.onSecondary,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  isObsecurePassword
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: context.cs.onSecondary,
+                                ),
+                                onPressed: onShowPassword,
+                              ),
+                            );
+                          },
                         ),
-                        SizedBox(height: 10),
-                        MainTextField(
-                          obscureText: isObsecurePassword,
-                          // errorText:
-                          //     state is TextFieldState &&
-                          //             state.type ==
-                          //                 TextFieldType.confirmPassword
-                          //         ? state.error
-                          //         : null,
-                          labelText: "confirm_password".tr(),
-                          onChanged: onConfirmPasswordChanged,
-                          onSubmitted: onConfirmPasswordSubmitted,
-                          focusNode: confirmPasswordFocusNode,
-                          prefixIcon: const Icon(
-                            Icons.lock,
-                            color: Colors.black54,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              isObsecurePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.black54,
-                            ),
-                            onPressed: onShowPassword,
-                          ),
+
+                        const SizedBox(height: 10),
+
+                        BlocBuilder<AuthCubit, AuthState>(
+                          bloc: widget.authCubit,
+                          buildWhen: (prev, curr) =>
+                          curr is TextFieldState &&
+                              curr.type == TextFieldType.confirmPassword,
+                          builder: (context, state) {
+                            final errorText = state is TextFieldState &&
+                                state.type == TextFieldType.confirmPassword
+                                ? state.error
+                                : null;
+                            return MainTextField(
+                              obscureText: isObsecurePassword,
+                              labelText: "confirm_password".tr(),
+                              onChanged: onConfirmPasswordChanged,
+                              onSubmitted: onConfirmPasswordSubmitted,
+                              focusNode: confirmPasswordFocusNode,
+                              errorText: errorText,
+                              prefixIcon: const Icon(
+                                Icons.lock,
+                                color: Colors.black54,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  isObsecurePassword
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.black54,
+                                ),
+                                onPressed: onShowPassword,
+                              ),
+                            );
+                          },
                         ),
-                        // const CustomTextField(
-                        //   label: 'Confirm Password',
-                        //   icon: Icons.lock,
-                        //   icon2: Icons.visibility,
-                        // ),
+
                         const SizedBox(height: 20),
-                        MainActionButton(
-                          padding: AppConstants.padding8,
-                          onTap: onMainActionTap,
-                          text: 'reset_password'.tr(),
+
+                        BlocConsumer<AuthCubit, AuthState>(
+                          bloc: widget.authCubit,
+                          listenWhen: (prev, curr) =>
+                          curr is ResetPasswordSuccess ||
+                              curr is ResetPasswordFail,
+                          listener: (context, state) {
+                            if (state is ResetPasswordSuccess) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.message)),
+                              );
+                              context.router.replace(SignInRoute());
+                            } else if (state is ResetPasswordFail) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(state.error),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          },
+                          buildWhen: (prev, curr) =>
+                          curr is ResetPasswordLoading ||
+                              curr is ResetPasswordSuccess ||
+                              curr is ResetPasswordFail,
+                          builder: (context, state) {
+                            final isLoading =
+                            state is ResetPasswordLoading;
+                            return MainActionButton(
+                              padding: AppConstants.padding8,
+                              onTap: isLoading ? () {} : onMainActionTap,
+                              text: 'reset_password'.tr(),
+                              child: isLoading
+                                  ? const SizedBox(
+                                height: 22,
+                                width: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.4,
+                                ),
+                              )
+                                  : null,
+                            );
+                          },
                         ),
+
                         const SizedBox(height: 20),
+
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

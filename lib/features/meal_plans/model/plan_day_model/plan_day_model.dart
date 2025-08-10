@@ -15,11 +15,13 @@ class PlanDayModel {
     required this.meals,
   });
 
+  @JsonKey(defaultValue: 0)
   final int id;
 
   @JsonKey(fromJson: DayEnum.fromJson, toJson: DayEnum.toJson)
   final DayEnum day;
 
+  @JsonKey(defaultValue: <MealModel>[])
   final List<MealModel> meals;
 
   factory PlanDayModel.fromJson(Map<String, dynamic> json) =>

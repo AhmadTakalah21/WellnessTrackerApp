@@ -20,6 +20,7 @@ part 'states/text_field_state.dart';
 part 'states/sign_in_state.dart';
 part 'states/add_info_state.dart';
 part 'states/subscription_expired_state.dart';
+part 'states/forget_password_state.dart';
 
 @injectable
 class AuthCubit extends Cubit<AuthState> {
@@ -32,6 +33,8 @@ class AuthCubit extends Cubit<AuthState> {
       const ResetPasswordPostModel();
   AddInfoModel addInfoModel = const AddInfoModel();
   String? code;
+  String? resetCode;
+
 
   void setUsername(String username) {
     postSignUpModel = postSignUpModel.copyWith(username: () => username);
@@ -79,6 +82,11 @@ class AuthCubit extends Cubit<AuthState> {
       confirmPassword: () => confirmPassword,
     );
     emit(TextFieldState(TextFieldType.confirmPassword));
+  }
+
+  void setResetCode(String code) {
+    resetCode = code.trim();
+    emit(TextFieldState(TextFieldType.code));
   }
 
   void setInitialFormData() {
@@ -254,35 +262,35 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> resetPassword() async {
-    bool shouldReturn = false;
-
-    final passwordError = resetPasswordPostModel.validatePassword();
-    if (passwordError != null) {
-      emit(TextFieldState(TextFieldType.password, error: passwordError));
-      shouldReturn = true;
-    } else {
-      emit(TextFieldState(TextFieldType.password));
-    }
-
-    final confirmPasswordError =
-        resetPasswordPostModel.validateConfirmPassword();
-    if (confirmPasswordError != null) {
-      emit(
-        TextFieldState(
-          TextFieldType.confirmPassword,
-          error: confirmPasswordError,
-        ),
-      );
-      shouldReturn = true;
-    } else {
-      emit(TextFieldState(TextFieldType.confirmPassword));
-    }
-    if (shouldReturn) return;
-    try {
-      // TODO
-    } catch (e) {}
-  }
+  // Future<void> resetPassword() async {
+  //   bool shouldReturn = false;_
+  //
+  //   final passwordError = resetPasswordPostModel.validatePassword();
+  //   if (passwordError != null) {
+  //     emit(TextFieldState(TextFieldType.password, error: passwordError));
+  //     shouldReturn = true;
+  //   } else {
+  //     emit(TextFieldState(TextFieldType.password));
+  //   }
+  //
+  //   final confirmPasswordError =
+  //       resetPasswordPostModel.validateConfirmPassword();
+  //   if (confirmPasswordError != null) {
+  //     emit(
+  //       TextFieldState(
+  //         TextFieldType.confirmPassword,
+  //         error: confirmPasswordError,
+  //       ),
+  //     );
+  //     shouldReturn = true;
+  //   } else {
+  //     emit(TextFieldState(TextFieldType.confirmPassword));
+  //   }
+  //   if (shouldReturn) return;
+  //   try {
+  //     // TODO
+  //   } catch (e) {}
+  // }
 
   Future<void> forgetPassword() async {
     bool shouldReturn = false;
@@ -327,4 +335,112 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AddInfoFail(e.toString()));
     }
   }
+
+  Future<void> sendResetCode() async {
+    bool shouldReturn = false;
+
+    final emailError = postSignUpModel.validateEmail();
+    if (emailError != null) {
+      emit(TextFieldState(TextFieldType.email, error: emailError));
+      shouldReturn = true;
+    } else {
+      emit(TextFieldState(TextFieldType.email));
+    }
+    if (shouldReturn) return;
+
+    emit(ForgotPasswordLoading());
+    try {
+      await authRepo.requestPasswordReset(email: postSignUpModel.email.trim());
+      emit(ForgotPasswordSuccess("reset_code_sent".tr()));
+    } catch (e) {
+      emit(ForgotPasswordFail(e.toString()));
+    }
+  }
+
+  /// خطوة (2): التحقق من الكود الذي وصل على البريد
+  Future<void> verifyResetCode() async {
+    bool shouldReturn = false;
+
+    final emailError = postSignUpModel.validateEmail();
+    if (emailError != null) {
+      emit(TextFieldState(TextFieldType.email, error: emailError));
+      shouldReturn = true;
+    } else {
+      emit(TextFieldState(TextFieldType.email));
+    }
+
+    if (resetCode == null || resetCode!.isEmpty) {
+      emit(TextFieldState(TextFieldType.code, error: "required_field".tr()));
+      shouldReturn = true;
+    } else {
+      emit(TextFieldState(TextFieldType.code));
+    }
+
+    if (shouldReturn) return;
+
+    emit(VerifyResetCodeLoading());
+    try {
+      await authRepo.verifyPasswordResetCode(
+        email: postSignUpModel.email.trim(),
+        code: resetCode!.trim(),
+      );
+      emit(VerifyResetCodeSuccess("reset_code_verified".tr()));
+    } catch (e) {
+      emit(VerifyResetCodeFail(e.toString()));
+    }
+  }
+
+  Future<void> resetPassword() async {
+    bool shouldReturn = false;
+
+    final emailError = postSignUpModel.validateEmail();
+    if (emailError != null) {
+      emit(TextFieldState(TextFieldType.email, error: emailError));
+      shouldReturn = true;
+    } else {
+      emit(TextFieldState(TextFieldType.email));
+    }
+
+    if (resetCode == null || resetCode!.isEmpty) {
+      emit(TextFieldState(TextFieldType.code, error: "required_field".tr()));
+      shouldReturn = true;
+    } else {
+      emit(TextFieldState(TextFieldType.code));
+    }
+
+    final passwordError = resetPasswordPostModel.validatePassword();
+    if (passwordError != null) {
+      emit(TextFieldState(TextFieldType.password, error: passwordError));
+      shouldReturn = true;
+    } else {
+      emit(TextFieldState(TextFieldType.password));
+    }
+
+    final confirmPasswordError = resetPasswordPostModel.validateConfirmPassword();
+    if (confirmPasswordError != null) {
+      emit(TextFieldState(TextFieldType.confirmPassword, error: confirmPasswordError));
+      shouldReturn = true;
+    } else {
+      emit(TextFieldState(TextFieldType.confirmPassword));
+    }
+
+    if (shouldReturn) return;
+
+    emit(ResetPasswordLoading());
+    try {
+      await authRepo.resetPassword(
+        email: postSignUpModel.email.trim(),
+        code: resetCode!.trim(),
+        password: resetPasswordPostModel.password!,
+        passwordConfirmation: resetPasswordPostModel.confirmPassword!,
+      );
+
+      emit(ResetPasswordSuccess("password_reset_success".tr()));
+      resetCode = null;
+      resetPasswordPostModel = const ResetPasswordPostModel();
+    } catch (e) {
+      emit(ResetPasswordFail(e.toString()));
+    }
+  }
+
 }

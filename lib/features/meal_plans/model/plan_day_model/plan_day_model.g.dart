@@ -7,11 +7,12 @@ part of 'plan_day_model.dart';
 // **************************************************************************
 
 PlanDayModel _$PlanDayModelFromJson(Map<String, dynamic> json) => PlanDayModel(
-      id: (json['id'] as num).toInt(),
+      id: (json['id'] as num?)?.toInt() ?? 0,
       day: DayEnum.fromJson(json['day']),
-      meals: (json['meals'] as List<dynamic>)
-          .map((e) => MealModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      meals: (json['meals'] as List<dynamic>?)
+              ?.map((e) => MealModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$PlanDayModelToJson(PlanDayModel instance) =>
