@@ -5,16 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field.dart';
 import '../../../../global/router/app_router.gr.dart';
 
-
-
-
 abstract class ForgotPasswordViewCallBacks {
-  void onEmailChanged(String email);
-  void onEmailSubmitted(String email);
   void onMainActionTap();
   void onLoginTap();
 }
@@ -72,21 +69,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
   }
 
   @override
-  void onEmailChanged(String email) {
-    widget.authCubit.setEmail(email);
-  }
-
-  @override
-  void onEmailSubmitted(String email) => emailFocusNode.unfocus();
-
-  @override
   void onLoginTap() => Navigator.pop(context);
 
   @override
   void onMainActionTap() {
     widget.authCubit.sendResetCode();
   }
-
 
   @override
   void dispose() {
@@ -149,74 +137,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                             ),
                           ),
                           const SizedBox(height: 20),
-                          SlideTransition(
-                            position: _slideAnimation,
-                            child: BlocBuilder<AuthCubit, AuthState>(
-                              bloc: widget.authCubit,
-                              buildWhen: (previous, current) =>
-                                  (current is TextFieldState &&
-                                      current.type == TextFieldType.email),
-                              builder: (context, state) {
-                                return MainTextField(
-                                  initialText:
-                                      widget.authCubit.postSignUpModel.getEmail,
-                                  errorText: state is TextFieldState &&
-                                          state.type == TextFieldType.email
-                                      ? state.error
-                                      : null,
-                                  prefixIcon: Icon(
-                                    Icons.email,
-                                    color: context.cs.onSecondary,
-                                  ),
-                                  labelText: "email".tr(),
-                                  onChanged: onEmailChanged,
-                                  onSubmitted: onEmailSubmitted,
-                                  focusNode: emailFocusNode,
-                                );
-                              },
-                            ),
-                          ),
+                          _buildEmailTextField(),
                           const SizedBox(height: 20),
-                          FadeTransition(
-                            opacity: _fadeAnimation,
-                            child: BlocConsumer<AuthCubit, AuthState>(
-                              bloc: widget.authCubit,
-                              listenWhen: (prev, curr) =>
-                              curr is ForgotPasswordSuccess || curr is ForgotPasswordFail,
-                              listener: (context, state) {
-                                if (state is ForgotPasswordSuccess) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(state.message)),
-                                  );
-                                   context.router.push(VerifyResetCodeRoute(authCubit: widget.authCubit));
-                                } else if (state is ForgotPasswordFail) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(state.error), backgroundColor: Colors.red),
-                                  );
-                                }
-                              },
-                              buildWhen: (prev, curr) =>
-                              curr is ForgotPasswordLoading ||
-                                  curr is ForgotPasswordSuccess ||
-                                  curr is ForgotPasswordFail,
-                              builder: (context, state) {
-                                final isLoading = state is ForgotPasswordLoading;
-                                return MainActionButton(
-                                  padding: AppConstants.padding8,
-                                  onTap: isLoading ? () {} : onMainActionTap,
-                                  text: 'reset_password'.tr(),
-                                  child: isLoading
-                                      ? const SizedBox(
-                                    height: 22,
-                                    width: 22,
-                                    child: CircularProgressIndicator(strokeWidth: 2.4),
-                                  )
-                                      : null,
-                                );
-                              },
-                            ),
-                          ),
-
+                          _buildMainActionButton(),
                           const SizedBox(height: 20),
                           FadeTransition(
                             opacity: _fadeAnimation,
@@ -247,6 +170,57 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmailTextField() {
+    return SlideTransition(
+      position: _slideAnimation,
+      child: BlocBuilder<AuthCubit, AuthState>(
+        bloc: widget.authCubit,
+        buildWhen: (previous, current) =>
+            (current is TextFieldState && current.type == TextFieldType.email),
+        builder: (context, state) {
+          bool b = state is TextFieldState && state.type == TextFieldType.email;
+          return MainTextField(
+            initialText: widget.authCubit.postSignUpModel.getEmail,
+            errorText: b ? state.error : null,
+            prefixIcon: Icon(Icons.email, color: context.cs.onSecondary),
+            labelText: "email".tr(),
+            onChanged: widget.authCubit.setEmail,
+            onSubmitted: (_) => emailFocusNode.unfocus,
+            focusNode: emailFocusNode,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildMainActionButton() {
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: BlocConsumer<AuthCubit, AuthState>(
+        bloc: widget.authCubit,
+        listener: (context, state) {
+          if (state is ForgotPasswordSuccess) {
+            MainSnackBar.showSuccessMessage(context, state.message);
+            context.router.push(
+              VerifyResetCodeRoute(authCubit: widget.authCubit),
+            );
+          } else if (state is ForgotPasswordFail) {
+            MainSnackBar.showErrorMessage(context, state.error);
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is ForgotPasswordLoading;
+          return MainActionButton(
+            padding: AppConstants.padding8,
+            onTap: isLoading ? () {} : onMainActionTap,
+            text: 'reset_password'.tr(),
+            child: isLoading ? LoadingIndicator(isInBtn: true) : null,
+          );
+        },
       ),
     );
   }

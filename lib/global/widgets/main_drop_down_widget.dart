@@ -119,7 +119,7 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
             filled: true,
             fillColor: context.cs.surfaceVariant,
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+                const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),

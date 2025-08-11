@@ -1,5 +1,5 @@
 import 'package:data_table_2/data_table_2.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' as tr;
 import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/per_page_enum.dart';
@@ -229,6 +229,7 @@ class _MainDataTableState<T extends DataTableModel>
     final meta = widget.items.meta;
 
     return Row(
+      textDirection: TextDirection.rtl,
       children: [
         PopupMenuButton<PerPageEnum>(
           offset: Offset(0, 30),
@@ -261,18 +262,25 @@ class _MainDataTableState<T extends DataTableModel>
         ),
         IconButton(
           onPressed: onNextPageTap,
-          icon: Icon(Icons.arrow_back_ios),
-          color: page != meta.totalPages
-              ? context.cs.secondary
-              : context.cs.onSecondaryFixed,
+          icon: Icon(
+            Icons.keyboard_arrow_right,
+            size: 30,
+            color: page != meta.totalPages
+                ? context.cs.secondary
+                : context.cs.onSecondaryFixed,
+          ),
         ),
         Spacer(),
         Text("${meta.currentPage} ${"of".tr()} ${meta.totalPages}"),
         Spacer(),
         IconButton(
           onPressed: onPreviousPageTap,
-          icon: Icon(Icons.arrow_forward_ios),
-          color: page != 1 ? context.cs.secondary : context.cs.onSecondaryFixed,
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            size: 30,
+            color:
+                page != 1 ? context.cs.secondary : context.cs.onSecondaryFixed,
+          ),
         ),
         IconButton(
           onPressed: onFirstPageTap,

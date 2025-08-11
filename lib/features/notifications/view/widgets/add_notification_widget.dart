@@ -85,17 +85,18 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
   @override
   void dispose() {
     _timeController.dispose();
+    widget.notificationsCubit.resetAddNotificationModel();
     super.dispose();
   }
 
   @override
   void onIsAllSelected(bool? value) {
-    final newVal = value ?? false;
-    setState(() => isAll = newVal);
-    if (newVal) {
+    if (value == null) return;
+    setState(() => isAll = value);
+    if (isAll) {
       widget.notificationsCubit.clearUserIds();
     }
-    widget.notificationsCubit.setIsAll(newVal ? "1" : "0");
+    widget.notificationsCubit.setIsAll(isAll ? "1" : "0");
   }
 
   @override
@@ -147,25 +148,24 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                     ],
                   ),
                   const SizedBox(height: 24),
-
-                  /// سويتش: الإرسال للجميع / محددين
                   SwitchListTile(
                     value: isAll,
                     onChanged: onIsAllSelected,
                     title: Text(
-                      isAll ? "all_subscribers".tr() : "certain_subscribers".tr(),
+                      isAll
+                          ? "all_subscribers".tr()
+                          : "certain_subscribers".tr(),
                       style: context.tt.bodyLarge,
                     ),
                     activeColor: context.cs.primary,
                     inactiveThumbColor: context.cs.secondary,
                     activeTrackColor: context.cs.primary.withValues(alpha: 0.4),
                     inactiveTrackColor:
-                    context.cs.secondary.withValues(alpha: 0.2),
+                        context.cs.secondary.withValues(alpha: 0.2),
                     dense: true,
                     visualDensity: VisualDensity.compact,
                   ),
-
-                  /// سويتش: الإشعارات المجدولة
+                  SizedBox(height: 10),
                   SwitchListTile(
                     value: widget.notificationsCubit.scheduleByTime,
                     onChanged: (v) {
@@ -186,12 +186,10 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                     inactiveThumbColor: context.cs.secondary,
                     activeTrackColor: context.cs.primary.withValues(alpha: 0.4),
                     inactiveTrackColor:
-                    context.cs.secondary.withValues(alpha: 0.2),
+                        context.cs.secondary.withValues(alpha: 0.2),
                     dense: true,
                     visualDensity: VisualDensity.compact,
                   ),
-
-                  /// حقل الوقت يظهر فقط عند التفعيل
                   AnimatedSizeAndFade.showHide(
                     show: widget.notificationsCubit.scheduleByTime,
                     child: Padding(
@@ -216,8 +214,6 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                       ),
                     ),
                   ),
-
-                  /// اختيار القسم + المشتركين (إذا لم يكن للجميع)
                   AnimatedSizeAndFade.showHide(
                     show: !isAll,
                     child: Column(
@@ -229,7 +225,6 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                             prefixIcon: Icons.group,
                             hintText: "department".tr(),
                             labelText: "department".tr(),
-                            errorMessage: "department_required".tr(),
                             onChanged: onDepartmentSelected,
                             isEntityName: true,
                           ),
@@ -248,6 +243,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                               return MutliSelectorDropDown(
                                 items: state.customers.data,
                                 prefixIcon: Icons.subscriptions,
+                                errorMessage: "subscribers_required".tr(),
                                 hintText: "subscribers".tr(),
                                 labelText: "subscribers".tr(),
                                 onChanged: widget.notificationsCubit.setUsers,
@@ -271,41 +267,33 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 16),
-
                   MainTextField2(
                     onChanged: widget.notificationsCubit.setTitle,
                     icon: Icons.title,
                     label: 'title'.tr(),
-                    validator: (val) =>
-                    val == null || val.isEmpty ? 'required_field'.tr() : null,
+                    validator: (val) => val == null || val.isEmpty
+                        ? 'required_field'.tr()
+                        : null,
                   ),
-
                   const SizedBox(height: 12),
-
                   MainTextField2(
                     onChanged: widget.notificationsCubit.setMessage,
                     icon: Icons.message,
                     label: 'message'.tr(),
-                    validator: (val) =>
-                    val == null || val.isEmpty ? 'required_field'.tr() : null,
+                    validator: (val) => val == null || val.isEmpty
+                        ? 'required_field'.tr()
+                        : null,
                   ),
-
                   const SizedBox(height: 12),
-
                   ChooseImageWidget(
                     onSetImage: widget.notificationsCubit.setImage,
-                    validator: (i) => i == null ? 'image_required'.tr() : null,
                   ),
-
-                  const SizedBox(height: 30),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
           ),
-
           Padding(
             padding: AppConstants.padding20,
             child: Column(
@@ -360,6 +348,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
       final mm = result.minute.toString().padLeft(2, '0');
       final value = "$hh:$mm";
       _timeController.text = value;
+      widget.notificationsCubit.setTz(DateTime.now().timeZoneOffset.toString());
       widget.notificationsCubit.setTime(value);
     }
   }

@@ -262,52 +262,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // Future<void> resetPassword() async {
-  //   bool shouldReturn = false;_
-  //
-  //   final passwordError = resetPasswordPostModel.validatePassword();
-  //   if (passwordError != null) {
-  //     emit(TextFieldState(TextFieldType.password, error: passwordError));
-  //     shouldReturn = true;
-  //   } else {
-  //     emit(TextFieldState(TextFieldType.password));
-  //   }
-  //
-  //   final confirmPasswordError =
-  //       resetPasswordPostModel.validateConfirmPassword();
-  //   if (confirmPasswordError != null) {
-  //     emit(
-  //       TextFieldState(
-  //         TextFieldType.confirmPassword,
-  //         error: confirmPasswordError,
-  //       ),
-  //     );
-  //     shouldReturn = true;
-  //   } else {
-  //     emit(TextFieldState(TextFieldType.confirmPassword));
-  //   }
-  //   if (shouldReturn) return;
-  //   try {
-  //     // TODO
-  //   } catch (e) {}
-  // }
-
-  Future<void> forgetPassword() async {
-    bool shouldReturn = false;
-
-    final emailError = postSignUpModel.validateEmail();
-    if (emailError != null) {
-      emit(TextFieldState(TextFieldType.email, error: emailError));
-      shouldReturn = true;
-    } else {
-      emit(TextFieldState(TextFieldType.email));
-    }
-    if (shouldReturn) return;
-    try {
-      // TODO
-    } catch (e) {}
-  }
-
   Future<void> logout({VoidCallback? onSuccess}) async {
     emit(SignInLoading());
 
@@ -357,7 +311,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  /// خطوة (2): التحقق من الكود الذي وصل على البريد
   Future<void> verifyResetCode() async {
     bool shouldReturn = false;
 
@@ -431,7 +384,7 @@ class AuthCubit extends Cubit<AuthState> {
       await authRepo.resetPassword(
         email: postSignUpModel.email.trim(),
         code: resetCode!.trim(),
-        password: resetPasswordPostModel.password!,
+        password: resetPasswordPostModel.password,
         passwordConfirmation: resetPasswordPostModel.confirmPassword!,
       );
 

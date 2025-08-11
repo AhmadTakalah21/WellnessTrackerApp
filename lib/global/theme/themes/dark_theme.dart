@@ -7,7 +7,7 @@ ThemeData darkTheme = ThemeData(
   colorScheme: ColorScheme(
       brightness: Brightness.dark,
       primary: AppColors.mainColor,
-      onPrimary: AppColors.mainColor,
+      onPrimary: AppColors.secondaryColor,
       secondary: AppColors.secondaryColor,
       onSecondary: Colors.black54,
       error: AppColors.red,

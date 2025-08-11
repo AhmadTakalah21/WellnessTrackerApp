@@ -3,8 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
 import 'package:wellnesstrackerapp/features/meal_plans/cubit/meal_plans_cubit.dart';
 import 'package:wellnesstrackerapp/features/meal_plans/model/plan_day_model/plan_day_model.dart';
 import 'package:wellnesstrackerapp/features/meals/model/meal_model/meal_model.dart';
@@ -17,6 +15,7 @@ import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_tab_bar.dart';
+import 'package:wellnesstrackerapp/global/widgets/video_player_widget.dart';
 
 abstract class MealsViewCallbacks {
   void onTabSelected(int index);
@@ -58,33 +57,32 @@ class _MealsPageState extends State<MealsPage>
 
   String get _baseUrl => 'https://dev-mi.serv00.net';
 
-  bool _isWebUrl(String s) => s.startsWith('http://') || s.startsWith('https://');
+  bool _isWebUrl(String s) =>
+      s.startsWith('http://') || s.startsWith('https://');
 
   bool _isVideo(String s) {
     final l = s.toLowerCase();
-    return l.endsWith('.mp4') || l.endsWith('.mov') || l.endsWith('.mkv') || l.endsWith('.webm');
-  }
-
-  bool _isImage(String s) {
-    final l = s.toLowerCase();
-    return l.endsWith('.png') || l.endsWith('.jpg') || l.endsWith('.jpeg') || l.endsWith('.gif') || l.endsWith('.webp');
+    return l.endsWith('.mp4') ||
+        l.endsWith('.mov') ||
+        l.endsWith('.mkv') ||
+        l.endsWith('.webm');
   }
 
   String _absoluteLink(String link) {
     if (link.isEmpty) return '';
-    return _isWebUrl(link) ? link : '$_baseUrl/$link';
+    return _isWebUrl(link) ? link : '$_baseUrl/storage/$link';
   }
 
   IconData _iconForLink(String raw) {
     final url = _absoluteLink(raw);
     if (url.isEmpty) return Icons.link_off;
     if (_isVideo(url)) return Icons.play_circle_fill;
-    if (_isImage(url)) return Icons.image;
     return Icons.link;
   }
 
   Future<void> _openExternal(String url) async {
-    final ok = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    final ok =
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     if (!ok && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('cannot_open_link'.tr())),
@@ -98,26 +96,12 @@ class _MealsPageState extends State<MealsPage>
 
     if (_isVideo(url)) {
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => VideoPlayerPage(url: url)),
-      );
-    } else if (_isImage(url)) {
-      showDialog(
-        context: context,
-        builder: (_) => Dialog(
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: InteractiveViewer(
-            minScale: 0.7,
-            maxScale: 4,
-            child: Image.network(url, fit: BoxFit.contain),
-          ),
-        ),
+        MaterialPageRoute(builder: (_) => VideoPlayerView(url: url)),
       );
     } else {
       _openExternal(url);
     }
   }
-
 
   @override
   void initState() {
@@ -129,7 +113,10 @@ class _MealsPageState extends State<MealsPage>
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => mealPlansCubit.getMealPlans(widget.role);
+  void onTryAgainTap() {
+    onTabSelected(0);
+    mealPlansCubit.getMealPlans(widget.role);
+  }
 
   @override
   void onTabSelected(int index) {
@@ -150,7 +137,7 @@ class _MealsPageState extends State<MealsPage>
           } else if (state is MealPlansSuccess) {
             final meals = state.mealPlans.data;
             final tabBarTitles =
-            meals.last.planDays.map((e) => e.day.displayName).toList();
+                meals.last.planDays.map((e) => e.day.displayName).toList();
             tabController =
                 TabController(length: tabBarTitles.length, vsync: this);
             return Column(
@@ -171,9 +158,16 @@ class _MealsPageState extends State<MealsPage>
                     itemCount: meals.last.planDays.length,
                     itemBuilder: (context, index) {
                       final planDay = meals.last.planDays[index];
+                      final child = planDay.meals.isEmpty
+                          ? MainErrorWidget(
+                              error: "no_meals".tr(),
+                              isRefresh: true,
+                              onTryAgainTap: onTryAgainTap,
+                            )
+                          : _buildPage(planDay);
                       return Padding(
                         padding: AppConstants.padding16,
-                        child: KeepAliveWidget(child: _buildPage(planDay)),
+                        child: KeepAliveWidget(child: child),
                       );
                     },
                   ),
@@ -269,22 +263,22 @@ class _MealsPageState extends State<MealsPage>
                       children: [
                         _buildNutrient(
                           icon: Icons.local_drink,
-                          label: "الكمية",
+                          label: "amount",
                           value: ingredientWithQnt.quantity.toString(),
                         ),
                         _buildNutrient(
                           icon: Icons.local_fire_department,
-                          label: "السعرات",
+                          label: "calories",
                           value: ingredient.calories,
                         ),
                         _buildNutrient(
                           icon: Icons.fitness_center,
-                          label: "البروتين",
+                          label: "proteins",
                           value: ingredient.proteins,
                         ),
                         _buildNutrient(
                           icon: Icons.bubble_chart,
-                          label: "الكربوهيدرات",
+                          label: "carbs",
                           value: ingredient.carbs,
                         ),
                       ],
@@ -298,7 +292,7 @@ class _MealsPageState extends State<MealsPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (link.isNotEmpty && (_isVideo(link) || _isImage(link))) ...[
+                  if (link.isNotEmpty && (_isVideo(link))) ...[
                     const SizedBox(height: 12),
                     GestureDetector(
                       onTap: () => _onOpenMedia(meal.link),
@@ -309,12 +303,12 @@ class _MealsPageState extends State<MealsPage>
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
-                              if (_isImage(link))
-                                Image.network(link, fit: BoxFit.cover)
-                              else
-                                Container(color: Colors.black.withOpacity(0.08)),
+                              if (_isVideo(link))
+                                Container(
+                                    color: Colors.black.withOpacity(0.08)),
                               const Center(
-                                child: Icon(Icons.play_circle_fill, size: 56, color: Colors.white),
+                                child: Icon(Icons.play_circle_fill,
+                                    size: 56, color: Colors.white),
                               ),
                             ],
                           ),
@@ -322,12 +316,11 @@ class _MealsPageState extends State<MealsPage>
                       ),
                     ),
                   ],
-
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("طريقة التحضير :", style: context.tt.titleLarge),
+                      Text("${"prepare_method".tr()} :", style: context.tt.titleMedium),
                       if (meal.link.isNotEmpty)
                         IconButton(
                           tooltip: 'open_instruction'.tr(),
@@ -360,67 +353,11 @@ class _MealsPageState extends State<MealsPage>
       children: [
         Icon(icon, size: 20, color: Colors.blueAccent),
         const SizedBox(height: 4),
-        Text(label, style: const TextStyle(fontSize: 12)),
+        Text(label.tr(), style: const TextStyle(fontSize: 12)),
         Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
       ],
     );
   }
 }
 
-class VideoPlayerPage extends StatefulWidget {
-  const VideoPlayerPage({super.key, required this.url});
-  final String url;
 
-  @override
-  State<VideoPlayerPage> createState() => _VideoPlayerPageState();
-}
-
-class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  late VideoPlayerController _videoCtrl;
-  ChewieController? _chewieCtrl;
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  Future<void> _init() async {
-    _videoCtrl = VideoPlayerController.networkUrl(Uri.parse(widget.url));
-    await _videoCtrl.initialize();
-    _chewieCtrl = ChewieController(
-      videoPlayerController: _videoCtrl,
-      autoPlay: true,
-      looping: false,
-      allowFullScreen: true,
-      allowMuting: true,
-      materialProgressColors: ChewieProgressColors(),
-    );
-    if (mounted) setState(() => _loading = false);
-  }
-
-  @override
-  void dispose() {
-    _chewieCtrl?.dispose();
-    _videoCtrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('video'.tr())),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : Center(
-        child: AspectRatio(
-          aspectRatio: _videoCtrl.value.aspectRatio == 0
-              ? 16 / 9
-              : _videoCtrl.value.aspectRatio,
-          child: Chewie(controller: _chewieCtrl!),
-        ),
-      ),
-    );
-  }
-}

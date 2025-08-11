@@ -530,66 +530,6 @@ class _SignInPageState extends State<SignInPage>
   }
 
   Widget _buildCodeTextField() {
-    // return Column(
-    //   children: [
-    //     SizedBox(height: 5),
-    //     BlocBuilder<AuthCubit, AuthState>(
-    //       buildWhen: (previous, current) =>
-    //           (current is TextFieldState && current.type == TextFieldType.code),
-    //       builder: (context, state) {
-    //         final isBuild =
-    //             state is TextFieldState && state.type == TextFieldType.code;
-    //         return MainTextField(
-    //           errorText: isBuild ? state.error : null,
-    //           labelText: "subscription_code".tr(),
-    //           onChanged: onCodeChanged,
-    //           onSubmitted: onCodeSubmitted,
-    //           focusNode: codeFocusNode,
-    //           prefixIcon: const Icon(Icons.key, color: Colors.black54),
-    //         );
-    //       },
-    //     ),
-    //     const SizedBox(height: 10),
-    //     BlocBuilder<SettingsCubit, GeneralSettingsState>(
-    //       buildWhen: (previous, current) => current is SettingsState,
-    //       builder: (context, state) {
-    //         SettingsModel? settings;
-    //         if (state is SettingsSuccess) {
-    //           settings = state.settings;
-    //         }
-    //         return Center(
-    //           child: InkWell(
-    //             onTap: () => onGetCodeTap(settings),
-    //             child: Row(
-    //               mainAxisSize: MainAxisSize.min,
-    //               children: [
-    //                 SvgPicture.asset(
-    //                   "assets/images/whatsapp.svg",
-    //                   width: 24,
-    //                   height: 24,
-    //                   colorFilter: ColorFilter.mode(
-    //                     context.cs.primary,
-    //                     BlendMode.srcIn,
-    //                   ),
-    //                 ),
-    //                 const SizedBox(width: 8),
-    //                 Text(
-    //                   "get_code_via_whatsapp".tr(),
-    //                   style: context.tt.bodyLarge?.copyWith(
-    //                     color: context.cs.primary,
-    //                     fontWeight: FontWeight.bold,
-    //                     decoration: TextDecoration.underline,
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       },
-    //     ),
-    //     const SizedBox(height: 10),
-    //   ],
-    // );
     return BlocBuilder<AuthCubit, AuthState>(
       buildWhen: (previous, current) => current is SubscriptionExpiredState,
       builder: (context, state) {
@@ -676,19 +616,22 @@ class _SignInPageState extends State<SignInPage>
             Text('accept_terms'.tr()),
           ],
         ),
-        AnimatedSizeAndFade(
-          child: isShowSignIn
-              ? TextButton(
-                  onPressed: onForgetPasswordTap,
-                  child: Text(
-                    'forgot_password?'.tr(),
-                    style: context.tt.labelLarge?.copyWith(
-                      color: context.cs.primary,
+        Expanded(
+          child: AnimatedSizeAndFade(
+            child: isShowSignIn
+                ? TextButton(
+                    onPressed: onForgetPasswordTap,
+                    child: Text(
+                      'forgot_password?'.tr(),
+                      style: context.tt.labelLarge?.copyWith(
+                        color: context.cs.primary,
+                      ),
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.fade,
                     ),
-                    overflow: TextOverflow.fade,
-                  ),
-                )
-              : SizedBox.shrink(),
+                  )
+                : SizedBox.shrink(),
+          ),
         ),
       ],
     );
@@ -765,22 +708,4 @@ class _SignInPageState extends State<SignInPage>
       ],
     );
   }
-
-  // PageRouteBuilder _createRoute(Widget page) {
-  //   return PageRouteBuilder(
-  //     pageBuilder: (context, animation, secondaryAnimation) => page,
-  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-  //       const begin = Offset(1.0, 0.0);
-  //       const end = Offset.zero;
-  //       const curve = Curves.easeInOut;
-
-  //       var tween = Tween(
-  //         begin: begin,
-  //         end: end,
-  //       ).chain(CurveTween(curve: curve));
-
-  //       return SlideTransition(position: animation.drive(tween), child: child);
-  //     },
-  //   );
-  // }
 }

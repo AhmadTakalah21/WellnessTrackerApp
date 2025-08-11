@@ -6,14 +6,12 @@ import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field.dart';
 
 abstract class ResetPasswordViewCallBacks {
-  void onPasswordChanged(String password);
-  void onPasswordSubmitted(String password);
-  void onConfirmPasswordChanged(String confirmPassword);
-  void onConfirmPasswordSubmitted(String confirmPassword);
   void onShowPassword();
   void onMainActionTap();
   void onLoginTap();
@@ -54,26 +52,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
   }
 
   @override
-  void onConfirmPasswordChanged(String confirmPassword) =>
-      widget.authCubit.setConfirmNewPassword(confirmPassword);
-
-  @override
-  void onConfirmPasswordSubmitted(String confirmPassword) =>
-      confirmPasswordFocusNode.unfocus();
-
-  @override
   void onLoginTap() => context.router.replace(SignInRoute());
 
   @override
   void onMainActionTap() => widget.authCubit.resetPassword();
-
-  @override
-  void onPasswordChanged(String password) =>
-      widget.authCubit.setNewPassword(password);
-
-  @override
-  void onPasswordSubmitted(String password) =>
-      confirmPasswordFocusNode.requestFocus();
 
   @override
   void onShowPassword() {
@@ -126,126 +108,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                           ),
                         ),
                         const SizedBox(height: 20),
-
-                        BlocBuilder<AuthCubit, AuthState>(
-                          bloc: widget.authCubit,
-                          buildWhen: (prev, curr) =>
-                          curr is TextFieldState &&
-                              curr.type == TextFieldType.password,
-                          builder: (context, state) {
-                            final errorText = state is TextFieldState &&
-                                state.type == TextFieldType.password
-                                ? state.error
-                                : null;
-                            return MainTextField(
-                              obscureText: isObsecurePassword,
-                              labelText: "password".tr(),
-                              onChanged: onPasswordChanged,
-                              onSubmitted: onPasswordSubmitted,
-                              focusNode: passwordFocusNode,
-                              errorText: errorText,
-                              prefixIcon: Icon(
-                                Icons.lock,
-                                color: context.cs.onSecondary,
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  isObsecurePassword
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: context.cs.onSecondary,
-                                ),
-                                onPressed: onShowPassword,
-                              ),
-                            );
-                          },
-                        ),
-
+                        _buildPasswordTextField(),
                         const SizedBox(height: 10),
-
-                        BlocBuilder<AuthCubit, AuthState>(
-                          bloc: widget.authCubit,
-                          buildWhen: (prev, curr) =>
-                          curr is TextFieldState &&
-                              curr.type == TextFieldType.confirmPassword,
-                          builder: (context, state) {
-                            final errorText = state is TextFieldState &&
-                                state.type == TextFieldType.confirmPassword
-                                ? state.error
-                                : null;
-                            return MainTextField(
-                              obscureText: isObsecurePassword,
-                              labelText: "confirm_password".tr(),
-                              onChanged: onConfirmPasswordChanged,
-                              onSubmitted: onConfirmPasswordSubmitted,
-                              focusNode: confirmPasswordFocusNode,
-                              errorText: errorText,
-                              prefixIcon: const Icon(
-                                Icons.lock,
-                                color: Colors.black54,
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  isObsecurePassword
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Colors.black54,
-                                ),
-                                onPressed: onShowPassword,
-                              ),
-                            );
-                          },
-                        ),
-
+                        _buildConfirmPasswordTextField(),
                         const SizedBox(height: 20),
-
-                        BlocConsumer<AuthCubit, AuthState>(
-                          bloc: widget.authCubit,
-                          listenWhen: (prev, curr) =>
-                          curr is ResetPasswordSuccess ||
-                              curr is ResetPasswordFail,
-                          listener: (context, state) {
-                            if (state is ResetPasswordSuccess) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(state.message)),
-                              );
-                              context.router.replace(SignInRoute());
-                            } else if (state is ResetPasswordFail) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(state.error),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          },
-                          buildWhen: (prev, curr) =>
-                          curr is ResetPasswordLoading ||
-                              curr is ResetPasswordSuccess ||
-                              curr is ResetPasswordFail,
-                          builder: (context, state) {
-                            final isLoading =
-                            state is ResetPasswordLoading;
-                            return MainActionButton(
-                              padding: AppConstants.padding8,
-                              onTap: isLoading ? () {} : onMainActionTap,
-                              text: 'reset_password'.tr(),
-                              child: isLoading
-                                  ? const SizedBox(
-                                height: 22,
-                                width: 22,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.4,
-                                ),
-                              )
-                                  : null,
-                            );
-                          },
-                        ),
-
+                        _buildMainActionButton(),
                         const SizedBox(height: 20),
-
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -272,6 +140,81 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPasswordTextField() {
+    final icon = isObsecurePassword ? Icons.visibility : Icons.visibility_off;
+    return BlocBuilder<AuthCubit, AuthState>(
+      bloc: widget.authCubit,
+      buildWhen: (prev, curr) =>
+          curr is TextFieldState && curr.type == TextFieldType.password,
+      builder: (context, state) {
+        bool b =
+            state is TextFieldState && state.type == TextFieldType.password;
+        return MainTextField(
+          obscureText: isObsecurePassword,
+          labelText: "password".tr(),
+          onChanged: widget.authCubit.setNewPassword,
+          onSubmitted: (_) => confirmPasswordFocusNode.requestFocus(),
+          focusNode: passwordFocusNode,
+          errorText: b ? state.error : null,
+          prefixIcon: Icon(Icons.lock, color: context.cs.onSecondary),
+          suffixIcon: IconButton(
+            icon: Icon(icon, color: context.cs.onSecondary),
+            onPressed: onShowPassword,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildConfirmPasswordTextField() {
+    final icon = isObsecurePassword ? Icons.visibility : Icons.visibility_off;
+    return BlocBuilder<AuthCubit, AuthState>(
+      bloc: widget.authCubit,
+      buildWhen: (prev, curr) =>
+          curr is TextFieldState && curr.type == TextFieldType.confirmPassword,
+      builder: (context, state) {
+        bool b = state is TextFieldState &&
+            state.type == TextFieldType.confirmPassword;
+        return MainTextField(
+          obscureText: isObsecurePassword,
+          labelText: "confirm_password".tr(),
+          onChanged: widget.authCubit.setConfirmNewPassword,
+          onSubmitted: (_) => confirmPasswordFocusNode.unfocus(),
+          focusNode: confirmPasswordFocusNode,
+          errorText: b ? state.error : null,
+          prefixIcon: const Icon(Icons.lock, color: Colors.black54),
+          suffixIcon: IconButton(
+            icon: Icon(icon, color: Colors.black54),
+            onPressed: onShowPassword,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMainActionButton() {
+    return BlocConsumer<AuthCubit, AuthState>(
+      bloc: widget.authCubit,
+      listener: (context, state) {
+        if (state is ResetPasswordSuccess) {
+          MainSnackBar.showSuccessMessage(context, state.message);
+          context.router.replace(SignInRoute());
+        } else if (state is ResetPasswordFail) {
+          MainSnackBar.showErrorMessage(context, state.error);
+        }
+      },
+      builder: (context, state) {
+        final isLoading = state is ResetPasswordLoading;
+        return MainActionButton(
+          padding: AppConstants.padding8,
+          onTap: isLoading ? () {} : onMainActionTap,
+          text: 'reset_password'.tr(),
+          child: isLoading ? LoadingIndicator(isInBtn: true) : null,
+        );
+      },
     );
   }
 }

@@ -20,7 +20,7 @@ class LoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = isInBtn ? 20.0 : this.size;
+    final size = isInBtn ? 25.0 : this.size;
     final color =
         isInBtn ? context.cs.secondary : this.color ?? context.cs.primary;
     return Container(

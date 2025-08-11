@@ -51,30 +51,20 @@ class AddNotificationModel {
   }
 
   String get title {
-    if (_title == null || _title!.isEmpty) {
+    if (_title == null || _title.isEmpty) {
       throw "title_required".tr();
     }
-    return _title!;
+    return _title;
   }
 
   String get message {
-    if (_message == null || _message!.isEmpty) {
+    if (_message == null || _message.isEmpty) {
       throw "message_required".tr();
     }
-    return _message!;
+    return _message;
   }
 
-  /// يتحقق من وجود الوقت وصحّة الصيغة HH:mm
-  String get time {
-    if (_time == null || _time!.isEmpty) {
-      throw "time_required".tr();
-    }
-    final regex = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
-    if (!regex.hasMatch(_time!)) {
-      throw "time_invalid_format".tr();
-    }
-    return _time!;
-  }
+  String? get time => _time;
 
   /// اختياري: المنطقة الزمنية إن أردت فرضها
   String? get tz => _tz;

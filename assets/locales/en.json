@@ -385,5 +385,61 @@
   "schedule_by_time": "Enable scheduled notifications",
   "time": "Time",
   "time_invalid_format": "Invalid time format. Use HH:mm",
-  "time_required": "Time is required"
+  "time_required": "Time is required",
+  "subscribers_required" : "Subscribers are required",
+  "no_more" : "There is no more",
+  "sent" : "Sent",
+  "received" : "Received",
+  "fail_to_load_video"  : "Failed to load video",
+  "round" : "Round",
+  "reps" : "Repets",
+  "instruction" : "Instruction",
+  "ads" : "Advertisements",
+  "offers" : "Offers",
+  "amount" : "Amount",
+  "prepare_method" : "Preparation method",
+  "items" : "Items",
+  "psicological_follow" : "Psicological follow",
+  "reset_code_sent" : "Reset code is sent successfully",
+  "reset_code_verified" : "Reset code is verified successfully",
+  "password_reset_success" : "Password is reset successfully",
+  "verify_code" : "Verification code",
+  "enter_code" : "Enter code",
+
+  "terms_acceptance": "Acceptance of Terms",
+  "terms_acceptance_text": "By using this application, you agree to comply with these Terms and Conditions. If you do not agree, please refrain from using the application.",
+  
+  "terms_permitted_use": "Permitted Use",
+  "terms_permitted_use_text": "The application is intended for personal use only.",
+  "terms_prohibited_use_text": "Any illegal activities or violations of local and international laws are strictly prohibited.",
+  
+  "terms_liability": "Liability",
+  "terms_liability_text": "The application is not liable for any damages arising from the use or inability to use the app.",
+  "terms_user_content_responsibility": "The user is solely responsible for any content they post or share through the application.",
+  
+  "terms_modifications": "Modifications",
+  "terms_modifications_text": "The application reserves the right to modify these Terms at any time. Users will be notified of changes via the app or email.",
+  
+  "terms_termination": "Termination of Service",
+  "terms_termination_text": "The application may suspend or terminate the account of any user violating these Terms without prior notice.",
+  
+  "privacy_data_collection": "Data Collection",
+  "privacy_data_collection_text": "We collect personal information such as name, age, height, and weight to provide personalized services.",
+  "privacy_location_data_text": "Location data may be used to enhance user experience.",
+  
+  "privacy_use_of_data": "Use of Data",
+  "privacy_use_of_data_text": "Data is used to improve services and deliver customized content.",
+  "privacy_no_third_party_share": "Your data will not be sold or shared with third parties without your consent.",
+  
+  "privacy_security": "Security",
+  "privacy_security_text": "Advanced encryption technologies are used to protect your data.",
+  "privacy_security_no_guarantee": "However, complete security of data transmitted over the internet cannot be guaranteed.",
+  
+  "privacy_user_rights": "User Rights",
+  "privacy_user_rights_text": "You may request deletion or correction of your personal data at any time.",
+  "privacy_unsubscribe_text": "You can unsubscribe from newsletters via the \"unsubscribe\" link.",
+  
+  "privacy_policy_changes": "Policy Changes",
+  "privacy_policy_changes_text": "You will be notified of any changes to the Privacy Policy via the app or email.",
+  "no_plans" : "There is no plans"
 }

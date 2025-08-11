@@ -65,8 +65,12 @@ abstract class MainSnackBar {
       backgroundColor: backgroundColor,
       duration: duration ?? AppConstants.duration1500ms,
       flushbarPosition: FlushbarPosition.TOP,
-      icon: Icon(icon, color: AppColors.white),
-      messageText: Text(message, style: context.tt.titleMedium),
+      //icon: Icon(icon, color: AppColors.white),
+      messageText: Center(
+        child: Text(message, style: context.tt.titleMedium?.copyWith(
+          color: context.cs.surface
+        )),
+      ),
     ).show(context);
   }
 }

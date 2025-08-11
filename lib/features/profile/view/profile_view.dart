@@ -2,11 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wellnesstrackerapp/features/about_us/view/about_us_view.dart';
-import 'package:wellnesstrackerapp/features/privacy_policy/view/privacy_policy_view.dart';
 import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart';
-import 'package:wellnesstrackerapp/features/settings/view/settings_view.dart';
-import 'package:wellnesstrackerapp/features/terms_and_conditions/view/terms_and_conditions_view.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -16,11 +12,20 @@ import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
+class IconTitleFuncModel {
+  final IconData icon;
+  final String title;
+  final void Function() onTap;
+
+  IconTitleFuncModel(this.icon, this.title, this.onTap);
+}
+
 abstract class ProfileViewCallbacks {
   Future<void> onRefresh();
   void onTryAgainTap();
   void onSettingsTap();
   void onAboutUsTap();
+  void onRateUsTap();
   void onTermsAndConditionsTap();
   void onPrivacyPolicyTap();
 }
@@ -60,46 +65,40 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   void onAboutUsTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AboutUsView(),
-      ),
-    );
+    context.router.push(AboutUsRoute());
+  }
+
+  @override
+  void onRateUsTap() {
+    context.router.push(AddRateRoute());
   }
 
   @override
   void onPrivacyPolicyTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PrivacyPolicyView(),
-      ),
-    );
+    context.router.push(PrivacyPolicyRoute());
   }
 
   @override
   void onSettingsTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SettingsView(role: UserRoleEnum.user),
-      ),
-    );
+    context.router.push(SettingsRoute(role: UserRoleEnum.user));
   }
 
   @override
   void onTermsAndConditionsTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TermsAndConditionsView(),
-      ),
-    );
+    context.router.push(TermsAndConditionsRoute());
   }
 
   @override
   Widget build(BuildContext context) {
+    List<IconTitleFuncModel> tiles = [
+      IconTitleFuncModel(Icons.settings, "settings".tr(), onSettingsTap),
+      IconTitleFuncModel(Icons.info, "about_us".tr(), onAboutUsTap),
+      IconTitleFuncModel(Icons.star, "rate_us".tr(), onRateUsTap),
+      IconTitleFuncModel(
+          Icons.article, "terms_and_conditions".tr(), onTermsAndConditionsTap),
+      IconTitleFuncModel(
+          Icons.privacy_tip, "privacy_policy".tr(), onPrivacyPolicyTap),
+    ];
     return Scaffold(
       appBar: MainAppBar(title: 'profile'.tr()),
       body: RefreshIndicator(
@@ -146,21 +145,21 @@ class _ProfilePageState extends State<ProfilePage>
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              RichText(
-                                text: TextSpan(
-                                  text: profile.level?.name,
-                                  style: TextStyle(color: Colors.grey),
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          '| ${profile.totalPoints?.toString() ?? 0} نقطة',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (profile.level != null)
+                                    Text(profile.level!.name,
+                                        style: TextStyle(color: Colors.grey)),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    '| ${profile.totalPoints?.toString() ?? 0} نقطة',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                  ],
-                                ),
+                                  )
+                                ],
                               ),
                             ],
                           ),
@@ -201,36 +200,20 @@ class _ProfilePageState extends State<ProfilePage>
               ),
               const SizedBox(height: 20),
               SizedBox(height: 10),
-              ProfileOptionWidget(
-                icon: Icons.settings,
-                title: "settings".tr(),
-                onTap: onSettingsTap,
-              ),
-              SizedBox(height: 16),
-              ProfileOptionWidget(
-                icon: Icons.info,
-                title: "about_us".tr(),
-                onTap: onAboutUsTap,
-              ),
-              SizedBox(height: 16),
-              ProfileOptionWidget(
-                icon: Icons.star,
-                title: "rate_us".tr(),
-                onTap: () => context.router.push(AddRateRoute()),
-              ),
-              SizedBox(height: 16),
-              ProfileOptionWidget(
-                icon: Icons.article,
-                title: "terms_and_conditions".tr(),
-                onTap: onTermsAndConditionsTap,
-              ),
-              SizedBox(height: 16),
-              ProfileOptionWidget(
-                icon: Icons.privacy_tip,
-                title: "privacy_policy".tr(),
-                onTap: onPrivacyPolicyTap,
-              ),
-              const SizedBox(height: 120),
+              ...tiles.map((e) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ProfileOptionWidget(
+                      icon: e.icon,
+                      title: e.title,
+                      onTap: e.onTap,
+                    ),
+                    SizedBox(height: 16),
+                  ],
+                );
+              }),
+              const SizedBox(height: 104),
             ],
           ),
         ),
@@ -291,7 +274,7 @@ class ProfileOptionWidget extends StatelessWidget {
 
   final IconData icon;
   final String title;
-  final Function() onTap;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {

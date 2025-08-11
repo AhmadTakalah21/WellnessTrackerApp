@@ -1,11 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:wellnesstrackerapp/features/select_plan/cubit/user_plans_cubit.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
-abstract class SelectPlanViewCallBacks {}
+abstract class SelectPlanViewCallBacks {
+  void onTryAgainTap();
+  Future<void> onRefresh();
+  Future<void> onLaunchPhoneTap(String? whatsappPhone);
+}
 
 @RoutePage()
 class SelectPlanView extends StatelessWidget {
@@ -13,7 +24,10 @@ class SelectPlanView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SelectPlanPage();
+    return BlocProvider(
+      create: (context) => get<UserPlansCubit>(),
+      child: const SelectPlanPage(),
+    );
   }
 }
 
@@ -26,39 +40,91 @@ class SelectPlanPage extends StatefulWidget {
 
 class _SelectPlanPageState extends State<SelectPlanPage>
     implements SelectPlanViewCallBacks {
+  late final UserPlansCubit userPlansCubit = context.read();
+
+  @override
+  void initState() {
+    super.initState();
+    userPlansCubit.getPlans();
+  }
+
+  @override
+  Future<void> onRefresh() async => onTryAgainTap();
+
+  @override
+  void onTryAgainTap() => userPlansCubit.getPlans();
+
+  @override
+  Future<void> onLaunchPhoneTap(String? whatsappPhone) async {
+    if (whatsappPhone == null || whatsappPhone.isEmpty) return;
+
+    final cleaned = whatsappPhone.replaceAll(RegExp(r'[^\d]'), '');
+    final message = Uri.encodeComponent("مرحباً");
+    final url = "https://wa.me/$cleaned?text=$message";
+
+    final success =
+        await launchUrlString(url, mode: LaunchMode.externalApplication);
+    if (!success && context.mounted) {
+      if (mounted) {
+        MainSnackBar.showErrorMessage(context, "cant_open_whatsapp".tr());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('follow_up'.tr())),
-      body: SingleChildScrollView(
-        padding: AppConstants.padding20,
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            _buildGridItem(
-              context,
-              'medical_follow',
-              '0912345678',
-              Icons.medication_rounded,
-              Colors.red.shade400,
-            ),
-            _buildGridItem(
-              context,
-              'nutrition_follow',
-              '0912345678',
-              Icons.restaurant_menu_rounded,
-              Colors.green.shade400,
-            ),
-            _buildGridItem(
-              context,
-              'sport_follow',
-              '0912345678',
-              Icons.fitness_center_rounded,
-              Colors.blue.shade400,
-            ),
-            SizedBox(height: 100),
-          ],
-        ),
+      body: BlocBuilder<UserPlansCubit, GeneralUserPlansState>(
+        builder: (context, state) {
+          if (state is UserPlansLoading) {
+            return LoadingIndicator();
+          } else if (state is UserPlansSuccess) {
+            return RefreshIndicator(
+              onRefresh: onRefresh,
+              child: SingleChildScrollView(
+                padding: AppConstants.padding20,
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    ...state.plans.map(
+                      (e) {
+                        return _buildGridItem(
+                          context,
+                          e.department.getTitle,
+                          '+963912345678',
+                          e.department.getIcon,
+                          e.department.getColor,
+                        );
+                      },
+                    ),
+                    _buildGridItem(
+                      context,
+                      'psicological_follow',
+                      '+963912345678',
+                      Icons.psychology,
+                      Colors.purple.shade400,
+                    ),
+                    SizedBox(height: 100),
+                  ],
+                ),
+              ),
+            );
+          } else if (state is UserPlansEmpty) {
+            return MainErrorWidget(
+              error: state.message,
+              isRefresh: true,
+              onTryAgainTap: onTryAgainTap,
+            );
+          } else if (state is UserPlansFail) {
+            return MainErrorWidget(
+              error: state.error,
+              onTryAgainTap: onTryAgainTap,
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
       ),
     );
   }
@@ -71,9 +137,7 @@ class _SelectPlanPageState extends State<SelectPlanPage>
     Color color,
   ) {
     return GestureDetector(
-      onTap: () {
-        // TODO
-      },
+      onTap: () => onLaunchPhoneTap(phone),
       child: Padding(
         padding: AppConstants.padding20,
         child: Card(

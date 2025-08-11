@@ -27,7 +27,7 @@ class MainFloatingButton extends StatelessWidget {
           borderRadius: AppConstants.borderRadiusCircle,
         ),
         backgroundColor: context.cs.primary,
-        child: Icon(icon ?? Icons.add, color: context.cs.surface, size: 25),
+        child: Icon(icon ?? Icons.add, color: context.cs.secondary, size: 25),
       ),
     );
   }

@@ -33,7 +33,7 @@ class _AboutUsPageState extends State<AboutUsPage>
         padding: AppConstants.padding16,
         child: Column(
           children: [
-            Text("خدماتنا", style: context.tt.headlineLarge),
+            // Text("خدماتنا", style: context.tt.headlineLarge),
             const SizedBox(height: 16),
             _WorkoutItem(
               title: 'Lose your weight',
@@ -68,7 +68,8 @@ class _WorkoutItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
+      margin: AppConstants.paddingV4,
+      padding: AppConstants.padding16,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.grey.shade100,
@@ -76,45 +77,43 @@ class _WorkoutItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(width: 12),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 13,
-                    ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+          SizedBox(width: 10),
           DecoratedBox(
             decoration: BoxDecoration(
-              color: context.cs.primary.withValues(alpha: 0.3),
+              color: context.cs.surface,
+              border: Border.all(width: 0.5),
+              //color: context.cs.primary.withValues(alpha: 0.3),
               shape: BoxShape.circle,
             ),
             child: Image.asset(
               "assets/images/app_logo.png",
-              width: 70,
-              height: 70,
+              width: 80,
+              height: 80,
             ),
           ),
-          const SizedBox(width: 12),
         ],
       ),
     );

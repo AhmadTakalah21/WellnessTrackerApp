@@ -3,8 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
 
 import 'package:wellnesstrackerapp/features/exercise_plans/cubit/exercise_plans_cubit.dart';
 import 'package:wellnesstrackerapp/features/exercise_plans/model/exercise_plan_day_model/exercise_plan_day_model.dart';
@@ -18,6 +16,7 @@ import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_tab_bar.dart';
+import 'package:wellnesstrackerapp/global/widgets/video_player_widget.dart';
 
 abstract class ExercisesViewCallbacks {
   void onTabSelected(int index);
@@ -70,15 +69,6 @@ class _ExercisesPageState extends State<ExercisesPage>
         l.endsWith('.webm');
   }
 
-  bool _isImage(String s) {
-    final l = s.toLowerCase();
-    return l.endsWith('.png') ||
-        l.endsWith('.jpg') ||
-        l.endsWith('.jpeg') ||
-        l.endsWith('.gif') ||
-        l.endsWith('.webp');
-  }
-
   String _absoluteLink(String link) {
     if (link.isEmpty) return '';
     return _isWebUrl(link) ? link : '$_baseUrl/$link';
@@ -88,7 +78,6 @@ class _ExercisesPageState extends State<ExercisesPage>
     final url = _absoluteLink(raw);
     if (url.isEmpty) return Icons.link_off;
     if (_isVideo(url)) return Icons.play_circle_fill;
-    if (_isImage(url)) return Icons.image;
     return Icons.link;
   }
 
@@ -108,21 +97,7 @@ class _ExercisesPageState extends State<ExercisesPage>
 
     if (_isVideo(url)) {
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => ExerciseVideoPlayerPage(url: url)),
-      );
-    } else if (_isImage(url)) {
-      showDialog(
-        context: context,
-        builder: (_) => Dialog(
-          clipBehavior: Clip.antiAlias,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: InteractiveViewer(
-            minScale: 0.7,
-            maxScale: 4,
-            child: Image.network(url, fit: BoxFit.contain),
-          ),
-        ),
+        MaterialPageRoute(builder: (_) => VideoPlayerView(url: url)),
       );
     } else {
       _openExternal(url);
@@ -278,12 +253,12 @@ class _ExercisesPageState extends State<ExercisesPage>
                   avatar: const Icon(Icons.repeat),
                   label: Text('${'rounds'.tr()}: ${desc.rounds}'),
                 ),
-                if (desc.repeats.isNotEmpty)
-                  Chip(
-                    avatar: const Icon(Icons.countertops),
-                    label:
-                        Text('${'repeats'.tr()}: ${desc.repeats.join(' / ')}'),
-                  ),
+                // if (desc.repeats.isNotEmpty)
+                //   Chip(
+                //     avatar: const Icon(Icons.countertops),
+                //     label:
+                //         Text('${'repeats'.tr()}: ${desc.repeats.join(' / ')}'),
+                //   ),
               ],
             ),
 
@@ -297,7 +272,7 @@ class _ExercisesPageState extends State<ExercisesPage>
                   for (int i = 0; i < desc.repeats.length; i++)
                     Chip(
                       label: Text(
-                        '${'set'.tr()} ${i + 1}: ${desc.repeats[i]} ${'reps'.tr()}',
+                        '${'round'.tr()} ${i + 1}: ${desc.repeats[i]} ${'reps'.tr()}',
                       ),
                     ),
                 ],
@@ -305,7 +280,6 @@ class _ExercisesPageState extends State<ExercisesPage>
 
             const SizedBox(height: 12),
 
-// تعليمات الأداء (explain) كنص أنيق مع أيقونة
             Row(
               children: [
                 Icon(Icons.info_outline, size: 18, color: context.cs.primary),
@@ -319,7 +293,7 @@ class _ExercisesPageState extends State<ExercisesPage>
               style: context.tt.bodyMedium,
             ),
 
-            if (link.isNotEmpty && (_isVideo(link) || _isImage(link))) ...[
+            if (link.isNotEmpty && (_isVideo(link))) ...[
               const SizedBox(height: 12),
               GestureDetector(
                 onTap: () => _onOpenMedia(exercise.link),
@@ -330,9 +304,7 @@ class _ExercisesPageState extends State<ExercisesPage>
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        if (_isImage(link))
-                          Image.network(link, fit: BoxFit.cover)
-                        else
+                        if (_isVideo(link))
                           Container(color: Colors.black.withOpacity(0.08)),
                         const Center(
                           child: Icon(Icons.play_circle_fill,
@@ -345,77 +317,15 @@ class _ExercisesPageState extends State<ExercisesPage>
               ),
             ],
 
-            const SizedBox(height: 12),
-
-            // الوصف التفصيلي للتمرين
-            Text(
-              exercise.description.explain,
-              style: context.tt.bodyMedium,
-              textAlign: TextAlign.start,
-            ),
+            // const SizedBox(height: 12),
+            // Text(
+            //   exercise.description.explain,
+            //   style: context.tt.bodyMedium,
+            //   textAlign: TextAlign.start,
+            // ),
           ],
         ),
       ),
-    );
-  }
-}
-
-// ====================== صفحة مشغّل الفيديو للتمارين ======================
-class ExerciseVideoPlayerPage extends StatefulWidget {
-  const ExerciseVideoPlayerPage({super.key, required this.url});
-  final String url;
-
-  @override
-  State<ExerciseVideoPlayerPage> createState() =>
-      _ExerciseVideoPlayerPageState();
-}
-
-class _ExerciseVideoPlayerPageState extends State<ExerciseVideoPlayerPage> {
-  late VideoPlayerController _videoCtrl;
-  ChewieController? _chewieCtrl;
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  Future<void> _init() async {
-    _videoCtrl = VideoPlayerController.networkUrl(Uri.parse(widget.url));
-    await _videoCtrl.initialize();
-    _chewieCtrl = ChewieController(
-      videoPlayerController: _videoCtrl,
-      autoPlay: true,
-      looping: false,
-      allowFullScreen: true,
-      allowMuting: true,
-      materialProgressColors: ChewieProgressColors(),
-    );
-    if (mounted) setState(() => _loading = false);
-  }
-
-  @override
-  void dispose() {
-    _chewieCtrl?.dispose();
-    _videoCtrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('video'.tr())),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : Center(
-              child: AspectRatio(
-                aspectRatio: _videoCtrl.value.aspectRatio == 0
-                    ? 16 / 9
-                    : _videoCtrl.value.aspectRatio,
-                child: Chewie(controller: _chewieCtrl!),
-              ),
-            ),
     );
   }
 }

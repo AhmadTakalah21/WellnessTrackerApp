@@ -386,7 +386,61 @@
   "schedule_by_time": "تفعيل الإشعارات المجدولة",
   "time": "الوقت",
   "time_invalid_format": "صيغة الوقت غير صحيحة. استخدم HH:mm",
-  "time_required": "الوقت مطلوب"
+  "time_required": "الوقت مطلوب",
+  "subscribers_required" : "حقل المشتركين مطلوب",
+  "no_more" : "لا يوجد المزيد",
+  "sent" : "المرسلة",
+  "received" : "المستلمة",
+  "fail_to_load_video"  : "فشل في تحميل الفيديو",
+  "round" : "الجولة",
+  "reps" : "تكرار",
+  "instruction" : "التعليمات",
+  "ads" : "الإعلانات",
+  "offers" : "العروض",
+  "amount" : "الكمية",
+  "prepare_method" : "طريقة التحضير",
+  "items" : "العناصر",
+  "psicological_follow" : "متابعة الصحة النفسية",
+  "reset_code_sent" : "تم إرسال كود التحقق بنجاح",
+  "reset_code_verified" : "تم التحقق من الكود بنجاح",
+  "password_reset_success" : "تم إعادة تعيين كلمة المرور بنجاح",
+  "verify_code" : "كود التحقق",
+  "enter_code" : "ادخل الكود",
 
-
+    "terms_acceptance": "القبول والشروط",
+  "terms_acceptance_text": "باستخدامك لهذا التطبيق، فإنك توافق على الالتزام بهذه البنود والشروط. إذا لم توافق، يرجى عدم استخدام التطبيق.",
+  
+  "terms_permitted_use": "الاستخدام المسموح",
+  "terms_permitted_use_text": "يُسمح باستخدام التطبيق للأغراض الشخصية فقط.",
+  "terms_prohibited_use_text": "يُحظر استخدام التطبيق لأي أنشطة غير قانونية أو مخالفة للقوانين المحلية والدولية.",
+  
+  "terms_liability": "المسؤولية",
+  "terms_liability_text": "لا يتحمل التطبيق أي مسؤولية عن أي أضرار ناتجة عن استخدام أو عدم القدرة على استخدام التطبيق.",
+  "terms_user_content_responsibility": "المستخدم هو المسؤول الوحيد عن أي محتوى ينشره أو يشاركه عبر التطبيق.",
+  
+  "terms_modifications": "التعديلات",
+  "terms_modifications_text": "يحق للتطبيق تعديل هذه البنود في أي وقت، وسيتم إعلام المستخدمين بالتغييرات عبر التطبيق أو البريد الإلكتروني.",
+  
+  "terms_termination": "إنهاء الخدمة",
+  "terms_termination_text": "يحق للتطبيق تعليق أو إنهاء حساب أي مستخدم ينتهك هذه البنود دون سابق إنذار.",
+  
+  "privacy_data_collection": "جمع المعلومات",
+  "privacy_data_collection_text": "نجمع المعلومات الشخصية مثل الاسم والعمر والطول والوزن لتقديم خدمات مخصصة.",
+  "privacy_location_data_text": "قد نستخدم بيانات الموقع لتحسين تجربة المستخدم.",
+  
+  "privacy_use_of_data": "استخدام البيانات",
+  "privacy_use_of_data_text": "تُستخدم البيانات لتحسين الخدمات وتقديم محتوى مخصص.",
+  "privacy_no_third_party_share": "لن يتم بيع أو مشاركة بياناتك مع أطراف ثالثة دون موافقتك.",
+  
+  "privacy_security": "الحماية",
+  "privacy_security_text": "نستخدم تقنيات تشفير متقدمة لحماية بياناتك.",
+  "privacy_security_no_guarantee": "ومع ذلك، لا يمكن ضمان أمان كامل للبيانات المنقولة عبر الإنترنت.",
+  
+  "privacy_user_rights": "حقوق المستخدم",
+  "privacy_user_rights_text": "يمكنك طلب حذف أو تصحيح بياناتك الشخصية في أي وقت.",
+  "privacy_unsubscribe_text": "يمكنك إلغاء الاشتراك من الرسائل الإخبارية عبر رابط \"إلغاء الاشتراك\".",
+  
+  "privacy_policy_changes": "التغييرات على السياسة",
+  "privacy_policy_changes_text": "سيتم إعلامك بأي تغييرات على سياسة الخصوصية عبر التطبيق أو البريد الإلكتروني.",
+  "no_plans" : "لا يوجد خطط متابعة"
 }

@@ -63,47 +63,38 @@ class ItemTile extends StatelessWidget {
             const SizedBox(height: 6),
             if (role.isUser)
               CircularPercentIndicator(
-                radius: 35,
-                lineWidth: 5,
-                percent: progress,
-                animation: true,
-                circularStrokeCap: CircularStrokeCap.round,
-                progressColor: Colors.white,
-                backgroundColor: Colors.white24,
-                center: image != null
-                    ? AppImageWidget(
-                        width: 40,
-                        height: 40,
-                        url: image,
-                        borderRadius: AppConstants.borderRadiusCircle,
-                        border: Border.all(color: Colors.white, width: 1),
-                      )
-                    : null,
-              ),
-            if (role.isAdmin)
-              image != null
-                  ? AspectRatio(
-                      aspectRatio: 5 / 3,
-                      child: AppImageWidget(
-                        url: image,
-                        fit: BoxFit.cover,
-                        borderRadius: AppConstants.borderRadius15,
-                        border: Border.all(color: Colors.white, width: 1),
-                      ),
-                    )
-                  : ClipRRect(
-                      borderRadius: AppConstants.borderRadius15,
-                      child: ColoredBox(
-                        color: Colors.white,
-                        child: AspectRatio(
-                          aspectRatio: 5 / 3,
-                          child: Image.asset(
-                            "assets/images/app_logo.png",
-                            color: context.cs.secondary,
-                          ),
-                        ),
-                      ),
+                  radius: 45,
+                  lineWidth: 5,
+                  percent: progress,
+                  animation: true,
+                  circularStrokeCap: CircularStrokeCap.round,
+                  progressColor: Colors.white,
+                  backgroundColor: Colors.white24,
+                  center: AppImageWidget(
+                    width: 70,
+                    height: 70,
+                    url: image ?? "",
+                    borderRadius: AppConstants.borderRadiusCircle,
+                    border: Border.all(color: Colors.white, width: 1),
+                    backgroundColor: context.cs.surface,
+                    errorWidget: Image.asset(
+                      "assets/images/app_logo.png",
                     ),
+                  )),
+            if (role.isAdmin)
+              AspectRatio(
+                aspectRatio: 5 / 3,
+                child: AppImageWidget(
+                  url: image ?? "",
+                  fit: BoxFit.cover,
+                  borderRadius: AppConstants.borderRadius15,
+                  border: Border.all(color: Colors.white, width: 1),
+                  backgroundColor: context.cs.surface,
+                  errorWidget: Image.asset(
+                    "assets/images/app_logo.png",
+                  ),
+                ),
+              ),
             const SizedBox(height: 10),
             Text(
               item.name.en ?? "Item",

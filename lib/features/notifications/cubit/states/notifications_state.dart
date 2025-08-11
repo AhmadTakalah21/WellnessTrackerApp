@@ -6,10 +6,15 @@ sealed class NotificationsState extends GeneralNotificationsState {}
 class NotificationsLoading extends NotificationsState {}
 
 class NotificationsSuccess extends NotificationsState {
-  final PaginatedModel<NotificationModel> notifications;
-  final String? emptyMessage;
+  final List<NotificationModel> notifications;
+  final bool isLoadingMore;
+  final bool hasMore;
 
-  NotificationsSuccess(this.notifications, this.emptyMessage);
+  NotificationsSuccess(
+    this.notifications, {
+    this.isLoadingMore = false,
+    this.hasMore = true,
+  });
 }
 
 class NotificationsEmpty extends NotificationsState {

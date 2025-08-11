@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
 import 'package:wellnesstrackerapp/features/items/view/widgets/add_item_view.dart';
@@ -138,7 +139,19 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
     } else if (widget.role.isUser) {
       if (item.link == null) {
         showBuyDialog(item);
-      } else {}
+      } else {
+        _openExternal(item.link!);
+      }
+    }
+  }
+
+  Future<void> _openExternal(String url) async {
+    final ok =
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    if (!ok && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('cannot_open_link'.tr())),
+      );
     }
   }
 
@@ -161,7 +174,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
   Widget build(BuildContext context) {
     final role = widget.role;
     return Scaffold(
-      appBar: AppBar(title: Text('store'.tr())),
+      appBar: AppBar(title: Text('items'.tr())),
       body: BlocBuilder<ItemsCubit, GeneralItemsState>(
         buildWhen: (previous, current) => current is ItemsState,
         builder: (context, state) {

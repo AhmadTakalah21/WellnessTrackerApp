@@ -8,13 +8,11 @@ import 'package:wellnesstrackerapp/features/notifications/model/add_notification
 import 'package:wellnesstrackerapp/features/notifications/model/notification_model/notification_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/service/notifications_service.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
-import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/general_notifications_state.dart';
 part 'states/notifications_state.dart';
 part 'states/add_notification_state.dart';
-
 
 @injectable
 class NotificationsCubit extends Cubit<GeneralNotificationsState> {
@@ -24,6 +22,9 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   final NotificationsService notificationsService;
 
   List<NotificationModel> notifications = [];
+  int page = 1;
+  bool hasMore = true;
+
   MetaModel? meta;
   AddNotificationModel addNotificationModel = const AddNotificationModel();
   List<CustomerModel> userIds = [];
@@ -40,8 +41,6 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
         tz: () => null,
       );
     }
-
-
   }
 
   void setIsAll(String? isAll) {
@@ -85,25 +84,48 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   }
 
   Future<void> getNotifications(
-      UserRoleEnum role, {
-        int? perPage = 10,
-        int? page,
-      }) async {
-    emit(NotificationsLoading());
+    UserRoleEnum role, {
+    int perPage = 10,
+    bool isLoadMore = true,
+  }) async {
+    if (!hasMore && isLoadMore) {
+      emit(NotificationsSuccess(notifications, hasMore: false));
+      return;
+    }
+    if (!isLoadMore) {
+      page = 1;
+      hasMore = true;
+      notifications.clear();
+    }
+    if (notifications.isEmpty) {
+      emit(NotificationsLoading());
+    } else {
+      emit(NotificationsSuccess(notifications, isLoadingMore: true));
+    }
     try {
       if (isClosed) return;
-      final result = await notificationsService.getNotifications(
+      final newItems = await notificationsService.getNotifications(
         role,
         page: page,
         perPage: perPage,
       );
-      notifications = result.data;
-      meta = result.meta;
-      final message = result.data.isEmpty ? "no_notifications".tr() : null;
-      if (result.data.isEmpty && result.meta.currentPage == 1) {
+      if (newItems.meta.count == newItems.meta.total) {
+        hasMore = false;
+      }
+      if (newItems.data.isEmpty) {
+        hasMore = false;
+        if (page == 1) {
+          emit(NotificationsEmpty("no_notifications".tr()));
+        }
+      } else {
+        notifications.addAll(newItems.data);
+        page++;
+      }
+
+      if (notifications.isEmpty) {
         emit(NotificationsEmpty("no_notifications".tr()));
       } else {
-        emit(NotificationsSuccess(result, message));
+        emit(NotificationsSuccess(notifications));
       }
     } catch (e) {
       if (isClosed) return;
@@ -116,7 +138,8 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
     try {
       if (scheduleByTime) {
         final t = (addNotificationModel.toJson()['time'] as String?);
-        final valid = t != null && RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$').hasMatch(t);
+        final valid =
+            t != null && RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$').hasMatch(t);
         if (!valid) {
           throw "time_invalid_format".tr();
         }

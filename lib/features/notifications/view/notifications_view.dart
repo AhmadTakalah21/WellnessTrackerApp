@@ -10,12 +10,17 @@ import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_add_floating_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_tab_bar.dart';
 
 abstract class NotificationsViewCallBacks {
   void onAddTap();
   void onTryAgainTap();
+  bool onNotification(ScrollNotification scrollInfo);
+  void onTabSelected(int index);
   Future<void> onRefresh();
 }
 
@@ -44,22 +49,36 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage>
+    with SingleTickerProviderStateMixin
     implements NotificationsViewCallBacks {
   late final NotificationsCubit notificationsCubit = context.read();
 
-  final List<NotificationModel> _notifications = List.generate(
-    8,
-    (index) => NotificationModel(
-      id: index + 1,
-      title: 'نقاط',
-      body: 'تم زيادة 5  نقاط نتيجة خفض الوزن بمقدار 1 كغ',
-    ),
-  );
+  PageController pageController = PageController();
+  late TabController tabController;
+  int selectedTab = 0;
+
+  final List<String> tabBarTitles = ["sent", "received"];
 
   @override
   void initState() {
     super.initState();
     notificationsCubit.getNotifications(widget.role);
+    tabController = TabController(length: tabBarTitles.length, vsync: this);
+  }
+
+  @override
+  bool onNotification(ScrollNotification scrollInfo) {
+    if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+      notificationsCubit.getNotifications(widget.role);
+    }
+    return true;
+  }
+
+  @override
+  void onTabSelected(int index) {
+    setState(() => selectedTab = index);
+    tabController.animateTo(index);
+    pageController.jumpToPage(index);
   }
 
   @override
@@ -79,30 +98,20 @@ class _NotificationsPageState extends State<NotificationsPage>
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => notificationsCubit.getNotifications(widget.role);
+  void onTryAgainTap() =>
+      notificationsCubit.getNotifications(widget.role, isLoadMore: false);
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('notifications'.tr()),
-        actions: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-            decoration: BoxDecoration(
-              color: context.cs.surface,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              '3 جديد',
-              style: context.tt.bodyLarge?.copyWith(
-                color: context.cs.primary,
-              ),
-            ),
-          ),
-          SizedBox(width: 10),
-        ],
-      ),
+      appBar: AppBar(title: Text('notifications'.tr())),
       body: SafeArea(
         top: false,
         child: BlocBuilder<NotificationsCubit, GeneralNotificationsState>(
@@ -110,42 +119,48 @@ class _NotificationsPageState extends State<NotificationsPage>
           builder: (context, state) {
             if (state is NotificationsLoading) {
               return LoadingIndicator();
-            } else if (state is NotificationsSuccess ||
-                state is NotificationsFail ||
-                state is NotificationsEmpty) {
-              return Padding(
-                padding: AppConstants.paddingH8,
-                child: RefreshIndicator(
-                  onRefresh: onRefresh,
-                  child: SingleChildScrollView(
-                    padding: AppConstants.padding10,
-                    physics: BouncingScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'اليوم',
-                              style: context.tt.bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              'تمييز كمقروء',
-                              style: context.tt.bodyLarge?.copyWith(
-                                color: context.cs.primary,
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        ..._buildNotifications(_notifications),
-                        SizedBox(height: 70),
-                      ],
+            } else if (state is NotificationsSuccess) {
+              final sent = state.notifications
+                  .where((element) => element.isSent)
+                  .toList();
+              final received = state.notifications
+                  .where((element) => !element.isSent)
+                  .toList();
+              final notifs = selectedTab == 0 ? sent : received;
+              if (widget.role.isUser) {
+                return _buildNotifications(
+                  state.notifications,
+                  state.isLoadingMore,
+                  state.hasMore,
+                );
+              }
+              return Column(
+                children: [
+                  MainTabBar(
+                    titles: tabBarTitles,
+                    tabController: tabController,
+                    onTapSelected: onTabSelected,
+                    selectedTab: selectedTab,
+                    isScrollable: false,
+                  ),
+                  Expanded(
+                    child: PageView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      controller: pageController,
+                      onPageChanged: onTabSelected,
+                      itemCount: tabBarTitles.length,
+                      itemBuilder: (context, index) => Padding(
+                        padding: AppConstants.paddingH20,
+                        child: KeepAliveWidget(
+                            child: _buildNotifications(
+                          notifs,
+                          state.isLoadingMore,
+                          state.hasMore,
+                        )),
+                      ),
                     ),
                   ),
-                ),
+                ],
               );
             } else if (state is NotificationsEmpty) {
               return MainErrorWidget(
@@ -164,27 +179,42 @@ class _NotificationsPageState extends State<NotificationsPage>
           },
         ),
       ),
-      floatingActionButton: !widget.role.isUser
-          ? Padding(
-              padding: AppConstants.padding8,
-              child: FloatingActionButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: AppConstants.borderRadiusCircle,
-                ),
-                onPressed: onAddTap,
-                child: Icon(Icons.add, color: context.cs.secondary, size: 30),
-              ),
-            )
-          : null,
+      floatingActionButton:
+          !widget.role.isUser ? MainFloatingButton(onTap: onAddTap) : null,
     );
   }
 
-  List<Widget> _buildNotifications(List<NotificationModel> notifications) {
-    return List.generate(_notifications.length, (index) {
-      final notification = _notifications[index];
+  Widget _buildNotifications(
+    List<NotificationModel> notifications,
+    bool isLoadingMore,
+    bool hasMore,
+  ) {
+    return RefreshIndicator(
+      notificationPredicate: onNotification,
+      onRefresh: onRefresh,
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        padding: AppConstants.paddingH2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10),
+            ..._buildNotificationsList(notifications),
+            if (isLoadingMore) LoadingIndicator(),
+            if (!hasMore) MainErrorWidget(error: "no_more".tr()),
+            SizedBox(height: 70),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildNotificationsList(List<NotificationModel> notifications) {
+    return List.generate(notifications.length, (index) {
+      final notification = notifications[index];
       return Card(
         color: Colors.white,
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.symmetric(vertical: 10),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(
@@ -217,15 +247,8 @@ class _NotificationsPageState extends State<NotificationsPage>
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Text(notification.body, style: context.tt.bodyLarge)
+                    Text(notification.message, style: context.tt.bodyLarge)
                   ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 22, horizontal: 4),
-                child: CircleAvatar(
-                  radius: 5,
-                  backgroundColor: Colors.deepOrange,
                 ),
               ),
             ],

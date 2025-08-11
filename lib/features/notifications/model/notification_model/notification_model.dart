@@ -1,41 +1,50 @@
 import 'dart:convert';
-import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'package:wellnesstrackerapp/global/utils/json_converters/bool_converter.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
-import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 
 part 'notification_model.g.dart';
 
 @JsonSerializable()
 @immutable
-class NotificationModel implements DeleteModel, DataTableModel {
+class NotificationModel implements DeleteModel {
   const NotificationModel({
     required this.id,
     required this.title,
-    required this.body,
+    this.data,
+    this.senderId,
+    this.receiverId,
+    this.sendAt,
+    required this.isSent,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.message,
   });
 
-  @override
   final int id;
   final String title;
-  final String body;
 
-  static String get header => 'notifications_management'.tr();
+  final dynamic data; // nullable, can be any type from API
+  @JsonKey(name: 'sender_id')
+  final int? senderId;
+  @JsonKey(name: 'receiver_id')
+  final int? receiverId;
+  @JsonKey(name: 'send_at')
+  final String? sendAt;
 
-  static List<String> get titles => [
-        '#',
-        'title'.tr(),
-        'body'.tr(),
-        'event'.tr(),
-      ];
+  @BoolConverter()
+  @JsonKey(name: 'is_sent')
+  final bool isSent;
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+  @JsonKey(name: 'updated_at')
+  final DateTime updatedAt;
 
-  @override
-  List<String> get values => [
-        '#$id',
-        title,
-        body,
-      ];
+  final String message;
+
 
   factory NotificationModel.fromString(String str) =>
       NotificationModel.fromJson(jsonDecode(str) as Map<String, dynamic>);

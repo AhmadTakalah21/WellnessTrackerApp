@@ -14,6 +14,7 @@ class AppImageWidget extends StatelessWidget {
     this.shadows,
     this.errorWidget,
     this.onImageLoaded,
+    this.backgroundColor,
   });
 
   final String url;
@@ -24,6 +25,7 @@ class AppImageWidget extends StatelessWidget {
   final Border? border;
   final List<BoxShadow>? shadows;
   final Widget? errorWidget;
+  final Color? backgroundColor;
   final void Function(ImageProvider)? onImageLoaded;
 
   @override
@@ -32,6 +34,7 @@ class AppImageWidget extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
+        color: backgroundColor,
         borderRadius: borderRadius,
         border: border,
         boxShadow: [...?shadows],

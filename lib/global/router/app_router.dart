@@ -42,7 +42,11 @@ class AppRouter extends RootStackRouter {
                       children: [
                         AutoRoute(initial: true, page: ProfileRoute.page),
                         AutoRoute(page: SettingsRoute.page),
+                        AutoRoute(page: CompanyInfoRoute.page),
                         AutoRoute(page: AddRateRoute.page),
+                        AutoRoute(page: AboutUsRoute.page),
+                        AutoRoute(page: PrivacyPolicyRoute.page),
+                        AutoRoute(page: TermsAndConditionsRoute.page),
                       ],
                     ),
                   ],

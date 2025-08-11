@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 
@@ -31,6 +32,9 @@ class AdvDetailsWidget extends StatelessWidget {
                       borderRadius: AppConstants.borderRadius20,
                       fit: BoxFit.contain,
                       url: adv.image,
+                      backgroundColor: context.cs.surface,
+                      shadows: AppColors.secondShadow,
+                      errorWidget: Image.asset("assets/images/app_logo.png"),
                     ),
                   ),
                   DecoratedBox(

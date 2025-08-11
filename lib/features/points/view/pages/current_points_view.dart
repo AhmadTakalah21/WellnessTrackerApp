@@ -113,8 +113,10 @@ class _CurrentPointsPageState extends State<CurrentPointsPage>
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
             minimum: 0,
-            maximum: maxNumber?.toDouble() ?? 1200,
-            interval: maxNumber == null
+            maximum: maxNumber == null || maxNumber == 0
+                ? 1200
+                : maxNumber.toDouble(),
+            interval: maxNumber == null || maxNumber == 0
                 ? 200
                 : (maxNumber.toDouble() / 6).ceilToDouble(),
             majorGridLines: const MajorGridLines(width: 0.5),

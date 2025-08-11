@@ -166,10 +166,10 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
                     spacing: 10,
                     children: [
                       SizedBox(height: 10),
-                      Text("الإعلانات", style: context.tt.headlineLarge),
+                      Text("ads".tr(), style: context.tt.headlineLarge),
                       _buildAdsList(ads, width / 2.4),
                       SizedBox.shrink(),
-                      Text("العروض", style: context.tt.headlineLarge),
+                      Text("offers".tr(), style: context.tt.headlineLarge),
                       _buildOffersList(offers),
                       if (!widget.role.isUser) SizedBox(height: 80),
                     ],
@@ -248,7 +248,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: context.cs.surface,
-          borderRadius: AppConstants.borderRadius30,
+          borderRadius: AppConstants.borderRadius20,
           boxShadow: [
             BoxShadow(
               offset: Offset(0, 4),
@@ -261,6 +261,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
           url: adv.image,
           width: width,
           height: width,
+          errorWidget: Image.asset("assets/images/app_logo.png"),
         ),
       ),
     );

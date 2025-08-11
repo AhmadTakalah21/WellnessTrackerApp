@@ -1,7 +1,9 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 
 class MutliSelectorDropDown<T extends DropDownItemModel>
@@ -47,46 +49,37 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
       children: [
         Text(widget.labelText, style: context.tt.titleLarge),
         SizedBox(height: 10),
-        DropdownButtonHideUnderline(
-          child: DropdownButton2<T>(
-            iconStyleData: IconStyleData(
-              openMenuIcon:
-                  Icon(LucideIcons.chevronUp, color: context.cs.primary),
-              icon: Icon(LucideIcons.chevronDown, color: context.cs.primary),
-            ),
-            isExpanded: true,
-            hint: Text(
-              widget.hintText,
-              style: context.tt.bodyMedium?.copyWith(color: Colors.grey[500]),
-            ),
-            items: widget.items.map((item) {
-              return DropdownMenuItem(
-                value: item,
-                enabled: false,
-                child: StatefulBuilder(
-                  builder: (context, menuSetState) {
-                    final isSelected = selectedItems.contains(item);
-                    return InkWell(
-                      onLongPress: () => widget.onLongPress?.call(item),
-                      onTap: () {
-                        isSelected
-                            ? selectedItems.remove(item)
-                            : selectedItems.add(item);
-                        setState(() {});
-                        menuSetState(() {});
-                        widget.onChanged(selectedItems);
-                      },
-                      child: Container(
-                        height: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              activeColor: context.cs.primary,
-                              checkColor: context.cs.surface,
-                              side: BorderSide(color: context.cs.secondary),
-                              value: isSelected,
-                              onChanged: (value) {
+        FormField(
+          builder: (field) {
+            final hasError = field.hasError;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2<T>(
+                    iconStyleData: IconStyleData(
+                      openMenuIcon: Icon(LucideIcons.chevronUp,
+                          color: context.cs.primary),
+                      icon: Icon(LucideIcons.chevronDown,
+                          color: context.cs.primary),
+                    ),
+                    isExpanded: true,
+                    hint: Text(
+                      widget.hintText,
+                      style: context.tt.bodyMedium
+                          ?.copyWith(color: Colors.grey[500]),
+                    ),
+                    items: widget.items.map((item) {
+                      return DropdownMenuItem(
+                        value: item,
+                        enabled: false,
+                        child: StatefulBuilder(
+                          builder: (context, menuSetState) {
+                            final isSelected = selectedItems.contains(item);
+                            return InkWell(
+                              onLongPress: () => widget.onLongPress?.call(item),
+                              onTap: () {
                                 isSelected
                                     ? selectedItems.remove(item)
                                     : selectedItems.add(item);
@@ -94,52 +87,94 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
                                 menuSetState(() {});
                                 widget.onChanged(selectedItems);
                               },
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                item.displayName,
-                                style: context.tt.titleMedium,
+                              child: Container(
+                                height: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      activeColor: context.cs.primary,
+                                      checkColor: context.cs.surface,
+                                      side: BorderSide(
+                                          color: context.cs.secondary),
+                                      value: isSelected,
+                                      onChanged: (value) {
+                                        isSelected
+                                            ? selectedItems.remove(item)
+                                            : selectedItems.add(item);
+                                        setState(() {});
+                                        menuSetState(() {});
+                                        widget.onChanged(selectedItems);
+                                      },
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Text(
+                                        item.displayName,
+                                        style: context.tt.titleMedium,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            );
+                          },
                         ),
+                      );
+                    }).toList(),
+                    value: selectedItems.isEmpty ? null : selectedItems.last,
+                    onChanged: (value) {},
+                    selectedItemBuilder: (context) {
+                      return widget.items.map(
+                        (item) {
+                          return Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              (selectedItems.map((item) => item.displayName))
+                                  .toList()
+                                  .join(', '),
+                              style: const TextStyle(fontSize: 14),
+                              maxLines: null,
+                            ),
+                          );
+                        },
+                      ).toList();
+                    },
+                    buttonStyleData: ButtonStyleData(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: hasError ? 1 : 2,
+                          color:
+                              hasError ? context.cs.error : context.cs.primary,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    );
-                  },
-                ),
-              );
-            }).toList(),
-            value: selectedItems.isEmpty ? null : selectedItems.last,
-            onChanged: (value) {},
-            selectedItemBuilder: (context) {
-              return widget.items.map(
-                (item) {
-                  return Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text(
-                      (selectedItems.map((item) => item.displayName))
-                          .toList()
-                          .join(', '),
-                      style: const TextStyle(fontSize: 14),
-                      maxLines: null,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 16),
                     ),
-                  );
-                },
-              ).toList();
-            },
-            buttonStyleData: ButtonStyleData(
-              decoration: BoxDecoration(
-                border: Border.all(width: 2, color: context.cs.primary),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-            ),
-            menuItemStyleData: const MenuItemStyleData(
-              height: 40,
-              padding: EdgeInsets.zero,
-            ),
-          ),
+                    menuItemStyleData: const MenuItemStyleData(
+                      height: 40,
+                      padding: EdgeInsets.zero,
+                    ),
+                  ),
+                ),
+                if (hasError && widget.errorMessage != null) ...[
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: AppConstants.paddingH16,
+                    child: Text(
+                      widget.errorMessage!,
+                      style: context.tt.bodySmall
+                          ?.copyWith(color: context.cs.error),
+                    ),
+                  ),
+                ]
+              ],
+            );
+          },
+          validator: (_) =>
+              selectedItems.isEmpty ? widget.errorMessage?.tr() : null,
         ),
       ],
     );

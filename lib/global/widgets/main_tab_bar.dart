@@ -56,9 +56,9 @@ class MainTabBar extends StatelessWidget {
     return AnimatedContainer(
       duration: AppConstants.duration500ms,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
       decoration: BoxDecoration(
-        borderRadius: AppConstants.borderRadius10,
+        borderRadius: AppConstants.borderRadius5,
         color: selectedTab == index ? context.cs.primary : context.cs.surface,
         boxShadow: [
           BoxShadow(
