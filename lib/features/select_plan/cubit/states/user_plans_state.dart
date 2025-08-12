@@ -8,7 +8,7 @@ final class UserPlansInitial extends UserPlansState {}
 final class UserPlansLoading extends UserPlansState {}
 
 final class UserPlansSuccess extends UserPlansState {
-  final List<UserPlanModel>plans;
+  final UserPlansModel plans;
 
   UserPlansSuccess(this.plans);
 }

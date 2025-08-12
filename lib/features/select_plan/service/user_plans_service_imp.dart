@@ -5,14 +5,11 @@ class UserPlansServiceImp implements UserPlansService {
   final dio = DioClient();
 
   @override
-  Future<List<UserPlanModel>> getPlans() async {
+  Future<UserPlansModel> getPlans() async {
     try {
-      final response = await dio.get("/v1/admin/plans?");
-      final data = response.data["data"] as List;
-      return data
-          .map((e) => UserPlanModel.fromJson(e as Map<String, dynamic>))
-          .toList();
-          
+      final response = await dio.get("/v1/users/subscriptions");
+      final data = response.data["data"] as Map<String, dynamic>;
+      return UserPlansModel.fromJson(data);
     } catch (e, stackTrance) {
       if (kDebugMode) print(stackTrance);
       rethrow;

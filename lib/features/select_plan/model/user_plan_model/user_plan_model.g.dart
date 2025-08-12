@@ -8,14 +8,12 @@ part of 'user_plan_model.dart';
 
 UserPlanModel _$UserPlanModelFromJson(Map<String, dynamic> json) =>
     UserPlanModel(
-      id: (json['id'] as num).toInt(),
       department: DepartmentEnum.fromJson((json['department'] as num).toInt()),
       phone: json['phone'] as String,
     );
 
 Map<String, dynamic> _$UserPlanModelToJson(UserPlanModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'department': DepartmentEnum.toJson(instance.department),
       'phone': instance.phone,
     };

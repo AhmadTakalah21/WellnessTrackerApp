@@ -131,22 +131,15 @@ class _VerifyResetCodePageState extends State<_VerifyResetCodePage>
                         const SizedBox(height: 20),
                         FadeTransition(
                           opacity: _fade,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('back_to_login'.tr()),
-                              const SizedBox(width: 6),
-                              GestureDetector(
-                                onTap: onBackToLoginTap,
-                                child: Text(
-                                  'login'.tr(),
-                                  style: TextStyle(
-                                    color: context.cs.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          child: GestureDetector(
+                            onTap: onBackToLoginTap,
+                            child: Text(
+                              'back_to_login'.tr(),
+                              style: TextStyle(
+                                color: context.cs.primary,
+                                fontWeight: FontWeight.bold,
                               ),
-                            ],
+                            ),
                           ),
                         ),
                         const SizedBox(height: 20),

@@ -441,5 +441,7 @@
   
   "privacy_policy_changes": "Policy Changes",
   "privacy_policy_changes_text": "You will be notified of any changes to the Privacy Policy via the app or email.",
-  "no_plans" : "There is no plans"
+  "no_plans" : "There is no plans",
+  "confirm" : "Confirm",
+  "back_to_login" : "Back to Login"
 }

@@ -87,12 +87,12 @@ class _SelectPlanPageState extends State<SelectPlanPage>
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    ...state.plans.map(
+                    ...state.plans.plans.map(
                       (e) {
                         return _buildGridItem(
                           context,
                           e.department.getTitle,
-                          '+963912345678',
+                          e.phone,
                           e.department.getIcon,
                           e.department.getColor,
                         );
@@ -101,7 +101,7 @@ class _SelectPlanPageState extends State<SelectPlanPage>
                     _buildGridItem(
                       context,
                       'psicological_follow',
-                      '+963912345678',
+                      state.plans.psyPhone,
                       Icons.psychology,
                       Colors.purple.shade400,
                     ),
@@ -121,6 +121,8 @@ class _SelectPlanPageState extends State<SelectPlanPage>
               error: state.error,
               onTryAgainTap: onTryAgainTap,
             );
+
+            
           } else {
             return SizedBox.shrink();
           }

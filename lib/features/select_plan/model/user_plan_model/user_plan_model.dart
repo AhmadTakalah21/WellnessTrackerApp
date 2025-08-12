@@ -10,12 +10,9 @@ part 'user_plan_model.g.dart';
 @immutable
 class UserPlanModel {
   const UserPlanModel({
-    required this.id,
     required this.department,
     required this.phone,
   });
-
-  final int id;
   
   @JsonKey(
     fromJson: DepartmentEnum.fromJson,
