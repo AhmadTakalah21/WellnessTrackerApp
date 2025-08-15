@@ -80,16 +80,19 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
 
   @override
   void onAdvLongPress(AdvModel adv) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
-      builder: (context) => AdditionalOptionsBottomSheet(
-        item: adv,
-        onEditTap: onEditTap,
-        onDeleteTap: onDeleteTap,
-      ),
-    );
+    if (widget.role.isAdmin) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape:
+            RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+        builder: (context) => AdditionalOptionsBottomSheet(
+          item: adv,
+          onEditTap: onEditTap,
+          onDeleteTap: onDeleteTap,
+        ),
+      );
+    }
   }
 
   @override

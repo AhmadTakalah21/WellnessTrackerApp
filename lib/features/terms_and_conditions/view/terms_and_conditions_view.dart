@@ -50,6 +50,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
             Text('terms_termination'.tr(), style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 4),
             Text('terms_termination_text'.tr()),
+            SizedBox(height:120),
           ],
         ),
       ),

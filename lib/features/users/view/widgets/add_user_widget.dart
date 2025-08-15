@@ -88,6 +88,7 @@ class _AddUserWidgetState extends State<AddUserWidget> {
           child: Stack(
             children: [
               SingleChildScrollView(
+                padding: MediaQuery.of(context).viewInsets,
                 child: Column(
                   spacing: 16,
                   mainAxisSize: MainAxisSize.min,

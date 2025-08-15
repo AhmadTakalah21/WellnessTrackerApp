@@ -99,13 +99,6 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                         date == null ? 'required_field'.tr() : null,
                   ),
                   MainCounterWidget(
-                    maxCount: 150,
-                    minCount: 12,
-                    onChanged: authCubit.setAge,
-                    label: 'age'.tr(),
-                    icon: Icons.calendar_today,
-                  ),
-                  MainCounterWidget(
                     maxCount: 200,
                     minCount: 30,
                     onChanged: authCubit.setWeight,

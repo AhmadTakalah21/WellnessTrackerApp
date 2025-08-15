@@ -91,7 +91,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   void setInitialFormData() {
     setGender(GenderEnum.male);
-    setAge(12);
     setWeight(30);
     setLength(120);
     setWaistCircumference(10);
@@ -107,10 +106,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   void setBirthday(String? birthday) {
     addInfoModel = addInfoModel.copyWith(birthday: () => birthday);
-  }
-
-  void setAge(int age) {
-    addInfoModel = addInfoModel.copyWith(age: () => age.toString());
   }
 
   void setWeight(int weight) {

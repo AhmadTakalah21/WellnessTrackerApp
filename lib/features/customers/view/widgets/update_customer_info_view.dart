@@ -86,14 +86,6 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
                 children: [
                   const SizedBox(height: 10),
                   MainCounterWidget(
-                    initialCount: info?.age,
-                    maxCount: 150,
-                    minCount: 12,
-                    onChanged: customersCubit.setAge,
-                    label: 'age'.tr(),
-                    icon: Icons.calendar_today,
-                  ),
-                  MainCounterWidget(
                     initialCount: info?.weight,
                     maxCount: 200,
                     minCount: 30,

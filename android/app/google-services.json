@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:17129356765:android:b323496a4219f96ca00a34",
+        "mobilesdk_app_id": "1:17129356765:android:666d0903c4f85620a00a34",
         "android_client_info": {
-          "package_name": "com.example.wellnesstrackerapp"
+          "package_name": "com.MedFit.wellnesstrackerapp"
         }
       },
       "oauth_client": [],

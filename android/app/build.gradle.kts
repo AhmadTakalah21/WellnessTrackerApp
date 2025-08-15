@@ -16,7 +16,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.wellnesstrackerapp"
+    namespace = "com.MedFit.wellnesstrackerapp"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -40,7 +40,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.wellnesstrackerapp"
+        applicationId = "com.MedFit.wellnesstrackerapp"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

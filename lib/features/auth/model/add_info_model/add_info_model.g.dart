@@ -9,7 +9,6 @@ part of 'add_info_model.dart';
 AddInfoModel _$AddInfoModelFromJson(Map<String, dynamic> json) => AddInfoModel(
       gender: GenderEnum.fromJson(json['gender'] as String),
       birthday: json['birthday'] as String?,
-      age: json['age'] as String?,
       weight: json['weight'] as String?,
       length: json['length'] as String?,
       chronicDiseases: json['chronic_diseases'] as String?,
@@ -24,7 +23,6 @@ Map<String, dynamic> _$AddInfoModelToJson(AddInfoModel instance) =>
     <String, dynamic>{
       'gender': GenderEnum.toJson(instance.gender),
       'birthday': instance.birthday,
-      'age': instance.age,
       'weight': instance.weight,
       'length': instance.length,
       'chronic_diseases': instance.chronicDiseases,

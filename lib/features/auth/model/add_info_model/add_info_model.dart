@@ -13,7 +13,6 @@ class AddInfoModel {
   const AddInfoModel({
     GenderEnum? gender,
     String? birthday,
-    String? age,
     String? weight,
     String? length,
     String? chronicDiseases,
@@ -24,7 +23,6 @@ class AddInfoModel {
     String? forearmCircumference,
   })  : _gender = gender,
         _birthday = birthday,
-        _age = age,
         _weight = weight,
         _length = length,
         _chronicDiseases = chronicDiseases,
@@ -36,7 +34,6 @@ class AddInfoModel {
 
   final GenderEnum? _gender;
   final String? _birthday;
-  final String? _age;
   final String? _weight;
   final String? _length;
   final String? _chronicDiseases;
@@ -49,7 +46,6 @@ class AddInfoModel {
   AddInfoModel copyWith({
     GenderEnum? Function()? gender,
     String? Function()? birthday,
-    String? Function()? age,
     String? Function()? weight,
     String? Function()? length,
     String? Function()? chronicDiseases,
@@ -62,7 +58,6 @@ class AddInfoModel {
     return AddInfoModel(
       gender: gender != null ? gender() : _gender,
       birthday: birthday != null ? birthday() : _birthday,
-      age: age != null ? age() : _age,
       weight: weight != null ? weight() : _weight,
       length: length != null ? length() : _length,
       chronicDiseases:
@@ -94,13 +89,6 @@ class AddInfoModel {
       throw "birthday_required".tr();
     }
     return _birthday;
-  }
-
-  String get age {
-    if (_age == null || _age.isEmpty) {
-      throw "age_required".tr();
-    }
-    return _age;
   }
 
   String get weight {

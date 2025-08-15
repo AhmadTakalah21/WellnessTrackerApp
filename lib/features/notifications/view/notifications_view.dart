@@ -121,10 +121,10 @@ class _NotificationsPageState extends State<NotificationsPage>
               return LoadingIndicator();
             } else if (state is NotificationsSuccess) {
               final sent = state.notifications
-                  .where((element) => element.isSent)
+                  .where((element) => !element.received)
                   .toList();
               final received = state.notifications
-                  .where((element) => !element.isSent)
+                  .where((element) => element.received)
                   .toList();
               final notifs = selectedTab == 0 ? sent : received;
               if (widget.role.isUser) {
@@ -202,6 +202,8 @@ class _NotificationsPageState extends State<NotificationsPage>
             ..._buildNotificationsList(notifications),
             if (isLoadingMore) LoadingIndicator(),
             if (!hasMore) MainErrorWidget(error: "no_more".tr()),
+            if (notifications.length < 6)
+              SizedBox(height: (6 - notifications.length) * 100.0),
             SizedBox(height: 70),
           ],
         ),

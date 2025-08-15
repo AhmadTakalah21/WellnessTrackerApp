@@ -1,8 +1,10 @@
 import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import 'package:wellnesstrackerapp/features/exercise_plans/cubit/exercise_plans_cubit.dart';
 import 'package:wellnesstrackerapp/features/exercise_plans/model/exercise_plan_day_model/exercise_plan_day_model.dart';
@@ -253,12 +255,6 @@ class _ExercisesPageState extends State<ExercisesPage>
                   avatar: const Icon(Icons.repeat),
                   label: Text('${'rounds'.tr()}: ${desc.rounds}'),
                 ),
-                // if (desc.repeats.isNotEmpty)
-                //   Chip(
-                //     avatar: const Icon(Icons.countertops),
-                //     label:
-                //         Text('${'repeats'.tr()}: ${desc.repeats.join(' / ')}'),
-                //   ),
               ],
             ),
 
@@ -300,32 +296,69 @@ class _ExercisesPageState extends State<ExercisesPage>
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        if (_isVideo(link))
-                          Container(color: Colors.black.withOpacity(0.08)),
-                        const Center(
-                          child: Icon(Icons.play_circle_fill,
-                              size: 56, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
+                      aspectRatio: 16 / 9, child: _buildVideoPreview(link)),
                 ),
               ),
             ],
-
-            // const SizedBox(height: 12),
-            // Text(
-            //   exercise.description.explain,
-            //   style: context.tt.bodyMedium,
-            //   textAlign: TextAlign.start,
-            // ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<Uint8List?> _generateThumbnail(String url) async {
+    try {
+      return await VideoThumbnail.thumbnailData(
+        video: url,
+        imageFormat: ImageFormat.JPEG,
+        maxWidth: 500,
+        quality: 75,
+      );
+    } catch (e) {
+      debugPrint("Thumbnail error: $e");
+      return null;
+    }
+  }
+
+  Widget _buildVideoPreview(String videoUrl) {
+    return FutureBuilder<Uint8List?>(
+      future: _generateThumbnail(videoUrl),
+      builder: (context, snapshot) {
+        Widget child;
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          child = Container(
+            color: Colors.black.withOpacity(0.08),
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasData && snapshot.data != null) {
+          child = Image.memory(
+            snapshot.data!,
+            fit: BoxFit.cover,
+          );
+        } else {
+          child = Container(
+            color: Colors.black.withOpacity(0.08),
+          );
+        }
+
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              child,
+              const Center(
+                child: Icon(
+                  Icons.play_circle_fill,
+                  size: 56,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

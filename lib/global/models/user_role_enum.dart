@@ -252,5 +252,5 @@ enum UserRoleEnum implements DropDownItemModel {
   }
 
   @override
-  int get id => throw UnimplementedError();
+  int get id => index + 1;
 }

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 
@@ -25,43 +26,82 @@ class MainCounterWidget extends StatefulWidget {
 }
 
 class _MainCounterWidgetState extends State<MainCounterWidget> {
-  late final controller = TextEditingController(
-      text: widget.initialCount?.toString() ?? widget.minCount?.toString());
-  late int counter = widget.initialCount ?? widget.minCount ?? 0;
+  late final TextEditingController controller;
+  late int counter;
+  // late final controller = TextEditingController(
+  //     text: widget.initialCount?.toString() ?? widget.minCount?.toString());
+  // late int counter = widget.initialCount ?? widget.minCount ?? 0;
+
+  @override
+  void initState() {
+    super.initState();
+    counter = widget.initialCount ?? widget.minCount ?? 0;
+    controller = TextEditingController(text: counter.toString());
+
+    controller.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    final text = controller.text.trim();
+    if (text.isEmpty) return;
+
+    final value = int.tryParse(text);
+    if (value != null) {
+      var newValue = value;
+
+      if (widget.minCount != null && newValue < widget.minCount!) {
+        newValue = widget.minCount!;
+      }
+      if (widget.maxCount != null && newValue > widget.maxCount!) {
+        newValue = widget.maxCount!;
+      }
+
+      if (newValue != counter) {
+        setState(() => counter = newValue);
+        widget.onChanged(counter);
+      }
+    }
+  }
+
+
 
   void onIncreaseTap() {
-    if (widget.maxCount != null && counter == widget.maxCount!) {
-      return;
-    }
-    setState(() {
-      counter++;
-    });
-
+    if (widget.maxCount != null && counter == widget.maxCount!) return;
+    setState(() => counter++);
     controller.text = counter.toString();
     widget.onChanged(counter);
   }
 
   void onDecreaseTap() {
-    if (counter != (widget.minCount ?? 0)) {
-      setState(() {
-        counter--;
-      });
-    }
+    if (widget.minCount != null && counter <= widget.minCount!) return;
+    setState(() => counter--);
     controller.text = counter.toString();
     widget.onChanged(counter);
+
+    // if (counter != (widget.minCount ?? 0)) {
+    //   setState(() {
+    //     counter--;
+    //   });
+    // }
+    // controller.text = counter.toString();
+    // widget.onChanged(counter);
+  }
+
+   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return MainTextField2(
-      //controller: widget.controller,
       controller: controller,
       label: widget.label,
       icon: widget.icon,
       suffix: Column(
         children: [
           InkWell(
-            //onTap: widget.onIncreaseTap,
             onTap: onIncreaseTap,
             child: Icon(
               Icons.arrow_drop_up,
@@ -69,7 +109,6 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
             ),
           ),
           InkWell(
-            //onTap: widget.onDecreaseTap,
             onTap: onDecreaseTap,
             child: Icon(
               Icons.arrow_drop_down,
@@ -78,8 +117,13 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
           ),
         ],
       ),
-      readOnly: true,
-      validator: (val) => val == null || val == '0' ? "required".tr() : null,
+      // validator: (val) => val == null || val == '0' ? "required".tr() : null,
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      validator: (val) =>
+          val == null || val.isEmpty || int.tryParse(val) == null
+              ? "required".tr()
+              : null,
     );
   }
 }

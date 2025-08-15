@@ -73,7 +73,7 @@ class UserModel implements DeleteModel, DataTableModel, DropDownItemModel {
         "email".tr(),
         "phone".tr(),
         "role".tr(),
-        "subscribers_count",
+        "subscribers_count".tr(),
         "status".tr(),
         "event".tr(),
       ];

@@ -9,7 +9,6 @@ part of 'update_customer_info_model.dart';
 UpdateCustomerInfoModel _$UpdateCustomerInfoModelFromJson(
         Map<String, dynamic> json) =>
     UpdateCustomerInfoModel(
-      age: json['age'] as String?,
       weight: json['weight'] as String?,
       length: json['length'] as String?,
       chronicDiseases: json['chronic_diseases'] as String?,
@@ -21,7 +20,6 @@ UpdateCustomerInfoModel _$UpdateCustomerInfoModelFromJson(
 Map<String, dynamic> _$UpdateCustomerInfoModelToJson(
         UpdateCustomerInfoModel instance) =>
     <String, dynamic>{
-      'age': instance.age,
       'weight': instance.weight,
       'length': instance.length,
       'chronic_diseases': instance.chronicDiseases,

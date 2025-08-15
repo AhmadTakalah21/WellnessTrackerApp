@@ -1,6 +1,12 @@
 import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
+
+abstract class PrivacyPolicyViewCallBacks {
+  Future<void> onTap();
+}
 
 @RoutePage()
 class PrivacyPolicyView extends StatelessWidget {
@@ -19,7 +25,27 @@ class PrivacyPolicyPage extends StatefulWidget {
   State<PrivacyPolicyPage> createState() => _PrivacyPolicyPageState();
 }
 
-class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
+class _PrivacyPolicyPageState extends State<PrivacyPolicyPage>
+    implements PrivacyPolicyViewCallBacks {
+  @override
+  Future<void> onTap() async {
+    final path =
+        'https://docs.google.com/document/d/1qGe66yBqlY49q1M_G_IMk-tf-QLKKEbNv_F8W2usPDY/edit?usp=sharing';
+    final url = Uri.parse(path);
+
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else if (mounted) {
+        MainSnackBar.showErrorMessage(context, "cant_open_url".tr());
+      }
+    } catch (e) {
+      if (mounted) {
+        MainSnackBar.showErrorMessage(context, "cant_open_url".tr());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +83,18 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
                 style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 4),
             Text('privacy_policy_changes_text'.tr()),
+            Divider(height: 30),
+            InkWell(
+              onTap: onTap,
+              child: Text(
+                'you_can_view_privacy_policy'.tr(),
+                style: TextStyle(
+                  color: Colors.blue, // Make it look like a link
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            SizedBox(height: 120),
           ],
         ),
       ),

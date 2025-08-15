@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class NotificationModel implements DeleteModel {
     this.receiverId,
     this.sendAt,
     required this.isSent,
+    required this.received,
     required this.createdAt,
     required this.updatedAt,
     required this.message,
@@ -38,13 +40,16 @@ class NotificationModel implements DeleteModel {
   @BoolConverter()
   @JsonKey(name: 'is_sent')
   final bool isSent;
+
+  @BoolConverter()
+  final bool received;
+
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 
   final String message;
-
 
   factory NotificationModel.fromString(String str) =>
       NotificationModel.fromJson(jsonDecode(str) as Map<String, dynamic>);

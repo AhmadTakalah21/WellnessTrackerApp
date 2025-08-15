@@ -9,7 +9,7 @@ part of 'customer_info_model.dart';
 CustomerInfoModel _$CustomerInfoModelFromJson(Map<String, dynamic> json) =>
     CustomerInfoModel(
       id: (json['id'] as num).toInt(),
-      age: (json['age'] as num).toInt(),
+      age: (json['age'] as num?)?.toInt(),
       weight: (json['weight'] as num).toInt(),
       length: (json['length'] as num).toInt(),
       chronicDiseases: json['chronic_diseases'] as String?,

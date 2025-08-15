@@ -602,7 +602,6 @@ class _SignInPageState extends State<SignInPage>
 
   Widget _buildTermsAndForgetPassword() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
@@ -619,16 +618,23 @@ class _SignInPageState extends State<SignInPage>
         Expanded(
           child: AnimatedSizeAndFade(
             child: isShowSignIn
-                ? TextButton(
-                    onPressed: onForgetPasswordTap,
-                    child: Text(
-                      'forgot_password?'.tr(),
-                      style: context.tt.labelLarge?.copyWith(
-                        color: context.cs.primary,
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: onForgetPasswordTap,
+                          child: Text(
+                            'forgot_password?'.tr(),
+                            style: context.tt.labelLarge?.copyWith(
+                              color: context.cs.primary,
+                            ),
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.fade,
+                          ),
+                        ),
                       ),
-                      textAlign: TextAlign.end,
-                      overflow: TextOverflow.fade,
-                    ),
+                    ],
                   )
                 : SizedBox.shrink(),
           ),

@@ -1,4 +1,4 @@
-package com.example.wellnesstrackerapp
+package com.MedFit.wellnesstrackerapp
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -153,7 +153,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         style: TextStyle(color: Colors.grey)),
                                   SizedBox(width: 4),
                                   Text(
-                                    '| ${profile.totalPoints?.toString() ?? 0} نقطة',
+                                    "| ${profile.totalPoints?.toString() ?? 0} ${"point".tr()}",
                                     style: TextStyle(
                                       color: Colors.blue,
                                       fontWeight: FontWeight.w500,
@@ -181,7 +181,8 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                               _InfoCard(
                                 label: 'Age',
-                                value: info.age.toString(),
+                                value:
+                                    info.age?.toString() ?? "not_provided".tr(),
                                 unit: 'Year',
                               ),
                             ],
@@ -237,7 +238,7 @@ class _InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 85,
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
       decoration: BoxDecoration(
         color: context.cs.primary,
         borderRadius: BorderRadius.circular(12),
@@ -245,13 +246,22 @@ class _InfoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            '$value$unit',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Text(
+                  '$value$unit',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 4),
           Text(

@@ -49,18 +49,12 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   }
 
   void setInitailCustomerInfo(CustomerInfoModel info) {
-    setAge(info.age);
     setWeight(info.weight);
     setLength(info.length);
     setChronicDiseases(info.chronicDiseases);
     setWaistCircumference(info.waistCircumference);
     setChest(info.chest);
     setShoulder(info.shoulder);
-  }
-
-  void setAge(int age) {
-    updateCustomerInfoModel =
-        updateCustomerInfoModel.copyWith(age: () => age.toString());
   }
 
   void setWeight(int weight) {

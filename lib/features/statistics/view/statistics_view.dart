@@ -150,47 +150,47 @@ class _StatisticsPageState extends State<StatisticsPage>
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            SfCartesianChart(
-              title: ChartTitle(
-                text: "statistics".tr(),
-                textStyle: context.tt.titleLarge,
-              ),
-              borderWidth: 0,
-              plotAreaBorderWidth: 0,
-              primaryYAxis: NumericAxis(
-                // minimum: 0,
-                // maximum: 1200,
-                // interval: 200,
-                maximum: maxNumber?.toDouble() ?? 1200,
-                interval: maxNumber == null
-                    ? 200
-                    : (maxNumber.toDouble() / 6).ceilToDouble(),
-                majorGridLines: const MajorGridLines(width: 0.5),
-                labelStyle: context.tt.bodyMedium,
-              ),
-              primaryXAxis: CategoryAxis(
-                labelStyle: context.tt.bodyMedium,
-                majorGridLines: const MajorGridLines(width: 0),
-              ),
-              tooltipBehavior: TooltipBehavior(enable: true),
-              series: List<CartesianSeries<ChartModel, String>>.generate(
-                chartData[0].yAxisProperty.length,
-                (index) => ColumnSeries<ChartModel, String>(
-                  width: 0.3,
-                  dataSource: chartData,
-                  animationDuration: 1000,
-                  xValueMapper: (ChartModel xAxis, ind) =>
-                      "$ind",
-                  yValueMapper: (ChartModel yAxis, ind) =>
-                      yAxis.yAxisProperty[index],
-                  pointColorMapper: (_, index) =>
-                      columnColors[index % columnColors.length],
-                  dataLabelSettings: const DataLabelSettings(isVisible: true),
-                  name: "stats".tr(),
+            Padding(
+              padding: AppConstants.paddingH4,
+              child: SfCartesianChart(
+                title: ChartTitle(
+                  text: "statistics".tr(),
+                  textStyle: context.tt.titleLarge,
+                ),
+                borderWidth: 0,
+                plotAreaBorderWidth: 0,
+                primaryYAxis: NumericAxis(
+                  maximum: maxNumber?.toDouble() ?? 1200,
+                  interval: maxNumber == null
+                      ? 200
+                      : (maxNumber.toDouble() / 6).ceilToDouble(),
+                  majorGridLines: const MajorGridLines(width: 0.5),
+                  labelStyle: context.tt.bodyMedium,
+                ),
+                primaryXAxis: CategoryAxis(
+                  labelStyle: context.tt.bodyMedium,
+                  majorGridLines: const MajorGridLines(width: 0),
+                ),
+                tooltipBehavior: TooltipBehavior(enable: true),
+                series: List<CartesianSeries<ChartModel, String>>.generate(
+                  chartData[0].yAxisProperty.length,
+                  (index) => ColumnSeries<ChartModel, String>(
+                    width: 0.3,
+                    dataSource: chartData,
+                    animationDuration: 1000,
+                    xValueMapper: (ChartModel xAxis, ind) =>
+                        "$ind",
+                    yValueMapper: (ChartModel yAxis, ind) =>
+                        yAxis.yAxisProperty[index],
+                    pointColorMapper: (_, index) =>
+                        columnColors[index % columnColors.length],
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    name: "stats".tr(),
+                  ),
                 ),
               ),
             ),
-            SizedBox(height: 100),
+            SizedBox(height: 30),
             Wrap(
               spacing: 12,
               runSpacing: 20,

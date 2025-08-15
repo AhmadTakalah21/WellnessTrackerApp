@@ -9,7 +9,7 @@ part 'customer_info_model.g.dart';
 class CustomerInfoModel {
   const CustomerInfoModel({
     required this.id,
-    required this.age,
+     this.age,
     required this.weight,
     required this.length,
     this.chronicDiseases,
@@ -22,7 +22,7 @@ class CustomerInfoModel {
   });
 
   final int id;
-  final int age;
+  final int? age;
   final int weight;
   final int length;
 

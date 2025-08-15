@@ -94,6 +94,8 @@ import 'package:wellnesstrackerapp/features/users/service/users_service.dart'
     as _i936;
 import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart'
     as _i396;
+import 'package:wellnesstrackerapp/global/blocs/share_cubit/cubit/share_cubit.dart'
+    as _i476;
 import 'package:wellnesstrackerapp/global/blocs/upload_file_cubit/cubit/upload_file_cubit.dart'
     as _i188;
 import 'package:wellnesstrackerapp/global/blocs/upload_image_cubit/cubit/upload_image_cubit.dart'
@@ -122,6 +124,7 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final appModule = _$AppModule();
+    gh.factory<_i476.ShareCubit>(() => _i476.ShareCubit());
     gh.factory<_i188.UploadFileCubit>(() => _i188.UploadFileCubit());
     gh.factory<_i540.UploadImageCubit>(() => _i540.UploadImageCubit());
     await gh.factoryAsync<_i460.SharedPreferences>(

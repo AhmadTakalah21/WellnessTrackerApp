@@ -176,7 +176,6 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
     final data = [
       TitleValueModel("gender", customer.gender?.displayName ?? "-"),
       TitleValueModel("birthday", customer.birthday ?? "-"),
-      TitleValueModel("age", info?.age.toString() ?? "-"),
       TitleValueModel("weight", info?.weight.toString() ?? "-"),
       TitleValueModel("length", info?.length.toString() ?? "-"),
       TitleValueModel(

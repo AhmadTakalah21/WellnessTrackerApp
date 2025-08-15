@@ -42,17 +42,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAqBiKSbo98xMThZZwp2Z85ghMp7QUCgeM',
-    appId: '1:17129356765:web:78164393ae9afb41a00a34',
+    appId: '1:17129356765:web:01b3f2fb6cbd90c4a00a34',
     messagingSenderId: '17129356765',
     projectId: 'wellness-tracker-app-d8def',
     authDomain: 'wellness-tracker-app-d8def.firebaseapp.com',
     storageBucket: 'wellness-tracker-app-d8def.firebasestorage.app',
-    measurementId: 'G-2T8XDKG95L',
+    measurementId: 'G-873WFRS0PD',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCYN9FAZyDj5mmAQ_qXmkrQz1lmOL7-W0o',
-    appId: '1:17129356765:android:b323496a4219f96ca00a34',
+    appId: '1:17129356765:android:666d0903c4f85620a00a34',
     messagingSenderId: '17129356765',
     projectId: 'wellness-tracker-app-d8def',
     storageBucket: 'wellness-tracker-app-d8def.firebasestorage.app',
@@ -78,11 +78,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyAqBiKSbo98xMThZZwp2Z85ghMp7QUCgeM',
-    appId: '1:17129356765:web:ebfac5bda82a39daa00a34',
+    appId: '1:17129356765:web:143d99b47d237836a00a34',
     messagingSenderId: '17129356765',
     projectId: 'wellness-tracker-app-d8def',
     authDomain: 'wellness-tracker-app-d8def.firebaseapp.com',
     storageBucket: 'wellness-tracker-app-d8def.firebasestorage.app',
-    measurementId: 'G-D0C0ES1Z6E',
+    measurementId: 'G-5MGPMWQCSY',
   );
 }
