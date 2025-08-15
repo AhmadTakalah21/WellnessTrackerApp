@@ -17,7 +17,6 @@ NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) =>
       isSent: const BoolConverter().fromJson(json['is_sent']),
       received: const BoolConverter().fromJson(json['received']),
       createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
       message: json['message'] as String,
     );
 
@@ -32,6 +31,5 @@ Map<String, dynamic> _$NotificationModelToJson(NotificationModel instance) =>
       'is_sent': const BoolConverter().toJson(instance.isSent),
       'received': const BoolConverter().toJson(instance.received),
       'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
       'message': instance.message,
     };

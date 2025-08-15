@@ -22,14 +22,13 @@ class NotificationModel implements DeleteModel {
     required this.isSent,
     required this.received,
     required this.createdAt,
-    required this.updatedAt,
     required this.message,
   });
 
   final int id;
   final String title;
 
-  final dynamic data; // nullable, can be any type from API
+  final dynamic data; 
   @JsonKey(name: 'sender_id')
   final int? senderId;
   @JsonKey(name: 'receiver_id')
@@ -46,8 +45,6 @@ class NotificationModel implements DeleteModel {
 
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
-  @JsonKey(name: 'updated_at')
-  final DateTime updatedAt;
 
   final String message;
 
