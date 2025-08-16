@@ -168,7 +168,7 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
                       icon: Icons.email,
                       title: 'support_email',
                       value: settings.email,
-                      onTap: () => onLaunchPhoneTap(settings.email),
+                      onTap: () => onLaunchEmailTap(settings.email),
                     ),
                     _buildInfoCard(
                       icon: Icons.phone,

@@ -42,8 +42,8 @@ android {
     defaultConfig {
         applicationId = "com.MedFit.wellnesstrackerapp"
         minSdk = flutter.minSdkVersion
-        //targetSdk = flutter.targetSdkVersion
-        targetSdk = 35
+        targetSdk = flutter.targetSdkVersion
+//        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }

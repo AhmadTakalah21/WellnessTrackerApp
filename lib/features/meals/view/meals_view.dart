@@ -303,7 +303,7 @@ class _MealsPageState extends State<MealsPage>
                         child: AspectRatio(
                           aspectRatio: 16 / 9,
                           child: _buildVideoPreview(link),
-                          // Stack(
+                          // child: Stack(
                           //   fit: StackFit.expand,
                           //   children: [
                           //     if (_isVideo(link))

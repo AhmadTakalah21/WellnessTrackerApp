@@ -296,7 +296,24 @@ class _ExercisesPageState extends State<ExercisesPage>
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: AspectRatio(
-                      aspectRatio: 16 / 9, child: _buildVideoPreview(link)),
+                    aspectRatio: 16 / 9,
+                    child: _buildVideoPreview(link)
+                    // child: ClipRRect(
+                    //   borderRadius: BorderRadius.circular(12),
+                    //   child: Stack(
+                    //     fit: StackFit.expand,
+                    //     children: [
+                    //       const Center(
+                    //         child: Icon(
+                    //           Icons.play_circle_fill,
+                    //           size: 56,
+                    //           color: Colors.white,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                  ),
                 ),
               ),
             ],
