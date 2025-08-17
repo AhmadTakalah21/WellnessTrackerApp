@@ -8,7 +8,6 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-// تحميل إعدادات التوقيع من ملف key.properties
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
@@ -16,9 +15,12 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+
     namespace = "com.MedFit.wellnesstrackerapp"
+
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -41,9 +43,11 @@ android {
 
     defaultConfig {
         applicationId = "com.MedFit.wellnesstrackerapp"
+
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-//        targetSdk = 35
+
+
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
