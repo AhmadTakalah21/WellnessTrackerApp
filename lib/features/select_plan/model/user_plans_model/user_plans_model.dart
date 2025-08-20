@@ -9,15 +9,9 @@ part 'user_plans_model.g.dart';
 @JsonSerializable()
 @immutable
 class UserPlansModel {
-  const UserPlansModel({
-    required this.plans,
-    required this.psyPhone,
-  });
+  const UserPlansModel({required this.plans});
 
   final List<UserPlanModel> plans;
-
-  @JsonKey(name: "psy_phone")
-  final String psyPhone;
 
   factory UserPlansModel.fromString(String str) =>
       UserPlansModel.fromJson(jsonDecode(str) as Map<String, dynamic>);
