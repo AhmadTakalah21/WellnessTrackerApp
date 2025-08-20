@@ -11,11 +11,13 @@ class MainTabBar extends StatelessWidget {
     required this.onTapSelected,
     required this.selectedTab,
     this.isScrollable = true,
+    this.tabAlignment = TabAlignment.start,
   });
 
   final List<String> titles;
   final TabController tabController;
   final ValueSetter<int> onTapSelected;
+  final TabAlignment tabAlignment;
   final int selectedTab;
   final bool isScrollable;
 
@@ -23,13 +25,14 @@ class MainTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isScrollable) {
       return TabBar(
+        physics: BouncingScrollPhysics(),
         controller: tabController,
         isScrollable: true,
         indicatorPadding: EdgeInsets.zero,
         dividerColor: Colors.transparent,
         indicatorColor: Colors.transparent,
         labelPadding: EdgeInsets.zero,
-        tabAlignment: TabAlignment.start,
+        tabAlignment: tabAlignment,
         onTap: onTapSelected,
         padding: const EdgeInsets.symmetric(horizontal: 10 * 1.25),
         tabs: List.generate(titles.length, (index) {
@@ -77,6 +80,7 @@ class MainTabBar extends StatelessWidget {
             color:
                 selectedTab == index ? context.cs.surface : context.cs.primary,
           ),
+          textAlign: TextAlign.center,
         ),
       ),
     );

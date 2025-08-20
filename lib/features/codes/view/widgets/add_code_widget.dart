@@ -29,6 +29,7 @@ class AddCodeWidget extends StatefulWidget {
 
 class _AddCodeWidgetState extends State<AddCodeWidget> {
   late final CodesCubit codesCubit = context.read();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -37,8 +38,11 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
   }
 
   void onCancelTap() => Navigator.pop(context);
-
-  void onSave() => widget.codesCubit.addCode(id: widget.code?.id);
+  void onSave() {
+    if (_formKey.currentState!.validate()) {
+      widget.codesCubit.addCode(id: widget.code?.id);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,19 +50,22 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
       padding: MediaQuery.of(context).viewInsets,
       child: Padding(
         padding: AppConstants.padding20,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          spacing: 12,
-          children: [
-            _buildTitle(),
-            const SizedBox(height: 4),
-            _buildCodeTextField(),
-            _buildValidityDaysConter(),
-            const SizedBox(height: 6),
-            _buildSubmitButton(),
-            SizedBox(height: 20),
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            spacing: 12,
+            children: [
+              _buildTitle(),
+              const SizedBox(height: 4),
+              _buildCodeTextField(),
+              _buildValidityDaysConter(),
+              const SizedBox(height: 6),
+              _buildSubmitButton(),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

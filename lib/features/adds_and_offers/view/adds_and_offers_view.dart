@@ -136,7 +136,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     showDialog(
       context: context,
       builder: (context) {
-        return AdvDetailsWidget(adv: adv);
+        return AdvDetailsWidget(adv: adv, role: widget.role);
       },
     );
   }
@@ -249,24 +249,21 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     return InkWell(
       onLongPress: () => onAdvLongPress(adv),
       onTap: () => onAdvTap(adv),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: context.cs.surface,
-          borderRadius: AppConstants.borderRadius20,
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, 4),
-              color: AppColors.black.withValues(alpha: 0.3),
-              blurRadius: 4,
-            )
-          ],
-        ),
-        child: AppImageWidget(
-          url: adv.image,
-          width: width,
-          height: width,
-          errorWidget: Image.asset("assets/images/app_logo.png"),
-        ),
+      child: AppImageWidget(
+        url: adv.image,
+        width: width,
+        height: width,
+        backgroundColor: context.cs.surface,
+        borderRadius: AppConstants.borderRadius20,
+        errorWidget: Image.asset("assets/images/app_logo.png"),
+        fit: BoxFit.cover,
+        shadows: [
+          BoxShadow(
+            offset: Offset(0, 4),
+            color: AppColors.black.withValues(alpha: 0.3),
+            blurRadius: 4,
+          )
+        ],
       ),
     );
   }

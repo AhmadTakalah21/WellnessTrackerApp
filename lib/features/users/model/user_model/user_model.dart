@@ -1,11 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 
-import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
@@ -32,8 +31,8 @@ class UserModel implements DeleteModel, DataTableModel, DropDownItemModel {
   final String email;
   final String phone;
 
-  @JsonKey(fromJson: UserRoleEnum.fromJson, toJson: UserRoleEnum.toJson)
-  final UserRoleEnum role;
+  @JsonKey(fromJson: DepartmentEnum.fromJson2, toJson: DepartmentEnum.toJson2)
+  final DepartmentEnum role;
   final String status;
 
   @JsonKey(name: "sum")

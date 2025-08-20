@@ -35,6 +35,7 @@ class AddAdvView extends StatelessWidget {
   final AddsAndOffersCubit advCubit;
   final AdvModel? adv;
   final VoidCallback? onSuccess;
+  
 
   @override
   Widget build(BuildContext context) {

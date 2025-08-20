@@ -5,7 +5,8 @@ import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 enum DepartmentEnum implements DropDownItemModel {
   dietitian,
   coach,
-  doctor;
+  doctor,
+  psychologist;
 
   @override
   String get displayName => name.tr();
@@ -13,37 +14,48 @@ enum DepartmentEnum implements DropDownItemModel {
   @override
   int get id => index + 1;
 
+  bool get isDietitian => this == dietitian;
+  bool get isCoach => this == coach;
+  bool get isDoctor => this == doctor;
+  bool get isPsychologist => this == psychologist;
+
   @override
   String get displayEntityName {
     switch (this) {
-      case DepartmentEnum.dietitian:
+      case dietitian:
         return "nutrition".tr();
-      case DepartmentEnum.coach:
+      case coach:
         return "sport".tr();
-      case DepartmentEnum.doctor:
+      case doctor:
         return "medicine".tr();
+      case psychologist:
+        return "psychology".tr();
     }
   }
 
   String get getTitle {
     switch (this) {
-      case DepartmentEnum.dietitian:
+      case dietitian:
         return "nutrition_follow";
-      case DepartmentEnum.coach:
+      case coach:
         return "sport_follow";
-      case DepartmentEnum.doctor:
+      case doctor:
         return "medical_follow";
+      case psychologist:
+        return "psicological_follow";
     }
   }
 
   IconData get getIcon {
     switch (this) {
-      case DepartmentEnum.dietitian:
+      case dietitian:
         return Icons.restaurant_menu_rounded;
-      case DepartmentEnum.coach:
+      case coach:
         return Icons.fitness_center_rounded;
-      case DepartmentEnum.doctor:
+      case doctor:
         return Icons.medication_rounded;
+      case psychologist:
+        return Icons.psychology;
     }
   }
 
@@ -55,6 +67,8 @@ enum DepartmentEnum implements DropDownItemModel {
         return Colors.blue.shade400;
       case DepartmentEnum.doctor:
         return Colors.red.shade400;
+      case psychologist:
+        return Colors.purple.shade400;
     }
   }
 
@@ -63,4 +77,9 @@ enum DepartmentEnum implements DropDownItemModel {
   static DepartmentEnum fromJson(int id) => values[id - 1];
 
   static DepartmentEnum getDepartmentById(int id) => fromJson(id);
+
+  static DepartmentEnum fromJson2(String role) =>
+      values.firstWhere((value) => value.name == role, orElse: () => dietitian);
+
+  static String toJson2(DepartmentEnum role) => role.name;
 }

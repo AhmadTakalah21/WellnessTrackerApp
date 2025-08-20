@@ -101,6 +101,7 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                   MainCounterWidget(
                     maxCount: 200,
                     minCount: 30,
+                    initialCount: 50,
                     onChanged: authCubit.setWeight,
                     label: 'weight'.tr(),
                     icon: Icons.monitor_weight,
@@ -108,6 +109,7 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                   MainCounterWidget(
                     maxCount: 220,
                     minCount: 120,
+                    initialCount: 160,
                     onChanged: authCubit.setLength,
                     label: 'length'.tr(),
                     icon: Icons.height,
@@ -116,44 +118,49 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                     onChanged: authCubit.setChronicDiseases,
                     icon: Icons.healing,
                     label: 'chronic_diseases'.tr(),
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    // validator: (val) => val == null || val.isEmpty
+                    //     ? 'required_field'.tr()
+                    //     : null,
                   ),
                   MainCounterWidget(
                     maxCount: 100,
-                    minCount: 10,
+                    //minCount: 10,
                     onChanged: authCubit.setWaistCircumference,
                     label: 'waist_circumference'.tr(),
                     icon: Icons.line_weight,
+                    isRequired: false,
                   ),
                   MainCounterWidget(
                     maxCount: 100,
-                    minCount: 20,
+                    //minCount: 20,
                     onChanged: authCubit.setChest,
                     label: 'chest'.tr(),
                     icon: Icons.accessibility_new,
+                    isRequired: false,
                   ),
                   MainCounterWidget(
                     maxCount: 100,
-                    minCount: 10,
+                    //minCount: 10,
                     onChanged: authCubit.setShoulder,
                     label: 'shoulder'.tr(),
                     icon: Icons.accessibility,
+                    isRequired: false,
                   ),
                   MainCounterWidget(
                     maxCount: 100,
-                    minCount: 10,
+                    //minCount: 10,
                     onChanged: authCubit.setThighCircumference,
                     label: 'thigh_circumference'.tr(),
                     icon: Icons.directions_walk,
+                    isRequired: false,
                   ),
                   MainCounterWidget(
                     maxCount: 100,
-                    minCount: 10,
+                    //minCount: 10,
                     onChanged: authCubit.setForearmCircumference,
                     label: 'forearm_circumference'.tr(),
                     icon: Icons.pan_tool,
+                    isRequired: false,
                   ),
                   const SizedBox(height: 60),
                 ],

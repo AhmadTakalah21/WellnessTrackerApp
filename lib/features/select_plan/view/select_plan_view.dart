@@ -98,13 +98,6 @@ class _SelectPlanPageState extends State<SelectPlanPage>
                         );
                       },
                     ),
-                    _buildGridItem(
-                      context,
-                      'psicological_follow',
-                      state.plans.psyPhone,
-                      Icons.psychology,
-                      Colors.purple.shade400,
-                    ),
                     SizedBox(height: 100),
                   ],
                 ),

@@ -446,5 +446,10 @@
   "confirm" : "Confirm",
   "back_to_login" : "Back to Login",
   "subscribers_count" : "Subscribers Count",
-  "point" : "Point"
+  "point" : "Point",
+  "invalid_value" : "Invalid value",
+  "height" : "Height",
+  "year" : "Year",
+  "psychologist" : "Psychologist",
+  "psychology" : "Psychology"
 }

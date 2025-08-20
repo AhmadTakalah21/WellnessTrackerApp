@@ -106,48 +106,48 @@ class AddInfoModel {
   }
 
   @JsonKey(name: "chronic_diseases")
-  String get chronicDiseases {
-    if (_chronicDiseases == null || _chronicDiseases.isEmpty) {
-      throw "chronic_diseases_required".tr();
-    }
+  String? get chronicDiseases {
+    // if (_chronicDiseases == null || _chronicDiseases.isEmpty) {
+    //   throw "chronic_diseases_required".tr();
+    // }
     return _chronicDiseases;
   }
 
   @JsonKey(name: "waist_circumference")
-  String get waistCircumference {
-    if (_waistCircumference == null || _waistCircumference.isEmpty) {
-      throw "waist_required".tr();
-    }
+  String? get waistCircumference {
+    // if (_waistCircumference == null || _waistCircumference.isEmpty) {
+    //   throw "waist_required".tr();
+    // }
     return _waistCircumference;
   }
 
-  String get chest {
-    if (_chest == null || _chest.isEmpty) {
-      throw "chest_required".tr();
-    }
+  String? get chest {
+    // if (_chest == null || _chest.isEmpty) {
+    //   throw "chest_required".tr();
+    // }
     return _chest;
   }
 
-  String get shoulder {
-    if (_shoulder == null || _shoulder.isEmpty) {
-      throw "shoulder_required".tr();
-    }
+  String? get shoulder {
+    // if (_shoulder == null || _shoulder.isEmpty) {
+    //   throw "shoulder_required".tr();
+    // }
     return _shoulder;
   }
 
   @JsonKey(name: "thigh_circumference")
-  String get thighCircumference {
-    if (_thighCircumference == null || _thighCircumference.isEmpty) {
-      throw "thigh_required".tr();
-    }
+  String? get thighCircumference {
+    // if (_thighCircumference == null || _thighCircumference.isEmpty) {
+    //   throw "thigh_required".tr();
+    // }
     return _thighCircumference;
   }
 
   @JsonKey(name: "forearm_circumference")
-  String get forearmCircumference {
-    if (_forearmCircumference == null || _forearmCircumference.isEmpty) {
-      throw "forearm_required".tr();
-    }
+  String? get forearmCircumference {
+    // if (_forearmCircumference == null || _forearmCircumference.isEmpty) {
+    //   throw "forearm_required".tr();
+    // }
     return _forearmCircumference;
   }
 

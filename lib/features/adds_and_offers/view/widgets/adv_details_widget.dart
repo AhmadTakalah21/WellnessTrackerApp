@@ -1,15 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 
 class AdvDetailsWidget extends StatelessWidget {
-  const AdvDetailsWidget({super.key, required this.adv});
+  const AdvDetailsWidget({super.key, required this.adv, required this.role});
 
   final AdvModel adv;
+  final UserRoleEnum role;
 
   void onBack(BuildContext context) => Navigator.pop(context);
 
@@ -53,25 +55,27 @@ class AdvDetailsWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 25),
-            if(adv.description.en != null && adv.description.en!.isNotEmpty)
-            Center(
-              child: Text(
-                adv.description.en!,
-                style: context.tt.titleMedium,
+            if (adv.description.en != null && adv.description.en!.isNotEmpty)
+              Center(
+                child: Text(
+                  adv.description.en!,
+                  style: context.tt.titleMedium,
+                ),
               ),
-            ),
-            const SizedBox(height: 15),
-            Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${"exp_date".tr()}: ${adv.endDate}",
-                    style: context.tt.titleLarge,
-                  ),
-                ],
+            if (role.isAdmin) ...[
+              const SizedBox(height: 15),
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${"exp_date".tr()}: ${adv.endDate}",
+                      style: context.tt.titleLarge,
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
             const SizedBox(height: 25),
           ],
         ),

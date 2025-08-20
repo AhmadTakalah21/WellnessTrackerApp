@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:wellnesstrackerapp/global/utils/utils.dart';
@@ -73,7 +73,7 @@ class _AddUserWidgetState extends State<AddUserWidget> {
     }
   }
 
-  void selectRole(UserRoleEnum? role) => usersCubit.setRole(role);
+  void selectRole(DepartmentEnum? role) => usersCubit.setRole(role);
 
   void onCancelTap() => Navigator.pop(context);
 
@@ -88,18 +88,18 @@ class _AddUserWidgetState extends State<AddUserWidget> {
           child: Stack(
             children: [
               SingleChildScrollView(
-                padding: MediaQuery.of(context).viewInsets,
                 child: Column(
-                  spacing: 16,
+                  spacing: 8,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildTitle(),
-                    const SizedBox(height: 8),
+                    const SizedBox.shrink(),
                     _buildNameTextField(user),
                     _buildEmailTextField(user),
                     _buildPasswordTextField(),
                     _buildPhoneTextField(user),
                     _buildRoleDropDown(user),
+                    const SizedBox(height: 70),
                   ],
                 ),
               ),
@@ -162,10 +162,10 @@ class _AddUserWidgetState extends State<AddUserWidget> {
       );
 
   Widget _buildRoleDropDown(UserModel? user) {
-    final selectedRole = UserRoleEnum.values
+    final selectedRole = DepartmentEnum.values
         .firstWhereOrNull((role) => role.name == user?.role.name);
     return MainDropDownWidget(
-      items: UserRoleEnum.values,
+      items: DepartmentEnum.values,
       selectedValue: selectedRole,
       onChanged: selectRole,
       hintText: 'select_role'.tr(),

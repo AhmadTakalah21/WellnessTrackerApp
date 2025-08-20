@@ -447,5 +447,10 @@
   "confirm" : "تأكيد",
   "back_to_login" : "العودة إلى تسجيل الدخول",
   "subscribers_count" : "عدد المشتركين",
-  "point" : "نقطة"
+  "point" : "نقطة",
+  "invalid_value" : "القيمة غير صالحة",
+  "height" : "الطول",
+  "year" : "سنة",
+  "psychologist" : "أخصائي نفسي",
+  "psychology" : "صحة نفسية"
 }

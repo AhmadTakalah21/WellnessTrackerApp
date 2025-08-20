@@ -91,13 +91,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   void setInitialFormData() {
     setGender(GenderEnum.male);
-    setWeight(30);
-    setLength(120);
-    setWaistCircumference(10);
-    setChest(20);
-    setShoulder(10);
-    setThighCircumference(10);
-    setForearmCircumference(10);
+    setWeight(50);
+    setLength(160);
   }
 
   void setGender(GenderEnum? gender) {

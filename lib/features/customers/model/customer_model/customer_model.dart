@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -10,6 +9,7 @@ import 'package:wellnesstrackerapp/features/customers/model/customer_subscriptio
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/utils/json_utils.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
@@ -22,23 +22,26 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
   const CustomerModel({
     required this.id,
     required this.name,
+    this.age,
     required this.email,
     this.phone,
     this.gender,
     this.birthday,
     required this.status,
+    this.image,
     required this.role,
     this.info,
     this.subscription,
     this.level,
+    this.isAdmin = false,
     this.totalPoints,
     required this.createdAt,
-    this.isAdmin = false,
   });
 
   @override
   final int id;
   final String name;
+  final int? age;
   final String email;
   final String? phone;
 
@@ -50,6 +53,12 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   final String? birthday;
   final String status;
+
+  @JsonKey(
+    fromJson: JsonUtils.setImageUrlNullableFromJson,
+    readValue: JsonUtils.readValue,
+  )
+  final String? image;
 
   @JsonKey(fromJson: UserRoleEnum.fromJson, toJson: UserRoleEnum.toJson)
   final UserRoleEnum role;

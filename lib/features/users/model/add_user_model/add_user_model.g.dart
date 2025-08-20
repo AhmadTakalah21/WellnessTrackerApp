@@ -11,7 +11,7 @@ AddUserModel _$AddUserModelFromJson(Map<String, dynamic> json) => AddUserModel(
       email: json['email'] as String?,
       password: json['password'] as String?,
       phone: json['phone'] as String?,
-      role: UserRoleEnum.fromJson(json['role'] as String),
+      role: DepartmentEnum.fromJson2(json['role'] as String),
     );
 
 Map<String, dynamic> _$AddUserModelToJson(AddUserModel instance) =>
@@ -20,5 +20,5 @@ Map<String, dynamic> _$AddUserModelToJson(AddUserModel instance) =>
       'email': instance.email,
       'password': instance.password,
       'phone': instance.phone,
-      'role': UserRoleEnum.toJson(instance.role),
+      'role': DepartmentEnum.toJson2(instance.role),
     };

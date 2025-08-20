@@ -51,13 +51,7 @@ abstract class Utils {
       if (!emailRegex.hasMatch(val)) {
         return 'email_invalid'.tr();
       }
-    } else if (type == InputTextType.phone) {
-      if (val.length != 10) {
-        return 'phone_number_10_digits'.tr();
-      } else if (!val.startsWith('09')) {
-        return 'phone_number_start_09'.tr();
-      }
-    } else if (type == InputTextType.password) {
+    }  else if (type == InputTextType.password) {
       if (val.length < 8) {
         return 'password_8_chars'.tr();
       }

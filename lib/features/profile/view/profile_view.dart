@@ -8,6 +8,7 @@ import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
@@ -118,20 +119,35 @@ class _ProfilePageState extends State<ProfilePage>
                   } else if (state is ProfileSuccess) {
                     final profile = state.customer;
                     final info = profile.info;
+                    final initialImage = CircleAvatar(
+                      radius: 48,
+                      backgroundColor:
+                          context.cs.primary.withValues(alpha: 0.7),
+                      child: Icon(
+                        Icons.person,
+                        color: context.cs.secondary.withValues(alpha: 0.7),
+                        size: 45,
+                      ),
+                    );
                     return Column(
                       children: [
                         Center(
-                          child: CircleAvatar(
-                            radius: 48,
-                            backgroundColor:
-                                context.cs.primary.withValues(alpha: 0.7),
-                            child: Icon(
-                              Icons.person,
-                              color:
-                                  context.cs.secondary.withValues(alpha: 0.7),
-                              size: 45,
-                            ),
-                          ),
+                          child: profile.image != null
+                              ? AppImageWidget(
+                                  url: profile.image!,
+                                  width: 95,
+                                  height: 95,
+                                  borderRadius: AppConstants.borderRadiusCircle,
+                                  backgroundColor:
+                                      context.cs.primary.withValues(alpha: 0.7),
+                                  errorWidget: Icon(
+                                    Icons.person,
+                                    color: context.cs.secondary
+                                        .withValues(alpha: 0.7),
+                                    size: 45,
+                                  ),
+                                )
+                              : initialImage,
                         ),
                         const SizedBox(height: 12),
                         Center(
@@ -170,20 +186,20 @@ class _ProfilePageState extends State<ProfilePage>
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _InfoCard(
-                                label: 'weight',
+                                label: 'weight'.tr(),
                                 value: info.weight.toString(),
                                 unit: 'Kg',
                               ),
                               _InfoCard(
-                                label: 'Height',
+                                label: 'height'.tr(),
                                 value: info.length.toString(),
                                 unit: 'cm',
                               ),
                               _InfoCard(
-                                label: 'Age',
-                                value:
-                                    info.age?.toString() ?? "not_provided".tr(),
-                                unit: 'Year',
+                                label: 'age'.tr(),
+                                value: profile.age?.toString() ??
+                                    "not_provided".tr(),
+                                unit: 'year'.tr(),
                               ),
                             ],
                           ),
@@ -251,7 +267,7 @@ class _InfoCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  '$value$unit',
+                  '$value $unit',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

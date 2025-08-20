@@ -8,7 +8,6 @@ import 'package:wellnesstrackerapp/features/users/service/users_service.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
-import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'states/users_state.dart';
 part 'states/general_users_state.dart';
@@ -49,7 +48,7 @@ class UsersCubit extends Cubit<GeneralUsersState> {
     addUserModel = addUserModel.copyWith(phone: () => phone);
   }
 
-  void setRole(UserRoleEnum? role) {
+  void setRole(DepartmentEnum? role) {
     addUserModel = addUserModel.copyWith(role: () => role);
   }
 

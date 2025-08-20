@@ -10,11 +10,14 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
     CustomerModel(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
+      age: (json['age'] as num?)?.toInt(),
       email: json['email'] as String,
       phone: json['phone'] as String?,
       gender: GenderEnum.nullableFromJson(json['gender'] as String?),
       birthday: json['birthday'] as String?,
       status: json['status'] as String,
+      image: JsonUtils.setImageUrlNullableFromJson(
+          JsonUtils.readValue(json, 'image') as Map<String, dynamic>),
       role: UserRoleEnum.fromJson(json['role'] as String),
       info: json['information'] == null
           ? null
@@ -35,11 +38,13 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'age': instance.age,
       'email': instance.email,
       'phone': instance.phone,
       'gender': GenderEnum.nullableToJson(instance.gender),
       'birthday': instance.birthday,
       'status': instance.status,
+      'image': instance.image,
       'role': UserRoleEnum.toJson(instance.role),
       'information': instance.info,
       'subscription': instance.subscription,

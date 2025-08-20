@@ -10,7 +10,8 @@ enum UserRoleEnum implements DropDownItemModel {
   user,
   doctor,
   coach,
-  dietitian;
+  dietitian,
+  psychologist;
 
   @override
   String get displayName => name.tr();
@@ -22,16 +23,18 @@ enum UserRoleEnum implements DropDownItemModel {
 
   String get getApiRoute {
     switch (this) {
-      case UserRoleEnum.admin:
+      case admin:
         return "admin";
-      case UserRoleEnum.user:
+      case user:
         return "users";
-      case UserRoleEnum.doctor:
+      case doctor:
         return "doctor";
-      case UserRoleEnum.coach:
+      case coach:
         return "coach";
-      case UserRoleEnum.dietitian:
+      case dietitian:
         return "dietitian";
+      case psychologist:
+        return "psychologist";
     }
   }
 
@@ -40,6 +43,7 @@ enum UserRoleEnum implements DropDownItemModel {
   bool get isDietitian => this == dietitian;
   bool get isCoach => this == coach;
   bool get isDoctor => this == doctor;
+  bool get isPsychologist => this == psychologist;
 
   List<UserViewOnPermissionModel> get getPermissions {
     switch (this) {
@@ -232,22 +236,45 @@ enum UserRoleEnum implements DropDownItemModel {
             color: Colors.black,
           ),
         ];
+      case psychologist:
+        return [
+          UserViewOnPermissionModel(
+            title: "customers_administration",
+            icon: Icons.admin_panel_settings,
+            screen: CustomersRoute(role: this),
+            color: Colors.red,
+          ),
+          UserViewOnPermissionModel(
+            title: "notifications",
+            icon: FontAwesomeIcons.bell,
+            screen: NotificationsRoute(role: this),
+            color: Colors.green,
+          ),
+          UserViewOnPermissionModel(
+            title: "settings",
+            icon: Icons.settings,
+            screen: SettingsRoute(role: this),
+            color: Colors.black,
+          ),
+        ];
     }
   }
 
   @override
   String get displayEntityName {
     switch (this) {
-      case UserRoleEnum.dietitian:
+      case dietitian:
         return "nutrition".tr();
-      case UserRoleEnum.coach:
+      case coach:
         return "sport".tr();
-      case UserRoleEnum.doctor:
+      case doctor:
         return "medicine".tr();
-      case UserRoleEnum.admin:
+      case admin:
         return "admin".tr();
-      case UserRoleEnum.user:
+      case user:
         return "user".tr();
+      case psychologist:
+        return "psychology".tr();
     }
   }
 

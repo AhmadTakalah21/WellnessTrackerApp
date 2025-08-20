@@ -151,7 +151,7 @@ class _LevelsPageState extends State<LevelsPage>
                   tabController: tabController,
                   onTapSelected: onTabSelected,
                   selectedTab: selectedTab,
-                  isScrollable: false,
+                  tabAlignment: TabAlignment.center,
                 ),
                 Expanded(
                   child: PageView.builder(

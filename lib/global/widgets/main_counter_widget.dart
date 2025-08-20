@@ -9,17 +9,19 @@ class MainCounterWidget extends StatefulWidget {
     super.key,
     required this.label,
     required this.icon,
-    this.minCount,
+    this.minCount = 0,
     required this.onChanged,
     this.maxCount,
     this.initialCount,
+    this.isRequired = true,
   });
   final void Function(int value) onChanged;
   final int? initialCount;
-  final int? minCount;
+  final int minCount;
   final int? maxCount;
   final String label;
   final IconData icon;
+  final bool isRequired;
 
   @override
   State<MainCounterWidget> createState() => _MainCounterWidgetState();
@@ -28,15 +30,12 @@ class MainCounterWidget extends StatefulWidget {
 class _MainCounterWidgetState extends State<MainCounterWidget> {
   late final TextEditingController controller;
   late int counter;
-  // late final controller = TextEditingController(
-  //     text: widget.initialCount?.toString() ?? widget.minCount?.toString());
-  // late int counter = widget.initialCount ?? widget.minCount ?? 0;
 
   @override
   void initState() {
     super.initState();
-    counter = widget.initialCount ?? widget.minCount ?? 0;
-    controller = TextEditingController(text: counter.toString());
+    counter = widget.initialCount ?? widget.minCount;
+    controller = TextEditingController(text: widget.initialCount?.toString());
 
     controller.addListener(_onTextChanged);
   }
@@ -49,8 +48,8 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
     if (value != null) {
       var newValue = value;
 
-      if (widget.minCount != null && newValue < widget.minCount!) {
-        newValue = widget.minCount!;
+      if (newValue < widget.minCount) {
+        newValue = widget.minCount;
       }
       if (widget.maxCount != null && newValue > widget.maxCount!) {
         newValue = widget.maxCount!;
@@ -63,8 +62,6 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
     }
   }
 
-
-
   void onIncreaseTap() {
     if (widget.maxCount != null && counter == widget.maxCount!) return;
     setState(() => counter++);
@@ -73,21 +70,36 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
   }
 
   void onDecreaseTap() {
-    if (widget.minCount != null && counter <= widget.minCount!) return;
+    if (counter <= widget.minCount) return;
     setState(() => counter--);
     controller.text = counter.toString();
     widget.onChanged(counter);
-
-    // if (counter != (widget.minCount ?? 0)) {
-    //   setState(() {
-    //     counter--;
-    //   });
-    // }
-    // controller.text = counter.toString();
-    // widget.onChanged(counter);
   }
 
-   @override
+  String? requiredValueValidator(String? val) {
+    if (val == null || val.isEmpty || int.tryParse(val) == null) {
+      return "required".tr();
+    } else if (int.parse(val) < widget.minCount ||
+        (widget.maxCount != null && int.parse(val) > widget.maxCount!)) {
+      return "invalid_value".tr();
+    } else {
+      return null;
+    }
+  }
+
+  String? optionalValueValidator(String? val) {
+    if (val != null && val.isNotEmpty || int.tryParse(val!) != null) {
+      if (int.parse(val) < widget.minCount ||
+          (widget.maxCount != null && int.parse(val) > widget.maxCount!)) {
+        return "invalid_value".tr();
+      }
+      return null;
+    } else {
+      return null;
+    }
+  }
+
+  @override
   void dispose() {
     controller.dispose();
     super.dispose();
@@ -117,13 +129,20 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
           ),
         ],
       ),
-      // validator: (val) => val == null || val == '0' ? "required".tr() : null,
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      validator: (val) =>
-          val == null || val.isEmpty || int.tryParse(val) == null
-              ? "required".tr()
-              : null,
+      validator:
+          widget.isRequired ? requiredValueValidator : optionalValueValidator,
+      // validator: (val) {
+      //   if (val == null || val.isEmpty || int.tryParse(val) == null) {
+      //     return "required".tr();
+      //   } else if (int.parse(val) < widget.minCount ||
+      //       (widget.maxCount != null && int.parse(val) > widget.maxCount!)) {
+      //     return "invalid_value".tr();
+      //   } else {
+      //     return null;
+      //   }
+      // },
     );
   }
 }

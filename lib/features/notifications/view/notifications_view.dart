@@ -149,15 +149,12 @@ class _NotificationsPageState extends State<NotificationsPage>
                       controller: pageController,
                       onPageChanged: onTabSelected,
                       itemCount: tabBarTitles.length,
-                      itemBuilder: (context, index) => Padding(
-                        padding: AppConstants.paddingH20,
-                        child: KeepAliveWidget(
-                            child: _buildNotifications(
-                          notifs,
-                          state.isLoadingMore,
-                          state.hasMore,
-                        )),
-                      ),
+                      itemBuilder: (context, index) => KeepAliveWidget(
+                          child: _buildNotifications(
+                        notifs,
+                        state.isLoadingMore,
+                        state.hasMore,
+                      )),
                     ),
                   ),
                 ],
@@ -194,7 +191,7 @@ class _NotificationsPageState extends State<NotificationsPage>
       onRefresh: onRefresh,
       child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        padding: AppConstants.paddingH2,
+        padding: AppConstants.paddingH20,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
