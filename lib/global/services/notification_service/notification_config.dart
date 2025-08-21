@@ -1,8 +1,7 @@
-// ignore: file_names
-//import 'dart:convert';
+import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,68 +10,69 @@ Future<void> backgroundHandler(RemoteMessage message) async {}
 
 @singleton
 class NotaficationsService {
-  //final localNotification = FlutterLocalNotificationsPlugin();
+  final localNotification = FlutterLocalNotificationsPlugin();
 
-  // bool? _isInitialized = false;
-  // bool? get isInitialized => _isInitialized;
-  // Future<void> initLocalNotifications() async {
-  //   if (_isInitialized == true) return;
-  //   const initSettingsAndroid =
-  //   AndroidInitializationSettings('@mipmap/launcher_icon');
+  bool? _isInitialized = false;
+  bool? get isInitialized => _isInitialized;
+  Future<void> initLocalNotifications() async {
+    if (_isInitialized == true) return;
+    const initSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/launcher_icon');
 
-  //   const initSettingsIOS = DarwinInitializationSettings(
-  //     requestAlertPermission: true,
-  //     requestBadgePermission: true,
-  //     requestSoundPermission: true,
-  //   );
+    const initSettingsIOS = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
 
-  //   const initSettings = InitializationSettings(
-  //     android: initSettingsAndroid,
-  //     iOS: initSettingsIOS,
-  //   );
+    const initSettings = InitializationSettings(
+      android: initSettingsAndroid,
+      iOS: initSettingsIOS,
+    );
 
-  //   _isInitialized = await localNotification.initialize(
-  //     initSettings,
-  //     onDidReceiveNotificationResponse: _onLocalNotificationTap,
-  //   );
-  // }
+    _isInitialized = await localNotification.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: _onLocalNotificationTap,
+    );
+  }
 
-  // NotificationDetails notificationDetails() {
-  //   return const NotificationDetails(
-  //       android: AndroidNotificationDetails(
-  //         'daily_channel_id',
-  //         "Daily notifications",
-  //         channelDescription: "Daily description channel",
-  //         importance: Importance.max,
-  //         priority: Priority.high,
-  //       ),
-  //       iOS: DarwinNotificationDetails());
-  // }
+  NotificationDetails notificationDetails() {
+    return const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'daily_channel_id',
+        "Daily notifications",
+        channelDescription: "Daily description channel",
+        importance: Importance.max,
+        priority: Priority.high,
+      ),
+      iOS: DarwinNotificationDetails(),
+    );
+  }
 
-  // Future<void> showNotification({
-  //   int id = 0,
-  //   String? title,
-  //   String? body,
-  //   String? payload,
-  // }) async {
-  //   return localNotification.show(
-  //     id,
-  //     title,
-  //     body,
-  //     notificationDetails(),
-  //     payload: payload,
-  //   );
-  // }
+  Future<void> showNotification({
+    int id = 0,
+    String? title,
+    String? body,
+    String? payload,
+  }) async {
+    return localNotification.show(
+      id,
+      title,
+      body,
+      notificationDetails(),
+      payload: payload,
+    );
+  }
 
-  // void _onLocalNotificationTap(NotificationResponse response) async {
-  //   // _handleNavigations(response.payload);
-  // }
+  void _onLocalNotificationTap(NotificationResponse response) async {
+    // _handleNavigations(response.payload);
+  }
 
   Future<void> initialize() async {
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     await firebaseMessaging.subscribeToTopic("wellness-tracker-app-d8def");
 
-    //initLocalNotifications();
+    initLocalNotifications();
 
     final fcmToken = await FirebaseMessaging.instance.getToken();
     final prefs = await SharedPreferences.getInstance();
@@ -108,12 +108,12 @@ class NotaficationsService {
   void _handleForegroundMessage(RemoteMessage message) {
     final notification = message.notification;
     if (notification != null) {
-      // showNotification(
-      //   title: notification.title,
-      //   body: notification.body,
-      //   //payload: notification.title,
-      //   payload: jsonEncode({'target': notification.title}),
-      // );
+      showNotification(
+        title: notification.title,
+        body: notification.body,
+        //payload: notification.title,
+        payload: jsonEncode({'target': notification.title}),
+      );
     }
   }
 }

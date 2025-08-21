@@ -41,11 +41,11 @@ android {
     }
 
     defaultConfig {
+        multiDexEnabled = true
         applicationId = "com.MedFit.wellnesstrackerapp"
 
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-
 
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -69,5 +69,5 @@ flutter {
 }
 
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 }

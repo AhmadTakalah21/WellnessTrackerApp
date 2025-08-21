@@ -1,7 +1,13 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/mixins/post_frame_mixin.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
+import 'package:wellnesstrackerapp/global/services/notification_service/notification_config.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
@@ -24,6 +30,8 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin, PostFrameMixin {
+  StreamSubscription<List<ConnectivityResult>>? subscription;
+
   late AnimationController _controller;
   late Animation<double> _fadeInAnimation;
   late Animation<double> _scaleAnimation;
@@ -31,6 +39,18 @@ class _SplashPageState extends State<SplashPage>
   @override
   void initState() {
     super.initState();
+
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> results) async {
+      if (results.isNotEmpty && !results.contains(ConnectivityResult.none)) {
+        if (kDebugMode) print("Internet is back 🟢");
+        await get<NotaficationsService>().initialize();
+      } else {
+        if (kDebugMode) print("Lost internet 🔴");
+      }
+    });
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
