@@ -9,8 +9,14 @@ final class ItemsLoading extends ItemsState {}
 
 final class ItemsSuccess extends ItemsState {
   final List<ItemModel> items;
+  final bool isLoadingMore;
+  final bool hasMore;
 
-  ItemsSuccess(this.items);
+  ItemsSuccess(
+    this.items, {
+    this.isLoadingMore = false,
+    this.hasMore = true,
+  });
 }
 
 final class ItemsEmpty extends ItemsState {

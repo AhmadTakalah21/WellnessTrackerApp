@@ -181,30 +181,44 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
           if (state is ItemsLoading) {
             return LoadingIndicator();
           } else if (state is ItemsSuccess) {
-            return NotificationListener<ScrollNotification>(
-              onNotification: onNotification,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: onRefresh,
-                      child: GridView.builder(
-                        padding: AppConstants.padding8,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: state.items.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, childAspectRatio: 0.75),
-                        itemBuilder: (context, index) {
-                          final item = state.items[index];
-                          return ItemTile(item: item, role: role, onTap: onTap);
-                        },
+            return Column(
+              children: [
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: onRefresh,
+                    notificationPredicate: onNotification,
+                    child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          GridView.builder(
+                            padding: AppConstants.padding8,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: state.items.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2, childAspectRatio: 0.75),
+                            itemBuilder: (context, index) {
+                              final item = state.items[index];
+                              return ItemTile(
+                                item: item,
+                                role: role,
+                                onTap: onTap,
+                              );
+                            },
+                          ),
+                          if (state.isLoadingMore) LoadingIndicator(),
+                          if (state.items.length < 7)
+                            SizedBox(height: (7 - state.items.length) * 100.0),
+                          SizedBox(height: widget.role.isUser ? 110 : 40)
+                        ],
                       ),
                     ),
                   ),
-                  SizedBox(height: widget.role.isUser ? 100 : 40)
-                ],
-              ),
+                ),
+              ],
             );
           } else if (state is ItemsEmpty) {
             return MainErrorWidget(

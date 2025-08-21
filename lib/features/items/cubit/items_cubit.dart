@@ -86,13 +86,20 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     bool isLoadMore = true,
     int? levelId,
   }) async {
-    if (!hasMore && isLoadMore) return;
+    if (!hasMore && isLoadMore) {
+      emit(ItemsSuccess(items, hasMore: false));
+      return;
+    }
     if (!isLoadMore) {
       page = 1;
       hasMore = true;
       items.clear();
     }
-    emit(ItemsLoading());
+    if (items.isEmpty) {
+      emit(ItemsLoading());
+    } else {
+      emit(ItemsSuccess(items, isLoadingMore: true));
+    }
     try {
       if (isClosed) return;
       final newItems = await itemService.getItems(

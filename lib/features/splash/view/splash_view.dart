@@ -26,8 +26,6 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin, PostFrameMixin {
-  //StreamSubscription<List<ConnectivityResult>>? subscription;
-
   late AnimationController _controller;
   late Animation<double> _fadeInAnimation;
   late Animation<double> _scaleAnimation;
