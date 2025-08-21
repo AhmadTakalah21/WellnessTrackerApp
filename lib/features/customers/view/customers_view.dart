@@ -131,13 +131,19 @@ class CustomersPageState extends State<CustomersPage>
   @override
   void onLongPress(CustomerModel customer) {
     if (customersCubit.isSelected(customer)) {
-      var onAssignPlan = onAssignDietPlan;
+      void Function()? onAssignPlan = onAssignDietPlan;
       String text = "assign_diet_plan";
-      if (widget.role.isDietitian) {
+      if (widget.role.isAdmin) {
+        onAssignPlan = null;
+      } else if (widget.role.isDietitian) {
       } else if (widget.role.isCoach) {
         onAssignPlan = onAssignExercisePlan;
         text = "assign_exercise_plan";
-      } else if (widget.role.isDoctor) {}
+      } else if (widget.role.isDoctor) {
+        onAssignPlan = null;
+      } else if (widget.role.isPsychologist) {
+        onAssignPlan = null;
+      }
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -218,6 +224,19 @@ class CustomersPageState extends State<CustomersPage>
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
     bool isAdmin = widget.role.isAdmin;
+    final titles = [
+      '#',
+      'name'.tr(),
+      'email'.tr(),
+      'phone'.tr(),
+      if (isAdmin && widget.user == null) ...[
+        'dietitian'.tr(),
+        'coach'.tr(),
+        'doctor'.tr(),
+      ],
+      'status'.tr(),
+      'event'.tr(),
+    ];
     return Scaffold(
       appBar: AppBar(title: Text('customers_administration'.tr())),
       backgroundColor: context.cs.surface,
@@ -239,28 +258,14 @@ class CustomersPageState extends State<CustomersPage>
                       child: Column(
                         children: [
                           MainDataTable<CustomerModel>(
-                            //titles: CustomerModel.titles,
-                            titles: [
-                              '#',
-                              'name'.tr(),
-                              'email'.tr(),
-                              'phone'.tr(),
-                              if (isAdmin && widget.user == null) ...[
-                                'dietitian'.tr(),
-                                'coach'.tr(),
-                                'doctor'.tr(),
-                              ],
-                              'status'.tr(),
-                              'event'.tr(),
-                            ],
+                            titles: titles,
                             items: state.customers,
                             onPageChanged: onSelectPageTap,
                             emptyMessage: state.emptyMessage,
                             onEditTap: onEditTap,
                             onDeleteTap: isAdmin ? onDeleteTap : null,
                             onSearchChanged: onSearchChanged,
-                            onSelected:
-                                !widget.role.isAdmin ? onSelected : null,
+                            onSelected: onSelected,
                             checkSelected: customersCubit.isSelected,
                             onLongPress: onLongPress,
                             searchHint: 'search_customer',

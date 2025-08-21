@@ -6,14 +6,14 @@ import 'package:wellnesstrackerapp/global/utils/constants.dart';
 class AdditionalCustomerOptionsWidget extends StatelessWidget {
   const AdditionalCustomerOptionsWidget({
     super.key,
-    required this.onAddPoints,
     required this.assignPlanText,
-    required this.onAssignPlan,
+    this.onAddPoints,
+    this.onAssignPlan,
   });
 
-  final void Function() onAddPoints;
+  final void Function()? onAddPoints;
+  final void Function()? onAssignPlan;
   final String assignPlanText;
-  final void Function() onAssignPlan;
 
   @override
   Widget build(BuildContext context) {
@@ -32,26 +32,28 @@ class AdditionalCustomerOptionsWidget extends StatelessWidget {
                     style: context.tt.headlineMedium,
                   ),
                 ),
-                TextButton.icon(
-                  icon: Icon(Icons.add_circle_outline),
-                  onPressed: onAddPoints,
-                  label: Text(
-                    "add_points".tr(),
-                    style: context.tt.titleMedium?.copyWith(
-                      color: context.cs.primary,
+                if (onAddPoints != null)
+                  TextButton.icon(
+                    icon: Icon(Icons.add_circle_outline),
+                    onPressed: onAddPoints,
+                    label: Text(
+                      "add_points".tr(),
+                      style: context.tt.titleMedium?.copyWith(
+                        color: context.cs.primary,
+                      ),
                     ),
                   ),
-                ),
-                TextButton.icon(
-                  icon: Icon(Icons.edit),
-                  onPressed: onAssignPlan,
-                  label: Text(
-                    assignPlanText.tr(),
-                    style: context.tt.titleMedium?.copyWith(
-                      color: context.cs.primary,
+                if (onAssignPlan != null)
+                  TextButton.icon(
+                    icon: Icon(Icons.edit),
+                    onPressed: onAssignPlan,
+                    label: Text(
+                      assignPlanText.tr(),
+                      style: context.tt.titleMedium?.copyWith(
+                        color: context.cs.primary,
+                      ),
                     ),
                   ),
-                ),
                 SizedBox(height: 20),
               ],
             ),

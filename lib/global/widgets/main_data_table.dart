@@ -40,6 +40,7 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
     this.onSelected,
     this.onLongPress,
     this.checkSelected,
+    this.showCheckboxColumn = false,
   });
 
   final String? header;
@@ -50,6 +51,7 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
   final double bottomHeight;
   final List<Widget> filters;
   final List<Widget> customButtons;
+  final bool showCheckboxColumn;
   final void Function(String input)? onSearchChanged;
   final void Function(int page, int perPage) onPageChanged;
   final void Function(T item)? onLongPress;
@@ -149,7 +151,7 @@ class _MainDataTableState<T extends DataTableModel>
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-        showCheckboxColumn: false,
+        showCheckboxColumn: widget.showCheckboxColumn,
         dividerThickness: 1,
         headingRowColor: WidgetStatePropertyAll(context.cs.primary),
         border: TableBorder.all(width: 1),
@@ -204,7 +206,7 @@ class _MainDataTableState<T extends DataTableModel>
           return DataRow2(
             color: WidgetStatePropertyAll(
               widget.checkSelected?.call(item) ?? false
-                  ? context.cs.secondary.withValues(alpha: 0.4)
+                  ? context.cs.primary.withValues(alpha: 0.2)
                   : context.cs.surface,
             ),
             onLongPress: () => widget.onLongPress?.call(item),
