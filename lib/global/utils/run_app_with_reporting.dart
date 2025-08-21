@@ -10,33 +10,17 @@ import 'package:wellnesstrackerapp/features/app/app.dart';
 import 'package:wellnesstrackerapp/firebase_options.dart';
 import 'package:wellnesstrackerapp/global/blocs/app_bloc_observer.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
-//import 'package:wellnesstrackerapp/global/services/notification_service/notification_config.dart';
 
 Future<void> runAppWithReporting() async {
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       EasyLocalization.ensureInitialized();
-      await configureDependencies();
 
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-
-      // final subscription = Connectivity()
-      //     .onConnectivityChanged
-      //     .listen((List<ConnectivityResult> results) async {
-      //   print("internet results is $results");
-      //   print("hello in check internet");
-      //   if (results.isNotEmpty && !results.contains(ConnectivityResult.none)) {
-      //     print("hello with net");
-      //     await get<NotaficationsService>().initialize();
-      //     if (kDebugMode) print("Internet is back 🟢");
-      //   } else {
-      //     print("hello without net");
-      //     if (kDebugMode) print("Lost internet 🔴");
-      //   }
-      // });
+      await configureDependencies();
 
       final app = App();
 
@@ -44,7 +28,6 @@ Future<void> runAppWithReporting() async {
 
       Bloc.observer = AppBlocObserver();
       runApp(app);
-      // subscription.cancel();
     },
     (error, stackTrace) {
       debugPrint('runAppWithReporting error: $error');

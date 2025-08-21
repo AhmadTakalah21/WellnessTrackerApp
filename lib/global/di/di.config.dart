@@ -94,6 +94,8 @@ import 'package:wellnesstrackerapp/features/users/service/users_service.dart'
     as _i936;
 import 'package:wellnesstrackerapp/global/blocs/delete_cubit/cubit/delete_cubit.dart'
     as _i396;
+import 'package:wellnesstrackerapp/global/blocs/internet_connection/cubit/internet_connection_cubit.dart'
+    as _i447;
 import 'package:wellnesstrackerapp/global/blocs/share_cubit/cubit/share_cubit.dart'
     as _i476;
 import 'package:wellnesstrackerapp/global/blocs/upload_file_cubit/cubit/upload_file_cubit.dart'
@@ -132,6 +134,8 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i533.AppManagerCubit>(() => _i533.AppManagerCubit());
+    gh.singleton<_i447.InternetConnectionCubit>(
+        () => _i447.InternetConnectionCubit());
     gh.singleton<_i384.DioClient>(() => _i384.DioClient());
     gh.singleton<_i1023.NotaficationsService>(
         () => _i1023.NotaficationsService());
