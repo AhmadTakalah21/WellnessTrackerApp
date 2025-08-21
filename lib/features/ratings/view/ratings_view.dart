@@ -12,6 +12,7 @@ import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
 abstract class RatingsViewCallBacks {
+  bool onNotification(ScrollNotification scrollInfo);
   void onTryAgainTap();
   Future<void> onRefresh();
 }
@@ -43,14 +44,22 @@ class _RatingsPageState extends State<RatingsPage>
   @override
   void initState() {
     super.initState();
-    ratingsCubit.getRatings(page: 1, perPage: 100000);
+    ratingsCubit.getRatings();
+  }
+
+  @override
+  bool onNotification(ScrollNotification scrollInfo) {
+    if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+      ratingsCubit.getRatings();
+    }
+    return true;
   }
 
   @override
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => ratingsCubit.getRatings(page: 1, perPage: 100000);
+  void onTryAgainTap() => ratingsCubit.getRatings(isLoadMore: false);
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +71,10 @@ class _RatingsPageState extends State<RatingsPage>
           if (state is RatingsLoading) {
             return const Center(child: LoadingIndicator());
           } else if (state is RatingsSuccess) {
-            final ratings = state.ratings.data;
+            final ratings = state.ratings;
             return RefreshIndicator(
               onRefresh: onRefresh,
+              notificationPredicate: onNotification,
               child: SingleChildScrollView(
                 padding: AppConstants.padding20,
                 physics: BouncingScrollPhysics(),
@@ -72,7 +82,10 @@ class _RatingsPageState extends State<RatingsPage>
                   spacing: 20,
                   children: [
                     ...ratings.map((rate) => _buildRateTile(rate)),
-                    SizedBox(height: 100)
+                    if (state.isLoadingMore) LoadingIndicator(),
+                    if (!state.hasMore) MainErrorWidget(error: "no_more".tr()),
+                    if (ratings.length < 6)
+                      SizedBox(height: (6 - ratings.length) * 100.0),
                   ],
                 ),
               ),

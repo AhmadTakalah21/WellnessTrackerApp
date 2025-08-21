@@ -8,10 +8,15 @@ final class RatingsInitial extends RatingsState {}
 final class RatingsLoading extends RatingsState {}
 
 final class RatingsSuccess extends RatingsState {
-  final PaginatedModel<RatingModel> ratings;
-  final String? emptyMessage;
+  final List<RatingModel> ratings;
+  final bool isLoadingMore;
+  final bool hasMore;
 
-  RatingsSuccess(this.ratings, this.emptyMessage);
+  RatingsSuccess(
+    this.ratings, {
+    this.isLoadingMore = false,
+    this.hasMore = true,
+  });
 }
 
 final class RatingsEmpty extends RatingsState {
