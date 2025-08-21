@@ -70,6 +70,8 @@ class LevelsPageItem extends StatelessWidget {
                           onLongPress(context, level);
                         },
                       )),
+                  if (levels.length < 3)
+                    SizedBox(height: (3 - levels.length) * 200.0),
                   SizedBox(height: role.isUser ? 100 : 40),
                 ],
               ),

@@ -130,6 +130,7 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
             if (state is PointsGuidelinesLoading) {
               return LoadingIndicator();
             } else if (state is PointsGuidelinesSuccess) {
+              final data = state.pointsGuidelines.data;
               return RefreshIndicator(
                 onRefresh: onRefresh,
                 child: SingleChildScrollView(
@@ -137,12 +138,10 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...state.pointsGuidelines.data.map(
-                        (guideline) {
-                          return _buildTile(guideline);
-                        },
-                      ),
-                      SizedBox(height: 120),
+                      ...data.map((guideline) => _buildTile(guideline)),
+                      if (data.length < 10)
+                        SizedBox(height: (10 - data.length) * 80.0),
+                      if (widget.role.isUser) SizedBox(height: 120),
                     ],
                   ),
                 ),
