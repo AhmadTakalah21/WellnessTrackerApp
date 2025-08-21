@@ -30,6 +30,7 @@ class PointsCubit extends Cubit<GeneralPointsState> {
     setTitleEn(model?.title.en);
     setDescriptionAr(model?.description.ar);
     setDescriptionEn(model?.description.en);
+    setLink(model?.link);
     if (model != null) {
       setIsActive(model.isActive
           ? ActivityStatusEnum.active
@@ -55,6 +56,12 @@ class PointsCubit extends Cubit<GeneralPointsState> {
   void setDescriptionAr(String? desc) {
     descriptionModel = descriptionModel.copyWith(ar: () => desc);
     model = model.copyWith(description: () => descriptionModel);
+  }
+
+  void setLink(String? link) {
+    model = model.copyWith(
+      link: () => link,
+    );
   }
 
   void setIsActive(ActivityStatusEnum isActive) {
@@ -83,7 +90,7 @@ class PointsCubit extends Cubit<GeneralPointsState> {
     emit(AddPointsGuidelineLoading());
     try {
       if (isClosed) return;
-      await pointsService.addPointsGuideLine(model,id: id);
+      await pointsService.addPointsGuideLine(model, id: id);
       final isAdd = id == null;
       final message = isAdd
           ? "points_guideline_added".tr()

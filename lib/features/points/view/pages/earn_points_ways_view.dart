@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart';
 import 'package:wellnesstrackerapp/features/points/model/points_guideline_model/points_guideline_model.dart';
 import 'package:wellnesstrackerapp/features/points/view/widgets/add_points_guideline_widget.dart';
@@ -21,6 +22,7 @@ abstract class EarnPointsWaysViewCallBacks {
   void onTap(PointsGuidelineModel guideline);
   void onEditTap(PointsGuidelineModel guideline);
   void onDeleteTap(PointsGuidelineModel guideline);
+  Future<void> launchLink(String url);
   Future<void> onRefresh();
   void onTryAgainTap();
 }
@@ -58,6 +60,17 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
   }
 
   @override
+  Future<void> launchLink(String url) async {
+    final ok =
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    if (!ok && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('cannot_open_link'.tr())),
+      );
+    }
+  }
+
+  @override
   void onTap(PointsGuidelineModel guideline) {
     if (widget.role.isAdmin) {
       showModalBottomSheet(
@@ -71,6 +84,10 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
           onDeleteTap: onDeleteTap,
         ),
       );
+    } else {
+      if (guideline.link != null) {
+        launchLink(guideline.link!);
+      }
     }
   }
 

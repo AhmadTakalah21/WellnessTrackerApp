@@ -12,6 +12,7 @@ AddPointsGuidelineModel _$AddPointsGuidelineModelFromJson(
       title: json['title'] == null
           ? null
           : EnArAddModel.fromJson(json['title'] as Map<String, dynamic>),
+      link: json['link'] as String?,
       description: json['description'] == null
           ? null
           : EnArAddModel.fromJson(json['description'] as Map<String, dynamic>),
@@ -24,6 +25,7 @@ Map<String, dynamic> _$AddPointsGuidelineModelToJson(
         AddPointsGuidelineModel instance) =>
     <String, dynamic>{
       'description': instance.description?.toJson(),
+      'link': instance.link,
       'is_active': ActivityStatusEnum.toJson(instance.isActive),
       'title': instance.title.toJson(),
     };

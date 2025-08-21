@@ -13,12 +13,14 @@ part 'add_points_guideline_model.g.dart';
 class AddPointsGuidelineModel {
   const AddPointsGuidelineModel({
     EnArAddModel? title,
+    this.link,
     this.description,
     this.isActive = ActivityStatusEnum.active,
   }) : _title = title;
 
   final EnArAddModel? _title;
   final EnArAddModel? description;
+  final String? link;
 
   @JsonKey(
     name: "is_active",
@@ -29,11 +31,13 @@ class AddPointsGuidelineModel {
 
   AddPointsGuidelineModel copyWith({
     EnArAddModel? Function()? title,
+    String? Function()? link,
     EnArAddModel? Function()? description,
     ActivityStatusEnum? isActive,
   }) {
     return AddPointsGuidelineModel(
       title: title != null ? title() : _title,
+      link: link != null ? link() : this.link,
       description: description != null ? description() : this.description,
       isActive: isActive ?? this.isActive,
     );

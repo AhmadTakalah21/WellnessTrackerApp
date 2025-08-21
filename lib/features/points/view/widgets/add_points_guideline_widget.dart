@@ -104,6 +104,7 @@ class _AddPointsGuidelinePageState extends State<AddPointsGuidelinePage>
                   _buildNameArTextField(guideline),
                   _buildDescriptionEnTextField(guideline),
                   _buildDescriptionArTextField(guideline),
+                  _buildLinkTextField(guideline),
                   const SizedBox(height: 60),
                 ],
               ),
@@ -158,6 +159,15 @@ class _AddPointsGuidelinePageState extends State<AddPointsGuidelinePage>
         icon: Icons.description,
         validator: (val) =>
             val == null || val.isEmpty ? 'description_ar_required'.tr() : null,
+      );
+
+  Widget _buildLinkTextField(PointsGuidelineModel? guideline) => MainTextField2(
+        initialText: guideline?.link,
+        onChanged: widget.pointsCubit.setLink,
+        label: 'link'.tr(),
+        icon: Icons.link,
+        validator: (val) =>
+            val == null || val.isEmpty ? 'link_required'.tr() : null,
       );
 
   Widget _buildSubmitButton() => Padding(

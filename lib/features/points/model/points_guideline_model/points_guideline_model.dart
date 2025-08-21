@@ -15,6 +15,7 @@ class PointsGuidelineModel implements DeleteModel {
   const PointsGuidelineModel({
     required this.id,
     required this.isActive,
+    this.link,
     required this.title,
     required this.description,
   });
@@ -24,6 +25,8 @@ class PointsGuidelineModel implements DeleteModel {
   @BoolConverter()
   @JsonKey(name: "is_active")
   final bool isActive;
+
+  final String? link;
 
   final EnArModel title;
   final EnArModel description;

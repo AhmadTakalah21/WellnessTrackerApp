@@ -11,6 +11,7 @@ PointsGuidelineModel _$PointsGuidelineModelFromJson(
     PointsGuidelineModel(
       id: (json['id'] as num).toInt(),
       isActive: const BoolConverter().fromJson(json['is_active']),
+      link: json['link'] as String?,
       title: EnArModel.fromJson(json['title'] as Map<String, dynamic>),
       description:
           EnArModel.fromJson(json['description'] as Map<String, dynamic>),
@@ -21,6 +22,7 @@ Map<String, dynamic> _$PointsGuidelineModelToJson(
     <String, dynamic>{
       'id': instance.id,
       'is_active': const BoolConverter().toJson(instance.isActive),
+      'link': instance.link,
       'title': instance.title,
       'description': instance.description,
     };
