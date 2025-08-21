@@ -1,10 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:wellnesstrackerapp/global/utils/json_converters/bool_converter.dart';
+import 'package:wellnesstrackerapp/global/utils/json_utils.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 
 part 'notification_model.g.dart';
@@ -20,6 +20,7 @@ class NotificationModel implements DeleteModel {
     this.receiverId,
     this.sendAt,
     required this.isSent,
+    this.image,
     required this.received,
     required this.createdAt,
     required this.message,
@@ -29,16 +30,25 @@ class NotificationModel implements DeleteModel {
   final String title;
 
   final dynamic data; 
+
   @JsonKey(name: 'sender_id')
   final int? senderId;
+
   @JsonKey(name: 'receiver_id')
   final int? receiverId;
+
   @JsonKey(name: 'send_at')
   final String? sendAt;
 
   @BoolConverter()
   @JsonKey(name: 'is_sent')
   final bool isSent;
+
+  @JsonKey(
+    fromJson: JsonUtils.setImageUrlNullableFromJson,
+    readValue: JsonUtils.readValue,
+  )
+  final String? image;
 
   @BoolConverter()
   final bool received;

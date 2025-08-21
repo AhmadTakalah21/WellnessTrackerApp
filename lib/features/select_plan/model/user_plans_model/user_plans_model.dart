@@ -10,7 +10,6 @@ part 'user_plans_model.g.dart';
 @immutable
 class UserPlansModel {
   const UserPlansModel({required this.plans});
-
   final List<UserPlanModel> plans;
 
   factory UserPlansModel.fromString(String str) =>

@@ -10,6 +10,7 @@ import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_add_floating_button.dart';
@@ -209,8 +210,44 @@ class _NotificationsPageState extends State<NotificationsPage>
   }
 
   List<Widget> _buildNotificationsList(List<NotificationModel> notifications) {
+    Widget initialImage = Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 12,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.green.shade100,
+        borderRadius: AppConstants.borderRadius5,
+      ),
+      child: Icon(
+        Icons.account_balance_wallet,
+        size: 24,
+        color: Colors.green,
+      ),
+    );
     return List.generate(notifications.length, (index) {
       final notification = notifications[index];
+      Widget image;
+      if (notification.image == null) {
+        image = Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          child: AppImageWidget(
+            url: "notification.image!",
+            width: 48,
+            height: 48,
+            borderRadius: AppConstants.borderRadius5,
+            backgroundColor: Colors.green.shade100,
+            errorWidget: Icon(
+              Icons.account_balance_wallet,
+              size: 24,
+              color: Colors.green,
+            ),
+          ),
+        );
+      } else {
+        image = initialImage;
+      }
       return Card(
         color: Colors.white,
         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -219,22 +256,7 @@ class _NotificationsPageState extends State<NotificationsPage>
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade100,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Icon(
-                  Icons.account_balance_wallet,
-                  size: 24,
-                  color: Colors.green,
-                ),
-              ),
+              image,
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
