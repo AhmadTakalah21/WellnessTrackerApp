@@ -7,4 +7,8 @@ part 'app_manager_state.dart';
 @singleton
 class AppManagerCubit extends Cubit<AppManagerState> {
   AppManagerCubit() : super(AppManagerInitial());
+
+  void emitBottomNavTabChanged(int index) {
+    emit(BottomNavTabChanged(index));
+  }
 }

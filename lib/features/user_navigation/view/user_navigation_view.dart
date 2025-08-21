@@ -1,7 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
+import 'package:motion_tab_bar/MotionTabBarController.dart';
+import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart';
 import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
@@ -37,7 +40,9 @@ class UserNavigationPage extends StatefulWidget {
 }
 
 class _UserNavigationPageState extends State<UserNavigationPage>
+    with SingleTickerProviderStateMixin
     implements UserNavigationViewCallbacks {
+  late MotionTabBarController controller;
   int currentIndex = 0;
   late final locale = context.locale;
   bool get isRtl => locale == SupportedLocales.arabic;
@@ -49,11 +54,23 @@ class _UserNavigationPageState extends State<UserNavigationPage>
   ];
 
   @override
+  void initState() {
+    super.initState();
+    controller = MotionTabBarController(length: tabs.length, vsync: this);
+  }
+
+  @override
   void onBottomTab(int currentIndex, TabsRouter tabsRouter) {
     tabsRouter.setActiveIndex(currentIndex);
     setState(() {
       this.currentIndex = currentIndex;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 
   @override
@@ -64,23 +81,31 @@ class _UserNavigationPageState extends State<UserNavigationPage>
     final rtlIcons = icons.reversed.toList();
 
     return AutoTabsScaffold(
-        routes: isRtl
-            ? [
-          ProfileRouter(),
-          DashboardRouter(),
-          AddsAndOffersRoute(role: UserRoleEnum.user),
-        ]
-            : [
-          AddsAndOffersRoute(role: UserRoleEnum.user),
-          DashboardRouter(),
-          ProfileRouter(),
-        ],
-        extendBody: true,
-        resizeToAvoidBottomInset: true,
-        bottomNavigationBuilder: (context, tabsRouter) {
-          return Container(
+      routes: isRtl
+          ? [
+              ProfileRouter(),
+              DashboardRouter(),
+              AddsAndOffersRoute(role: UserRoleEnum.user),
+            ]
+          : [
+              AddsAndOffersRoute(role: UserRoleEnum.user),
+              DashboardRouter(),
+              ProfileRouter(),
+            ],
+      extendBody: true,
+      resizeToAvoidBottomInset: true,
+      bottomNavigationBuilder: (context, tabsRouter) {
+        return BlocListener<AppManagerCubit, AppManagerState>(
+          listener: (context, state) {
+            if (state is BottomNavTabChanged) {
+              onBottomTab(state.index, tabsRouter);
+              controller.animateTo(state.index);
+            }
+          },
+          child: Container(
             decoration: BoxDecoration(
               color: context.cs.surface,
+              borderRadius: AppConstants.borderRadiusTlTr,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black12,
@@ -88,9 +113,9 @@ class _UserNavigationPageState extends State<UserNavigationPage>
                   offset: const Offset(0, -2),
                 )
               ],
-              borderRadius: AppConstants.borderRadiusTlTr,
             ),
             child: MotionTabBar(
+              controller: controller,
               labels: isRtl ? rtlLabels : labels,
               icons: isRtl ? rtlIcons : icons,
               initialSelectedTab: isRtl ? rtlLabels[1] : labels[1],
@@ -110,8 +135,9 @@ class _UserNavigationPageState extends State<UserNavigationPage>
                 onBottomTab(index, tabsRouter);
               },
             ),
-          );
-        },
-      );
+          ),
+        );
+      },
+    );
   }
 }
