@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart';
+import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
@@ -17,6 +18,10 @@ class AdvDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale == SupportedLocales.arabic;
+    final title = isArabic ? adv.title.ar : adv.title.en;
+    final description = isArabic ? adv.description.ar : adv.description.en;
+    final expDate = "${"exp_date".tr()}: ${adv.endDate}";
     return AlertDialog(
       contentPadding: AppConstants.padding16,
       content: SingleChildScrollView(
@@ -40,14 +45,15 @@ class AdvDetailsWidget extends StatelessWidget {
                     ),
                   ),
                   DecoratedBox(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(shape: BoxShape.circle),
                     child: Padding(
-                      padding: const EdgeInsets.all(2),
+                      padding: AppConstants.padding8,
                       child: InkWell(
                         onTap: () => onBack(context),
-                        child: const Icon(Icons.close),
+                        child: Icon(
+                          Icons.close,
+                          color: context.cs.onTertiary,
+                        ),
                       ),
                     ),
                   ),
@@ -55,27 +61,20 @@ class AdvDetailsWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 25),
-            if (adv.description.en != null && adv.description.en!.isNotEmpty)
-              Center(
-                child: Text(
-                  adv.description.en!,
-                  style: context.tt.titleMedium,
-                ),
-              ),
-            if (role.isAdmin) ...[
+            if (title != null && title.isNotEmpty) ...[
+              Center(child: Text(title, style: context.tt.titleLarge)),
               const SizedBox(height: 15),
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${"exp_date".tr()}: ${adv.endDate}",
-                      style: context.tt.titleLarge,
-                    ),
-                  ],
-                ),
-              ),
             ],
+            if (description != null && description.isNotEmpty) ...[
+              Center(child: Text(description, style: context.tt.titleSmall)),
+              const SizedBox(height: 15),
+            ],
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [Text(expDate, style: context.tt.titleLarge)],
+              ),
+            ),
             const SizedBox(height: 25),
           ],
         ),

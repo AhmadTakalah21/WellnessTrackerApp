@@ -14,6 +14,7 @@ import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/additional_options_bottom_sheet.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
@@ -202,10 +203,18 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
                                     crossAxisCount: 2, childAspectRatio: 0.75),
                             itemBuilder: (context, index) {
                               final item = state.items[index];
-                              return ItemTile(
-                                item: item,
-                                role: role,
-                                onTap: onTap,
+                              final fromRight = index.isEven;
+                              return TileSlideAnimation(
+                                index: index,
+                                beginOffset:
+                                    Offset(fromRight ? 0.25 : -0.25, 0),
+                                animationDuration: const Duration(seconds: 1),
+                                deley: 70,
+                                child: ItemTile(
+                                  item: item,
+                                  role: role,
+                                  onTap: onTap,
+                                ),
                               );
                             },
                           ),

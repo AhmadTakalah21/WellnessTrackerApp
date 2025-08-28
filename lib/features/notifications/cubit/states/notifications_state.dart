@@ -8,12 +8,14 @@ class NotificationsLoading extends NotificationsState {}
 class NotificationsSuccess extends NotificationsState {
   final List<NotificationModel> notifications;
   final bool isLoadingMore;
-  final bool hasMore;
+  final bool isError;
+  final String? message;
 
   NotificationsSuccess(
     this.notifications, {
     this.isLoadingMore = false,
-    this.hasMore = true,
+    this.isError = false,
+    this.message,
   });
 }
 

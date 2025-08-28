@@ -67,13 +67,14 @@ class _MainTextField2State extends State<MainTextField2> {
           const SizedBox(height: 10),
         ],
         TextFormField(
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           maxLines: widget.maxLines,
           inputFormatters: widget.inputFormatters,
           keyboardType: widget.keyboardType,
           initialValue: widget.initialText,
           controller: widget.controller,
           onChanged: widget.onChanged,
-          onTap: widget.onTap,              // ⬅️ يمرّر نداء النقر
+          onTap: widget.onTap,
           obscureText: isVisible,
           readOnly: widget.readOnly,
           style: context.tt.bodyMedium,
@@ -85,7 +86,7 @@ class _MainTextField2State extends State<MainTextField2> {
             hintStyle: TextStyle(color: Colors.grey[500]),
             floatingLabelBehavior: widget.floatingLabelBehavior,
             filled: true,
-            fillColor: context.cs.surfaceVariant,
+            fillColor: context.cs.surfaceContainerHighest,
             contentPadding:
             const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
             border: OutlineInputBorder(

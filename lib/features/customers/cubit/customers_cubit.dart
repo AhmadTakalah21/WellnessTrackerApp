@@ -5,11 +5,14 @@ import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/customers/model/add_points_model/add_points_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_meal_plan_model/assign_meal_plan_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_subscriber_model/assign_subscriber_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/customer_evaluation_model/customer_evaluation_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_info_model/customer_info_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/evaluate_customer_model/evaluate_customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/update_customer_info_model/update_customer_info_model.dart';
 import 'package:wellnesstrackerapp/features/customers/service/customers_service.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
+import 'package:wellnesstrackerapp/global/models/activity_status_enum.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
@@ -21,6 +24,8 @@ part 'states/assign_meal_plan_state.dart';
 //part 'states/assign_exercise_plan_state.dart';
 part 'states/add_points_state.dart';
 part 'states/update_customer_info_state.dart';
+part 'states/evaluate_subscriber_state.dart';
+part 'states/subscriber_evaluation_state.dart';
 
 @injectable
 class CustomersCubit extends Cubit<GeneralCustomersState> {
@@ -34,11 +39,14 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   AssignSubscriberModel model = const AssignSubscriberModel();
   AddPointsModel addPointsModel = const AddPointsModel();
   AssignPlanModel assignPlanModel = const AssignPlanModel();
+  EvaluateCustomerModel evaluateCustomerModel = const EvaluateCustomerModel();
   List<int> userIds = [];
 
   UserModel? selectedDietitian;
   UserModel? selectedCoach;
   UserModel? selectedDoctor;
+
+  ActivityStatusEnum? status;
 
   String lastQuery = '';
   String? lastStatus;
@@ -109,6 +117,10 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     }
   }
 
+  void setActivityStatus(ActivityStatusEnum? status) {
+    this.status = status;
+  }
+
   void setLevelId(int? id) {
     model = model.copyWith(levelId: () => id);
   }
@@ -134,16 +146,41 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     assignPlanModel = assignPlanModel.copyWith(planId: () => planId);
   }
 
+  void setHealth(String? health) {
+    evaluateCustomerModel =
+        evaluateCustomerModel.copyWith(health: () => health);
+  }
+
+  void setPsychology(String? psychology) {
+    evaluateCustomerModel =
+        evaluateCustomerModel.copyWith(psychology: () => psychology);
+  }
+
+  void setBehavior(String? behavior) {
+    evaluateCustomerModel =
+        evaluateCustomerModel.copyWith(behavior: () => behavior);
+  }
+
+  void setPlansCount(int? plansCount) {
+    evaluateCustomerModel =
+        evaluateCustomerModel.copyWith(plansCount: () => plansCount);
+  }
+
   void clearUserIds() => userIds.clear();
 
   void resetAddPointsModel() {
     addPointsModel = const AddPointsModel();
   }
 
+  void resetEvaluateCustomerModel() {
+    evaluateCustomerModel = const EvaluateCustomerModel();
+  }
+
   void resetAssignSubscriberModel() {
     selectedDietitian = null;
     selectedCoach = null;
     selectedDoctor = null;
+    status = null;
     emit(SelectedSpecialistsState(
       selectedDietitian,
       selectedCoach,
@@ -248,6 +285,22 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     }
   }
 
+  Future<void> changeStatus(int id) async {
+    if (status == null) {
+      emit(AssignSubscriberFail("status_required".tr()));
+      return;
+    }
+    emit(AssignSubscriberLoading());
+    try {
+      if (isClosed) return;
+      await customerService.changeStatus(id, status!.name);
+      emit(AssignSubscriberSuccess("status_updated".tr()));
+    } catch (e) {
+      if (isClosed) return;
+      emit(AssignSubscriberFail(e.toString()));
+    }
+  }
+
   Future<void> addPoints(UserRoleEnum role) async {
     addPointsModel = addPointsModel.copyWith(subscribers: () => userIds);
     emit(AddPointsLoading());
@@ -284,6 +337,31 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     } catch (e) {
       if (isClosed) return;
       emit(AssignPlanFail(e.toString()));
+    }
+  }
+
+  Future<void> evaluateSubscriber(UserRoleEnum role, int id) async {
+    emit(EvaluateSubscriberLoading());
+    try {
+      if (isClosed) return;
+      await customerService.evaluateSubscriber(role, id, evaluateCustomerModel);
+      emit(EvaluateSubscriberSuccess("subscriber_evaluated".tr()));
+    } catch (e) {
+      if (isClosed) return;
+      emit(EvaluateSubscriberFail(e.toString()));
+    }
+  }
+
+  Future<void> getSubscriberEvaluation(UserRoleEnum role, int id) async {
+    emit(SubscriberEvaluationLoading());
+    try {
+      if (isClosed) return;
+      final evaluation =
+          await customerService.getSubscriberEvaluation(role, id);
+      emit(SubscriberEvaluationSuccess(evaluation));
+    } catch (e) {
+      if (isClosed) return;
+      emit(SubscriberEvaluationFail(e.toString()));
     }
   }
 }

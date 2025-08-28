@@ -148,12 +148,12 @@ enum UserRoleEnum implements DropDownItemModel {
             screen: ItemsRoute(role: this),
             color: Colors.greenAccent,
           ),
-          UserViewOnPermissionModel(
-            title: "notifications",
-            icon: FontAwesomeIcons.bell,
-            screen: NotificationsRoute(role: this),
-            color: Colors.green,
-          ),
+          // UserViewOnPermissionModel(
+          //   title: "notifications",
+          //   icon: FontAwesomeIcons.bell,
+          //   screen: NotificationsRoute(role: this),
+          //   color: Colors.green,
+          // ),
         ];
       case doctor:
         return [

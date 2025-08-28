@@ -105,6 +105,7 @@ class _MainTextFieldState extends State<MainTextField> {
           const SizedBox(height: 8),
         ],
         TextFormField(
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           controller: _controller,
           obscureText: widget.obscureText,
           readOnly: widget.readOnly,

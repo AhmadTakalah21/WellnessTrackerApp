@@ -19,12 +19,13 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
       if (results.isNotEmpty && !results.contains(ConnectivityResult.none)) {
         if (kDebugMode) print("Internet is back 🟢");
         await get<NotaficationsService>().initialize();
+        _subscription?.cancel();
       } else {
         if (kDebugMode) print("Lost internet 🔴");
       }
     });
   }
-  
+
   Future<bool> checkInternetConnection() async {
     bool isConnected = false;
     emit(CheckInternetLoading());
@@ -43,6 +44,10 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
       emit(CheckInternetFail(e.toString()));
     }
     return isConnected;
+  }
+
+  void closeSubscription() {
+    _subscription?.cancel();
   }
 
   @override

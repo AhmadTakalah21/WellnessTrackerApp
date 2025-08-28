@@ -10,6 +10,7 @@ import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/models/activity_status_enum.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -29,6 +30,7 @@ class TitleValueModel {
 abstract class ApproveCustomerViewCallBacks {
   void onDepartmentSelected(DepartmentEnum? department);
   void onEmployeeSelected(UserModel? employee);
+  void onActivityStatusSelected(ActivityStatusEnum? status);
   void onLevelSelected(LevelModel? level);
   void onCancelTap();
   void onSave();
@@ -52,9 +54,7 @@ class ApproveCustomerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(
-          value: customersCubit,
-        ),
+        BlocProvider.value(value: customersCubit),
         BlocProvider(create: (context) => get<UsersCubit>()),
         BlocProvider(create: (context) => get<LevelsCubit>()),
       ],
@@ -92,12 +92,21 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   @override
   void initState() {
     super.initState();
-    if (widget.customer.status != "active") {
+    if (widget.customer.subscription == null) {
       usersCubit.getUsers(perPage: 1000000);
       levelsCubit.getLevels(UserRoleEnum.admin, perPage: 1000000);
       widget.customersCubit.setUserId(widget.customer.id);
+    } else {
+      final status = widget.customer.status == "active"
+          ? ActivityStatusEnum.active
+          : ActivityStatusEnum.inactive;
+      widget.customersCubit.setActivityStatus(status);
     }
   }
+
+  @override
+  void onActivityStatusSelected(ActivityStatusEnum? status) =>
+      widget.customersCubit.setActivityStatus(status);
 
   @override
   void onDepartmentSelected(DepartmentEnum? department) {
@@ -113,15 +122,20 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
       widget.customersCubit.setLevelId(level?.id);
 
   @override
-  void onEmployeeSelected(UserModel? employee) {
-    widget.customersCubit.setEmployeeId(employee);
-  }
+  void onEmployeeSelected(UserModel? employee) =>
+      widget.customersCubit.setEmployeeId(employee);
 
   @override
   void onCancelTap() => context.router.pop();
 
   @override
-  void onSave() => widget.customersCubit.assignSubscriber();
+  void onSave() {
+    if (widget.customer.subscription == null) {
+      widget.customersCubit.assignSubscriber();
+    } else {
+      widget.customersCubit.changeStatus(widget.customer.id);
+    }
+  }
 
   @override
   void onTryAgainTap() {
@@ -147,16 +161,18 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
           children: [
             const SizedBox(height: 5),
             _buildSubscriberInfoTable(),
-            if (widget.customer.status != "active") ...[
-              const SizedBox(height: 10),
+            const SizedBox(height: 10),
+            if (widget.customer.subscription != null)
+              _buildActivityStatusDropDown(),
+            if (widget.customer.subscription == null) ...[
               _buildDepartmentsDropDown(),
               _buildUsersDropDown(),
               _buildSelectedEmployees(),
               _buildLevelsDropDown(),
-              const SizedBox(height: 10),
-              _buildSubmitButton(),
-              const SizedBox(height: 20),
-            ]
+            ],
+            const SizedBox(height: 10),
+            _buildSubmitButton(),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -201,11 +217,19 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
       children: data.map((entry) {
         return TableRow(
           children: [
-            Padding(
-              padding: AppConstants.padding12,
-              child: Text(entry.title.tr(), style: context.tt.titleMedium),
+            TableCell(
+              verticalAlignment: TableCellVerticalAlignment.middle,
+              child: Padding(
+                padding: AppConstants.padding12,
+                child: Text(
+                  entry.title.tr(),
+                  style: context.tt.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-            Center(
+            TableCell(
+              verticalAlignment: TableCellVerticalAlignment.middle,
               child: Padding(
                 padding: AppConstants.padding12,
                 child: Text(
@@ -220,6 +244,17 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
       }).toList(),
     );
   }
+
+  Widget _buildActivityStatusDropDown() => MainDropDownWidget(
+        items: ActivityStatusEnum.values,
+        prefixIcon: Icons.bar_chart,
+        hintText: 'status'.tr(),
+        labelText: 'status'.tr(),
+        onChanged: onActivityStatusSelected,
+        selectedValue: widget.customer.status == "active"
+            ? ActivityStatusEnum.active
+            : ActivityStatusEnum.inactive,
+      );
 
   Widget _buildDepartmentsDropDown() => MainDropDownWidget(
         items: DepartmentEnum.values,

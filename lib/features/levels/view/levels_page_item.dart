@@ -8,6 +8,7 @@ import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/additional_options_bottom_sheet.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
@@ -61,15 +62,18 @@ class LevelsPageItem extends StatelessWidget {
               child: Column(
                 spacing: 20,
                 children: [
-                  ...levels.map((level) => LevelItemWidget(
+                  ...levels.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final level = entry.value;
+                    return TileSlideAnimation(
+                      index: index,
+                      child: LevelItemWidget(
                         level: level,
-                        onTap: (level) {
-                          onTap(context, level);
-                        },
-                        onLongPress: (LevelModel level) {
-                          onLongPress(context, level);
-                        },
-                      )),
+                        onTap: (level) => onTap(context, level),
+                        onLongPress: (level) => onLongPress(context, level),
+                      ),
+                    );
+                  }),
                   if (levels.length < 3)
                     SizedBox(height: (3 - levels.length) * 200.0),
                   SizedBox(height: role.isUser ? 100 : 40),

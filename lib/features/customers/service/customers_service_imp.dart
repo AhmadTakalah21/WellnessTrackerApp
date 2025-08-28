@@ -96,4 +96,47 @@ class CustomersServiceImp implements CustomersService {
       rethrow;
     }
   }
+
+  @override
+  Future<void> changeStatus(int id, String status) async {
+    try {
+      final endpoint = "/v1/admin/subscriptions/change-status/$id";
+      await dio.post(endpoint, data: {"status": status});
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> evaluateSubscriber(
+    UserRoleEnum role,
+    int id,
+    EvaluateCustomerModel model,
+  ) async {
+    try {
+      final endpoint = "/v1/${role.getApiRoute}/subscriptions/evaluate/$id";
+      await dio.post(endpoint, data: model.toJson());
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CustomerEvaluationModel> getSubscriberEvaluation(
+    UserRoleEnum role,
+    int id,
+  ) async {
+    try {
+      final endpoint =
+          "/v1/${role.getApiRoute}/subscriptions/get-evaluation/$id";
+      final response = await dio.get(endpoint);
+      final data = response.data["data"] as Map<String, dynamic>;
+      return CustomerEvaluationModel.fromJson(data);
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
 }

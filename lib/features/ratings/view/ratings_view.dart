@@ -8,6 +8,7 @@ import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/extensions/date_x.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
@@ -81,7 +82,12 @@ class _RatingsPageState extends State<RatingsPage>
                 child: Column(
                   spacing: 20,
                   children: [
-                    ...ratings.map((rate) => _buildRateTile(rate)),
+                    ...ratings.asMap().entries.map((rating) {
+                      return TileSlideAnimation(
+                        index: rating.key,
+                        child: _buildRateTile(rating.value),
+                      );
+                    }),
                     if (state.isLoadingMore) LoadingIndicator(),
                     if (!state.hasMore) MainErrorWidget(error: "no_more".tr()),
                     if (ratings.length < 6)

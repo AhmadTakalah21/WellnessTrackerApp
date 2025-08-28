@@ -10,6 +10,7 @@ import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/keep_alive_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
@@ -19,7 +20,7 @@ import 'package:wellnesstrackerapp/global/widgets/main_tab_bar.dart';
 
 abstract class NotificationsViewCallBacks {
   void onAddTap();
-  void onTryAgainTap();
+  void onTryAgainTap(bool isLoadMore);
   bool onNotification(ScrollNotification scrollInfo);
   void onTabSelected(int index);
   Future<void> onRefresh();
@@ -90,17 +91,17 @@ class _NotificationsPageState extends State<NotificationsPage>
       builder: (bottomSheetContext) => AddNotificationView(
         notificationsCubit: notificationsCubit,
         role: widget.role,
-        onSuccess: onTryAgainTap,
+        onSuccess: () => onTryAgainTap(false),
       ),
     );
   }
 
   @override
-  Future<void> onRefresh() async => onTryAgainTap();
+  Future<void> onRefresh() async => onTryAgainTap(false);
 
   @override
-  void onTryAgainTap() =>
-      notificationsCubit.getNotifications(widget.role, isLoadMore: false);
+  void onTryAgainTap(bool isLoadMore) =>
+      notificationsCubit.getNotifications(widget.role, isLoadMore: isLoadMore);
 
   @override
   void dispose() {
@@ -127,12 +128,13 @@ class _NotificationsPageState extends State<NotificationsPage>
               final received = state.notifications
                   .where((element) => element.received)
                   .toList();
-              final notifs = selectedTab == 0 ? sent : received;
+              final notifications = selectedTab == 0 ? sent : received;
               if (widget.role.isUser) {
                 return _buildNotifications(
                   state.notifications,
                   state.isLoadingMore,
-                  state.hasMore,
+                  state.message,
+                  isError: state.isError,
                 );
               }
               return Column(
@@ -151,11 +153,19 @@ class _NotificationsPageState extends State<NotificationsPage>
                       onPageChanged: onTabSelected,
                       itemCount: tabBarTitles.length,
                       itemBuilder: (context, index) => KeepAliveWidget(
-                          child: _buildNotifications(
-                        notifs,
-                        state.isLoadingMore,
-                        state.hasMore,
-                      )),
+                        child: notifications.isEmpty
+                            ? MainErrorWidget(
+                                isRefresh: true,
+                                error: "no_notifications".tr(),
+                                onTryAgainTap: () => onTryAgainTap(false),
+                              )
+                            : _buildNotifications(
+                                notifications,
+                                state.isLoadingMore,
+                                state.message,
+                                isError: state.isError,
+                              ),
+                      ),
                     ),
                   ),
                 ],
@@ -164,12 +174,12 @@ class _NotificationsPageState extends State<NotificationsPage>
               return MainErrorWidget(
                 isRefresh: true,
                 error: state.message,
-                onTryAgainTap: onTryAgainTap,
+                onTryAgainTap: () => onTryAgainTap(false),
               );
             } else if (state is NotificationsFail) {
               return MainErrorWidget(
                 error: state.error,
-                onTryAgainTap: onTryAgainTap,
+                onTryAgainTap: () => onTryAgainTap(false),
               );
             } else {
               return SizedBox.shrink();
@@ -184,9 +194,10 @@ class _NotificationsPageState extends State<NotificationsPage>
 
   Widget _buildNotifications(
     List<NotificationModel> notifications,
-    bool isLoadingMore,
-    bool hasMore,
-  ) {
+    bool isLoadMore,
+    String? message, {
+    bool isError = false,
+  }) {
     return RefreshIndicator(
       notificationPredicate: onNotification,
       onRefresh: onRefresh,
@@ -197,9 +208,13 @@ class _NotificationsPageState extends State<NotificationsPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            ..._buildNotificationsList(notifications),
-            if (isLoadingMore) LoadingIndicator(),
-            if (!hasMore) MainErrorWidget(error: "no_more".tr()),
+            ..._buildNotificationsList(notifications, isLoadMore: isLoadMore),
+            if (isLoadMore) LoadingIndicator(),
+            if (message != null)
+              MainErrorWidget(
+                error: message,
+                onTryAgainTap: isError ? () => onTryAgainTap(true) : null,
+              ),
             if (notifications.length < 6)
               SizedBox(height: (6 - notifications.length) * 100.0),
             SizedBox(height: 70),
@@ -209,7 +224,10 @@ class _NotificationsPageState extends State<NotificationsPage>
     );
   }
 
-  List<Widget> _buildNotificationsList(List<NotificationModel> notifications) {
+  List<Widget> _buildNotificationsList(
+    List<NotificationModel> notifications, {
+    bool isLoadMore = false,
+  }) {
     Widget initialImage = Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.symmetric(
@@ -226,56 +244,73 @@ class _NotificationsPageState extends State<NotificationsPage>
         color: Colors.green,
       ),
     );
-    return List.generate(notifications.length, (index) {
-      final notification = notifications[index];
-      Widget image;
-      if (notification.image == null) {
-        image = Container(
-          margin: const EdgeInsets.only(bottom: 10),
-          child: AppImageWidget(
-            url: "notification.image!",
-            width: 48,
-            height: 48,
-            borderRadius: AppConstants.borderRadius5,
-            backgroundColor: Colors.green.shade100,
-            errorWidget: Icon(
-              Icons.account_balance_wallet,
-              size: 24,
-              color: Colors.green,
-            ),
-          ),
-        );
-      } else {
-        image = initialImage;
+
+    int offset = 0;
+    return notifications.asMap().entries.map((entry) {
+      final ind = entry.key;
+      if (ind + notificationsCubit.lastBatchLength <=
+          notifications.length - notificationsCubit.lastBatchLength) {
+        offset++;
       }
-      return Card(
-        color: Colors.white,
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              image,
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      notification.title,
-                      style: context.tt.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(notification.message, style: context.tt.bodyLarge)
-                  ],
-                ),
-              ),
-            ],
+      final notification = entry.value;
+      return TileSlideAnimation(
+        index: offset,
+        child: _buildNotificationTile(notification, initialImage),
+      );
+    }).toList();
+  }
+
+  Widget _buildNotificationTile(
+    NotificationModel notification,
+    Widget initialImage,
+  ) {
+    Widget image;
+    if (notification.image == null) {
+      image = Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        child: AppImageWidget(
+          url: "notification.image!",
+          width: 48,
+          height: 48,
+          borderRadius: AppConstants.borderRadius5,
+          backgroundColor: Colors.green.shade100,
+          errorWidget: Icon(
+            Icons.account_balance_wallet,
+            size: 24,
+            color: Colors.green,
           ),
         ),
       );
-    });
+    } else {
+      image = initialImage;
+    }
+    return Card(
+      color: Colors.white,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            image,
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    notification.title,
+                    style: context.tt.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(notification.message, style: context.tt.bodyLarge)
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

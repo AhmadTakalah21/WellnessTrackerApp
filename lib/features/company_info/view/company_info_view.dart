@@ -1,8 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
 import 'package:wellnesstrackerapp/features/company_info/view/widgets/update_company_info_widget.dart';
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
 import 'package:wellnesstrackerapp/features/settings/model/settings_model/settings_model.dart';
@@ -11,9 +13,19 @@ import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
+
+class IconTitleValueFunc {
+  final IconData icon;
+  final String title;
+  final String value;
+  final void Function()? onTap;
+
+  IconTitleValueFunc(this.icon, this.title, this.value, this.onTap);
+}
 
 abstract class CompanyInfoViewCallBacks {
   void onTryAgainTap();
@@ -140,6 +152,44 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
             return LoadingIndicator();
           } else if (state is SettingsSuccess) {
             final settings = state.settings;
+            final List<IconTitleValueFunc> items = [
+              IconTitleValueFunc(
+                Icons.account_circle,
+                'app_name',
+                settings.name,
+                null,
+              ),
+              IconTitleValueFunc(
+                Icons.android,
+                'android_url',
+                settings.appUrlAndroid ?? 'not_provided'.tr(),
+                () => onShareTap(settings.appUrlIos, "ios_url".tr()),
+              ),
+              IconTitleValueFunc(
+                Icons.apple,
+                'ios_url',
+                settings.appUrlIos ?? 'not_provided'.tr(),
+                () => onShareTap(settings.appUrlIos, "ios_url".tr()),
+              ),
+              IconTitleValueFunc(
+                Icons.email,
+                'support_email',
+                settings.email,
+                () => onLaunchEmailTap(settings.email),
+              ),
+              IconTitleValueFunc(
+                Icons.phone,
+                'support_phone',
+                settings.supportPhoneNumber,
+                () => onLaunchPhoneTap(settings.supportPhoneNumber),
+              ),
+              IconTitleValueFunc(
+                Icons.phone,
+                'phycological_support_phone',
+                settings.psychologicalPhoneNumber ?? 'not_provided'.tr(),
+                () => onLaunchPhoneTap(settings.psychologicalPhoneNumber),
+              ),
+            ];
             return Padding(
               padding: AppConstants.padding16,
               child: RefreshIndicator(
@@ -147,44 +197,19 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
                 child: ListView(
                   physics: BouncingScrollPhysics(),
                   children: [
-                    _buildInfoCard(
-                      icon: Icons.account_circle,
-                      title: 'app_name',
-                      value: settings.name,
-                    ),
-                    _buildInfoCard(
-                        icon: Icons.android,
-                        title: 'android_url',
-                        value: settings.appUrlAndroid ?? 'not_provided'.tr(),
-                        onTap: () => onShareTap(
-                            settings.appUrlAndroid, "android_url".tr())),
-                    _buildInfoCard(
-                        icon: Icons.apple,
-                        title: 'ios_url',
-                        value: settings.appUrlIos ?? 'not_provided'.tr(),
-                        onTap: () =>
-                            onShareTap(settings.appUrlIos, "ios_url".tr())),
-                    _buildInfoCard(
-                      icon: Icons.email,
-                      title: 'support_email',
-                      value: settings.email,
-                      onTap: () => onLaunchEmailTap(settings.email),
-                    ),
-                    _buildInfoCard(
-                      icon: Icons.phone,
-                      title: 'support_phone',
-                      value: settings.supportPhoneNumber,
-                      onTap: () =>
-                          onLaunchPhoneTap(settings.supportPhoneNumber),
-                    ),
-                    _buildInfoCard(
-                      icon: Icons.phone,
-                      title: 'phycological_support_phone',
-                      value: settings.psychologicalPhoneNumber ??
-                          'not_provided'.tr(),
-                      onTap: () =>
-                          onLaunchPhoneTap(settings.psychologicalPhoneNumber),
-                    ),
+                    ...items.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final item = entry.value;
+                      return TileSlideAnimation(
+                        index: index,
+                        child: _buildInfoCard(
+                          icon: item.icon,
+                          title: item.title,
+                          value: item.value,
+                          onTap: item.onTap,
+                        ),
+                      );
+                    }),
                     SizedBox(height: 150),
                   ],
                 ),

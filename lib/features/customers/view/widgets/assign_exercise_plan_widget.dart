@@ -28,14 +28,9 @@ abstract class AssignExercisePlanViewCallBacks {
 }
 
 class AssignExercisePlanView extends StatelessWidget {
-  const AssignExercisePlanView({
-    super.key,
-    required this.customersCubit,
-    required this.onSave,
-  });
+  const AssignExercisePlanView({super.key, required this.customersCubit});
 
   final CustomersCubit customersCubit;
-  final void Function() onSave;
 
   @override
   Widget build(BuildContext context) {
@@ -44,22 +39,14 @@ class AssignExercisePlanView extends StatelessWidget {
         BlocProvider.value(value: customersCubit),
         BlocProvider(create: (context) => get<ExercisePlansCubit>()),
       ],
-      child: AssignExercisePlanWidget(
-        customersCubit: customersCubit,
-        onSave: onSave,
-      ),
+      child: AssignExercisePlanWidget(customersCubit: customersCubit),
     );
   }
 }
 
 class AssignExercisePlanWidget extends StatefulWidget {
-  const AssignExercisePlanWidget({
-    super.key,
-    required this.customersCubit,
-    required this.onSave,
-  });
+  const AssignExercisePlanWidget({super.key, required this.customersCubit});
   final CustomersCubit customersCubit;
-  final void Function() onSave;
 
   @override
   State<AssignExercisePlanWidget> createState() =>
@@ -79,12 +66,12 @@ class _AssignExercisePlanWidgetState extends State<AssignExercisePlanWidget>
   @override
   void onAddExercisePlanTap() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddExercisePlanView(
-            exercisePlansCubit: exercisePlansCubit,
-          ),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            AddExercisePlanView(exercisePlansCubit: exercisePlansCubit),
+      ),
+    );
   }
 
   @override
@@ -106,13 +93,14 @@ class _AssignExercisePlanWidgetState extends State<AssignExercisePlanWidget>
   void onEditTap(ExercisePlanModel exercisePlan) {
     Navigator.pop(context);
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddExercisePlanView(
-            exercisePlansCubit: exercisePlansCubit,
-            exercisePlan: exercisePlan,
-          ),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddExercisePlanView(
+          exercisePlansCubit: exercisePlansCubit,
+          exercisePlan: exercisePlan,
+        ),
+      ),
+    );
   }
 
   @override
@@ -121,16 +109,19 @@ class _AssignExercisePlanWidgetState extends State<AssignExercisePlanWidget>
     showDialog(
       context: context,
       builder: (_) => InsureDeleteWidget(
-          item: exercisePlan,
-          onSuccess: () {
-            Navigator.pop(context);
-            exercisePlansCubit.getExercisePlans(
-              UserRoleEnum.coach,
-              perPage: 100000,
-            );
-          }),
+        item: exercisePlan,
+        onSuccess: () {
+          Navigator.pop(context);
+          exercisePlansCubit.getExercisePlans(
+            UserRoleEnum.coach,
+            perPage: 100000,
+          );
+        },
+      ),
     );
   }
+
+  void onSave() => widget.customersCubit.assignExercisePlan();
 
   @override
   void onTryAgainTap() =>
@@ -260,7 +251,7 @@ class _AssignExercisePlanWidgetState extends State<AssignExercisePlanWidget>
         return SizedBox(
           width: double.infinity,
           child: MainActionButton(
-            onTap: isLoading ? () {} : () => widget.onSave(),
+            onTap: isLoading ? () {} : onSave,
             text: "save".tr(),
             child: isLoading
                 ? LoadingIndicator(size: 20, color: context.cs.surface)

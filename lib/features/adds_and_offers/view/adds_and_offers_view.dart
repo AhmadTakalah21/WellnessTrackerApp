@@ -12,6 +12,7 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/additional_options_bottom_sheet.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
@@ -164,18 +165,19 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
               return RefreshIndicator(
                 onRefresh: onRefresh,
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 10,
                     children: [
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text("ads".tr(), style: context.tt.headlineLarge),
                       _buildAdsList(ads, width / 2.4),
-                      SizedBox.shrink(),
+                      const SizedBox.shrink(),
                       Text("offers".tr(), style: context.tt.headlineLarge),
                       _buildOffersList(offers),
-                      SizedBox(height: 10),
-                      if (widget.role.isUser) SizedBox(height: 100),
+                      const SizedBox(height: 10),
+                      if (widget.role.isUser) const SizedBox(height: 100),
                     ],
                   ),
                 ),
@@ -201,7 +203,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
           ? Padding(
               padding: AppConstants.padding8,
               child: FloatingActionButton(
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: AppConstants.borderRadiusCircle,
                 ),
                 onPressed: onAddTap,
@@ -214,14 +216,21 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
 
   Widget _buildAdsList(List<AdvModel> ads, double width) {
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       padding: AppConstants.padding8,
       scrollDirection: Axis.horizontal,
       child: Row(
         spacing: 20,
         children: List.generate(ads.length, (index) {
           final ad = ads[index];
-          return _buildAdvItem(ad, width: width);
+          final fromRight = index.isEven;
+          return TileSlideAnimation(
+            index: index,
+            beginOffset: Offset(fromRight ? 0.25 : -0.25, 0),
+            animationDuration: const Duration(seconds: 1),
+            deley: 70,
+            child: _buildAdvItem(ad, width: width),
+          );
         }),
       ),
     );
@@ -231,16 +240,23 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     return GridView.builder(
       shrinkWrap: true,
       padding: AppConstants.padding8,
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemCount: offers.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
       ),
       itemBuilder: (context, index) {
         final offer = offers[index];
-        return _buildAdvItem(offer);
+        final fromRight = index.isOdd;
+        return TileSlideAnimation(
+          index: index,
+          beginOffset: Offset(fromRight ? 0.25 : -0.25, 0),
+          animationDuration: const Duration(seconds: 1),
+          deley: 70,
+          child: _buildAdvItem(offer),
+        );
       },
     );
   }
@@ -259,7 +275,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
         fit: BoxFit.cover,
         shadows: [
           BoxShadow(
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
             color: AppColors.black.withValues(alpha: 0.3),
             blurRadius: 4,
           )

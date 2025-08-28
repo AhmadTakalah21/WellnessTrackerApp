@@ -297,22 +297,7 @@ class _ExercisesPageState extends State<ExercisesPage>
                   borderRadius: BorderRadius.circular(12),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
-                    child: _buildVideoPreview(link)
-                    // child: ClipRRect(
-                    //   borderRadius: BorderRadius.circular(12),
-                    //   child: Stack(
-                    //     fit: StackFit.expand,
-                    //     children: [
-                    //       const Center(
-                    //         child: Icon(
-                    //           Icons.play_circle_fill,
-                    //           size: 56,
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
+                    child: _buildVideoPreview(link),
                   ),
                 ),
               ),
@@ -344,19 +329,14 @@ class _ExercisesPageState extends State<ExercisesPage>
         Widget child;
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          child = Container(
+          child = ColoredBox(
             color: Colors.black.withOpacity(0.08),
-            child: const Center(child: CircularProgressIndicator()),
+            child: LoadingIndicator(color: context.cs.secondary),
           );
         } else if (snapshot.hasData && snapshot.data != null) {
-          child = Image.memory(
-            snapshot.data!,
-            fit: BoxFit.cover,
-          );
+          child = Image.memory(snapshot.data!, fit: BoxFit.cover);
         } else {
-          child = Container(
-            color: Colors.black.withOpacity(0.08),
-          );
+          child = ColoredBox(color: Colors.black.withOpacity(0.08));
         }
 
         return ClipRRect(
@@ -365,6 +345,7 @@ class _ExercisesPageState extends State<ExercisesPage>
             fit: StackFit.expand,
             children: [
               child,
+              if (child is Image)
               const Center(
                 child: Icon(
                   Icons.play_circle_fill,

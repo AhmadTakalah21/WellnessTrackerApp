@@ -9,7 +9,9 @@ abstract class AppConstants {
   static const duration1s = Duration(seconds: 1);
   static const duration2s = Duration(seconds: 2);
   static const duration3s = Duration(seconds: 3);
+  static const duration4s = Duration(seconds: 4);
   static const duration500ms = Duration(milliseconds: 500);
+  static const duration600ms = Duration(milliseconds: 600);
   static const duration1500ms = Duration(milliseconds: 1500);
 
   static const borderRadiusCircle = BorderRadius.all(Radius.circular(100));

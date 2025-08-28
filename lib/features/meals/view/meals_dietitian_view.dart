@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:wellnesstrackerapp/features/meal_plans/view/widget/add_meal_dialog.dart';
 import 'package:wellnesstrackerapp/features/meals/cubit/meals_cubit.dart';
 import 'package:wellnesstrackerapp/features/meals/model/meal_model/meal_model.dart';
@@ -13,6 +17,7 @@ import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_add_floating_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
+import 'package:wellnesstrackerapp/global/widgets/video_player_widget.dart';
 
 abstract class MealsDietitianViewCallbacks {
   void onAddTap();
@@ -50,6 +55,54 @@ class _MealsDietitianPageState extends State<MealsDietitianPage>
   void initState() {
     super.initState();
     mealsCubit.getMeals();
+  }
+
+  String get _baseUrl => 'https://dev-mi.serv00.net';
+
+  bool _isWebUrl(String s) =>
+      s.startsWith('http://') || s.startsWith('https://');
+
+  bool _isVideo(String s) {
+    final l = s.toLowerCase();
+    return l.endsWith('.mp4') ||
+        l.endsWith('.mov') ||
+        l.endsWith('.mkv') ||
+        l.endsWith('.webm');
+  }
+
+  String _absoluteLink(String link) {
+    if (link.isEmpty) return '';
+    return _isWebUrl(link) ? link : '$_baseUrl/storage/$link';
+  }
+
+  IconData _iconForLink(String raw) {
+    final url = _absoluteLink(raw);
+    if (url.isEmpty) return Icons.link_off;
+    if (_isVideo(url)) return Icons.play_circle_fill;
+    return Icons.link;
+  }
+
+  Future<void> _openExternal(String url) async {
+    final ok =
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    if (!ok && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('cannot_open_link'.tr())),
+      );
+    }
+  }
+
+  void _onOpenMedia(String raw) {
+    final url = _absoluteLink(raw);
+    if (url.isEmpty) return;
+
+    if (_isVideo(url)) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => VideoPlayerView(url: url)),
+      );
+    } else {
+      _openExternal(url);
+    }
   }
 
   @override
@@ -154,6 +207,8 @@ class _MealsDietitianPageState extends State<MealsDietitianPage>
   }
 
   Widget _buildMealItem(MealModel meal) {
+    final link = _absoluteLink(meal.link);
+
     return InkWell(
       onTap: () => onTap(meal),
       child: Card(
@@ -161,14 +216,21 @@ class _MealsDietitianPageState extends State<MealsDietitianPage>
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
+        margin: const EdgeInsets.symmetric(vertical: 12),
         child: Padding(
-          padding: AppConstants.padding20,
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Text(meal.name, style: context.tt.headlineSmall),
+                  Text(
+                    meal.name,
+                    style: context.tt.titleLarge?.copyWith(
+                      color: context.cs.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -196,22 +258,22 @@ class _MealsDietitianPageState extends State<MealsDietitianPage>
                         children: [
                           _buildNutrient(
                             icon: Icons.local_drink,
-                            label: "الكمية",
+                            label: "amount",
                             value: ingredientWithQnt.quantity.toString(),
                           ),
                           _buildNutrient(
                             icon: Icons.local_fire_department,
-                            label: "السعرات",
+                            label: "calories",
                             value: ingredient.calories,
                           ),
                           _buildNutrient(
                             icon: Icons.fitness_center,
-                            label: "البروتين",
+                            label: "proteins",
                             value: ingredient.proteins,
                           ),
                           _buildNutrient(
                             icon: Icons.bubble_chart,
-                            label: "الكربوهيدرات",
+                            label: "carbs",
                             value: ingredient.carbs,
                           ),
                         ],
@@ -225,18 +287,42 @@ class _MealsDietitianPageState extends State<MealsDietitianPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (link.isNotEmpty && (_isVideo(link))) ...[
+                      const SizedBox(height: 12),
+                      GestureDetector(
+                        onTap: () => _onOpenMedia(link),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: _buildVideoPreview(link),
+                          ),
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("طريقة التحضير :", style: context.tt.titleLarge),
-                        Icon(Icons.play_circle, color: context.cs.error)
+                        Text("${"prepare_method".tr()} :",
+                            style: context.tt.titleMedium),
+                        if (meal.link.isNotEmpty)
+                          IconButton(
+                            tooltip: 'open_instruction'.tr(),
+                            icon: Icon(
+                              _iconForLink(meal.link),
+                              color: context.cs.primary,
+                              size: 30,
+                            ),
+                            onPressed: () => _onOpenMedia(meal.link),
+                          ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(meal.description, style: context.tt.bodyMedium),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -253,9 +339,61 @@ class _MealsDietitianPageState extends State<MealsDietitianPage>
       children: [
         Icon(icon, size: 20, color: Colors.blueAccent),
         const SizedBox(height: 4),
-        Text(label, style: const TextStyle(fontSize: 12)),
+        Text(label.tr(), style: const TextStyle(fontSize: 12)),
         Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
       ],
+    );
+  }
+
+  Future<Uint8List?> _generateThumbnail(String url) async {
+    try {
+      return await VideoThumbnail.thumbnailData(
+        video: url,
+        imageFormat: ImageFormat.JPEG,
+        maxWidth: 500,
+        quality: 75,
+      );
+    } catch (e) {
+      debugPrint("Thumbnail error: $e");
+      return null;
+    }
+  }
+
+  Widget _buildVideoPreview(String videoUrl) {
+    return FutureBuilder<Uint8List?>(
+      future: _generateThumbnail(videoUrl),
+      builder: (context, snapshot) {
+        Widget child;
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          child = ColoredBox(
+            color: Colors.black.withOpacity(0.08),
+            child: LoadingIndicator(color: context.cs.secondary),
+          );
+        } else if (snapshot.hasData && snapshot.data != null) {
+          child = Image.memory(snapshot.data!, fit: BoxFit.cover);
+        } else {
+          child = ColoredBox(color: Colors.black.withOpacity(0.08));
+        }
+
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              child,
+              if (child is Image)
+                const Center(
+                  child: Icon(
+                    Icons.play_circle_fill,
+                    size: 56,
+                    color: Colors.white,
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

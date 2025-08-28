@@ -3,7 +3,9 @@ import 'package:injectable/injectable.dart';
 import 'package:wellnesstrackerapp/features/customers/model/add_points_model/add_points_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_meal_plan_model/assign_meal_plan_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_subscriber_model/assign_subscriber_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/customer_evaluation_model/customer_evaluation_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/evaluate_customer_model/evaluate_customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/update_customer_info_model/update_customer_info_model.dart';
 import 'package:wellnesstrackerapp/global/dio/dio_client.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
@@ -19,6 +21,7 @@ abstract class CustomersService {
     int? employeeId,
   });
   Future<void> assignSubscriber(AssignSubscriberModel model);
+  Future<void> changeStatus(int id, String status);
   Future<void> updateCustomerInfo(
     UserRoleEnum role,
     UpdateCustomerInfoModel model,
@@ -27,4 +30,13 @@ abstract class CustomersService {
   Future<void> addPoints(UserRoleEnum role, AddPointsModel model);
   Future<void> assignMealPlan(AssignPlanModel model);
   Future<void> assignExercisePlan(AssignPlanModel model);
+  Future<void> evaluateSubscriber(
+    UserRoleEnum role,
+    int id,
+    EvaluateCustomerModel model,
+  );
+  Future<CustomerEvaluationModel> getSubscriberEvaluation(
+    UserRoleEnum role,
+    int id,
+  );
 }

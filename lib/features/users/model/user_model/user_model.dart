@@ -1,10 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 
+import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_data_table.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
@@ -22,6 +23,7 @@ class UserModel implements DeleteModel, DataTableModel, DropDownItemModel {
     required this.role,
     required this.status,
     this.subscribersCount = 0,
+    this.medicalConsultationsNum,
     this.fcmToken,
   });
 
@@ -37,6 +39,9 @@ class UserModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   @JsonKey(name: "sum")
   final int subscribersCount;
+
+  @JsonKey(name: "medical_consultations_num")
+  final int? medicalConsultationsNum;
 
   @JsonKey(name: 'fcm_token')
   final String? fcmToken;
@@ -62,6 +67,7 @@ class UserModel implements DeleteModel, DataTableModel, DropDownItemModel {
         phone,
         role.displayName,
         subscribersCount.toString(),
+        medicalConsultationsNum?.toString() ?? 'not_existed'.tr(),
         status,
       ];
 
@@ -73,6 +79,7 @@ class UserModel implements DeleteModel, DataTableModel, DropDownItemModel {
         "phone".tr(),
         "role".tr(),
         "subscribers_count".tr(),
+        "medical_consultations_num".tr(),
         "status".tr(),
         "event".tr(),
       ];

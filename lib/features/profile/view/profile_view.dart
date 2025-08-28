@@ -1,3 +1,4 @@
+import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
@@ -114,8 +116,9 @@ class _ProfilePageState extends State<ProfilePage>
               BlocBuilder<ProfileCubit, GeneralProfileState>(
                 buildWhen: (previous, current) => current is ProfileState,
                 builder: (context, state) {
+                  Widget child;
                   if (state is ProfileLoading) {
-                    return LoadingIndicator();
+                    child = LoadingIndicator();
                   } else if (state is ProfileSuccess) {
                     final profile = state.customer;
                     final info = profile.info;
@@ -129,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage>
                         size: 45,
                       ),
                     );
-                    return Column(
+                    child = Column(
                       children: [
                         Center(
                           child: profile.image != null
@@ -203,34 +206,34 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                             ],
                           ),
+                          SizedBox(height: 10)
                       ],
                     );
                   } else if (state is ProfileFail) {
-                    return MainErrorWidget(
+                    child = MainErrorWidget(
                       error: state.error,
                       onTryAgainTap: onTryAgainTap,
                     );
                   } else {
-                    return SizedBox.shrink();
+                    child = SizedBox.shrink();
                   }
+                  return AnimatedSizeAndFade(child: child);
                 },
               ),
-              const SizedBox(height: 20),
-              SizedBox(height: 10),
-              ...tiles.map((e) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ProfileOptionWidget(
-                      icon: e.icon,
-                      title: e.title,
-                      onTap: e.onTap,
-                    ),
-                    SizedBox(height: 16),
-                  ],
+              const SizedBox(height: 10),
+              ...tiles.asMap().entries.map((entry) {
+                final index = entry.key;
+                final option = entry.value;
+                return TileSlideAnimation(
+                  index: index,
+                  child: ProfileOptionWidget(
+                    icon: option.icon,
+                    title: option.title,
+                    onTap: option.onTap,
+                  ),
                 );
               }),
-              const SizedBox(height: 104),
+              const SizedBox(height: 115),
             ],
           ),
         ),
@@ -307,6 +310,7 @@ class ProfileOptionWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        margin: AppConstants.paddingV8,
         padding: AppConstants.padding20,
         decoration: BoxDecoration(
           color: context.cs.surface,

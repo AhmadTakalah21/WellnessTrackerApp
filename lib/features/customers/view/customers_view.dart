@@ -2,8 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
+import 'package:wellnesstrackerapp/features/customers/view/widgets/add_customer_report_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/add_points_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/additional_customer_options_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_exercise_plan_widget.dart';
@@ -26,14 +28,12 @@ abstract class CustomersViewCallbacks {
   void onSearchChanged(String input);
   void onEditTap(CustomerModel customer);
   void onDeleteTap(CustomerModel customer);
+  void onReportTap(CustomerModel customer);
   void onLongPress(CustomerModel customer);
   void onAddPoints();
-  void onAssignDietPlan();
-  void onAssignExercisePlan();
-  void onSubmitAddPoints();
-  void onSubmitDietPlan();
-  void onSubmitExercisePlan();
+  void onAssignPlan();
   void onTryAgainTap();
+  Future<void> onRefresh();
   void onSelected(CustomerModel customer);
 }
 
@@ -117,32 +117,54 @@ class CustomersPageState extends State<CustomersPage>
   }
 
   @override
+  void onReportTap(CustomerModel customer) {
+    if (!widget.role.isAdmin) {
+      showMaterialModalBottomSheet(
+        context: context,
+        shape:
+            RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+        builder: (context) => AddCustomerReportView(
+          customersCubit: customersCubit,
+          role: widget.role,
+          customer: customer,
+        ),
+      );
+    } else {
+      context.router.push(
+        SubscriberEvaluationRoute(role: widget.role, customer: customer),
+      );
+    }
+  }
+
+  @override
   void onSelected(CustomerModel customer) {
     customersCubit.updateUserIds(customer);
     setState(() {});
   }
 
   @override
-  void onSubmitExercisePlan() => customersCubit.assignExercisePlan();
-
-  @override
-  void onSubmitDietPlan() => customersCubit.assignMealPlan();
+  void onAssignPlan() {
+    final view = widget.role.isDietitian
+        ? AssignMealPlanView(customersCubit: customersCubit)
+        : AssignExercisePlanView(customersCubit: customersCubit);
+    Navigator.pop(context);
+    showDialog(context: context, builder: (context) => view);
+  }
 
   @override
   void onLongPress(CustomerModel customer) {
     if (customersCubit.isSelected(customer)) {
-      void Function()? onAssignPlan = onAssignDietPlan;
+      void Function()? onAssign = onAssignPlan;
       String text = "assign_diet_plan";
       if (widget.role.isAdmin) {
-        onAssignPlan = null;
+        onAssign = null;
       } else if (widget.role.isDietitian) {
       } else if (widget.role.isCoach) {
-        onAssignPlan = onAssignExercisePlan;
         text = "assign_exercise_plan";
       } else if (widget.role.isDoctor) {
-        onAssignPlan = null;
+        onAssign = null;
       } else if (widget.role.isPsychologist) {
-        onAssignPlan = null;
+        onAssign = null;
       }
       showModalBottomSheet(
         context: context,
@@ -152,7 +174,7 @@ class CustomersPageState extends State<CustomersPage>
         builder: (context) => AdditionalCustomerOptionsWidget(
           onAddPoints: onAddPoints,
           assignPlanText: text,
-          onAssignPlan: onAssignPlan,
+          onAssignPlan: onAssign,
         ),
       );
     }
@@ -164,44 +186,10 @@ class CustomersPageState extends State<CustomersPage>
     showDialog(
       context: context,
       builder: (context) {
-        return AddPointsView(
-          customersCubit: customersCubit,
-          onSave: onSubmitAddPoints,
-        );
+        return AddPointsView(customersCubit: customersCubit, role: widget.role);
       },
     );
   }
-
-  @override
-  void onAssignExercisePlan() {
-    Navigator.pop(context);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AssignExercisePlanView(
-          customersCubit: customersCubit,
-          onSave: onSubmitExercisePlan,
-        );
-      },
-    );
-  }
-
-  @override
-  void onAssignDietPlan() {
-    Navigator.pop(context);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AssignMealPlanView(
-          customersCubit: customersCubit,
-          onSave: onSubmitDietPlan,
-        );
-      },
-    );
-  }
-
-  @override
-  void onSubmitAddPoints() => customersCubit.addPoints(widget.role);
 
   @override
   void onDeleteTap(CustomerModel customer) {
@@ -221,8 +209,10 @@ class CustomersPageState extends State<CustomersPage>
   void onTryAgainTap() => fetchCustomers();
 
   @override
+  Future<void> onRefresh() async => fetchCustomers();
+
+  @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height;
     bool isAdmin = widget.role.isAdmin;
     final titles = [
       '#',
@@ -233,6 +223,8 @@ class CustomersPageState extends State<CustomersPage>
         'dietitian'.tr(),
         'coach'.tr(),
         'doctor'.tr(),
+        'code'.tr(),
+        'subscription_end_date'.tr()
       ],
       'status'.tr(),
       'event'.tr(),
@@ -249,41 +241,52 @@ class CustomersPageState extends State<CustomersPage>
                 buildWhen: (previous, current) => current is CustomersState,
                 builder: (context, state) {
                   if (state is CustomersLoading) {
-                    return LoadingIndicator(
-                      color: context.cs.primary,
-                      height: height / 1.2,
-                    );
+                    return LoadingIndicator();
                   } else if (state is CustomersSuccess) {
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          MainDataTable<CustomerModel>(
-                            titles: titles,
-                            items: state.customers,
-                            onPageChanged: onSelectPageTap,
-                            emptyMessage: state.emptyMessage,
-                            onEditTap: onEditTap,
-                            onDeleteTap: isAdmin ? onDeleteTap : null,
-                            onSearchChanged: onSearchChanged,
-                            onSelected: onSelected,
-                            checkSelected: customersCubit.isSelected,
-                            onLongPress: onLongPress,
-                            searchHint: 'search_customer',
-                          ),
-                        ],
+                    return RefreshIndicator(
+                      onRefresh: onRefresh,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            MainDataTable<CustomerModel>(
+                              titles: titles,
+                              items: state.customers,
+                              onPageChanged: onSelectPageTap,
+                              emptyMessage: state.emptyMessage,
+                              onEditTap: onEditTap,
+                              onDeleteTap: isAdmin ? onDeleteTap : null,
+                              onSearchChanged: onSearchChanged,
+                              onSelected: onSelected,
+                              checkSelected: customersCubit.isSelected,
+                              onLongPress: onLongPress,
+                              searchHint: 'search_customer',
+                              customButtons: (item) {
+                                return [
+                                  IconButton(
+                                    onPressed: () => onReportTap(item),
+                                    icon: Icon(
+                                      isAdmin
+                                          ? Icons.description
+                                          : Icons.edit_document,
+                                      color: context.cs.onPrimaryFixed,
+                                    ),
+                                  ),
+                                ];
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   } else if (state is CustomersEmpty) {
                     return MainErrorWidget(
                       error: state.message,
                       onTryAgainTap: onTryAgainTap,
-                      height: 2.5,
                       isRefresh: true,
                     );
                   } else if (state is CustomersFail) {
                     return MainErrorWidget(
                       error: state.error,
-                      height: 2.5,
                       onTryAgainTap: onTryAgainTap,
                     );
                   } else {

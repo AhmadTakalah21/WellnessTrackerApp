@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -15,17 +16,17 @@ class AddPointsView extends StatelessWidget {
   const AddPointsView({
     super.key,
     required this.customersCubit,
-    required this.onSave,
+    required this.role,
   });
 
   final CustomersCubit customersCubit;
-  final void Function() onSave;
+  final UserRoleEnum role;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: customersCubit,
-      child: AddPointsWidget(customersCubit: customersCubit, onSave: onSave),
+      child: AddPointsWidget(customersCubit: customersCubit, role: role),
     );
   }
 }
@@ -34,22 +35,23 @@ class AddPointsWidget extends StatefulWidget {
   const AddPointsWidget({
     super.key,
     required this.customersCubit,
-    required this.onSave,
+    required this.role,
   });
   final CustomersCubit customersCubit;
-  final void Function() onSave;
+  final UserRoleEnum role;
 
   @override
   State<AddPointsWidget> createState() => _AddPointsWidgetState();
 }
 
 class _AddPointsWidgetState extends State<AddPointsWidget> {
-  
   @override
   void dispose() {
     widget.customersCubit.resetAddPointsModel();
     super.dispose();
   }
+
+  void onSave() => widget.customersCubit.addPoints(widget.role);
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +100,7 @@ class _AddPointsWidgetState extends State<AddPointsWidget> {
               builder: (context, state) {
                 bool isLoading = state is AddPointsLoading;
                 return MainActionButton(
-                  onTap: isLoading ? () {} : () => widget.onSave(),
+                  onTap: isLoading ? () {} : onSave,
                   text: "save".tr(),
                   child: isLoading
                       ? LoadingIndicator(size: 20, color: context.cs.surface)

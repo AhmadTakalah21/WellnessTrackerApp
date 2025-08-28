@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -33,6 +34,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
     this.info,
     this.subscription,
     this.level,
+    this.code,
+    this.subEndDate,
     this.isAdmin = false,
     this.totalPoints,
     required this.createdAt,
@@ -70,6 +73,11 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   final LevelModel? level;
 
+  final String? code;
+
+  @JsonKey(name: "subscription_end_date")
+  final String? subEndDate;
+
   @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isAdmin;
 
@@ -81,20 +89,6 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   static String get header => 'customers_administration'.tr();
 
-  List<String> get titles => [
-        '#',
-        'name'.tr(),
-        'email'.tr(),
-        'phone'.tr(),
-        if (isAdmin) ...[
-          'dietitian'.tr(),
-          'coach'.tr(),
-          'doctor'.tr(),
-        ],
-        'status'.tr(),
-        'event'.tr(),
-      ];
-
   @override
   List<String> get values => [
         '#$id',
@@ -105,6 +99,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
           subscription?.dietitian?.name ?? 'not_existed'.tr(),
           subscription?.coach?.name ?? 'not_existed'.tr(),
           subscription?.doctor?.name ?? 'not_existed'.tr(),
+          code ?? 'not_existed'.tr(),
+          subEndDate ?? 'not_existed'.tr(),
         ],
         status,
       ];

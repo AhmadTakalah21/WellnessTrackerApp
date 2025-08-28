@@ -28,14 +28,9 @@ abstract class AssignMealPlanViewCallBacks {
 }
 
 class AssignMealPlanView extends StatelessWidget {
-  const AssignMealPlanView({
-    super.key,
-    required this.customersCubit,
-    required this.onSave,
-  });
+  const AssignMealPlanView({super.key, required this.customersCubit});
 
   final CustomersCubit customersCubit;
-  final void Function() onSave;
 
   @override
   Widget build(BuildContext context) {
@@ -44,22 +39,14 @@ class AssignMealPlanView extends StatelessWidget {
         BlocProvider.value(value: customersCubit),
         BlocProvider(create: (context) => get<MealPlansCubit>()),
       ],
-      child: AssignMealPlanWidget(
-        customersCubit: customersCubit,
-        onSave: onSave,
-      ),
+      child: AssignMealPlanWidget(customersCubit: customersCubit),
     );
   }
 }
 
 class AssignMealPlanWidget extends StatefulWidget {
-  const AssignMealPlanWidget({
-    super.key,
-    required this.customersCubit,
-    required this.onSave,
-  });
+  const AssignMealPlanWidget({super.key, required this.customersCubit});
   final CustomersCubit customersCubit;
-  final void Function() onSave;
 
   @override
   State<AssignMealPlanWidget> createState() => _AssignMealPlanWidgetState();
@@ -97,9 +84,7 @@ class _AssignMealPlanWidgetState extends State<AssignMealPlanWidget>
         context,
         MaterialPageRoute(
           builder: (context) => AddMealPlanView(
-            mealPlansCubit: mealPlansCubit,
-            mealPlan:mealPlan
-          ),
+              mealPlansCubit: mealPlansCubit, mealPlan: mealPlan),
         ));
   }
 
@@ -123,13 +108,14 @@ class _AssignMealPlanWidgetState extends State<AssignMealPlanWidget>
   @override
   void onAddMealPlanTap() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddMealPlanView(
-            mealPlansCubit: mealPlansCubit,
-          ),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddMealPlanView(mealPlansCubit: mealPlansCubit),
+      ),
+    );
   }
+
+  void onSave() => widget.customersCubit.assignMealPlan();
 
   @override
   void onTryAgainTap() =>
@@ -257,7 +243,7 @@ class _AssignMealPlanWidgetState extends State<AssignMealPlanWidget>
         return SizedBox(
           width: double.infinity,
           child: MainActionButton(
-            onTap: isLoading ? () {} : () => widget.onSave(),
+            onTap: isLoading ? () {} : onSave,
             text: "save".tr(),
             child: isLoading
                 ? LoadingIndicator(size: 20, color: context.cs.surface)

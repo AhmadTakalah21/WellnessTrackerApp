@@ -30,6 +30,8 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       level: json['level'] == null
           ? null
           : LevelModel.fromJson(json['level'] as Map<String, dynamic>),
+      code: json['code'] as String?,
+      subEndDate: json['subscription_end_date'] as String?,
       totalPoints: (json['total_points'] as num?)?.toInt(),
       createdAt: json['created_at'] as String,
     );
@@ -49,6 +51,8 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
       'information': instance.info,
       'subscription': instance.subscription,
       'level': instance.level,
+      'code': instance.code,
+      'subscription_end_date': instance.subEndDate,
       'total_points': instance.totalPoints,
       'created_at': instance.createdAt,
     };

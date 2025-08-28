@@ -71,6 +71,7 @@ final dashboardAutoRoutes = [
   AutoRoute(page: SelectPlanRoute.page),
   AutoRoute(page: UsersRoute.page),
   AutoRoute(page: CustomersRoute.page),
+  AutoRoute(page: SubscriberEvaluationRoute.page),
   AutoRoute(page: CodesRoute.page),
   AutoRoute(page: PointsRoute.page),
   AutoRoute(page: MealsRoute.page),

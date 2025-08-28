@@ -25,6 +25,8 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   int page = 1;
   bool hasMore = true;
 
+  int lastBatchLength = 0;
+
   MetaModel? meta;
   AddNotificationModel addNotificationModel = const AddNotificationModel();
   List<CustomerModel> userIds = [];
@@ -89,7 +91,7 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
     bool isLoadMore = true,
   }) async {
     if (!hasMore && isLoadMore) {
-      emit(NotificationsSuccess(notifications, hasMore: false));
+      emit(NotificationsSuccess(notifications, message: "no_more".tr()));
       return;
     }
     if (!isLoadMore) {
@@ -109,6 +111,8 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
         page: page,
         perPage: perPage,
       );
+      lastBatchLength = notifications.length;
+
       if (newItems.meta.count == newItems.meta.total) {
         hasMore = false;
       }
@@ -129,7 +133,15 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
       }
     } catch (e) {
       if (isClosed) return;
-      emit(NotificationsFail(e.toString()));
+      if (notifications.isEmpty) {
+        emit(NotificationsFail(e.toString()));
+      } else {
+        emit(NotificationsSuccess(
+          notifications,
+          message: e.toString(),
+          isError: true,
+        ));
+      }
     }
   }
 

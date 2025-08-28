@@ -12,6 +12,7 @@ import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/additional_options_bottom_sheet.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_add_floating_button.dart';
@@ -155,7 +156,14 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...data.map((guideline) => _buildTile(guideline)),
+                      ...data.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final guideline = entry.value;
+                        return TileSlideAnimation(
+                          index: index,
+                          child: _buildTile(guideline),
+                        );
+                      }),
                       if (data.length < 10)
                         SizedBox(height: (10 - data.length) * 80.0),
                       if (widget.role.isUser) SizedBox(height: 120),

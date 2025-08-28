@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
@@ -13,11 +16,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title = AppConstants.appName,
     this.automaticallyImplyLeading = false,
     this.hasLogout = true,
+    this.role = UserRoleEnum.admin,
   });
 
   final String title;
   final bool automaticallyImplyLeading;
   final bool hasLogout;
+  final UserRoleEnum role;
 
   @override
   Size get preferredSize => const Size.fromHeight(60);
@@ -30,6 +35,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: title,
         automaticallyImplyLeading: automaticallyImplyLeading,
         hasLogout: hasLogout,
+        role: role,
       ),
     );
   }
@@ -41,11 +47,13 @@ class MainAppBarImp extends StatefulWidget {
     required this.title,
     required this.automaticallyImplyLeading,
     required this.hasLogout,
+    required this.role,
   });
 
   final String title;
   final bool automaticallyImplyLeading;
   final bool hasLogout;
+  final UserRoleEnum role;
 
   @override
   State<MainAppBarImp> createState() => _MainAppBarImpState();
@@ -56,12 +64,26 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
 
   void onLogoutTap() => authCubit.logout();
 
+  void onNotificationTap() => context.router.push(
+        NotificationsRoute(role: widget.role),
+      );
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 4,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
-      title: Text(widget.title,),
+      leading: widget.role.isUser
+          ? IconButton(
+              iconSize: 30,
+              onPressed: onNotificationTap,
+              icon: Icon(
+                Icons.notifications_outlined,
+                color: context.cs.secondary,
+              ),
+            )
+          : null,
+      title: Text(widget.title),
       actions: [
         if (widget.hasLogout)
           BlocConsumer<AuthCubit, AuthState>(
@@ -74,16 +96,16 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
             },
             builder: (context, state) {
               if (state is SignInLoading) {
-                return LoadingIndicator(color: context.cs.error);
+                return LoadingIndicator(color: context.cs.secondary);
               }
               return IconButton(
                 iconSize: 30,
-                color: Colors.white,
                 onPressed: onLogoutTap,
                 icon: const Icon(Icons.logout_rounded),
               );
             },
           ),
+        SizedBox(width: 8),
       ],
     );
   }

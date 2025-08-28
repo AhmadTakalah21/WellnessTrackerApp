@@ -8,6 +8,7 @@ import 'package:wellnesstrackerapp/features/select_plan/cubit/user_plans_cubit.d
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -87,17 +88,33 @@ class _SelectPlanPageState extends State<SelectPlanPage>
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    ...state.plans.plans.map(
-                      (e) {
-                        return _buildGridItem(
-                          context,
-                          e.department.getTitle,
-                          e.phone,
-                          e.department.getIcon,
-                          e.department.getColor,
+                    ...state.plans.plans.asMap().entries.map(
+                      (entry) {
+                        final index = entry.key;
+                        final plan = entry.value;
+                        return TileSlideAnimation(
+                          index: index,
+                          child: _buildGridItem(
+                            context,
+                            plan.department.getTitle,
+                            plan.phone,
+                            plan.department.getIcon,
+                            plan.department.getColor,
+                          ),
                         );
                       },
                     ),
+                    // ...state.plans.plans.map(
+                    //   (e) {
+                    //     return _buildGridItem(
+                    //       context,
+                    //       e.department.getTitle,
+                    //       e.phone,
+                    //       e.department.getIcon,
+                    //       e.department.getColor,
+                    //     );
+                    //   },
+                    // ),
                     SizedBox(height: 100),
                   ],
                 ),
@@ -114,8 +131,6 @@ class _SelectPlanPageState extends State<SelectPlanPage>
               error: state.error,
               onTryAgainTap: onTryAgainTap,
             );
-
-            
           } else {
             return SizedBox.shrink();
           }

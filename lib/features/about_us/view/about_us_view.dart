@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 
 abstract class AboutUsViewCallBacks {}
 
@@ -25,6 +26,11 @@ class AboutUsPage extends StatefulWidget {
 
 class _AboutUsPageState extends State<AboutUsPage>
     implements AboutUsViewCallBacks {
+  final List<List<String>> items = [
+    ['Lose your weight', '10 workouts / Level 1 Newbie'],
+    ['Quick full body stretches', '10 workouts / Level 1 Newbie'],
+    ['Morning Yoga', '10 workouts / Level 1 Newbie'],
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,22 +39,15 @@ class _AboutUsPageState extends State<AboutUsPage>
         padding: AppConstants.padding16,
         child: Column(
           children: [
-            // Text("خدماتنا", style: context.tt.headlineLarge),
             const SizedBox(height: 16),
-            _WorkoutItem(
-              title: 'Lose your weight',
-              subtitle: '10 workouts / Level 1 Newbie',
-            ),
-            const SizedBox(height: 12),
-            _WorkoutItem(
-              title: 'Quick full body stretches',
-              subtitle: '10 workouts / Level 1 Newbie',
-            ),
-            const SizedBox(height: 12),
-            _WorkoutItem(
-              title: 'Morning Yoga',
-              subtitle: '10 workouts / Level 1 Newbie',
-            ),
+            ...items.asMap().entries.map((entry) {
+              final index = entry.key;
+              final item = entry.value;
+              return TileSlideAnimation(
+                index: index,
+                child: _WorkoutItem(title: item[0], subtitle: item[1]),
+              );
+            }),
           ],
         ),
       ),
@@ -92,10 +91,7 @@ class _WorkoutItem extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13,
-                  ),
+                  style: const TextStyle(color: Colors.grey, fontSize: 13),
                 ),
               ],
             ),
@@ -105,7 +101,6 @@ class _WorkoutItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: context.cs.surface,
               border: Border.all(width: 0.5),
-              //color: context.cs.primary.withValues(alpha: 0.3),
               shape: BoxShape.circle,
             ),
             child: Image.asset(

@@ -14,6 +14,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       role: DepartmentEnum.fromJson2(json['role'] as String),
       status: json['status'] as String,
       subscribersCount: (json['sum'] as num?)?.toInt() ?? 0,
+      medicalConsultationsNum:
+          (json['medical_consultations_num'] as num?)?.toInt(),
       fcmToken: json['fcm_token'] as String?,
     );
 
@@ -25,5 +27,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'role': DepartmentEnum.toJson2(instance.role),
       'status': instance.status,
       'sum': instance.subscribersCount,
+      'medical_consultations_num': instance.medicalConsultationsNum,
       'fcm_token': instance.fcmToken,
     };

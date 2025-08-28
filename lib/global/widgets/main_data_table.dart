@@ -36,7 +36,7 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
     this.onSearchChanged,
     this.bottomHeight = 100,
     this.filters = const [],
-    this.customButtons = const [],
+    this.customButtons = _emptyButtons,
     this.onSelected,
     this.onLongPress,
     this.checkSelected,
@@ -50,7 +50,7 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
   final String searchHint;
   final double bottomHeight;
   final List<Widget> filters;
-  final List<Widget> customButtons;
+  final List<Widget> Function(T item) customButtons;
   final bool showCheckboxColumn;
   final void Function(String input)? onSearchChanged;
   final void Function(int page, int perPage) onPageChanged;
@@ -60,6 +60,8 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
   final void Function(T item)? onShowDetailsTap;
   final void Function(T item)? onEditTap;
   final void Function(T item)? onDeleteTap;
+
+  static List<Widget> _emptyButtons(DataTableModel item) => const [];
 
   @override
   State<MainDataTable<T>> createState() => _MainDataTableState<T>();
@@ -197,7 +199,7 @@ class _MainDataTableState<T extends DataTableModel>
                         onPressed: () => widget.onDeleteTap!(item),
                         icon: Icon(Icons.delete, color: context.cs.error),
                       ),
-                    ...widget.customButtons,
+                    ...widget.customButtons(item),
                   ],
                 ),
               ),

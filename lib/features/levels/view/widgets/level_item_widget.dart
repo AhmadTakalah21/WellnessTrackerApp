@@ -33,15 +33,18 @@ class LevelItemWidget extends StatelessWidget {
               aspectRatio: 5 / 2,
               child: image == null
                   ? Image.asset(
-                      "assets/images/app_logo.png",
+                    "assets/images/app_logo.png",
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: Colors.grey[200],
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.broken_image, size: 40),
+                    ),
+                  )
+                  : AppImageWidget(
+                      url: image,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey[200],
-                        alignment: Alignment.center,
-                        child: const Icon(Icons.broken_image, size: 40),
-                      ),
-                    )
-                  : AppImageWidget(url: image , fit: BoxFit.cover,),
+                    ),
             ),
             Padding(
               padding: const EdgeInsets.all(16),

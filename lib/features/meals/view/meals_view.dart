@@ -303,18 +303,6 @@ class _MealsPageState extends State<MealsPage>
                         child: AspectRatio(
                           aspectRatio: 16 / 9,
                           child: _buildVideoPreview(link),
-                          // child: Stack(
-                          //   fit: StackFit.expand,
-                          //   children: [
-                          //     if (_isVideo(link))
-                          //       Container(
-                          //           color: Colors.black.withOpacity(0.08)),
-                          //     const Center(
-                          //       child: Icon(Icons.play_circle_fill,
-                          //           size: 56, color: Colors.white),
-                          //     ),
-                          //   ],
-                          // ),
                         ),
                       ),
                     ),
@@ -377,7 +365,6 @@ class _MealsPageState extends State<MealsPage>
     }
   }
 
-
   Widget _buildVideoPreview(String videoUrl) {
     return FutureBuilder<Uint8List?>(
       future: _generateThumbnail(videoUrl),
@@ -385,19 +372,14 @@ class _MealsPageState extends State<MealsPage>
         Widget child;
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          child = Container(
+          child = ColoredBox(
             color: Colors.black.withOpacity(0.08),
-            child: const Center(child: CircularProgressIndicator()),
+            child: LoadingIndicator(color: context.cs.secondary),
           );
         } else if (snapshot.hasData && snapshot.data != null) {
-          child = Image.memory(
-            snapshot.data!,
-            fit: BoxFit.cover,
-          );
+          child = Image.memory(snapshot.data!, fit: BoxFit.cover);
         } else {
-          child = Container(
-            color: Colors.black.withOpacity(0.08),
-          );
+          child = ColoredBox(color: Colors.black.withOpacity(0.08));
         }
 
         return ClipRRect(
@@ -406,13 +388,14 @@ class _MealsPageState extends State<MealsPage>
             fit: StackFit.expand,
             children: [
               child,
-              const Center(
-                child: Icon(
-                  Icons.play_circle_fill,
-                  size: 56,
-                  color: Colors.white,
+              if (child is Image)
+                const Center(
+                  child: Icon(
+                    Icons.play_circle_fill,
+                    size: 56,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
             ],
           ),
         );
