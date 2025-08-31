@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'package:wellnesstrackerapp/features/statistics/model/code_stats_model/code_stats_model.dart';
+
 part 'stats_model.g.dart';
 
 @JsonSerializable()
@@ -16,6 +19,7 @@ class StatsModel {
     required this.avgAgesUsers,
     required this.avgWeightsUsers,
     required this.avgLengthsUsers,
+    required this.mostCodeUsed,
   });
 
   @JsonKey(name: "active_users")
@@ -42,6 +46,8 @@ class StatsModel {
   @JsonKey(name: "avg_lengths_users")
   final double avgLengthsUsers;
 
+  @JsonKey(name: "most_used_code")
+  final CodeStatsModel mostCodeUsed;
 
   factory StatsModel.fromString(String str) =>
       StatsModel.fromJson(jsonDecode(str) as Map<String, dynamic>);

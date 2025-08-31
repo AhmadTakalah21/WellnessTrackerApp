@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
+import 'package:wellnesstrackerapp/features/customers/model/add_medical_consultation_model/add_medical_consultation_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/add_points_model/add_points_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_meal_plan_model/assign_meal_plan_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_subscriber_model/assign_subscriber_model.dart';
@@ -23,6 +24,7 @@ part 'states/assign_subscriber_state.dart';
 part 'states/assign_meal_plan_state.dart';
 //part 'states/assign_exercise_plan_state.dart';
 part 'states/add_points_state.dart';
+part 'states/add_medical_consultation_state.dart';
 part 'states/update_customer_info_state.dart';
 part 'states/evaluate_subscriber_state.dart';
 part 'states/subscriber_evaluation_state.dart';
@@ -40,11 +42,15 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   AddPointsModel addPointsModel = const AddPointsModel();
   AssignPlanModel assignPlanModel = const AssignPlanModel();
   EvaluateCustomerModel evaluateCustomerModel = const EvaluateCustomerModel();
+  AddMedicalConsultationModel addMedicalConsultationModel =
+      const AddMedicalConsultationModel();
+
   List<int> userIds = [];
 
   UserModel? selectedDietitian;
   UserModel? selectedCoach;
   UserModel? selectedDoctor;
+  UserModel? selectedPsychologist;
 
   ActivityStatusEnum? status;
 
@@ -98,14 +104,17 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   void setEmployeeId(UserModel? user) {
     if (user != null) {
       if (user.role.isCoach) {
-        model = model.copyWith(coachId: () => user.id);
-        selectedCoach = user;
+        selectedCoach = selectedCoach != user ? user : null;
+        model = model.copyWith(coachId: () => selectedCoach?.id);
       } else if (user.role.isDietitian) {
-        model = model.copyWith(dietitianId: () => user.id);
-        selectedDietitian = user;
+        selectedDietitian = selectedDietitian != user ? user : null;
+        model = model.copyWith(dietitianId: () => selectedDietitian?.id);
       } else if (user.role.isDoctor) {
-        model = model.copyWith(doctorId: () => user.id);
-        selectedDoctor = user;
+        selectedDoctor = selectedDoctor != user ? user : null;
+        model = model.copyWith(doctorId: () => selectedDoctor?.id);
+      } else if (user.role.isPsychologist) {
+        selectedPsychologist = selectedPsychologist != user ? user : null;
+        model = model.copyWith(psychologistId: () => selectedPsychologist?.id);
       } else {
         return;
       }
@@ -113,6 +122,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
         selectedDietitian,
         selectedCoach,
         selectedDoctor,
+        selectedPsychologist,
       ));
     }
   }
@@ -166,6 +176,12 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
         evaluateCustomerModel.copyWith(plansCount: () => plansCount);
   }
 
+  void setMedicalConsultation(String? medicalConsultation) {
+    addMedicalConsultationModel = addMedicalConsultationModel.copyWith(
+      medicalConsultation: () => medicalConsultation,
+    );
+  }
+
   void clearUserIds() => userIds.clear();
 
   void resetAddPointsModel() {
@@ -174,6 +190,10 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
 
   void resetEvaluateCustomerModel() {
     evaluateCustomerModel = const EvaluateCustomerModel();
+  }
+
+  void resetAddMedicalConsultationModel() {
+    addMedicalConsultationModel = const AddMedicalConsultationModel();
   }
 
   void resetAssignSubscriberModel() {
@@ -185,6 +205,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
       selectedDietitian,
       selectedCoach,
       selectedDoctor,
+      selectedPsychologist,
     ));
     model = const AssignSubscriberModel();
   }
@@ -293,7 +314,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     emit(AssignSubscriberLoading());
     try {
       if (isClosed) return;
-      await customerService.changeStatus(id, status!.name);
+      await customerService.changeStatus(id,status!.name);
       emit(AssignSubscriberSuccess("status_updated".tr()));
     } catch (e) {
       if (isClosed) return;
@@ -362,6 +383,22 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     } catch (e) {
       if (isClosed) return;
       emit(SubscriberEvaluationFail(e.toString()));
+    }
+  }
+
+  Future<void> addMedicalConsultation(UserRoleEnum role, int id) async {
+    emit(AddMedicalConsultationLoading());
+    try {
+      if (isClosed) return;
+      await customerService.addMedicalConsultation(
+        role,
+        id,
+        addMedicalConsultationModel,
+      );
+      emit(AddMedicalConsultationSuccess("medical_consultation_added".tr()));
+    } catch (e) {
+      if (isClosed) return;
+      emit(AddMedicalConsultationFail(e.toString()));
     }
   }
 }

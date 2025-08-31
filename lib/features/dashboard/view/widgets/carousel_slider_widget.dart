@@ -67,8 +67,6 @@ class CarouselSliderWidget extends StatelessWidget {
                             url: adv.image,
                             backgroundColor: context.cs.surface,
                             borderRadius: AppConstants.borderRadius20,
-                            errorWidget:
-                                Image.asset("assets/images/app_logo.png"),
                             fit: BoxFit.cover,
                             shadows: [
                               BoxShadow(

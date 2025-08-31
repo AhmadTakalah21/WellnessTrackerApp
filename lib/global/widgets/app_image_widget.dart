@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/image_place_holder_widget.dart';
 
 class AppImageWidget extends StatelessWidget {
@@ -51,17 +52,7 @@ class AppImageWidget extends StatelessWidget {
           imageUrl: url,
           fit: fit,
           errorWidget: (context, url, error) {
-            return errorWidget ??
-                Center(
-                  child: Text(
-                    "No image",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: width != null ? width! / 4 : 20,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                );
+            return errorWidget ?? Image.asset(AppConstants.logo);
           },
           placeholder: (context, url) => const ImagePlaceHolderWidget(),
         ),

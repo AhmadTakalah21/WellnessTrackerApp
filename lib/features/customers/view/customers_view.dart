@@ -6,6 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/add_customer_report_widget.dart';
+import 'package:wellnesstrackerapp/features/customers/view/widgets/add_medical_consultation_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/add_points_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/additional_customer_options_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_exercise_plan_widget.dart';
@@ -30,6 +31,7 @@ abstract class CustomersViewCallbacks {
   void onDeleteTap(CustomerModel customer);
   void onReportTap(CustomerModel customer);
   void onLongPress(CustomerModel customer);
+  void onAddMedicalConsultation(CustomerModel customer);
   void onAddPoints();
   void onAssignPlan();
   void onTryAgainTap();
@@ -192,6 +194,20 @@ class CustomersPageState extends State<CustomersPage>
   }
 
   @override
+  void onAddMedicalConsultation(CustomerModel customer) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AddMedicalConsultationView(
+          customersCubit: customersCubit,
+          role: widget.role,
+          customer: customer,
+        );
+      },
+    );
+  }
+
+  @override
   void onDeleteTap(CustomerModel customer) {
     showDialog(
       context: context,
@@ -214,6 +230,8 @@ class CustomersPageState extends State<CustomersPage>
   @override
   Widget build(BuildContext context) {
     bool isAdmin = widget.role.isAdmin;
+    bool isDoctor = widget.role.isDoctor;
+    bool isPsychologist = widget.role.isPsychologist;
     final titles = [
       '#',
       'name'.tr(),
@@ -243,6 +261,7 @@ class CustomersPageState extends State<CustomersPage>
                   if (state is CustomersLoading) {
                     return LoadingIndicator();
                   } else if (state is CustomersSuccess) {
+                    print("code is ${state.customers.data[0].code}");
                     return RefreshIndicator(
                       onRefresh: onRefresh,
                       child: SingleChildScrollView(
@@ -271,6 +290,15 @@ class CustomersPageState extends State<CustomersPage>
                                       color: context.cs.onPrimaryFixed,
                                     ),
                                   ),
+                                  if (isDoctor || isPsychologist)
+                                    IconButton(
+                                      onPressed: () =>
+                                          onAddMedicalConsultation(item),
+                                      icon: Icon(
+                                        Icons.medical_services,
+                                        color: Colors.red,
+                                      ),
+                                    ),
                                 ];
                               },
                             ),

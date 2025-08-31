@@ -14,6 +14,7 @@ AssignSubscriberModel _$AssignSubscriberModelFromJson(
       coachId: (json['coach_id'] as num?)?.toInt(),
       levelId: (json['level_id'] as num?)?.toInt(),
       doctorId: (json['doctor_id'] as num?)?.toInt(),
+      psychologistId: (json['psychologist_id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$AssignSubscriberModelToJson(
@@ -24,4 +25,5 @@ Map<String, dynamic> _$AssignSubscriberModelToJson(
       'coach_id': instance.coachId,
       'level_id': instance.levelId,
       'doctor_id': instance.doctorId,
+      'psychologist_id': instance.psychologistId,
     };

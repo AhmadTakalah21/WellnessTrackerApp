@@ -73,6 +73,7 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   final LevelModel? level;
 
+  @JsonKey(name: "code")
   final String? code;
 
   @JsonKey(name: "subscription_end_date")
@@ -141,6 +142,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
       subscription: subscription,
       level: level,
       isAdmin: isAdmin ?? this.isAdmin,
+      code: code,
+      subEndDate: subEndDate,
       totalPoints: totalPoints,
       createdAt: createdAt,
     );

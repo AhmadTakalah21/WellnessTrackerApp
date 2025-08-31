@@ -9,6 +9,7 @@ abstract class MainSnackBar {
     BuildContext context,
     String message, {
     Color? color,
+    FlushbarPosition flushbarPosition = FlushbarPosition.TOP,
     Duration? duration,
   }) {
     _showSnackBar(
@@ -16,6 +17,7 @@ abstract class MainSnackBar {
       message,
       backgroundColor: color ?? AppColors.green,
       icon: Icons.check_circle,
+      flushbarPosition: flushbarPosition,
       duration: duration,
     );
   }
@@ -24,6 +26,7 @@ abstract class MainSnackBar {
     BuildContext context,
     String message, {
     Color? color,
+    FlushbarPosition flushbarPosition = FlushbarPosition.TOP,
     Duration? duration,
   }) {
     _showSnackBar(
@@ -31,6 +34,7 @@ abstract class MainSnackBar {
       message,
       backgroundColor: color ?? Colors.blueGrey.shade200,
       icon: Icons.info,
+      flushbarPosition: flushbarPosition,
       duration: duration,
     );
   }
@@ -39,6 +43,7 @@ abstract class MainSnackBar {
     BuildContext context,
     String message, {
     Color? color,
+    FlushbarPosition flushbarPosition = FlushbarPosition.TOP,
     Duration? duration,
   }) {
     _showSnackBar(
@@ -46,6 +51,7 @@ abstract class MainSnackBar {
       message,
       backgroundColor: color ?? AppColors.red,
       icon: Icons.error,
+      flushbarPosition: flushbarPosition,
       duration: duration,
     );
   }
@@ -55,21 +61,21 @@ abstract class MainSnackBar {
     String message, {
     required Color backgroundColor,
     required IconData icon,
+    required FlushbarPosition flushbarPosition,
     Duration? duration,
   }) {
     Flushbar(
-      shouldIconPulse: true,
       onTap: (flushbar) => flushbar.dismiss(),
       margin: AppConstants.padding8,
       borderRadius: BorderRadius.circular(12),
       backgroundColor: backgroundColor,
       duration: duration ?? AppConstants.duration1500ms,
-      flushbarPosition: FlushbarPosition.TOP,
-      //icon: Icon(icon, color: AppColors.white),
+      flushbarPosition: flushbarPosition,
       messageText: Center(
-        child: Text(message, style: context.tt.titleMedium?.copyWith(
-          color: context.cs.surface
-        )),
+        child: Text(
+          message,
+          style: context.tt.titleMedium?.copyWith(color: context.cs.surface),
+        ),
       ),
     ).show(context);
   }

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
@@ -16,6 +17,7 @@ class ProfileCubit extends Cubit<GeneralProfileState> {
   ProfileCubit(this.profileService) : super(GeneralProfileInitial());
   final ProfileService profileService;
   AddRateModel addRateModel = const AddRateModel();
+  XFile? image;
 
   void setModel(RatingModel? rating) {
     setRating(rating?.rating);
@@ -28,6 +30,10 @@ class ProfileCubit extends Cubit<GeneralProfileState> {
 
   void setComment(String? comment) {
     addRateModel = addRateModel.copyWith(comment: () => comment);
+  }
+
+  void setImage(XFile? image) {
+    this.image = image;
   }
 
   void resetAddRateModel() {

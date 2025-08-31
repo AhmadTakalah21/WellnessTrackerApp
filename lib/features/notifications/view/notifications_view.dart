@@ -210,7 +210,7 @@ class _NotificationsPageState extends State<NotificationsPage>
             SizedBox(height: 10),
             ..._buildNotificationsList(notifications, isLoadMore: isLoadMore),
             if (isLoadMore) LoadingIndicator(),
-            if (message != null)
+            if (message != null && notifications.length >= 6)
               MainErrorWidget(
                 error: message,
                 onTryAgainTap: isError ? () => onTryAgainTap(true) : null,
@@ -235,8 +235,15 @@ class _NotificationsPageState extends State<NotificationsPage>
         vertical: 12,
       ),
       decoration: BoxDecoration(
-        color: Colors.green.shade100,
+        color: context.cs.surface,
         borderRadius: AppConstants.borderRadius5,
+        boxShadow: [
+          BoxShadow(
+            color: context.cs.onTertiary.withValues(alpha: 0.3),
+            offset: Offset(0, 1),
+            blurRadius: 1,
+          ),
+        ],
       ),
       child: Icon(
         Icons.account_balance_wallet,
@@ -265,15 +272,22 @@ class _NotificationsPageState extends State<NotificationsPage>
     Widget initialImage,
   ) {
     Widget image;
-    if (notification.image == null) {
+    if (notification.image != null) {
       image = Container(
         margin: const EdgeInsets.only(bottom: 10),
         child: AppImageWidget(
-          url: "notification.image!",
+          url: notification.image!,
           width: 48,
           height: 48,
           borderRadius: AppConstants.borderRadius5,
-          backgroundColor: Colors.green.shade100,
+          backgroundColor: context.cs.surface,
+          shadows: [
+            BoxShadow(
+              color: context.cs.onTertiary.withValues(alpha: 0.3),
+              offset: Offset(0, 1),
+              blurRadius: 1,
+            ),
+          ],
           errorWidget: Icon(
             Icons.account_balance_wallet,
             size: 24,

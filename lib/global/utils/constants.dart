@@ -24,6 +24,9 @@ abstract class AppConstants {
   static const borderRadiusT20 = BorderRadius.vertical(
     top: Radius.circular(20),
   );
+  static const borderRadiusT5 = BorderRadius.vertical(
+    top: Radius.circular(5),
+  );
   static const borderRadiusL10 = BorderRadius.only(
     topLeft: Radius.circular(10),
     bottomLeft: Radius.circular(10),
@@ -85,4 +88,6 @@ abstract class AppConstants {
   static const padding6 = EdgeInsets.all(6);
   static const padding2 = EdgeInsets.all(2);
   static const padding0 = EdgeInsets.zero;
+
+  static const logo = "assets/images/app_logo.png";
 }

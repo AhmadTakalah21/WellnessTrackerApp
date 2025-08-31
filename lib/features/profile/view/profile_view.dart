@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
@@ -53,6 +57,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage>
     implements ProfileViewCallbacks {
   late final ProfileCubit profileCubit = context.read();
+  File? _pickedImage;
 
   @override
   void initState() {
@@ -60,11 +65,26 @@ class _ProfilePageState extends State<ProfilePage>
     profileCubit.getProfile();
   }
 
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _pickedImage = File(pickedFile.path);
+      });
+      profileCubit.setImage(pickedFile);
+    }
+  }
+
   @override
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => profileCubit.getProfile();
+  void onTryAgainTap() {
+    _pickedImage = null;
+    profileCubit.getProfile();
+  }
 
   @override
   void onAboutUsTap() {
@@ -103,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage>
           Icons.privacy_tip, "privacy_policy".tr(), onPrivacyPolicyTap),
     ];
     return Scaffold(
-      appBar: MainAppBar(title: 'profile'.tr()),
+      appBar: MainAppBar(title: 'profile'.tr(), role: UserRoleEnum.user),
       body: RefreshIndicator(
         onRefresh: onRefresh,
         child: SingleChildScrollView(
@@ -122,91 +142,14 @@ class _ProfilePageState extends State<ProfilePage>
                   } else if (state is ProfileSuccess) {
                     final profile = state.customer;
                     final info = profile.info;
-                    final initialImage = CircleAvatar(
-                      radius: 48,
-                      backgroundColor:
-                          context.cs.primary.withValues(alpha: 0.7),
-                      child: Icon(
-                        Icons.person,
-                        color: context.cs.secondary.withValues(alpha: 0.7),
-                        size: 45,
-                      ),
-                    );
                     child = Column(
                       children: [
-                        Center(
-                          child: profile.image != null
-                              ? AppImageWidget(
-                                  url: profile.image!,
-                                  width: 95,
-                                  height: 95,
-                                  borderRadius: AppConstants.borderRadiusCircle,
-                                  backgroundColor:
-                                      context.cs.primary.withValues(alpha: 0.7),
-                                  errorWidget: Icon(
-                                    Icons.person,
-                                    color: context.cs.secondary
-                                        .withValues(alpha: 0.7),
-                                    size: 45,
-                                  ),
-                                )
-                              : initialImage,
-                        ),
+                        _buildImagePicker(profile),
                         const SizedBox(height: 12),
-                        Center(
-                          child: Column(
-                            children: [
-                              Text(
-                                profile.name,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (profile.level != null)
-                                    Text(profile.level!.name,
-                                        style: TextStyle(color: Colors.grey)),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    "| ${profile.totalPoints?.toString() ?? 0} ${"point".tr()}",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+                        _buildNameWithLevelAndPoints(profile),
                         const SizedBox(height: 16),
-                        if (info != null)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _InfoCard(
-                                label: 'weight'.tr(),
-                                value: info.weight.toString(),
-                                unit: 'Kg',
-                              ),
-                              _InfoCard(
-                                label: 'height'.tr(),
-                                value: info.length.toString(),
-                                unit: 'cm',
-                              ),
-                              _InfoCard(
-                                label: 'age'.tr(),
-                                value: profile.age?.toString() ??
-                                    "not_provided".tr(),
-                                unit: 'year'.tr(),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10)
+                        if (info != null) _buildCards(profile),
+                        SizedBox(height: 10)
                       ],
                     );
                   } else if (state is ProfileFail) {
@@ -238,6 +181,103 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildImagePicker(CustomerModel profile) {
+    final initialImage = CircleAvatar(
+      radius: 48,
+      backgroundColor: context.cs.primary.withValues(alpha: 0.7),
+      child: Icon(
+        Icons.person,
+        color: context.cs.secondary.withValues(alpha: 0.7),
+        size: 45,
+      ),
+    );
+    return Center(
+      child: GestureDetector(
+        onTap: _pickImage,
+        child: _pickedImage != null
+            ? ClipRRect(
+                borderRadius: AppConstants.borderRadiusCircle,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: context.cs.primary.withValues(alpha: 0.7),
+                  ),
+                  child: Image.file(
+                    _pickedImage!,
+                    width: 95,
+                    height: 95,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )
+            : profile.image != null
+                ? AppImageWidget(
+                    url: profile.image!,
+                    width: 95,
+                    height: 95,
+                    borderRadius: AppConstants.borderRadiusCircle,
+                    backgroundColor: context.cs.primary.withValues(alpha: 0.7),
+                    errorWidget: Icon(
+                      Icons.person,
+                      color: context.cs.secondary.withValues(alpha: 0.7),
+                      size: 45,
+                    ),
+                  )
+                : initialImage,
+      ),
+    );
+  }
+
+  Widget _buildNameWithLevelAndPoints(CustomerModel profile) {
+    return Center(
+      child: Column(
+        children: [
+          Text(
+            profile.name,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (profile.level != null)
+                Text(profile.level!.name, style: TextStyle(color: Colors.grey)),
+              SizedBox(width: 4),
+              Text(
+                "| ${profile.totalPoints?.toString() ?? 0} ${"point".tr()}",
+                style:
+                    TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCards(CustomerModel profile) {
+    final info = profile.info;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _InfoCard(
+          label: 'weight'.tr(),
+          value: info!.weight.toString(),
+          unit: 'Kg',
+        ),
+        _InfoCard(
+          label: 'height'.tr(),
+          value: info.length.toString(),
+          unit: 'cm',
+        ),
+        _InfoCard(
+          label: 'age'.tr(),
+          value: profile.age?.toString() ?? "not_provided".tr(),
+          unit: 'year'.tr(),
+        ),
+      ],
     );
   }
 }

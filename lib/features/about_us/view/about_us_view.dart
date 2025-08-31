@@ -103,11 +103,7 @@ class _WorkoutItem extends StatelessWidget {
               border: Border.all(width: 0.5),
               shape: BoxShape.circle,
             ),
-            child: Image.asset(
-              "assets/images/app_logo.png",
-              width: 80,
-              height: 80,
-            ),
+            child: Image.asset(AppConstants.logo, width: 80, height: 80),
           ),
         ],
       ),

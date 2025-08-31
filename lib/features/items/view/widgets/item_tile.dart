@@ -1,9 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
+import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 
@@ -24,7 +27,11 @@ class ItemTile extends StatelessWidget {
     final userPoints = 1000;
     final progress = (userPoints / item.price).clamp(0.0, 1.0);
     final image = item.image;
-    final description = item.description;
+    //final description = item.description;
+
+    final isArabic = context.locale == SupportedLocales.arabic;
+    final name = isArabic ? item.name.ar : item.name.en;
+    final description = isArabic ? item.description?.ar : item.description?.en;
 
     return GestureDetector(
       onTap: () => onTap(item),
@@ -63,24 +70,22 @@ class ItemTile extends StatelessWidget {
             const SizedBox(height: 6),
             if (role.isUser)
               CircularPercentIndicator(
-                  radius: 45,
-                  lineWidth: 5,
-                  percent: progress,
-                  animation: true,
-                  circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: Colors.white,
-                  backgroundColor: Colors.white24,
-                  center: AppImageWidget(
-                    width: 70,
-                    height: 70,
-                    url: image ?? "",
-                    borderRadius: AppConstants.borderRadiusCircle,
-                    border: Border.all(color: Colors.white, width: 1),
-                    backgroundColor: context.cs.surface,
-                    errorWidget: Image.asset(
-                      "assets/images/app_logo.png",
-                    ),
-                  )),
+                radius: 45,
+                lineWidth: 5,
+                percent: progress,
+                animation: true,
+                circularStrokeCap: CircularStrokeCap.round,
+                progressColor: AppColors.white,
+                backgroundColor: Colors.white24,
+                center: AppImageWidget(
+                  width: 70,
+                  height: 70,
+                  url: image ?? "",
+                  borderRadius: AppConstants.borderRadiusCircle,
+                  border: Border.all(color: AppColors.white, width: 1),
+                  backgroundColor: context.cs.surface,
+                ),
+              ),
             if (role.isAdmin)
               AspectRatio(
                 aspectRatio: 5 / 3,
@@ -88,26 +93,23 @@ class ItemTile extends StatelessWidget {
                   url: image ?? "",
                   fit: BoxFit.cover,
                   borderRadius: AppConstants.borderRadius15,
-                  border: Border.all(color: Colors.white, width: 1),
+                  border: Border.all(color: AppColors.white, width: 1),
                   backgroundColor: context.cs.surface,
-                  errorWidget: Image.asset(
-                    "assets/images/app_logo.png",
-                  ),
                 ),
               ),
             const SizedBox(height: 10),
             Text(
-              item.name.en ?? "Item",
+              name ?? "Item",
               style: context.tt.titleMedium?.copyWith(
-                color: Colors.white,
+                color: AppColors.white,
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 4),
-            if (description?.en != null && description!.en!.isNotEmpty)
+            if (description != null && description.isNotEmpty)
               Text(
-                description.en!,
+                description,
                 style: context.tt.bodySmall?.copyWith(
                   color: Colors.white70,
                 ),
@@ -119,18 +121,18 @@ class ItemTile extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: AppColors.black.withOpacity(0.08),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
                 ],
               ),
               child: Text(
-                "${item.price.toInt()} نقطة",
+                "${item.price.toInt()} ${"point".tr()}",
                 style: GoogleFonts.poppins(
                   color: context.cs.primary,
                   fontWeight: FontWeight.bold,

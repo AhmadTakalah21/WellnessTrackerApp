@@ -129,11 +129,25 @@ class CustomersServiceImp implements CustomersService {
     int id,
   ) async {
     try {
-      final endpoint =
-          "/v1/${role.getApiRoute}/subscriptions/get-evaluation/$id";
+      final endpoint = "/v1/${role.getApiRoute}/subscriptions/evaluate/$id";
       final response = await dio.get(endpoint);
       final data = response.data["data"] as Map<String, dynamic>;
       return CustomerEvaluationModel.fromJson(data);
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addMedicalConsultation(
+    UserRoleEnum role,
+    int id,
+    AddMedicalConsultationModel model,
+  ) async {
+    try {
+      final endpoint = "/v1/${role.getApiRoute}/consultations/$id";
+      await dio.post(endpoint, data: model.toJson());
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
       rethrow;

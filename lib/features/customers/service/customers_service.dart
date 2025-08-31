@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:wellnesstrackerapp/features/customers/model/add_medical_consultation_model/add_medical_consultation_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/add_points_model/add_points_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_meal_plan_model/assign_meal_plan_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_subscriber_model/assign_subscriber_model.dart';
@@ -38,5 +39,10 @@ abstract class CustomersService {
   Future<CustomerEvaluationModel> getSubscriberEvaluation(
     UserRoleEnum role,
     int id,
+  );
+  Future<void> addMedicalConsultation(
+    UserRoleEnum role,
+    int id,
+    AddMedicalConsultationModel model,
   );
 }

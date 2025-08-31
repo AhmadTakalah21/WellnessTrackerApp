@@ -41,7 +41,6 @@ class AdvDetailsWidget extends StatelessWidget {
                       url: adv.image,
                       backgroundColor: context.cs.surface,
                       shadows: AppColors.secondShadow,
-                      errorWidget: Image.asset("assets/images/app_logo.png"),
                     ),
                   ),
                   DecoratedBox(

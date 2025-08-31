@@ -376,8 +376,8 @@
   "active_users": "المستخدمون النشطون",
   "diet_users": "المشتركين متابعة تغذية",
   "exercise_users": "المشتركين متابعة رياضية",
-  "male_users": "المستخدمون الذكور",
-  "female_users": "المستخدمات الإناث",
+  "male_users": "المشتركين الذكور",
+  "female_users": "المشتركين الإناث",
   "avg_ages": "متوسط الأعمار",
   "avg_weights": "متوسط الأوزان",
   "avg_lenghts": "متوسط الأطوال",
@@ -470,5 +470,13 @@
   "plans_count": "عدد البرامج المستلمة",
   "subscriber_evaluation" : "تقييم المشترك",
   "weight_before_subscription" : "الوزن قبل الاشتراك",
-  "currnet_weight" : "الوزن الحالي"
+  "currnet_weight" : "الوزن الحالي",
+  "add_medical_consultation" : "إضافة استشارة طبية",
+  "medical_consultation" : "الاستشارة الطبية",
+  "medical_consultation_required" : "حقل الاستشارة الطبية مطلوب",
+  "level_required" : "المستوى مطلوب",
+  "subscriber_evaluated" : "تم تقييم المشترك بنجاح",
+  "medical_consultation_added" : "تم إضافة استشارة طبية بنجاح",
+  "plz_accept" : "يرجى قبول البنود والشروط اولا",
+  "most_used_code" : "الكود الأكثر استخداما"
 }

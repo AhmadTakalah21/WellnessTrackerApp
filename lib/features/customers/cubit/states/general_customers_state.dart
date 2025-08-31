@@ -8,10 +8,12 @@ class SelectedSpecialistsState extends GeneralCustomersState {
   final UserModel? selectedDietitian;
   final UserModel? selectedCoach;
   final UserModel? selectedDoctor;
+  final UserModel? selectedPsychologist;
 
   SelectedSpecialistsState(
     this.selectedDietitian,
     this.selectedCoach,
     this.selectedDoctor,
+    this.selectedPsychologist,
   );
 }

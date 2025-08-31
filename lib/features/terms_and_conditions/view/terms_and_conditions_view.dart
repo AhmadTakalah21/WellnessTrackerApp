@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
 @RoutePage()
 class TermsAndConditionsView extends StatelessWidget {
@@ -47,10 +48,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
           children: [
             AspectRatio(
               aspectRatio: 5 / 2,
-              child: Image.asset(
-                "assets/images/app_logo.png",
-                fit: BoxFit.cover,
-              ),
+              child: Image.asset(AppConstants.logo, fit: BoxFit.cover),
             ),
             const SizedBox(height: 10),
             Divider(

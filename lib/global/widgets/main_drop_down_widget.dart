@@ -23,6 +23,7 @@ class MainDropDownWidget<T extends DropDownItemModel> extends StatefulWidget {
     required this.onChanged,
     this.isEntityName = false,
     this.onLongPress,
+    this.isRequired = true,
   });
 
   final List<T> items;
@@ -35,6 +36,7 @@ class MainDropDownWidget<T extends DropDownItemModel> extends StatefulWidget {
   final T? selectedValue;
   final IconData? icon;
   final bool isEntityName;
+  final bool isRequired;
 
   @override
   State<MainDropDownWidget<T>> createState() => _MainDropDownWidgetState<T>();
@@ -117,7 +119,7 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
           decoration: InputDecoration(
             prefixIcon: Icon(widget.prefixIcon, color: context.cs.primary),
             filled: true,
-            fillColor: context.cs.surfaceVariant,
+            fillColor: context.cs.surfaceContainerHighest ,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -147,8 +149,9 @@ class _MainDropDownWidgetState<T extends DropDownItemModel>
             setState(() => selectedValue = value);
             widget.onChanged(value);
           },
-          validator: (value) =>
-              value == null ? widget.errorMessage?.tr() : null,
+          validator: widget.isRequired
+              ? (value) => value == null ? widget.errorMessage?.tr() : null
+              : null,
         ),
       ],
     );

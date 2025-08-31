@@ -15,17 +15,20 @@ class AssignSubscriberModel {
     int? coachId,
     int? levelId,
     int? doctorId,
+    int? psychologistId,
   })  : _userId = userId,
         _dietitianId = dietitianId,
         _coachId = coachId,
         _levelId = levelId,
-        _doctorId = doctorId;
+        _doctorId = doctorId,
+        _psychologistId = psychologistId;
 
   final int? _userId;
   final int? _dietitianId;
   final int? _coachId;
   final int? _levelId;
   final int? _doctorId;
+  final int? _psychologistId;
 
   AssignSubscriberModel copyWith({
     int? Function()? userId,
@@ -33,6 +36,7 @@ class AssignSubscriberModel {
     int? Function()? coachId,
     int? Function()? levelId,
     int? Function()? doctorId,
+    int? Function()? psychologistId,
   }) {
     return AssignSubscriberModel(
       userId: userId != null ? userId() : _userId,
@@ -40,6 +44,7 @@ class AssignSubscriberModel {
       coachId: coachId != null ? coachId() : _coachId,
       levelId: levelId != null ? levelId() : _levelId,
       doctorId: doctorId != null ? doctorId() : _doctorId,
+      psychologistId: psychologistId != null ? psychologistId() : _psychologistId,
     );
   }
 
@@ -53,17 +58,11 @@ class AssignSubscriberModel {
 
   @JsonKey(name: 'dietitian_id')
   int? get dietitianId {
-    // if (_dietitianId == null) {
-    //   throw "dietitian_required".tr();
-    // }
     return _dietitianId;
   }
 
   @JsonKey(name: 'coach_id')
   int? get coachId {
-    // if (_coachId == null) {
-    //   throw "coach_required".tr();
-    // }
     return _coachId;
   }
 
@@ -77,10 +76,12 @@ class AssignSubscriberModel {
 
   @JsonKey(name: 'doctor_id')
   int? get doctorId {
-    // if (_doctorId == null) {
-    //   throw "doctor_required".tr();
-    // }
     return _doctorId;
+  }
+
+  @JsonKey(name: 'psychologist_id')
+  int? get psychologistId {
+    return _psychologistId;
   }
 
   factory AssignSubscriberModel.fromJson(Map<String, dynamic> json) =>

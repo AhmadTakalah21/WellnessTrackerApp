@@ -30,9 +30,10 @@ abstract class AppColors {
 
   static List<BoxShadow> firstShadow = [
     BoxShadow(
-        color: black.withValues(alpha: 0.3),
-        offset: Offset(0, 4),
-        blurRadius: 4),
+      color: black.withValues(alpha: 0.3),
+      offset: Offset(0, 4),
+      blurRadius: 4,
+    ),
   ];
   static List<BoxShadow> secondShadow = [
     BoxShadow(

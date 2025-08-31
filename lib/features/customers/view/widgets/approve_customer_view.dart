@@ -298,17 +298,13 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
             spacing: 10,
             children: [
               if (state.selectedDietitian != null)
-                Text(
-                  "selected dietitian :${state.selectedDietitian?.name} ",
-                ),
+                Text("selected dietitian :${state.selectedDietitian?.name} "),
               if (state.selectedCoach != null)
-                Text(
-                  "selected coach :${state.selectedCoach?.name} ",
-                ),
+                Text("selected coach :${state.selectedCoach?.name} "),
               if (state.selectedDoctor != null)
-                Text(
-                  "selected doctor :${state.selectedDoctor?.name} ",
-                ),
+                Text("selected doctor :${state.selectedDoctor?.name} "),
+              if (state.selectedPsychologist != null)
+                Text("selected doctor :${state.selectedPsychologist?.name} "),
             ],
           );
         } else {
@@ -331,6 +327,8 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
               errorMessage: 'required_field'.tr(),
               onChanged: onLevelSelected,
             );
+          } else if (state is LevelsEmpty) {
+            return MainErrorWidget(error: state.message);
           } else if (state is LevelsFail) {
             return MainErrorWidget(
               error: state.error,

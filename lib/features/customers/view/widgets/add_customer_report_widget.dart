@@ -30,7 +30,7 @@ class AddCustomerReportView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: customersCubit,
-      child: AddCustomerReportWidget(
+      child: _AddCustomerReportWidget(
         role: role,
         customersCubit: customersCubit,
         customer: customer,
@@ -39,9 +39,8 @@ class AddCustomerReportView extends StatelessWidget {
   }
 }
 
-class AddCustomerReportWidget extends StatefulWidget {
-  const AddCustomerReportWidget({
-    super.key,
+class _AddCustomerReportWidget extends StatefulWidget {
+  const _AddCustomerReportWidget({
     required this.role,
     required this.customersCubit,
     required this.customer,
@@ -51,11 +50,11 @@ class AddCustomerReportWidget extends StatefulWidget {
   final CustomerModel customer;
 
   @override
-  State<AddCustomerReportWidget> createState() =>
-      _AddCustomerReportWidgetState();
+  State<_AddCustomerReportWidget> createState() =>
+      __AddCustomerReportWidgetState();
 }
 
-class _AddCustomerReportWidgetState extends State<AddCustomerReportWidget> {
+class __AddCustomerReportWidgetState extends State<_AddCustomerReportWidget> {
   final _formKey = GlobalKey<FormState>();
 
   @override

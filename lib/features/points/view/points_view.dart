@@ -17,10 +17,16 @@ class ChartModel {
   ChartModel({
     required this.xAxisProperty,
     required this.yAxisProperty,
+    this.isInChart = true,
+    required this.color,
+    this.icon,
   });
 
   final String xAxisProperty;
   final List<double> yAxisProperty;
+  final bool isInChart;
+  final Color color;
+  final IconData? icon;
 }
 
 abstract class PointsViewCallBacks {
@@ -131,186 +137,4 @@ class _PointsPageState extends State<PointsPage>
       ),
     );
   }
-
-  // Widget buildStatsRow() {
-  //   return SingleChildScrollView(
-  //     scrollDirection: Axis.horizontal,
-  //     child: Row(
-  //       children: [
-  //         buildStatCard("1.9 km", FontAwesomeIcons.shoePrints, Colors.blue),
-  //         buildStatCard("130 kcal", FontAwesomeIcons.fire, Colors.purple),
-  //         buildStatCard(
-  //           "3.2 km/h",
-  //           FontAwesomeIcons.guaraniSign,
-  //           Colors.orange,
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget buildStatCard(String value, IconData icon, Color bgColor) {
-  //   return Container(
-  //     margin: EdgeInsets.only(right: 5),
-  //     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-  //     decoration: BoxDecoration(
-  //       color: bgColor.withAlpha((0.1 * 255).toInt()),
-  //       borderRadius: BorderRadius.circular(12),
-  //     ),
-  //     child: Row(
-  //       children: [
-  //         CircleAvatar(
-  //           backgroundColor: bgColor,
-  //           radius: 15,
-  //           child: FaIcon(icon, color: Colors.white, size: 14),
-  //         ),
-  //         const SizedBox(width: 8),
-  //         Text(value, style: GoogleFonts.poppins(fontSize: 14)),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget buildFriendsList(BuildContext context) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Text(
-  //             "الأصدقاء",
-  //             style: GoogleFonts.poppins(
-  //               fontSize: 18,
-  //               fontWeight: FontWeight.bold,
-  //             ),
-  //           ),
-  //           Text(
-  //             "عرض الكل",
-  //             style: GoogleFonts.poppins(
-  //               fontSize: 16,
-  //               color: context.cs.primary,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //       const SizedBox(height: 10),
-  //       buildFriendItem(
-  //         "Robert",
-  //         "4085",
-  //         "2.7 km",
-  //         "190 kcal",
-  //         "2.3 km/h",
-  //         Colors.red,
-  //       ),
-  //       buildFriendItem(
-  //         "Valery",
-  //         "304",
-  //         "0.3 km",
-  //         "64 kcal",
-  //         "0.5 km/h",
-  //         Colors.purple,
-  //       ),
-  //       buildFriendItem(
-  //         "Max",
-  //         "10238",
-  //         "8 km",
-  //         "315 kcal",
-  //         "5 km/h",
-  //         Colors.blue,
-  //       ),
-  //       buildFriendItem(
-  //         "Robert",
-  //         "4085",
-  //         "2.7 km",
-  //         "190 kcal",
-  //         "2.3 km/h",
-  //         Colors.red,
-  //       ),
-  //       buildFriendItem(
-  //         "Valery",
-  //         "304",
-  //         "0.3 km",
-  //         "64 kcal",
-  //         "0.5 km/h",
-  //         Colors.purple,
-  //       ),
-  //       buildFriendItem(
-  //         "Max",
-  //         "10238",
-  //         "8 km",
-  //         "315 kcal",
-  //         "5 km/h",
-  //         Colors.blue,
-  //       ),
-  //       buildFriendItem(
-  //         "Robert",
-  //         "4085",
-  //         "2.7 km",
-  //         "190 kcal",
-  //         "2.3 km/h",
-  //         Colors.red,
-  //       ),
-  //       buildFriendItem(
-  //         "Valery",
-  //         "304",
-  //         "0.3 km",
-  //         "64 kcal",
-  //         "0.5 km/h",
-  //         Colors.purple,
-  //       ),
-  //       buildFriendItem(
-  //         "Max",
-  //         "10238",
-  //         "8 km",
-  //         "315 kcal",
-  //         "5 km/h",
-  //         Colors.blue,
-  //       ),
-  //       SizedBox(height: 80),
-  //     ],
-  //   );
-  // }
-
-  // Widget buildFriendItem(
-  //   String name,
-  //   String steps,
-  //   String distance,
-  //   String kcal,
-  //   String speed,
-  //   Color color,
-  // ) {
-  //   return Card(
-  //     color: Colors.white,
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-  //     elevation: 2,
-  //     child: ListTile(
-  //       leading: CircleAvatar(
-  //         backgroundColor: color.withAlpha((0.1 * 255).toInt()),
-  //         backgroundImage: NetworkImage(
-  //           'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
-  //         ),
-  //       ),
-  //       title: Text(
-  //         name,
-  //         style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
-  //       ),
-  //       subtitle: Row(
-  //         children: [
-  //           Text("$distance | ", style: GoogleFonts.poppins(fontSize: 12)),
-  //           Text("$kcal | ", style: GoogleFonts.poppins(fontSize: 12)),
-  //           Text(speed, style: GoogleFonts.poppins(fontSize: 12)),
-  //         ],
-  //       ),
-  //       trailing: Text(
-  //         steps,
-  //         style: GoogleFonts.poppins(
-  //           fontSize: 16,
-  //           fontWeight: FontWeight.bold,
-  //           color: color,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

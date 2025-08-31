@@ -92,51 +92,70 @@ class _StatisticsPageState extends State<StatisticsPage>
   }
 
   Widget _buildChart(BuildContext context, StatsModel stats) {
+    final active = stats.activeUsers.toDouble();
+    final dietitian = stats.dietitianUsers.toDouble();
+    final exercise = stats.exerciseUsers.toDouble();
+    final male = stats.maleUsers.toDouble();
+    final female = stats.femaleUsers.toDouble();
     final List<ChartModel> chartData = [
-      ChartModel(
-        xAxisProperty: "active_users".tr(),
-        yAxisProperty: [stats.activeUsers.toDouble()],
-      ),
-      ChartModel(
-        xAxisProperty: "diet_users".tr(),
-        yAxisProperty: [stats.dietitianUsers.toDouble()],
-      ),
-      ChartModel(
-        xAxisProperty: "exercise_users".tr(),
-        yAxisProperty: [stats.exerciseUsers.toDouble()],
-      ),
-      ChartModel(
-        xAxisProperty: "male_users".tr(),
-        yAxisProperty: [stats.maleUsers.toDouble()],
-      ),
-      ChartModel(
-        xAxisProperty: "female_users".tr(),
-        yAxisProperty: [stats.femaleUsers.toDouble()],
-      ),
       ChartModel(
         xAxisProperty: "avg_ages".tr(),
         yAxisProperty: [stats.avgAgesUsers],
+        color: Colors.teal,
       ),
       ChartModel(
         xAxisProperty: "avg_weights".tr(),
         yAxisProperty: [stats.avgWeightsUsers],
+        color: Colors.brown,
       ),
       ChartModel(
         xAxisProperty: "avg_lenghts".tr(),
         yAxisProperty: [stats.avgLengthsUsers],
+        color: Colors.indigo,
+      ),
+      ChartModel(
+        xAxisProperty: "active_users".tr(),
+        yAxisProperty: [active],
+        color: Colors.blue,
+      ),
+      ChartModel(
+        xAxisProperty: "diet_users".tr(),
+        yAxisProperty: [(100 * dietitian) / active, dietitian],
+        isInChart: false,
+        color: Colors.green,
+        icon: Icons.restaurant_menu_rounded,
+      ),
+      ChartModel(
+        xAxisProperty: "exercise_users".tr(),
+        yAxisProperty: [(100 * exercise) / active, exercise],
+        isInChart: false,
+        color: Colors.orange,
+        icon: Icons.fitness_center_rounded,
+      ),
+      ChartModel(
+        xAxisProperty: "male_users".tr(),
+        yAxisProperty: [(100 * male) / active, male],
+        isInChart: false,
+        color: Colors.purple,
+        icon: Icons.male,
+      ),
+      ChartModel(
+        xAxisProperty: "female_users".tr(),
+        yAxisProperty: [(100 * female) / active, female],
+        isInChart: false,
+        color: Colors.red,
+        icon: Icons.female,
+      ),
+      ChartModel(
+        xAxisProperty: "most_used_code".tr(),
+        yAxisProperty: [stats.mostCodeUsed.total.toDouble()],
+        isInChart: false,
+        color: Colors.cyan,
+        icon: Icons.qr_code,
       ),
     ];
 
-    final List<Color> columnColors = [
-      Colors.blue,
-      Colors.green,
-      Colors.orange,
-      Colors.purple,
-      Colors.red,
-      Colors.teal,
-      Colors.brown,
-      Colors.indigo,
-    ];
+    final dataSource = chartData.where((data) => data.isInChart).toList();
 
     final points = chartData.map((e) => e.yAxisProperty[0].toInt()).toList();
     int? maxNumber;
@@ -175,15 +194,14 @@ class _StatisticsPageState extends State<StatisticsPage>
                 series: List<CartesianSeries<ChartModel, String>>.generate(
                   chartData[0].yAxisProperty.length,
                   (index) => ColumnSeries<ChartModel, String>(
-                    width: 0.3,
-                    dataSource: chartData,
+                    width: 0.5,
+                    dataSource: dataSource,
+                    borderRadius: AppConstants.borderRadiusT5,
                     animationDuration: 1000,
-                    xValueMapper: (ChartModel xAxis, ind) =>
-                        "$ind",
+                    xValueMapper: (ChartModel xAxis, ind) => " " * ind,
                     yValueMapper: (ChartModel yAxis, ind) =>
                         yAxis.yAxisProperty[index],
-                    pointColorMapper: (_, index) =>
-                        columnColors[index % columnColors.length],
+                    pointColorMapper: (_, index) => dataSource[index].color,
                     dataLabelSettings: const DataLabelSettings(isVisible: true),
                     name: "stats".tr(),
                   ),
@@ -195,22 +213,47 @@ class _StatisticsPageState extends State<StatisticsPage>
               spacing: 12,
               runSpacing: 20,
               children: List.generate(chartData.length, (index) {
+                final item = chartData[index];
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      width: 14,
-                      height: 14,
-                      decoration: BoxDecoration(
-                        color: columnColors[index % columnColors.length],
-                        borderRadius: BorderRadius.circular(3),
+                    if (item.isInChart)
+                      Container(
+                        width: 14,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: item.color,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
                       ),
-                    ),
+                    if (item.icon != null)
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: item.color.withAlpha((0.2 * 255).toInt()),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Icon(item.icon, color: item.color),
+                        ),
+                      ),
                     const SizedBox(width: 6),
-                    Text(
-                      chartData[index].xAxisProperty,
-                      style: context.tt.bodyMedium,
-                    ),
+                    Text(item.xAxisProperty, style: context.tt.bodyMedium),
+                    if (!item.isInChart) ...[
+                      const SizedBox(width: 6),
+                      if(item.icon == Icons.qr_code)
+                      Text(
+                        "${stats.mostCodeUsed.code}: (${item.yAxisProperty[0].toStringAsFixed(0)})",
+                        style: context.tt.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      if(item.icon != Icons.qr_code)
+                      Text(
+                        "${item.yAxisProperty[1].toStringAsFixed(0)}  (${item.yAxisProperty[0].toStringAsFixed(0)} %)",
+                        style: context.tt.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ],
                 );
               }),

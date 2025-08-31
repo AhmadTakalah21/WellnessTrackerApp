@@ -77,7 +77,7 @@ class _SplashPageState extends State<SplashPage>
           children: [
             ScaleTransition(
               scale: _scaleAnimation,
-              child: Image.asset("assets/images/app_logo.png"),
+              child: Image.asset(AppConstants.logo),
             ),
             const SizedBox(height: 30),
             FadeTransition(

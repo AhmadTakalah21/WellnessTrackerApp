@@ -105,25 +105,18 @@ ThemeData darkTheme = ThemeData(
       color: AppColors.secondaryColor,
       height: 1.26,
       fontWeight: FontWeight.w700,
-      fontSize: 20,
+      fontSize: 24,
     ),
     centerTitle: true,
     elevation: 10,
     backgroundColor: AppColors.mainColor,
-    iconTheme: IconThemeData(color: AppColors.secondaryColor),
+    iconTheme: IconThemeData(color: AppColors.secondaryColor ,size: 30),
   ),
   iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
           iconColor: WidgetStatePropertyAll(AppColors.secondaryColor))),
   iconTheme: IconThemeData(color: AppColors.secondaryColor),
   useMaterial3: true,
-  // textSelectionToolbarTheme: TextSelectionToolbarThemeData(
-  //   toolbarTextStyle: TextStyle(
-  //     color: AppColors.secondaryColor,  // Color of "Copy", "Paste" etc.
-  //     fontSize: 14,
-  //   ),
-  // ),
-
   datePickerTheme: DatePickerThemeData(
     backgroundColor: AppColors.white,
     headerForegroundColor: AppColors.secondaryColor,

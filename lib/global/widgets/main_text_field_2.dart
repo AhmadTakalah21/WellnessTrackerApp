@@ -36,7 +36,7 @@ class MainTextField2 extends StatefulWidget {
   final String? hint;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
-  final VoidCallback? onTap;               // ⬅️ جديد
+  final VoidCallback? onTap; // ⬅️ جديد
   final FloatingLabelBehavior floatingLabelBehavior;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
@@ -67,7 +67,11 @@ class _MainTextField2State extends State<MainTextField2> {
           const SizedBox(height: 10),
         ],
         TextFormField(
-          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          onTapOutside: (_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            });
+          },
           maxLines: widget.maxLines,
           inputFormatters: widget.inputFormatters,
           keyboardType: widget.keyboardType,
@@ -88,7 +92,7 @@ class _MainTextField2State extends State<MainTextField2> {
             filled: true,
             fillColor: context.cs.surfaceContainerHighest,
             contentPadding:
-            const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+                const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -102,14 +106,14 @@ class _MainTextField2State extends State<MainTextField2> {
             ),
             suffixIcon: widget.isPassword
                 ? IconButton(
-              onPressed: setVisible,
-              icon: Icon(
-                isVisible
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
-                color: context.cs.primary,
-              ),
-            )
+                    onPressed: setVisible,
+                    icon: Icon(
+                      isVisible
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      color: context.cs.primary,
+                    ),
+                  )
                 : widget.suffix,
           ),
           validator: widget.validator,

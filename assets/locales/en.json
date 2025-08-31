@@ -469,5 +469,13 @@
   "plans_count": "Received Plans Count",
   "subscriber_evaluation": "Subscriber Evaluation",
   "weight_before_subscription": "Weight before subscription",
-  "currnet_weight": "Currnet Weight"
+  "currnet_weight": "Currnet Weight",
+  "add_medical_consultation" : "Add medical consultation",
+  "medical_consultation" : "Medical Consultation",
+  "medical_consultation_required" : "Medical Consultation is required",
+  "level_required" : "Level is required",
+  "subscriber_evaluated" : "Subscriber is evaluated successfully",
+  "medical_consultation_added" : "Medical Consultation is added",
+  "plz_accept" : "Please Accept Terms & Conditions First",
+  "most_used_code" : "Most used code"
 }

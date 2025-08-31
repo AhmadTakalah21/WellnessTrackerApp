@@ -150,6 +150,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
         automaticallyImplyLeading: !widget.role.isUser,
         title: 'adds_and_offers'.tr(),
         hasLogout: widget.role.isUser,
+        role: widget.role
       ),
       body: Padding(
         padding: AppConstants.padding16,
@@ -271,7 +272,6 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
         height: width,
         backgroundColor: context.cs.surface,
         borderRadius: AppConstants.borderRadius20,
-        errorWidget: Image.asset("assets/images/app_logo.png"),
         fit: BoxFit.cover,
         shadows: [
           BoxShadow(

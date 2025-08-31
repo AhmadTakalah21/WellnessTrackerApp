@@ -92,6 +92,7 @@ class _CurrentPointsPageState extends State<CurrentPointsPage>
         .map((e) => ChartModel(
               xAxisProperty: e.month,
               yAxisProperty: [e.points.toDouble()],
+              color: Colors.black
             ))
         .toList();
     final points = data.map((e) => e.points).toList();

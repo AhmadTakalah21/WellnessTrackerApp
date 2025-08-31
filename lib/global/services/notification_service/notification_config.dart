@@ -8,6 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 @pragma('vm:entry-point')
 Future<void> backgroundHandler(RemoteMessage message) async {}
 
+@pragma('vm:entry-point')
+void notificationTapBackground(NotificationResponse notificationResponse) {
+  // handle action
+}
+
 @singleton
 class NotaficationsService {
   final localNotification = FlutterLocalNotificationsPlugin();
@@ -18,14 +23,38 @@ class NotaficationsService {
     if (_isInitialized == true) return;
     const initSettingsAndroid =
         AndroidInitializationSettings('@mipmap/launcher_icon');
-
-    const initSettingsIOS = DarwinInitializationSettings(
+    final initSettingsIOS = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
+      notificationCategories: [
+        DarwinNotificationCategory(
+          'demoCategory',
+          actions: <DarwinNotificationAction>[
+            DarwinNotificationAction.plain('id_1', 'Action 1'),
+            DarwinNotificationAction.plain(
+              'id_2',
+              'Action 2',
+              options: <DarwinNotificationActionOption>{
+                DarwinNotificationActionOption.destructive,
+              },
+            ),
+            DarwinNotificationAction.plain(
+              'id_3',
+              'Action 3',
+              options: <DarwinNotificationActionOption>{
+                DarwinNotificationActionOption.foreground,
+              },
+            ),
+          ],
+          options: <DarwinNotificationCategoryOption>{
+            DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
+          },
+        )
+      ],
     );
 
-    const initSettings = InitializationSettings(
+    final initSettings = InitializationSettings(
       android: initSettingsAndroid,
       iOS: initSettingsIOS,
     );
@@ -33,6 +62,7 @@ class NotaficationsService {
     _isInitialized = await localNotification.initialize(
       initSettings,
       onDidReceiveNotificationResponse: _onLocalNotificationTap,
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
   }
 

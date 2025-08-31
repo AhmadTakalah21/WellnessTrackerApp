@@ -77,10 +77,10 @@ class _RatingsPageState extends State<RatingsPage>
               onRefresh: onRefresh,
               notificationPredicate: onNotification,
               child: SingleChildScrollView(
-                padding: AppConstants.padding20,
+                padding: AppConstants.padding16,
                 physics: BouncingScrollPhysics(),
                 child: Column(
-                  spacing: 20,
+                  spacing: 10,
                   children: [
                     ...ratings.asMap().entries.map((rating) {
                       return TileSlideAnimation(
@@ -89,9 +89,10 @@ class _RatingsPageState extends State<RatingsPage>
                       );
                     }),
                     if (state.isLoadingMore) LoadingIndicator(),
-                    if (!state.hasMore) MainErrorWidget(error: "no_more".tr()),
-                    if (ratings.length < 6)
-                      SizedBox(height: (6 - ratings.length) * 100.0),
+                    if (!state.hasMore && state.ratings.length >= 7)
+                      MainErrorWidget(error: "no_more".tr()),
+                    if (ratings.length < 7)
+                      SizedBox(height: (7 - ratings.length) * 100.0),
                   ],
                 ),
               ),
@@ -122,7 +123,7 @@ class _RatingsPageState extends State<RatingsPage>
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: AppConstants.padding20,
+        padding: AppConstants.padding14,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -150,6 +151,7 @@ class _RatingsPageState extends State<RatingsPage>
                 ),
                 const SizedBox(height: 8),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
                         child:

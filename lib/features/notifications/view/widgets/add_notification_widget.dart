@@ -9,6 +9,7 @@ import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/utils/utils.dart';
 import 'package:wellnesstrackerapp/global/widgets/choose_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
@@ -120,6 +121,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
   @override
   Widget build(BuildContext context) {
     final isAdmin = widget.role.isAdmin;
+    final subs = isAll ? "all_subscribers".tr() : "certain_subscribers".tr();
 
     return Scaffold(
       body: Stack(
@@ -151,12 +153,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                   SwitchListTile(
                     value: isAll,
                     onChanged: onIsAllSelected,
-                    title: Text(
-                      isAll
-                          ? "all_subscribers".tr()
-                          : "certain_subscribers".tr(),
-                      style: context.tt.bodyLarge,
-                    ),
+                    title: Text(subs, style: context.tt.bodyLarge),
                     activeColor: context.cs.primary,
                     inactiveThumbColor: context.cs.secondary,
                     activeTrackColor: context.cs.primary.withValues(alpha: 0.4),
@@ -227,6 +224,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                             labelText: "department".tr(),
                             onChanged: onDepartmentSelected,
                             isEntityName: true,
+                            isRequired: false,
                           ),
                         ],
                         const SizedBox(height: 16),
@@ -272,18 +270,16 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                     onChanged: widget.notificationsCubit.setTitle,
                     icon: Icons.title,
                     label: 'title'.tr(),
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    validator: (val) =>
+                        Utils.validateInput(val, InputTextType.none),
                   ),
                   const SizedBox(height: 12),
                   MainTextField2(
                     onChanged: widget.notificationsCubit.setMessage,
                     icon: Icons.message,
                     label: 'message'.tr(),
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    validator: (val) =>
+                        Utils.validateInput(val, InputTextType.none),
                   ),
                   const SizedBox(height: 12),
                   ChooseImageWidget(

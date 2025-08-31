@@ -15,6 +15,8 @@ StatsModel _$StatsModelFromJson(Map<String, dynamic> json) => StatsModel(
       avgAgesUsers: (json['avg_ages_users'] as num).toDouble(),
       avgWeightsUsers: (json['avg_weights_users'] as num).toDouble(),
       avgLengthsUsers: (json['avg_lengths_users'] as num).toDouble(),
+      mostCodeUsed: CodeStatsModel.fromJson(
+          json['most_used_code'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$StatsModelToJson(StatsModel instance) =>
@@ -27,4 +29,5 @@ Map<String, dynamic> _$StatsModelToJson(StatsModel instance) =>
       'avg_ages_users': instance.avgAgesUsers,
       'avg_weights_users': instance.avgWeightsUsers,
       'avg_lengths_users': instance.avgLengthsUsers,
+      'most_used_code': instance.mostCodeUsed,
     };

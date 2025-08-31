@@ -75,7 +75,7 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
       leading: widget.role.isUser
           ? IconButton(
-              iconSize: 30,
+              iconSize: 35,
               onPressed: onNotificationTap,
               icon: Icon(
                 Icons.notifications_outlined,
@@ -99,7 +99,7 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
                 return LoadingIndicator(color: context.cs.secondary);
               }
               return IconButton(
-                iconSize: 30,
+                iconSize: 35,
                 onPressed: onLogoutTap,
                 icon: const Icon(Icons.logout_rounded),
               );

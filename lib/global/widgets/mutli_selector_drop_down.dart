@@ -20,6 +20,7 @@ class MutliSelectorDropDown<T extends DropDownItemModel>
     this.icon,
     this.validator,
     this.onLongPress,
+    this.maxHeight = 250,
   });
 
   final List<T> items;
@@ -27,6 +28,7 @@ class MutliSelectorDropDown<T extends DropDownItemModel>
   final void Function(T)? onLongPress;
   final String hintText;
   final String labelText;
+  final double? maxHeight;
   final IconData prefixIcon;
   final String? errorMessage;
   final List<T>? selectedValues;
@@ -44,6 +46,8 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
 
   @override
   Widget build(BuildContext context) {
+    final primary = context.cs.primary;
+    final errorColor = context.cs.error;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -59,10 +63,8 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
                 DropdownButtonHideUnderline(
                   child: DropdownButton2<T>(
                     iconStyleData: IconStyleData(
-                      openMenuIcon: Icon(LucideIcons.chevronUp,
-                          color: context.cs.primary),
-                      icon: Icon(LucideIcons.chevronDown,
-                          color: context.cs.primary),
+                      openMenuIcon: Icon(LucideIcons.chevronUp, color: primary),
+                      icon: Icon(LucideIcons.chevronDown, color: primary),
                     ),
                     isExpanded: true,
                     hint: Text(
@@ -70,58 +72,13 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
                       style: context.tt.bodyMedium
                           ?.copyWith(color: Colors.grey[500]),
                     ),
+                    dropdownStyleData: DropdownStyleData(
+                      decoration: BoxDecoration(
+                          borderRadius: AppConstants.borderRadius10),
+                      maxHeight: widget.maxHeight,
+                    ),
                     items: widget.items.map((item) {
-                      return DropdownMenuItem(
-                        value: item,
-                        enabled: false,
-                        child: StatefulBuilder(
-                          builder: (context, menuSetState) {
-                            final isSelected = selectedItems.contains(item);
-                            return InkWell(
-                              onLongPress: () => widget.onLongPress?.call(item),
-                              onTap: () {
-                                isSelected
-                                    ? selectedItems.remove(item)
-                                    : selectedItems.add(item);
-                                setState(() {});
-                                menuSetState(() {});
-                                widget.onChanged(selectedItems);
-                              },
-                              child: Container(
-                                height: double.infinity,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      activeColor: context.cs.primary,
-                                      checkColor: context.cs.surface,
-                                      side: BorderSide(
-                                          color: context.cs.secondary),
-                                      value: isSelected,
-                                      onChanged: (value) {
-                                        isSelected
-                                            ? selectedItems.remove(item)
-                                            : selectedItems.add(item);
-                                        setState(() {});
-                                        menuSetState(() {});
-                                        widget.onChanged(selectedItems);
-                                      },
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Expanded(
-                                      child: Text(
-                                        item.displayName,
-                                        style: context.tt.titleMedium,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
+                      return _buildDropDownTile(item);
                     }).toList(),
                     value: selectedItems.isEmpty ? null : selectedItems.last,
                     onChanged: (value) {},
@@ -145,8 +102,7 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
                       decoration: BoxDecoration(
                         border: Border.all(
                           width: hasError ? 1 : 2,
-                          color:
-                              hasError ? context.cs.error : context.cs.primary,
+                          color: hasError ? errorColor : primary,
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -165,8 +121,7 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
                     padding: AppConstants.paddingH16,
                     child: Text(
                       widget.errorMessage!,
-                      style: context.tt.bodySmall
-                          ?.copyWith(color: context.cs.error),
+                      style: context.tt.bodySmall?.copyWith(color: errorColor),
                     ),
                   ),
                 ]
@@ -177,6 +132,54 @@ class _MutliSelectorDropDownState<T extends DropDownItemModel>
               selectedItems.isEmpty ? widget.errorMessage?.tr() : null,
         ),
       ],
+    );
+  }
+
+  DropdownMenuItem<T> _buildDropDownTile(T item) {
+    return DropdownMenuItem(
+      value: item,
+      enabled: false,
+      child: StatefulBuilder(
+        builder: (context, menuSetState) {
+          final isSelected = selectedItems.contains(item);
+          return InkWell(
+            onLongPress: () => widget.onLongPress?.call(item),
+            onTap: () {
+              isSelected ? selectedItems.remove(item) : selectedItems.add(item);
+              setState(() {});
+              menuSetState(() {});
+              widget.onChanged(selectedItems);
+            },
+            child: Container(
+              height: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  Checkbox(
+                    activeColor: context.cs.primary,
+                    checkColor: context.cs.surface,
+                    side: BorderSide(color: context.cs.secondary),
+                    value: isSelected,
+                    onChanged: (value) {
+                      isSelected
+                          ? selectedItems.remove(item)
+                          : selectedItems.add(item);
+                      setState(() {});
+                      menuSetState(() {});
+                      widget.onChanged(selectedItems);
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child:
+                        Text(item.displayName, style: context.tt.titleMedium),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

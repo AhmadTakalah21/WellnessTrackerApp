@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 
 class LevelItemWidget extends StatelessWidget {
@@ -33,18 +34,15 @@ class LevelItemWidget extends StatelessWidget {
               aspectRatio: 5 / 2,
               child: image == null
                   ? Image.asset(
-                    "assets/images/app_logo.png",
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: Colors.grey[200],
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.broken_image, size: 40),
-                    ),
-                  )
-                  : AppImageWidget(
-                      url: image,
+                      AppConstants.logo,
                       fit: BoxFit.cover,
-                    ),
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey[200],
+                        alignment: Alignment.center,
+                        child: const Icon(Icons.broken_image, size: 40),
+                      ),
+                    )
+                  : AppImageWidget(url: image, fit: BoxFit.cover),
             ),
             Padding(
               padding: const EdgeInsets.all(16),

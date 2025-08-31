@@ -1,14 +1,15 @@
 import 'package:animated_size_and_fade/animated_size_and_fade.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl_phone_field/phone_number.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
+import 'package:wellnesstrackerapp/features/auth/view/widgets/contact_options_widget.dart';
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
 import 'package:wellnesstrackerapp/features/settings/model/settings_model/settings_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
@@ -22,19 +23,10 @@ import 'package:wellnesstrackerapp/global/widgets/main_text_field.dart';
 import 'package:wellnesstrackerapp/global/widgets/phone_text_field.dart';
 
 abstract class SignInViewCallbacks {
-  void onEmailChanged(String email);
   void onEmailSubmitted(String email);
-  void onUsernameChanged(String username);
-  void onUsernameSubmitted(String username);
-  void onPhoneChanged(PhoneNumber? phone);
-  void onPhoneSubmitted(String phone);
-  void onPasswordChanged(String password);
   void onPasswordSubmitted(String password);
-  void onConfirmPasswordChanged(String confirmPassword);
-  void onConfirmPasswordSubmitted(String confirmPassword);
-  void onCodeChanged(String code);
-  void onCodeSubmitted(String code);
   void onConfirmTermsAndConditionsTap(bool? isChecked);
+  void onTermsAndConditionsTap();
   void onGetCodeTap(SettingsModel? setting);
   Future<void> onLaunchPhoneTap(String? whatsappPhone);
   void onForgetPasswordTap();
@@ -55,12 +47,8 @@ class SignInView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => get<AuthCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => get<SettingsCubit>(),
-        ),
+        BlocProvider(create: (context) => get<AuthCubit>()),
+        BlocProvider(create: (context) => get<SettingsCubit>()),
       ],
       child: SignInPage(onSignedIn: onSignedIn),
     );
@@ -82,6 +70,8 @@ class _SignInPageState extends State<SignInPage>
   late final AuthCubit authCubit = context.read();
   late final SettingsCubit settingsCubit = context.read();
   bool? _rememberMe = false;
+  final _formKey = GlobalKey<FormState>();
+
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -129,9 +119,6 @@ class _SignInPageState extends State<SignInPage>
   }
 
   @override
-  void onEmailChanged(String email) => authCubit.setEmail(email);
-
-  @override
   void onEmailSubmitted(String email) {
     if (isShowSignIn) {
       passwordFocusNode.requestFocus();
@@ -139,9 +126,6 @@ class _SignInPageState extends State<SignInPage>
       usernameFocusNode.requestFocus();
     }
   }
-
-  @override
-  void onPasswordChanged(String password) => authCubit.setPassword(password);
 
   @override
   void onPasswordSubmitted(String password) {
@@ -153,37 +137,12 @@ class _SignInPageState extends State<SignInPage>
   }
 
   @override
-  void onConfirmPasswordChanged(String confirmPassword) =>
-      authCubit.setConfirmPassword(confirmPassword);
-
-  @override
-  void onConfirmPasswordSubmitted(String confirmpassword) =>
-      codeFocusNode.requestFocus();
-
-  @override
-  void onCodeChanged(String code) => authCubit.setSubscriptionCode(code);
-
-  @override
-  void onCodeSubmitted(String code) => codeFocusNode.unfocus();
-
-  @override
   void onForgetPasswordTap() =>
       context.router.push(ForgotPasswordRoute(authCubit: authCubit));
 
   @override
-  void onUsernameChanged(String username) => authCubit.setUsername(username);
-
-  @override
-  void onUsernameSubmitted(String username) => phoneFocusNode.requestFocus();
-
-  // @override
-  // void onPhoneChanged(String phone) => authCubit.setPhone(phone);
-
-  @override
-  void onPhoneChanged(PhoneNumber? phone) => authCubit.setPhone(phone);
-
-  @override
-  void onPhoneSubmitted(String phone) => passwordFocusNode.requestFocus();
+  void onTermsAndConditionsTap() =>
+      context.router.push(TermsAndConditionsRoute());
 
   @override
   void onGetCodeTap(SettingsModel? setting) {
@@ -191,50 +150,7 @@ class _SignInPageState extends State<SignInPage>
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
-      builder: (context) => Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: AppConstants.padding16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: Text(
-                      "additional_options".tr(),
-                      style: context.tt.headlineMedium,
-                    ),
-                  ),
-                  TextButton.icon(
-                    icon: Icon(Icons.phone),
-                    onPressed: () =>
-                        onLaunchPhoneTap(setting?.supportPhoneNumber),
-                    label: Text(
-                      "contact_customer_service".tr(),
-                      style: context.tt.titleMedium?.copyWith(
-                        color: context.cs.primary,
-                      ),
-                    ),
-                  ),
-                  TextButton.icon(
-                    icon: Icon(Icons.phone),
-                    onPressed: () =>
-                        onLaunchPhoneTap(setting?.psychologicalPhoneNumber),
-                    label: Text(
-                      "contact_psycological_support".tr(),
-                      style: context.tt.titleMedium?.copyWith(
-                        color: context.cs.primary,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+      builder: (context) => ContactOptionsWidget(setting: setting),
     );
   }
 
@@ -274,10 +190,15 @@ class _SignInPageState extends State<SignInPage>
 
   @override
   void onMainAction() {
-    if (isShowSignIn) {
-      authCubit.signIn();
+    if (_formKey.currentState!.validate()) {
+      if (isShowSignIn) {
+        authCubit.signIn();
+      } else {
+        authCubit.signUp();
+      }
     } else {
-      authCubit.signUp();
+      MainSnackBar.showErrorMessage(context, "plz_accept".tr(),
+          flushbarPosition: FlushbarPosition.BOTTOM);
     }
   }
 
@@ -402,7 +323,7 @@ class _SignInPageState extends State<SignInPage>
           errorText: isBuild ? state.error : null,
           prefixIcon: Icon(Icons.email, color: context.cs.onSecondary),
           labelText: "email".tr(),
-          onChanged: onEmailChanged,
+          onChanged: authCubit.setEmail,
           onSubmitted: onEmailSubmitted,
           focusNode: emailFocusNode,
           textInputType: TextInputType.emailAddress,
@@ -427,8 +348,8 @@ class _SignInPageState extends State<SignInPage>
                 errorText: isBuild ? state.error : null,
                 prefixIcon: Icon(Icons.person, color: context.cs.onSecondary),
                 labelText: "username".tr(),
-                onChanged: onUsernameChanged,
-                onSubmitted: onUsernameSubmitted,
+                onChanged: authCubit.setUsername,
+                onSubmitted: (_) => phoneFocusNode.requestFocus(),
                 focusNode: usernameFocusNode,
               );
             },
@@ -452,8 +373,8 @@ class _SignInPageState extends State<SignInPage>
                   state is TextFieldState && state.type == TextFieldType.phone;
               return PhoneTextField(
                 focusNode: phoneFocusNode,
-                onChanged: onPhoneChanged,
-                onSubmitted: onPhoneSubmitted,
+                onChanged: authCubit.setPhone,
+                onSubmitted: (_) => passwordFocusNode.requestFocus(),
                 errorText: isBuild ? state.error : null,
                 prefixIcon: Icon(Icons.phone, color: context.cs.onSecondary),
                 labelText: "phone_number".tr(),
@@ -478,7 +399,7 @@ class _SignInPageState extends State<SignInPage>
           obscureText: isObsecure,
           errorText: isBuild ? state.error : null,
           labelText: "password".tr(),
-          onChanged: onPasswordChanged,
+          onChanged: authCubit.setPassword,
           onSubmitted: onPasswordSubmitted,
           focusNode: passwordFocusNode,
           prefixIcon: Icon(Icons.lock, color: context.cs.onSecondary),
@@ -510,8 +431,8 @@ class _SignInPageState extends State<SignInPage>
                 obscureText: isObsecure,
                 errorText: isBuild ? state.error : null,
                 labelText: "confirm_password".tr(),
-                onChanged: onConfirmPasswordChanged,
-                onSubmitted: onConfirmPasswordSubmitted,
+                onChanged: authCubit.setConfirmPassword,
+                onSubmitted: (_) => codeFocusNode.requestFocus(),
                 focusNode: confirmPasswordFocusNode,
                 prefixIcon: const Icon(Icons.lock, color: Colors.black54),
                 suffixIcon: IconButton(
@@ -547,8 +468,8 @@ class _SignInPageState extends State<SignInPage>
                   return MainTextField(
                     errorText: isBuild ? innerState.error : null,
                     labelText: "subscription_code".tr(),
-                    onChanged: onCodeChanged,
-                    onSubmitted: onCodeSubmitted,
+                    onChanged: authCubit.setSubscriptionCode,
+                    onSubmitted: (_) => codeFocusNode.unfocus(),
                     focusNode: codeFocusNode,
                     prefixIcon: const Icon(Icons.key, color: Colors.black54),
                   );
@@ -603,17 +524,38 @@ class _SignInPageState extends State<SignInPage>
   Widget _buildTermsAndForgetPassword() {
     return Row(
       children: [
-        Row(
-          children: [
-            Checkbox(
-              value: _rememberMe,
-              onChanged: onConfirmTermsAndConditionsTap,
-              side: BorderSide(color: context.cs.secondary),
-              checkColor: context.cs.surface,
-              activeColor: context.cs.primary,
-            ),
-            Text('accept_terms'.tr()),
-          ],
+        Form(
+          key: _formKey,
+          child: FormField<bool>(
+            builder: (field) {
+              final color =
+                  field.hasError ? context.cs.error : context.cs.secondary;
+              return Row(
+                children: [
+                  Checkbox(
+                    value: _rememberMe,
+                    onChanged: onConfirmTermsAndConditionsTap,
+                    side: BorderSide(color: color),
+                    checkColor: context.cs.surface,
+                    activeColor: context.cs.primary,
+                  ),
+                  InkWell(
+                    onTap: onTermsAndConditionsTap,
+                    child: Text(
+                      'accept_terms'.tr(),
+                      style: TextStyle(
+                        color: color,
+                        decorationColor: color,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+            validator: (_) =>
+                _rememberMe == null || !_rememberMe! ? "required".tr() : null,
+          ),
         ),
         Expanded(
           child: AnimatedSizeAndFade(

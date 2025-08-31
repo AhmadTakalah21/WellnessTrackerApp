@@ -104,17 +104,8 @@ class _SelectPlanPageState extends State<SelectPlanPage>
                         );
                       },
                     ),
-                    // ...state.plans.plans.map(
-                    //   (e) {
-                    //     return _buildGridItem(
-                    //       context,
-                    //       e.department.getTitle,
-                    //       e.phone,
-                    //       e.department.getIcon,
-                    //       e.department.getColor,
-                    //     );
-                    //   },
-                    // ),
+                    if (state.plans.plans.length < 3)
+                      SizedBox(height: (3 - state.plans.plans.length) * 250.0),
                     SizedBox(height: 100),
                   ],
                 ),
@@ -186,7 +177,8 @@ class _SelectPlanPageState extends State<SelectPlanPage>
                   SizedBox(width: 5),
                   SvgPicture.asset(
                     "assets/images/whatsapp.svg",
-                    color: context.cs.primary,
+                    colorFilter:
+                        ColorFilter.mode(context.cs.primary, BlendMode.srcIn),
                   ),
                 ],
               ),
