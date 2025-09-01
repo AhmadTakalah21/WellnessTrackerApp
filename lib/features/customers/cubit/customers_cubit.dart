@@ -200,6 +200,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     selectedDietitian = null;
     selectedCoach = null;
     selectedDoctor = null;
+    selectedPsychologist = null;
     status = null;
     emit(SelectedSpecialistsState(
       selectedDietitian,
