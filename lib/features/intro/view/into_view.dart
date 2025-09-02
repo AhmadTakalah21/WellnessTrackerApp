@@ -151,7 +151,7 @@ class _IntroPageState extends State<IntroPage> implements IntroViewCallBacks {
                 child: AnimatedSizeAndFade.showHide(
                   show: selectedPage != introPageModels.length - 1,
                   child: MainActionButton(
-                    onTap: onNextTap,
+                    onTap: onSkipTap,
                     text: 'skip'.tr(),
                     buttonColor: context.cs.surface,
                     textColor: context.cs.primary,

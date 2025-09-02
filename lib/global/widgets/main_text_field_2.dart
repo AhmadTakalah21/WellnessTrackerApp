@@ -68,9 +68,13 @@ class _MainTextField2State extends State<MainTextField2> {
         ],
         TextFormField(
           onTapOutside: (_) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              FocusManager.instance.primaryFocus?.unfocus();
-            });
+            //FocusScope.of(context).unfocus();
+            // Future.microtask(() {
+            //   FocusManager.instance.primaryFocus?.unfocus();
+            // });
+            // WidgetsBinding.instance.addPostFrameCallback((_) {
+            //   FocusManager.instance.primaryFocus?.unfocus();
+            // });
           },
           maxLines: widget.maxLines,
           inputFormatters: widget.inputFormatters,

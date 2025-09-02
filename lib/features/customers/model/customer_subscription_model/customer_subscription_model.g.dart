@@ -20,6 +20,9 @@ CustomerSubscriptionModel _$CustomerSubscriptionModelFromJson(
       doctor: json['doctor'] == null
           ? null
           : UserModel.fromJson(json['doctor'] as Map<String, dynamic>),
+      psychologist: json['psychologist'] == null
+          ? null
+          : UserModel.fromJson(json['psychologist'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CustomerSubscriptionModelToJson(
@@ -30,4 +33,5 @@ Map<String, dynamic> _$CustomerSubscriptionModelToJson(
       'dietitian': instance.dietitian,
       'coach': instance.coach,
       'doctor': instance.doctor,
+      'psychologist': instance.psychologist,
     };

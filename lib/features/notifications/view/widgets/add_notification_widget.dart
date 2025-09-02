@@ -247,11 +247,7 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                                 onChanged: widget.notificationsCubit.setUsers,
                               );
                             } else if (state is CustomersEmpty) {
-                              return MainErrorWidget(
-                                error: state.message,
-                                onTryAgainTap: onTryAgainTap,
-                                isRefresh: true,
-                              );
+                              return MainErrorWidget(error: state.message);
                             } else if (state is CustomersFail) {
                               return MainErrorWidget(
                                 error: state.error,

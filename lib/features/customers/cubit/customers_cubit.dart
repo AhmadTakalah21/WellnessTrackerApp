@@ -200,6 +200,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     selectedDietitian = null;
     selectedCoach = null;
     selectedDoctor = null;
+    selectedPsychologist = null;
     status = null;
     emit(SelectedSpecialistsState(
       selectedDietitian,
@@ -232,7 +233,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
       customers = result.data;
       meta = result.meta;
       final message = result.data.isEmpty ? "no_customers".tr() : null;
-      if (page == 1 && result.data.isEmpty) {
+      if ((page == 1 || page == null) && result.data.isEmpty) {
         emit(CustomersEmpty("no_customers".tr()));
       } else {
         emit(CustomersSuccess(result, message));
@@ -314,7 +315,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     emit(AssignSubscriberLoading());
     try {
       if (isClosed) return;
-      await customerService.changeStatus(id,status!.name);
+      await customerService.changeStatus(id, status!.name);
       emit(AssignSubscriberSuccess("status_updated".tr()));
     } catch (e) {
       if (isClosed) return;

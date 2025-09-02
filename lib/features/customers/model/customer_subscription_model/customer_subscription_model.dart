@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class CustomerSubscriptionModel {
     this.dietitian,
     this.coach,
     this.doctor,
+    this.psychologist,
   });
 
   final int id;
@@ -23,6 +25,7 @@ class CustomerSubscriptionModel {
   final UserModel? dietitian;
   final UserModel? coach;
   final UserModel? doctor;
+  final UserModel? psychologist;
 
   factory CustomerSubscriptionModel.fromString(String str) =>
       CustomerSubscriptionModel.fromJson(

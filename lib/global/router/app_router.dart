@@ -38,7 +38,14 @@ class AppRouter extends RootStackRouter {
                       page: DashboardRouter.page,
                       children: dashboardAutoRoutes,
                     ),
-                    AutoRoute(page: AddsAndOffersRoute.page),
+                    //AutoRoute(page: AddsAndOffersRoute.page),
+                    AutoRoute(
+                      page: AddsAndOffersRouter.page,
+                      children: [
+                        AutoRoute(initial: true, page: AddsAndOffersRoute.page),
+                        AutoRoute(page: NotificationsRoute.page),
+                      ],
+                    ),
                     AutoRoute(
                       page: ProfileRouter.page,
                       children: [
@@ -49,6 +56,7 @@ class AppRouter extends RootStackRouter {
                         AutoRoute(page: AboutUsRoute.page),
                         AutoRoute(page: PrivacyPolicyRoute.page),
                         AutoRoute(page: TermsAndConditionsRoute.page),
+                        AutoRoute(page: NotificationsRoute.page),
                       ],
                     ),
                   ],

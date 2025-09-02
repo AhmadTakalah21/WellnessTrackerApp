@@ -37,6 +37,7 @@ abstract class CustomersViewCallbacks {
   void onTryAgainTap();
   Future<void> onRefresh();
   void onSelected(CustomerModel customer);
+  List<Widget> customButtons(CustomerModel customer);
 }
 
 @RoutePage()
@@ -98,15 +99,14 @@ class CustomersPageState extends State<CustomersPage>
       if (customer.info == null) {
         MainSnackBar.showMessage(context, "customer_not_fill_info".tr());
         return;
-      } else {
-        context.router.push(
-          ApproveCustomerRoute(
-            customer: customer,
-            customersCubit: customersCubit,
-            onSuccess: fetchCustomers,
-          ),
-        );
       }
+      context.router.push(
+        ApproveCustomerRoute(
+          customer: customer,
+          customersCubit: customersCubit,
+          onSuccess: fetchCustomers,
+        ),
+      );
     } else {
       context.router.push(
         UpdateCustomerInfoRoute(
@@ -222,6 +222,27 @@ class CustomersPageState extends State<CustomersPage>
   void onSearchChanged(String input) => customersCubit.searchCustomers(input);
 
   @override
+  List<Widget> customButtons(CustomerModel customer) {
+    bool isAdmin = widget.role.isAdmin;
+    bool isDoctor = widget.role.isDoctor;
+    bool isPsychologist = widget.role.isPsychologist;
+    return [
+      IconButton(
+        onPressed: () => onReportTap(customer),
+        icon: Icon(
+          isAdmin ? Icons.description : Icons.edit_document,
+          color: context.cs.onPrimaryFixed,
+        ),
+      ),
+      if (isDoctor || isPsychologist)
+        IconButton(
+          onPressed: () => onAddMedicalConsultation(customer),
+          icon: Icon(Icons.medical_services, color: Colors.red),
+        ),
+    ];
+  }
+
+  @override
   void onTryAgainTap() => fetchCustomers();
 
   @override
@@ -230,8 +251,6 @@ class CustomersPageState extends State<CustomersPage>
   @override
   Widget build(BuildContext context) {
     bool isAdmin = widget.role.isAdmin;
-    bool isDoctor = widget.role.isDoctor;
-    bool isPsychologist = widget.role.isPsychologist;
     final titles = [
       '#',
       'name'.tr(),
@@ -241,6 +260,7 @@ class CustomersPageState extends State<CustomersPage>
         'dietitian'.tr(),
         'coach'.tr(),
         'doctor'.tr(),
+        'psychologist'.tr(),
         'code'.tr(),
         'subscription_end_date'.tr()
       ],
@@ -261,7 +281,6 @@ class CustomersPageState extends State<CustomersPage>
                   if (state is CustomersLoading) {
                     return LoadingIndicator();
                   } else if (state is CustomersSuccess) {
-                    print("code is ${state.customers.data[0].code}");
                     return RefreshIndicator(
                       onRefresh: onRefresh,
                       child: SingleChildScrollView(
@@ -279,28 +298,7 @@ class CustomersPageState extends State<CustomersPage>
                               checkSelected: customersCubit.isSelected,
                               onLongPress: onLongPress,
                               searchHint: 'search_customer',
-                              customButtons: (item) {
-                                return [
-                                  IconButton(
-                                    onPressed: () => onReportTap(item),
-                                    icon: Icon(
-                                      isAdmin
-                                          ? Icons.description
-                                          : Icons.edit_document,
-                                      color: context.cs.onPrimaryFixed,
-                                    ),
-                                  ),
-                                  if (isDoctor || isPsychologist)
-                                    IconButton(
-                                      onPressed: () =>
-                                          onAddMedicalConsultation(item),
-                                      icon: Icon(
-                                        Icons.medical_services,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                ];
-                              },
+                              customButtons: customButtons,
                             ),
                           ],
                         ),

@@ -70,6 +70,7 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
   }) async {
     emit(AddsAndOffersLoading());
     try {
+      if (isClosed) return;
       final result = await addsAndOffersService.getAdvs(
         role,
         page: page,
@@ -85,6 +86,7 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
         emit(AddsAndOffersSuccess(result, message));
       }
     } catch (e) {
+      if (isClosed) return;
       emit(AddsAndOffersFail(e.toString()));
     }
   }

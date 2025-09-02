@@ -48,12 +48,6 @@ class LevelsServiceImp implements LevelsService {
 
       final response = await dio.post(endpoint, data: formData);
 
-      // final response = await dio.postOrPut(
-      //   endpoint,
-      //   isAdd: isAdd,
-      //   data: formData,
-      // );
-
       final data = response.data["data"] as Map<String, dynamic>;
       return LevelModel.fromJson(data);
     } catch (e, stackTrace) {

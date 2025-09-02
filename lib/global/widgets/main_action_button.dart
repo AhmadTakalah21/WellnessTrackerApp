@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 
 class MainActionButton extends StatefulWidget {
   const MainActionButton({
@@ -21,6 +22,7 @@ class MainActionButton extends StatefulWidget {
     this.padding,
     this.child,
     this.icon,
+    this.isLoading = false,
   });
 
   final VoidCallback onTap;
@@ -38,6 +40,7 @@ class MainActionButton extends StatefulWidget {
   final EdgeInsets? padding;
   final Widget? child;
   final Icon? icon;
+  final bool isLoading;
 
   @override
   State<MainActionButton> createState() => _MainActionButtonState();
@@ -48,7 +51,7 @@ class _MainActionButtonState extends State<MainActionButton> {
   Widget build(BuildContext context) {
     final icon = widget.icon;
     return InkWell(
-      onTap: widget.onTap,
+      onTap: widget.isLoading ? null : widget.onTap,
       child: Container(
         height: widget.height,
         width: widget.width,
@@ -65,15 +68,17 @@ class _MainActionButtonState extends State<MainActionButton> {
             children: [
               if (icon != null) icon,
               if (icon != null) const SizedBox(width: 5),
-              widget.child ??
-                  Text(
-                    widget.text,
-                    style: context.tt.titleMedium?.copyWith(
-                      color: widget.textColor ?? AppColors.white,
-                      fontSize: widget.fontSize ?? 18,
-                      fontWeight: widget.fontWeight,
-                    ),
-                  ),
+              widget.isLoading
+                  ? LoadingIndicator(size: 30, color: context.cs.surface)
+                  : widget.child ??
+                      Text(
+                        widget.text,
+                        style: context.tt.titleMedium?.copyWith(
+                          color: widget.textColor ?? AppColors.white,
+                          fontSize: widget.fontSize ?? 18,
+                          fontWeight: widget.fontWeight,
+                        ),
+                      ),
             ],
           ),
         ),

@@ -100,6 +100,7 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
           subscription?.dietitian?.name ?? 'not_existed'.tr(),
           subscription?.coach?.name ?? 'not_existed'.tr(),
           subscription?.doctor?.name ?? 'not_existed'.tr(),
+          subscription?.psychologist?.name ?? 'not_existed'.tr(),
           code ?? 'not_existed'.tr(),
           subEndDate ?? 'not_existed'.tr(),
         ],

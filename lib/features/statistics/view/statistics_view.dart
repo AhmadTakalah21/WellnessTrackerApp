@@ -241,18 +241,24 @@ class _StatisticsPageState extends State<StatisticsPage>
                     Text(item.xAxisProperty, style: context.tt.bodyMedium),
                     if (!item.isInChart) ...[
                       const SizedBox(width: 6),
-                      if(item.icon == Icons.qr_code)
-                      Text(
-                        "${stats.mostCodeUsed.code}: (${item.yAxisProperty[0].toStringAsFixed(0)})",
-                        style: context.tt.bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      if(item.icon != Icons.qr_code)
-                      Text(
-                        "${item.yAxisProperty[1].toStringAsFixed(0)}  (${item.yAxisProperty[0].toStringAsFixed(0)} %)",
-                        style: context.tt.bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
+                      if (item.icon == Icons.qr_code)
+                        Text(
+                          "${stats.mostCodeUsed.code}  ",
+                          style: context.tt.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      if (item.icon == Icons.qr_code)
+                        Text(
+                          "(${item.yAxisProperty[0].toStringAsFixed(0)})",
+                          style: context.tt.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      if (item.icon != Icons.qr_code)
+                        Text(
+                          "${item.yAxisProperty[1].toStringAsFixed(0)}  (${item.yAxisProperty[0].toStringAsFixed(0)} %)",
+                          style: context.tt.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
                     ],
                   ],
                 );
