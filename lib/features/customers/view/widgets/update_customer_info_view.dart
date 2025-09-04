@@ -106,9 +106,9 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
                     onChanged: customersCubit.setChronicDiseases,
                     icon: Icons.healing,
                     label: 'chronic_diseases'.tr(),
-                    validator: (val) => val == null || val.isEmpty
-                        ? 'required_field'.tr()
-                        : null,
+                    // validator: (val) => val == null || val.isEmpty
+                    //     ? 'required_field'.tr()
+                    //     : null,
                   ),
                   MainCounterWidget(
                     initialCount: info?.waistCircumference,
@@ -117,6 +117,7 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
                     onChanged: customersCubit.setWaistCircumference,
                     label: 'waist_circumference'.tr(),
                     icon: Icons.line_weight,
+                    isRequired: false,
                   ),
                   MainCounterWidget(
                     initialCount: info?.chest,
@@ -125,6 +126,7 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
                     onChanged: customersCubit.setChest,
                     label: 'chest'.tr(),
                     icon: Icons.accessibility_new,
+                    isRequired: false,
                   ),
                   MainCounterWidget(
                     initialCount: info?.shoulder,
@@ -133,6 +135,7 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
                     onChanged: customersCubit.setShoulder,
                     label: 'shoulder'.tr(),
                     icon: Icons.accessibility,
+                    isRequired: false,
                   ),
                   const SizedBox(height: 60),
                 ],

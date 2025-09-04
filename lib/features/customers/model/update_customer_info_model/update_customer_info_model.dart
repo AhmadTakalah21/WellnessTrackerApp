@@ -81,32 +81,32 @@ class UpdateCustomerInfoModel {
   }
 
   @JsonKey(name: "chronic_diseases")
-  String get chronicDiseases {
-    if (_chronicDiseases == null || _chronicDiseases.isEmpty) {
-      throw "chronic_diseases_required".tr();
-    }
+  String? get chronicDiseases {
+    // if (_chronicDiseases == null || _chronicDiseases.isEmpty) {
+    //   throw "chronic_diseases_required".tr();
+    // }
     return _chronicDiseases;
   }
 
   @JsonKey(name: "waist_circumference")
-  String get waistCircumference {
-    if (_waistCircumference == null || _waistCircumference.isEmpty) {
-      throw "waist_required".tr();
-    }
+  String? get waistCircumference {
+    // if (_waistCircumference == null || _waistCircumference.isEmpty) {
+    //   throw "waist_required".tr();
+    // }
     return _waistCircumference;
   }
 
-  String get chest {
-    if (_chest == null || _chest.isEmpty) {
-      throw "chest_required".tr();
-    }
+  String? get chest {
+    // if (_chest == null || _chest.isEmpty) {
+    //   throw "chest_required".tr();
+    // }
     return _chest;
   }
 
-  String get shoulder {
-    if (_shoulder == null || _shoulder.isEmpty) {
-      throw "shoulder_required".tr();
-    }
+  String? get shoulder {
+    // if (_shoulder == null || _shoulder.isEmpty) {
+    //   throw "shoulder_required".tr();
+    // }
     return _shoulder;
   }
 

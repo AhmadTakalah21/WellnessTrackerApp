@@ -119,6 +119,13 @@ class NotaficationsService {
       sound: true,
     );
 
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
     FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
 
     final initialMessage = await firebaseMessaging.getInitialMessage();
