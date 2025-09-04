@@ -163,7 +163,7 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
                 Icons.android,
                 'android_url',
                 settings.appUrlAndroid ?? 'not_provided'.tr(),
-                () => onShareTap(settings.appUrlIos, "ios_url".tr()),
+                () => onShareTap(settings.appUrlAndroid, "android_url".tr()),
               ),
               IconTitleValueFunc(
                 Icons.apple,
