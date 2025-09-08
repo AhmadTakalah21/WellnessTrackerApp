@@ -13,7 +13,7 @@ UpdateSettingsModel _$UpdateSettingsModelFromJson(Map<String, dynamic> json) =>
       appUrlIos: json['app_url_ios'] as String?,
       email: json['email'] as String?,
       supportPhoneNumber: json['support_phone_number'] as String?,
-      psychologicalPhoneNumber: json['psychological_support_number'] as String?,
+      emergenciesPhone: json['emergencies_phone'] as String?,
     );
 
 Map<String, dynamic> _$UpdateSettingsModelToJson(
@@ -24,5 +24,5 @@ Map<String, dynamic> _$UpdateSettingsModelToJson(
       'app_url_ios': instance.appUrlIos,
       'email': instance.email,
       'support_phone_number': instance.supportPhoneNumber,
-      'psychological_support_number': instance.psychologicalPhoneNumber,
+      'emergencies_phone': instance.emergenciesPhone,
     };

@@ -352,16 +352,10 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
           }
         },
         builder: (context, state) {
-          var onTap = onSave;
-          Widget? child;
-          if (state is AssignSubscriberLoading) {
-            onTap = () {};
-            child = LoadingIndicator(size: 30, color: context.cs.surface);
-          }
           return MainActionButton(
             text: 'save'.tr(),
-            onTap: onTap,
-            child: child,
+            onTap: onSave,
+            isLoading: state is AssignSubscriberLoading,
           );
         },
       );

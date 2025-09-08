@@ -14,7 +14,7 @@ class SettingsModel {
     this.appUrlIos,
     required this.email,
     required this.supportPhoneNumber,
-    this.psychologicalPhoneNumber,
+    this.emergenciesPhone,
   });
 
   final String name;
@@ -30,8 +30,8 @@ class SettingsModel {
   @JsonKey(name: 'support_phone_number')
   final String supportPhoneNumber;
 
-  @JsonKey(name: 'psychological_support_number')
-  final String? psychologicalPhoneNumber;
+  @JsonKey(name: 'emergencies_phone')
+  final String? emergenciesPhone;
 
   factory SettingsModel.fromString(String str) =>
       SettingsModel.fromJson(jsonDecode(str) as Map<String, dynamic>);

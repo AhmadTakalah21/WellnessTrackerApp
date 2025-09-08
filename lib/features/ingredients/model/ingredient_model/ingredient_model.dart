@@ -51,7 +51,7 @@ class IngredientModel implements DeleteModel, DropDownItemModel {
   String toString() => jsonEncode(toJson());
 
   @override
-  String get apiDeleteUrl => "/v1/admin/ingredients/$id";
+  String get apiDeleteUrl => "/v1/dietitian/ingredients/$id";
 
   @override
   String get displayName => name;

@@ -88,7 +88,6 @@ class _IngredientsPageState extends State<IngredientsPage>
       builder: (_) => InsureDeleteWidget(
           item: ingredient,
           onSuccess: () {
-            Navigator.pop(context);
             ingredientsCubit.getIngredients(UserRoleEnum.dietitian);
           }),
     );

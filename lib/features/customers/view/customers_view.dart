@@ -250,7 +250,9 @@ class CustomersPageState extends State<CustomersPage>
 
   @override
   Widget build(BuildContext context) {
-    bool isAdmin = widget.role.isAdmin;
+    final bool isAdmin = widget.role.isAdmin;
+    final bool isDoctor = widget.role.isDoctor;
+    final bool isPsychologist = widget.role.isPsychologist;
     final titles = [
       '#',
       'name'.tr(),
@@ -261,15 +263,15 @@ class CustomersPageState extends State<CustomersPage>
         'coach'.tr(),
         'doctor'.tr(),
         'psychologist'.tr(),
-        'code'.tr(),
-        'subscription_end_date'.tr()
       ],
+      if (isAdmin) ...['code'.tr(), 'subscription_end_date'.tr()],
+      if (isAdmin && widget.user != null && (isDoctor || isPsychologist))
+        "medical_consultations_num".tr(),
       'status'.tr(),
       'event'.tr(),
     ];
     return Scaffold(
       appBar: AppBar(title: Text('customers_administration'.tr())),
-      backgroundColor: context.cs.surface,
       body: Padding(
         padding: AppConstants.padding16,
         child: Column(
@@ -299,6 +301,7 @@ class CustomersPageState extends State<CustomersPage>
                               onLongPress: onLongPress,
                               searchHint: 'search_customer',
                               customButtons: customButtons,
+                              //showCheckboxColumn: true,
                             ),
                           ],
                         ),

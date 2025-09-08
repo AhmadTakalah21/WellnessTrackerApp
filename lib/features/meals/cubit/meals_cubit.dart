@@ -66,22 +66,22 @@ class MealsCubit extends Cubit<GeneralMealsState> {
     model = model.copyWith(link: () => link);
   }
 
-  void updateQuantityForIngredient(bool isAdd, int index) {
-    int quantity = ingredients[index].quantity;
-    if (isAdd) {
-      quantity++;
-    } else {
-      if (quantity != 0) {
-        quantity--;
-      }
-    }
-    ingredients[index] = ingredients[index].copyWith(quantity: quantity);
-  }
-
-  // void updateQuantityForIngredient(int quantity, int index) {
+  // void updateQuantityForIngredient(bool isAdd, int index) {
+  //   int quantity = ingredients[index].quantity;
+  //   if (isAdd) {
+  //     quantity++;
+  //   } else {
+  //     if (quantity != 0) {
+  //       quantity--;
+  //     }
+  //   }
   //   ingredients[index] = ingredients[index].copyWith(quantity: quantity);
-  //   emit(SelectedIngredientsState(ingredients));
   // }
+
+  void updateQuantityForIngredient(int quantity, int index) {
+    ingredients[index] = ingredients[index].copyWith(quantity: quantity);
+    emit(SelectedIngredientsState(ingredients));
+  }
 
   void setIngredientsInitial(List<IngredientWithQuantityModel> items) {
     final initialItems = items.map((e) => e.ingredient).toList();

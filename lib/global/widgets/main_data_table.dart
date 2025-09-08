@@ -211,6 +211,7 @@ class _MainDataTableState<T extends DataTableModel>
                   ? context.cs.primary.withValues(alpha: 0.2)
                   : context.cs.surface,
             ),
+            selected: widget.checkSelected?.call(item) ?? false,
             onLongPress: () => widget.onLongPress?.call(item),
             onSelectChanged: (value) => widget.onSelected?.call(item),
             cells: cells,

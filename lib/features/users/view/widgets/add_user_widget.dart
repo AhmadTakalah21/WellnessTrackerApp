@@ -8,7 +8,6 @@ import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:wellnesstrackerapp/global/utils/utils.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -202,18 +201,11 @@ class _AddUserWidgetState extends State<AddUserWidget> {
                   }
                 },
                 builder: (context, state) {
-                  var onTap = _saveUser;
-                  Widget? child;
-                  if (state is AddUserLoading) {
-                    onTap = () {};
-                    child =
-                        LoadingIndicator(size: 30, color: context.cs.surface);
-                  }
                   return Expanded(
                     child: MainActionButton(
                       text: 'save'.tr(),
-                      onTap: onTap,
-                      child: child,
+                      onTap: _saveUser,
+                      isLoading: state is AddUserLoading,
                     ),
                   );
                 },

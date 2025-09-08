@@ -104,8 +104,18 @@ class _SelectPlanPageState extends State<SelectPlanPage>
                         );
                       },
                     ),
-                    if (state.plans.plans.length < 3)
-                      SizedBox(height: (3 - state.plans.plans.length) * 250.0),
+                    TileSlideAnimation(
+                      index: state.plans.plans.length,
+                      child: _buildGridItem(
+                        context,
+                        "emergencies_phone",
+                        state.plans.emergenciesPhone ?? "not_available".tr(),
+                        Icons.emergency_rounded,
+                        Colors.blueGrey,
+                      ),
+                    ),
+                    if (state.plans.plans.length < 2)
+                      SizedBox(height: (2 - state.plans.plans.length) * 250.0),
                     SizedBox(height: 100),
                   ],
                 ),

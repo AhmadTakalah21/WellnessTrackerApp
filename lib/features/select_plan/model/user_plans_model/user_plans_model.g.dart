@@ -11,9 +11,11 @@ UserPlansModel _$UserPlansModelFromJson(Map<String, dynamic> json) =>
       plans: (json['plans'] as List<dynamic>)
           .map((e) => UserPlanModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      emergenciesPhone: json['emergencies_phone'] as String?,
     );
 
 Map<String, dynamic> _$UserPlansModelToJson(UserPlansModel instance) =>
     <String, dynamic>{
       'plans': instance.plans,
+      'emergencies_phone': instance.emergenciesPhone,
     };

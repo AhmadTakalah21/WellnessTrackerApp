@@ -6,7 +6,6 @@ import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -158,16 +157,10 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
                     }
                   },
                   builder: (context, state) {
-                    var onTap = onSubmit;
-                    Widget? child;
-                    if (state is UpdateCustomerInfoLoading) {
-                      onTap = () {};
-                      child = const LoadingIndicator(isInBtn: true);
-                    }
                     return MainActionButton(
                       text: 'save'.tr(),
-                      onTap: onTap,
-                      child: child,
+                      onTap: onSubmit,
+                      isLoading: state is UpdateCustomerInfoLoading,
                     );
                   },
                 ),

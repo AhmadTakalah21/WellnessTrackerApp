@@ -6,7 +6,6 @@ import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
 import 'package:wellnesstrackerapp/features/settings/model/settings_model/settings_model.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
@@ -105,10 +104,10 @@ class _UpdateCompanyInfoWidgetState extends State<UpdateCompanyInfoWidget> {
       );
 
   Widget _buildPsycologicalPhoneTextField() => MainTextField2(
-        initialText: widget.settings.psychologicalPhoneNumber,
-        onChanged: widget.settingsCubit.setPsychologicalPhoneNumber,
+        initialText: widget.settings.emergenciesPhone,
+        onChanged: widget.settingsCubit.setEmergenciesPhoneNumber,
         icon: Icons.phone,
-        label: 'phycological_support_phone'.tr(),
+        label: 'emergencies_phone'.tr(),
         keyboardType: TextInputType.phone,
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
@@ -116,11 +115,11 @@ class _UpdateCompanyInfoWidgetState extends State<UpdateCompanyInfoWidget> {
         hint: '+963987654321',
         validator: (v) {
           if (v == null || v.isEmpty) {
-            return 'psychological_phone_required'.tr();
+            return 'emergencies_phone_required'.tr();
           }
           final cleaned =
               v.replaceAll(RegExp(r'[^\d+]'), '').replaceAll('+', '');
-          if (cleaned.length < 8) return 'رقم الهاتف غير صحيح';
+          if (cleaned.length < 8) return 'invalid_phone'.tr();
           return null;
         },
       );
@@ -152,16 +151,10 @@ class _UpdateCompanyInfoWidgetState extends State<UpdateCompanyInfoWidget> {
           }
         },
         builder: (context, state) {
-          Widget? child;
-          var onTap = onSave;
-          if (state is UpdateSettingsLoading) {
-            onTap = () {};
-            child = LoadingIndicator(size: 30, color: context.cs.surface);
-          }
           return MainActionButton(
             text: 'update'.tr(),
-            onTap: onTap,
-            child: child,
+            onTap: onSave,
+            isLoading: state is UpdateSettingsLoading,
           );
         },
       );

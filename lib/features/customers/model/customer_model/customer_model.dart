@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -37,7 +36,9 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
     this.code,
     this.subEndDate,
     this.isAdmin = false,
+    this.isForEmployee = false,
     this.totalPoints,
+    this.medicalConsultationsNum,
     required this.createdAt,
   });
 
@@ -82,8 +83,14 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isAdmin;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool isForEmployee;
+
   @JsonKey(name: "total_points")
   final int? totalPoints;
+
+  @JsonKey(name: "medical_consultations_num")
+  final int? medicalConsultationsNum;
 
   @JsonKey(name: 'created_at')
   final String createdAt;
@@ -96,14 +103,20 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
         name,
         email,
         phone ?? '_',
-        if (isAdmin) ...[
+        if (isAdmin && !isForEmployee) ...[
           subscription?.dietitian?.name ?? 'not_existed'.tr(),
           subscription?.coach?.name ?? 'not_existed'.tr(),
           subscription?.doctor?.name ?? 'not_existed'.tr(),
           subscription?.psychologist?.name ?? 'not_existed'.tr(),
+        ],
+        if (isAdmin) ...[
           code ?? 'not_existed'.tr(),
           subEndDate ?? 'not_existed'.tr(),
         ],
+        if (isForEmployee)
+          if (medicalConsultationsNum != null &&
+              (role.isDoctor || role.isPsychologist))
+            medicalConsultationsNum!.toString(),
         status,
       ];
 
@@ -129,6 +142,7 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
 
   CustomerModel copyWith({
     bool? isAdmin,
+    bool? isForEmployee,
   }) {
     return CustomerModel(
       id: id,
@@ -143,7 +157,9 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
       subscription: subscription,
       level: level,
       isAdmin: isAdmin ?? this.isAdmin,
+      isForEmployee: isForEmployee ?? this.isForEmployee,
       code: code,
+      medicalConsultationsNum: medicalConsultationsNum,
       subEndDate: subEndDate,
       totalPoints: totalPoints,
       createdAt: createdAt,

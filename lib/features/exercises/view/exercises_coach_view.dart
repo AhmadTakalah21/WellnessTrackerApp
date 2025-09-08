@@ -77,7 +77,7 @@ class _ExercisesCoachPageState extends State<ExercisesCoachPage>
 
   String _absoluteLink(String link) {
     if (link.isEmpty) return '';
-    return _isWebUrl(link) ? link : '$_baseUrl/$link';
+    return _isWebUrl(link) ? link : '$_baseUrl/storage/$link';
   }
 
   IconData _iconForLink(String raw) {

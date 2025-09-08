@@ -9,7 +9,6 @@ import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/choose_image_widget.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -169,16 +168,10 @@ class _AddLevelPageState extends State<_AddLevelPage>
           }
         },
         builder: (context, state) {
-          var onTap = onSubmit;
-          Widget? child;
-          if (state is AddLevelLoading) {
-            onTap = () {};
-            child = LoadingIndicator(size: 30, color: context.cs.surface);
-          }
           return MainActionButton(
             text: 'save'.tr(),
-            onTap: onTap,
-            child: child,
+            onTap: onSubmit,
+            isLoading: state is AddLevelLoading,
           );
         },
       );

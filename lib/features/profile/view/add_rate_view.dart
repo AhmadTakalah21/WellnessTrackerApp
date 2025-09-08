@@ -6,7 +6,6 @@ import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart';
 import 'package:wellnesstrackerapp/global/models/rating_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
@@ -167,11 +166,10 @@ class _Ratingfeaturestate extends State<AddRatePage>
         }
       },
       builder: (context, state) {
-        bool isLoading = state is AddRatingLoading;
         return MainActionButton(
-          onTap: isLoading ? () {} : onSubmitTap,
+          onTap: onSubmitTap,
           text: "submit".tr(),
-          child: isLoading ? LoadingIndicator(isInBtn: true) : null,
+          isLoading: state is AddRatingLoading,
         );
       },
     );

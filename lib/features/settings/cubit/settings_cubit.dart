@@ -23,7 +23,7 @@ class SettingsCubit extends Cubit<GeneralSettingsState> {
     setSupportPhoneNumber(model?.supportPhoneNumber);
     setAppUrlAndroid(model?.appUrlAndroid);
     setAppUrlIos(model?.appUrlIos);
-    setPsychologicalPhoneNumber(model?.psychologicalPhoneNumber);
+    setEmergenciesPhoneNumber(model?.emergenciesPhone);
   }
 
   void setName(String? name) {
@@ -48,9 +48,9 @@ class SettingsCubit extends Cubit<GeneralSettingsState> {
         updateSettingsModel.copyWith(supportPhoneNumber: () => phone);
   }
 
-  void setPsychologicalPhoneNumber(String? phone) {
+  void setEmergenciesPhoneNumber(String? phone) {
     updateSettingsModel =
-        updateSettingsModel.copyWith(psychologicalPhoneNumber: () => phone);
+        updateSettingsModel.copyWith(emergenciesPhone: () => phone);
   }
 
   void resetUpdateModel() {

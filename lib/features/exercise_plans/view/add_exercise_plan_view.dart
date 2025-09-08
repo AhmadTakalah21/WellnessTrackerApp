@@ -14,7 +14,6 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/utils/utils.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -229,11 +228,10 @@ class _AddExercisePlanPageState extends State<AddExercisePlanPage>
         }
       },
       builder: (context, state) {
-        final isLoading = state is AddExercisePlanLoading;
         return MainActionButton(
-          onTap: isLoading ? () {} : onSave,
+          onTap: onSave,
           text: "save".tr(),
-          child: isLoading ? LoadingIndicator() : null,
+          isLoading: state is AddExercisePlanLoading,
         );
       },
     );

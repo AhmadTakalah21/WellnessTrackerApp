@@ -5,21 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/exercises/cubit/exercises_cubit.dart';
 import 'package:wellnesstrackerapp/features/exercises/model/exercise_model/exercise_model.dart';
 import 'package:wellnesstrackerapp/global/models/video_type_enum.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/utils/utils.dart';
 import 'package:wellnesstrackerapp/global/widgets/check_box_selector_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/choose_file_widget.dart';
-import 'package:wellnesstrackerapp/global/widgets/counter_widget.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 
 abstract class AddExerciseViewCallBacks {
-  void updateRounds(bool isAdd);
-  void updateRepeatsForRound(bool isAdd, int index);
   void onVideoTypeChnaged(VideoTypeEnum type);
   void onSave();
 }
@@ -54,8 +50,7 @@ class AddExercisePage extends StatefulWidget {
 class _AddExercisePageState extends State<AddExercisePage>
     implements AddExerciseViewCallBacks {
   late final ExercisesCubit exercisesCubit = context.read();
-  final roundsController = TextEditingController(text: "0");
-  late List<TextEditingController> repeatsForRoundsController = [];
+
   final _formKey = GlobalKey<FormState>();
   bool isLink = true;
 
@@ -63,39 +58,6 @@ class _AddExercisePageState extends State<AddExercisePage>
   void initState() {
     super.initState();
     exercisesCubit.setModel(widget.exercise);
-    roundsController.text =
-        widget.exercise?.description.rounds.toString() ?? "0";
-    print(widget.exercise?.description.repeats);
-    print(exercisesCubit.repeatsForRounds.length);
-    repeatsForRoundsController = List.generate(
-      exercisesCubit.repeatsForRounds.length,
-      (index) => TextEditingController(
-        text: exercisesCubit.repeatsForRounds[index].toString(),
-      ),
-    );
-  }
-
-  @override
-  void updateRounds(bool isAdd) {
-    exercisesCubit.updateRounds(isAdd);
-    setState(() {
-      roundsController.text = exercisesCubit.rounds.toString();
-    });
-    repeatsForRoundsController = List.generate(
-      exercisesCubit.repeatsForRounds.length,
-      (index) => TextEditingController(
-        text: exercisesCubit.repeatsForRounds[index].toString(),
-      ),
-    );
-  }
-
-  @override
-  void updateRepeatsForRound(bool isAdd, int index) {
-    exercisesCubit.updateRepeatsForRound(isAdd, index);
-    setState(() {
-      repeatsForRoundsController[index].text =
-          exercisesCubit.repeatsForRounds[index].toString();
-    });
   }
 
   @override
@@ -114,11 +76,9 @@ class _AddExercisePageState extends State<AddExercisePage>
 
   @override
   void dispose() {
-    roundsController.dispose();
-    for (var repeatsForRoundController in repeatsForRoundsController) {
-      repeatsForRoundController.dispose();
+    if (widget.exercise == null) {
+      exercisesCubit.resetModel();
     }
-    exercisesCubit.resetModel();
     super.dispose();
   }
 
@@ -137,7 +97,6 @@ class _AddExercisePageState extends State<AddExercisePage>
         child: Form(
           key: _formKey,
           child: Column(
-            spacing: 20,
             children: [
               MainTextField2(
                 initialText: exercise?.name,
@@ -147,26 +106,43 @@ class _AddExercisePageState extends State<AddExercisePage>
                 validator: (val) =>
                     Utils.validateInput(val, InputTextType.none),
               ),
-              CounterWidget(
-                controller: roundsController,
-                onIncreaseTap: () => updateRounds(true),
-                onDecreaseTap: () => updateRounds(false),
+              SizedBox(height: 20),
+              MainCounterWidget(
                 label: 'rounds'.tr(),
                 icon: Icons.fitness_center_outlined,
+                initialCount: widget.exercise?.description.rounds,
+                onChanged: (value) => exercisesCubit.updateRounds(value),
+                isRequired: true,
               ),
-              if (int.parse(roundsController.text) != 0)
-                ...List.generate(
-                  repeatsForRoundsController.length,
-                  (index) {
-                    return CounterWidget(
-                      controller: repeatsForRoundsController[index],
-                      onIncreaseTap: () => updateRepeatsForRound(true, index),
-                      onDecreaseTap: () => updateRepeatsForRound(false, index),
-                      label: "repeats_for".tr(args: [(index + 1).toString()]),
-                      icon: Icons.repeat_outlined,
+              SizedBox(height: 20),
+              BlocBuilder<ExercisesCubit, GeneralExercisesState>(
+                buildWhen: (previous, current) => current is RoundsUpdatedState,
+                builder: (context, state) {
+                  if (state is RoundsUpdatedState) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...List.generate(
+                          state.repeats.length,
+                          (index) {
+                            return MainCounterWidget(
+                              initialCount: state.repeats[index],
+                              onChanged: (value) => exercisesCubit
+                                  .updateRepeatsForRound(value, index),
+                              label: "repeats_for"
+                                  .tr(args: [(index + 1).toString()]),
+                              icon: Icons.repeat_outlined,
+                              isRequired: true,
+                            );
+                          },
+                        ),
+                        if (state.repeats.isNotEmpty) SizedBox(height: 20),
+                      ],
                     );
-                  },
-                ),
+                  }
+                  return SizedBox.shrink();
+                },
+              ),
               MainTextField2(
                 initialText: exercise?.description.explain,
                 onChanged: exercisesCubit.setExplain,
@@ -176,6 +152,7 @@ class _AddExercisePageState extends State<AddExercisePage>
                 validator: (val) =>
                     Utils.validateInput(val, InputTextType.none),
               ),
+              SizedBox(height: 20),
               Row(
                 children: [
                   CheckBoxSelectorWidget(
@@ -206,6 +183,7 @@ class _AddExercisePageState extends State<AddExercisePage>
                     ))
                 ],
               ),
+              SizedBox(height: 20),
               BlocConsumer<ExercisesCubit, GeneralExercisesState>(
                 listener: (context, state) {
                   if (state is AddExerciseSuccess) {
@@ -217,17 +195,10 @@ class _AddExercisePageState extends State<AddExercisePage>
                   }
                 },
                 builder: (context, state) {
-                  final isLoading = state is AddExerciseLoading;
-                  final child = isLoading
-                      ? LoadingIndicator(
-                          size: 30,
-                          color: context.cs.surface,
-                        )
-                      : null;
                   return MainActionButton(
-                    onTap: isLoading ? () {} : onSave,
+                    onTap: onSave,
                     text: "save".tr(),
-                    child: child,
+                    isLoading: state is AddExerciseLoading,
                   );
                 },
               )

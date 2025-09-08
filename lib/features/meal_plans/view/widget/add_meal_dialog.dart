@@ -13,17 +13,16 @@ import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/meal_type_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/models/video_type_enum.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/utils/utils.dart';
 import 'package:wellnesstrackerapp/global/widgets/additional_options_bottom_sheet.dart';
 import 'package:wellnesstrackerapp/global/widgets/check_box_selector_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/choose_file_widget.dart';
-import 'package:wellnesstrackerapp/global/widgets/counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/insure_delete_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -33,7 +32,7 @@ import 'package:wellnesstrackerapp/global/widgets/mutli_selector_drop_down.dart'
 abstract class AddMealViewCallBacks {
   void onVideoTypeChnaged(VideoTypeEnum type);
   void onAddIngredient();
-  void updateQuantityForIngredient(bool isAdd, int index);
+  //void updateQuantityForIngredient(bool isAdd, int index);
   void onLongPress(IngredientModel ingredient);
   void onEditTap(IngredientModel ingredient);
   void onDeleteTap(IngredientModel ingredient);
@@ -72,7 +71,6 @@ class _AddMealPageState extends State<AddMealPage>
   late final MealsCubit mealsCubit = context.read();
   late final IngredientsCubit ingredientsCubit = context.read();
 
-  late List<TextEditingController> quantityForIngredientController = [];
   final _formKey = GlobalKey<FormState>();
   bool isLink = true;
 
@@ -151,15 +149,6 @@ class _AddMealPageState extends State<AddMealPage>
   }
 
   @override
-  void updateQuantityForIngredient(bool isAdd, int index) {
-    mealsCubit.updateQuantityForIngredient(isAdd, index);
-    setState(() {
-      quantityForIngredientController[index].text =
-          mealsCubit.ingredients[index].quantity.toString();
-    });
-  }
-
-  @override
   void onTryAgainTap() =>
       ingredientsCubit.getIngredients(UserRoleEnum.dietitian, perPage: 100000);
 
@@ -172,9 +161,6 @@ class _AddMealPageState extends State<AddMealPage>
 
   @override
   void dispose() {
-    for (var controller in quantityForIngredientController) {
-      controller.dispose();
-    }
     mealsCubit.resetModel();
     super.dispose();
   }
@@ -267,12 +253,6 @@ class _AddMealPageState extends State<AddMealPage>
                     current is SelectedIngredientsState,
                 builder: (context, state) {
                   if (state is SelectedIngredientsState) {
-                    quantityForIngredientController = List.generate(
-                      mealsCubit.ingredients.length,
-                      (index) => TextEditingController(
-                        text: mealsCubit.ingredients[index].quantity.toString(),
-                      ),
-                    );
                     return Column(
                       spacing: 10,
                       children: [
@@ -280,30 +260,18 @@ class _AddMealPageState extends State<AddMealPage>
                           state.ingredients.length,
                           (index) {
                             final ingredient = state.ingredients[index];
-                            return CounterWidget(
-                              controller:
-                                  quantityForIngredientController[index],
-                              onIncreaseTap: () =>
-                                  updateQuantityForIngredient(true, index),
-                              onDecreaseTap: () =>
-                                  updateQuantityForIngredient(false, index),
+                            return MainCounterWidget(
+                              onChanged: (value) => mealsCubit
+                                  .updateQuantityForIngredient(value, index),
+                              initialCount:
+                                  mealsCubit.ingredients[index].quantity,
                               label: "quantity_for_ingredient".tr(args: [
                                 ingredient.ingredient.name,
                                 ingredient.ingredient.unit.displayName
                               ]),
                               icon: Icons.format_list_numbered_outlined,
+                              isRequired:true ,
                             );
-                            // return MainCounterWidget(
-                            //   onChanged: (value) => mealsCubit
-                            //       .updateQuantityForIngredient(value, index),
-                            //   initialCount:
-                            //       mealsCubit.ingredients[index].quantity,
-                            //   label: "quantity_for_ingredient".tr(args: [
-                            //     ingredient.ingredient.name,
-                            //     ingredient.ingredient.unit.displayName
-                            //   ]),
-                            //   icon: Icons.format_list_numbered_outlined,
-                            // );
                           },
                         ),
                       ],
@@ -323,17 +291,10 @@ class _AddMealPageState extends State<AddMealPage>
                   }
                 },
                 builder: (context, state) {
-                  final isLoading = state is AddMealLoading;
-                  final child = isLoading
-                      ? LoadingIndicator(
-                          size: 30,
-                          color: context.cs.surface,
-                        )
-                      : null;
                   return MainActionButton(
-                    onTap: isLoading ? () {} : onSave,
+                    onTap: onSave,
                     text: "save".tr(),
-                    child: child,
+                    isLoading: state is AddMealLoading,
                   );
                 },
               )

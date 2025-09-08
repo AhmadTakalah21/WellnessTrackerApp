@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
@@ -92,19 +91,13 @@ class BuyItemDialog extends StatelessWidget {
                       }
                     },
                     builder: (context, state) {
-                      final isLoading = state is BuyItemLoading;
-                      var onTap = (item) => this.onTap(item);
-                      if (isLoading) {
-                        onTap = (item) {};
-                      }
                       return MainActionButton(
                         onTap: () => onTap(item),
                         borderRadius: BorderRadius.circular(16),
                         buttonColor: context.cs.surface,
                         textColor: context.cs.primary,
                         text: "buy".tr(),
-                        child:
-                            isLoading ? LoadingIndicator(isInBtn: true) : null,
+                        isLoading: state is BuyItemLoading,
                       );
                     },
                   )),

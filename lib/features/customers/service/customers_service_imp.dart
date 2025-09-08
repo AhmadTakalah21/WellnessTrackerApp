@@ -26,8 +26,10 @@ class CustomersServiceImp implements CustomersService {
         (json) {
           CustomerModel customer =
               CustomerModel.fromJson(json as Map<String, dynamic>);
-          customer =
-              customer.copyWith(isAdmin: role.isAdmin && employeeId == null);
+          customer = customer.copyWith(
+            isAdmin: role.isAdmin,
+            isForEmployee: employeeId != null,
+          );
           return customer;
         },
       );

@@ -239,15 +239,12 @@ class _AssignMealPlanWidgetState extends State<AssignMealPlanWidget>
         }
       },
       builder: (context, state) {
-        final isLoading = state is AssignPlanLoading;
         return SizedBox(
           width: double.infinity,
           child: MainActionButton(
-            onTap: isLoading ? () {} : onSave,
+            onTap: onSave,
             text: "save".tr(),
-            child: isLoading
-                ? LoadingIndicator(size: 20, color: context.cs.surface)
-                : null,
+            isLoading: state is AssignPlanLoading,
           ),
         );
       },

@@ -303,19 +303,10 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                     }
                   },
                   builder: (context, state) {
-                    var onTap = onSend;
-                    Widget? child;
-                    if (state is AddNotificationLoading) {
-                      onTap = () {};
-                      child = LoadingIndicator(
-                        size: 30,
-                        color: context.cs.surface,
-                      );
-                    }
                     return MainActionButton(
                       text: 'send'.tr(),
-                      onTap: onTap,
-                      child: child,
+                      onTap: onSend,
+                      isLoading: state is AddNotificationLoading,
                     );
                   },
                 ),

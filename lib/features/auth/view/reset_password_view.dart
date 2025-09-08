@@ -6,7 +6,6 @@ import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field.dart';
@@ -207,12 +206,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
         }
       },
       builder: (context, state) {
-        final isLoading = state is ResetPasswordLoading;
         return MainActionButton(
           padding: AppConstants.padding8,
-          onTap: isLoading ? () {} : onMainActionTap,
+          onTap: onMainActionTap,
           text: 'reset_password'.tr(),
-          child: isLoading ? LoadingIndicator(isInBtn: true) : null,
+          isLoading:  state is ResetPasswordLoading,
         );
       },
     );

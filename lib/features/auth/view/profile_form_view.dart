@@ -7,9 +7,7 @@ import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/extensions/date_x.dart';
 import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_date_picker.dart';
@@ -119,9 +117,6 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                     onChanged: authCubit.setChronicDiseases,
                     icon: Icons.healing,
                     label: 'chronic_diseases'.tr(),
-                    // validator: (val) => val == null || val.isEmpty
-                    //     ? 'required_field'.tr()
-                    //     : null,
                   ),
                   MainCounterWidget(
                     maxCount: 100,
@@ -182,19 +177,10 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                     }
                   },
                   builder: (context, state) {
-                    var onTap = onSubmit;
-                    Widget? child;
-                    if (state is AddInfoLoading) {
-                      onTap = () {};
-                      child = LoadingIndicator(
-                        size: 30,
-                        color: context.cs.surface,
-                      );
-                    }
                     return MainActionButton(
                       text: 'save'.tr(),
-                      onTap: onTap,
-                      child: child,
+                      onTap: onSubmit,
+                      isLoading: state is AddInfoLoading,
                     );
                   },
                 ),

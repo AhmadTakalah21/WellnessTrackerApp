@@ -9,10 +9,8 @@ import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart';
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/choose_image_widget.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
@@ -213,16 +211,10 @@ class _AddItemPageState extends State<AddItemPage>
                 }
               },
               builder: (context, state) {
-                var onTap = onSubmit;
-                Widget? child;
-                if (state is AddItemLoading) {
-                  onTap = () {};
-                  child = LoadingIndicator(size: 30, color: context.cs.surface);
-                }
                 return MainActionButton(
                   text: 'save'.tr(),
-                  onTap: onTap,
-                  child: child,
+                  onTap: onSubmit,
+                  isLoading: state is AddItemLoading,
                 );
               },
             ),

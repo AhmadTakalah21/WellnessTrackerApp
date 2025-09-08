@@ -137,7 +137,6 @@ class _MealsDietitianPageState extends State<MealsDietitianPage>
       builder: (_) => InsureDeleteWidget(
         item: meal,
         onSuccess: () {
-          Navigator.pop(context);
           mealsCubit.getMeals();
         },
       ),
@@ -259,7 +258,7 @@ class _MealsDietitianPageState extends State<MealsDietitianPage>
                           _buildNutrient(
                             icon: Icons.local_drink,
                             label: "amount",
-                            value: ingredientWithQnt.quantity.toString(),
+                            value: "${ingredientWithQnt.quantity.toString()} ${ingredientWithQnt.ingredient.unit.displayName}",
                           ),
                           _buildNutrient(
                             icon: Icons.local_fire_department,

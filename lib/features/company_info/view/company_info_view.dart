@@ -185,9 +185,9 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
               ),
               IconTitleValueFunc(
                 Icons.phone,
-                'phycological_support_phone',
-                settings.psychologicalPhoneNumber ?? 'not_provided'.tr(),
-                () => onLaunchPhoneTap(settings.psychologicalPhoneNumber),
+                'emergencies_phone',
+                settings.emergenciesPhone ?? 'not_provided'.tr(),
+                () => onLaunchPhoneTap(settings.emergenciesPhone),
               ),
             ];
             return Padding(

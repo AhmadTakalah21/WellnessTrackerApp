@@ -116,7 +116,7 @@ class _MealsPageState extends State<MealsPage>
 
   @override
   void onTryAgainTap() {
-    onTabSelected(0);
+    selectedTab = 0;
     mealPlansCubit.getMealPlans(widget.role);
   }
 
@@ -131,23 +131,25 @@ class _MealsPageState extends State<MealsPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('meals'.tr())),
-      body: BlocBuilder<MealPlansCubit, GeneralMealPlansState>(
+      body: BlocConsumer<MealPlansCubit, GeneralMealPlansState>(
         buildWhen: (previous, current) => current is MealPlansState,
+        listener: (context, state) {
+          if (state is MealPlansSuccess) {
+            final planDays = state.mealPlans.data.last.planDays;
+            final titles = planDays.map((e) => e.day.displayName).toList();
+            tabController = TabController(length: titles.length, vsync: this);
+          }
+        },
         builder: (context, state) {
           if (state is MealPlansLoading) {
             return const Center(child: LoadingIndicator());
           } else if (state is MealPlansSuccess) {
             final meals = state.mealPlans.data;
-            final tabBarTitles =
-                meals.last.planDays.map((e) => e.day.displayName).toList();
-            tabController =
-                TabController(length: tabBarTitles.length, vsync: this);
+            final planDays = meals.last.planDays;
             return Column(
               children: [
                 MainTabBar(
-                  titles: meals.last.planDays
-                      .map((e) => e.day.displayName)
-                      .toList(),
+                  titles: planDays.map((e) => e.day.displayName).toList(),
                   tabController: tabController,
                   onTapSelected: onTabSelected,
                   selectedTab: selectedTab,
@@ -157,9 +159,9 @@ class _MealsPageState extends State<MealsPage>
                     physics: const BouncingScrollPhysics(),
                     controller: pageController,
                     onPageChanged: onTabSelected,
-                    itemCount: meals.last.planDays.length,
+                    itemCount: planDays.length,
                     itemBuilder: (context, index) {
-                      final planDay = meals.last.planDays[index];
+                      final planDay = planDays[index];
                       final child = planDay.meals.isEmpty
                           ? MainErrorWidget(
                               error: "no_meals".tr(),
@@ -229,13 +231,25 @@ class _MealsPageState extends State<MealsPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Center(
+              child: Text(
+                meal.type.displayName,
+                style: context.tt.headlineMedium?.copyWith(
+                  color: context.cs.secondary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
             Row(
               children: [
-                Text(
-                  meal.name,
-                  style: context.tt.titleLarge?.copyWith(
-                    color: context.cs.primary,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    meal.name,
+                    style: context.tt.titleLarge?.copyWith(
+                      color: context.cs.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -266,7 +280,8 @@ class _MealsPageState extends State<MealsPage>
                         _buildNutrient(
                           icon: Icons.local_drink,
                           label: "amount",
-                          value: ingredientWithQnt.quantity.toString(),
+                          value:
+                              "${ingredientWithQnt.quantity.toString()} ${ingredientWithQnt.ingredient.unit.displayName}",
                         ),
                         _buildNutrient(
                           icon: Icons.local_fire_department,

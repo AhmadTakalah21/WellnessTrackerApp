@@ -53,17 +53,6 @@ class ContactOptionsWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                TextButton.icon(
-                  icon: Icon(Icons.phone),
-                  onPressed: () => onLaunchPhoneTap(
-                      context, setting?.psychologicalPhoneNumber),
-                  label: Text(
-                    "contact_psycological_support".tr(),
-                    style: context.tt.titleMedium?.copyWith(
-                      color: context.cs.primary,
-                    ),
-                  ),
-                ),
                 SizedBox(height: 20),
               ],
             ),

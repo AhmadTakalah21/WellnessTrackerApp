@@ -94,31 +94,6 @@ class _SubscriberEvaluationPageState extends State<SubscriberEvaluationPage>
               error: state.error,
               onTryAgainTap: onTryAgainTap,
             );
-            // return RefreshIndicator(
-            //   onRefresh: onRefresh,
-            //   child: SingleChildScrollView(
-            //     padding: AppConstants.padding20,
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       spacing: 10,
-            //       children: [
-            //         _buildEvaluationInfoTable(
-            //           CustomerEvaluationModel(
-            //             name: "faris",
-            //             age: 21,
-            //             length: 170,
-            //             weightBeforeSubscription: 70,
-            //             healthEvaluation: "good",
-            //             psycologyEvaluation: "good and stable",
-            //             behaviorEvaluation: "active and always responsive",
-            //             currentWeight: 50,
-            //             receivedPlansCount: 5,
-            //           ),
-            //         )
-            //       ],
-            //     ),
-            //   ),
-            // );
           } else {
             return SizedBox.shrink();
           }

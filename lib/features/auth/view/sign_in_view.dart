@@ -16,7 +16,6 @@ import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field.dart';
@@ -599,22 +598,16 @@ class _SignInPageState extends State<SignInPage>
         }
       },
       builder: (context, state) {
-        var onTap = onMainAction;
-        Widget? child;
-        if (state is SignInLoading) {
-          child = LoadingIndicator(size: 30, color: context.cs.surface);
-          onTap = () {};
-        }
         return Row(
           children: [
             Expanded(
               child: MainActionButton(
                 padding: AppConstants.padding10,
-                onTap: onTap,
+                onTap: onMainAction,
                 text: isShowSignIn ? "login".tr() : "sign_up".tr(),
                 fontSize: 18,
                 borderRadius: AppConstants.borderRadius10,
-                child: child,
+                isLoading: state is SignInLoading,
               ),
             ),
           ],

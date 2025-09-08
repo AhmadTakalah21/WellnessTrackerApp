@@ -4,10 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
-import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
@@ -110,13 +108,10 @@ class __AddMedicalConsultationWidgetState
                 }
               },
               builder: (context, state) {
-                bool isLoading = state is AddMedicalConsultationLoading;
                 return MainActionButton(
-                  onTap: isLoading ? () {} : onSave,
+                  onTap: onSave,
                   text: "save".tr(),
-                  child: isLoading
-                      ? LoadingIndicator(size: 20, color: context.cs.surface)
-                      : null,
+                  isLoading: state is AddMedicalConsultationLoading,
                 );
               },
             ),

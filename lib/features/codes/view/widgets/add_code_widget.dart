@@ -5,7 +5,6 @@ import 'package:wellnesstrackerapp/features/codes/cubit/codes_cubit.dart';
 import 'package:wellnesstrackerapp/features/codes/model/code_model/code_model.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -105,16 +104,10 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
           }
         },
         builder: (context, state) {
-          var onTap = onSave;
-          Widget? child;
-          if (state is AddCodeLoading) {
-            onTap = () {};
-            child = LoadingIndicator(size: 30, color: context.cs.surface);
-          }
           return MainActionButton(
             text: 'save'.tr(),
-            onTap: onTap,
-            child: child,
+            onTap: onSave,
+            isLoading: state is AddCodeLoading,
           );
         },
       );

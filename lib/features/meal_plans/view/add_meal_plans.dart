@@ -14,7 +14,6 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/utils/utils.dart';
-import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -219,11 +218,10 @@ class _AddMealPlanPageState extends State<AddMealPlanPage>
         }
       },
       builder: (context, state) {
-        final isLoading = state is AddMealPlanLoading;
         return MainActionButton(
-          onTap: isLoading ? () {} : onSave,
+          onTap: onSave,
           text: "save".tr(),
-          child: isLoading ? LoadingIndicator() : null,
+          isLoading: state is AddMealPlanLoading,
         );
       },
     );

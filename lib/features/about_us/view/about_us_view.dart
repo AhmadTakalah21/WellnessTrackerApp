@@ -26,16 +26,25 @@ class AboutUsPage extends StatefulWidget {
 
 class _AboutUsPageState extends State<AboutUsPage>
     implements AboutUsViewCallBacks {
+  // final List<List<String>> items = [
+  //   ['Lose your weight', '10 workouts / Level 1 Newbie'],
+  //   ['Quick full body stretches', '10 workouts / Level 1 Newbie'],
+  //   ['Morning Yoga', '10 workouts / Level 1 Newbie'],
+  // ];
+
   final List<List<String>> items = [
-    ['Lose your weight', '10 workouts / Level 1 Newbie'],
-    ['Quick full body stretches', '10 workouts / Level 1 Newbie'],
-    ['Morning Yoga', '10 workouts / Level 1 Newbie'],
+    ['personal_nutrition_title'.tr(), 'personal_nutrition_subtitle'.tr()],
+    ['daily_exercises_title'.tr(), 'daily_exercises_subtitle'.tr()],
+    ['direct_followup_title'.tr(), 'direct_followup_subtitle'.tr()],
+    ['consultations_title'.tr(), 'consultations_subtitle'.tr()],
+    ['rewards_title'.tr(), 'rewards_subtitle'.tr()],
+    ['levels_title'.tr(), 'levels_subtitle'.tr()],
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('about_us'.tr())),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: AppConstants.padding16,
         child: Column(
           children: [
@@ -48,6 +57,7 @@ class _AboutUsPageState extends State<AboutUsPage>
                 child: _WorkoutItem(title: item[0], subtitle: item[1]),
               );
             }),
+            const SizedBox(height: 115),
           ],
         ),
       ),
@@ -67,46 +77,104 @@ class _WorkoutItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: AppConstants.paddingV4,
+      margin: AppConstants.paddingV8,
       padding: AppConstants.padding16,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.grey.shade100,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: context.tt.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 Text(
                   subtitle,
-                  style: const TextStyle(color: Colors.grey, fontSize: 13),
+                  style: context.tt.bodyMedium?.copyWith(
+                    color: Colors.grey[700],
+                    height: 1.4,
+                  ),
                 ),
               ],
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 12),
           DecoratedBox(
             decoration: BoxDecoration(
               color: context.cs.surface,
               border: Border.all(width: 0.5),
               shape: BoxShape.circle,
             ),
-            child: Image.asset(AppConstants.logo, width: 80, height: 80),
+            child: Image.asset(AppConstants.apkLogo, width: 60, height: 60),
           ),
         ],
       ),
     );
   }
 }
+
+// class _WorkoutItem extends StatelessWidget {
+//   final String title;
+//   final String subtitle;
+
+//   const _WorkoutItem({
+//     required this.title,
+//     required this.subtitle,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       margin: AppConstants.paddingV8,
+//       padding: AppConstants.padding16,
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(12),
+//         color: Colors.grey.shade100,
+//       ),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Text(
+//                   title,
+//                   style: const TextStyle(
+//                     fontWeight: FontWeight.bold,
+//                     fontSize: 16,
+//                   ),
+//                 ),
+//                 const SizedBox(height: 4),
+//                 Text(
+//                   subtitle,
+//                   style: const TextStyle(color: Colors.grey, fontSize: 13),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           SizedBox(width: 10),
+//           DecoratedBox(
+//             decoration: BoxDecoration(
+//               color: context.cs.surface,
+//               border: Border.all(width: 0.5),
+//               shape: BoxShape.circle,
+//             ),
+//             child: Image.asset(AppConstants.apkLogo, width: 70, height: 70),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

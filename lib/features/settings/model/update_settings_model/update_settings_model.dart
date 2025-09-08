@@ -15,20 +15,20 @@ class UpdateSettingsModel {
     String? appUrlIos,
     String? email,
     String? supportPhoneNumber,
-    String? psychologicalPhoneNumber,
+    String? emergenciesPhone,
   })  : _name = name,
         _appUrlAndroid = appUrlAndroid,
         _appUrlIos = appUrlIos,
         _email = email,
         _supportPhoneNumber = supportPhoneNumber,
-        _psychologicalPhoneNumber = psychologicalPhoneNumber;
+        _emergenciesPhone = emergenciesPhone;
 
   final String? _name;
   final String? _appUrlAndroid;
   final String? _appUrlIos;
   final String? _email;
   final String? _supportPhoneNumber;
-  final String? _psychologicalPhoneNumber;
+  final String? _emergenciesPhone;
 
   UpdateSettingsModel copyWith({
     String? Function()? name,
@@ -36,7 +36,7 @@ class UpdateSettingsModel {
     String? Function()? appUrlIos,
     String? Function()? email,
     String? Function()? supportPhoneNumber,
-    String? Function()? psychologicalPhoneNumber,
+    String? Function()? emergenciesPhone,
   }) {
     return UpdateSettingsModel(
       name: name != null ? name() : _name,
@@ -46,9 +46,8 @@ class UpdateSettingsModel {
       supportPhoneNumber: supportPhoneNumber != null
           ? supportPhoneNumber()
           : _supportPhoneNumber,
-      psychologicalPhoneNumber: psychologicalPhoneNumber != null
-          ? psychologicalPhoneNumber()
-          : _psychologicalPhoneNumber,
+      emergenciesPhone:
+          emergenciesPhone != null ? emergenciesPhone() : _emergenciesPhone,
     );
   }
 
@@ -80,12 +79,12 @@ class UpdateSettingsModel {
     return _supportPhoneNumber;
   }
 
-  @JsonKey(name: 'psychological_support_number')
-  String get psychologicalPhoneNumber {
-    if (_psychologicalPhoneNumber == null || _psychologicalPhoneNumber.isEmpty) {
-      throw "psychological_phone_required".tr();
+  @JsonKey(name: 'emergencies_phone')
+  String get emergenciesPhone {
+    if (_emergenciesPhone == null || _emergenciesPhone.isEmpty) {
+      throw "emergencies_phone_required".tr();
     }
-    return _psychologicalPhoneNumber;
+    return _emergenciesPhone;
   }
 
   factory UpdateSettingsModel.fromJson(Map<String, dynamic> json) =>

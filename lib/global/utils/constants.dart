@@ -90,4 +90,5 @@ abstract class AppConstants {
   static const padding0 = EdgeInsets.zero;
 
   static const logo = "assets/images/app_logo.png";
+  static const apkLogo = "assets/images/apk_logo.png";
 }

@@ -35,6 +35,8 @@ class ExercisesCubit extends Cubit<GeneralExercisesState> {
     setExplain(exercise?.description.explain);
     setRounds(exercise?.description.rounds);
     repeatsForRounds = exercise?.description.repeats ?? [];
+    print("repeats are : ${exercise?.description.repeats}");
+    print("leghtn is : ${repeatsForRounds.length}");
     setRepeats(repeatsForRounds);
   }
 
@@ -61,33 +63,27 @@ class ExercisesCubit extends Cubit<GeneralExercisesState> {
 
   void setRepeats(List<int> repeats) {
     addDescriptionModel = addDescriptionModel.copyWith(repeats: () => repeats);
+    emit(RoundsUpdatedState(repeats));
   }
 
   void setDescription() {
     model = model.copyWith(description: () => addDescriptionModel);
   }
 
-  void updateRounds(bool isAdd) {
-    if (isAdd) {
-      rounds++;
-      repeatsForRounds.add(0);
-    } else {
-      if (rounds != 0) {
-        rounds--;
+  void updateRounds(int? rounds) {
+    if (rounds != null) {
+      if (rounds > repeatsForRounds.length) {
+        repeatsForRounds.add(0);
+      } else {
         repeatsForRounds.removeLast();
       }
+      emit(RoundsUpdatedState(repeatsForRounds));
     }
     setRounds(rounds);
   }
 
-  void updateRepeatsForRound(bool isAdd, int index) {
-    if (isAdd) {
-      repeatsForRounds[index]++;
-    } else {
-      if (rounds != 0) {
-        repeatsForRounds[index]--;
-      }
-    }
+  void updateRepeatsForRound(int repeat, int index) {
+    repeatsForRounds[index] = repeat;
     setRepeats(repeatsForRounds);
   }
 

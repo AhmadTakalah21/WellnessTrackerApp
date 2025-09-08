@@ -68,6 +68,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
 
   @override
   Widget build(BuildContext context) {
+    print("url is ${widget.url}");
     return Scaffold(
       appBar: AppBar(title: Text('video'.tr())),
       body: _loading
