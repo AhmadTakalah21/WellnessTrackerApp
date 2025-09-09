@@ -27,7 +27,7 @@ import 'package:wellnesstrackerapp/features/app_manager/view/app_manager_view.da
     as _i13;
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart' as _i76;
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart'
-    as _i72;
+    as _i71;
 import 'package:wellnesstrackerapp/features/auth/view/auth_router.dart' as _i16;
 import 'package:wellnesstrackerapp/features/auth/view/forget_password_view.dart'
     as _i27;
@@ -45,9 +45,9 @@ import 'package:wellnesstrackerapp/features/codes/view/codes_view.dart' as _i17;
 import 'package:wellnesstrackerapp/features/company_info/view/company_info_view.dart'
     as _i18;
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart'
-    as _i74;
-import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart'
     as _i73;
+import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart'
+    as _i72;
 import 'package:wellnesstrackerapp/features/customers/view/customers_view.dart'
     as _i21;
 import 'package:wellnesstrackerapp/features/customers/view/widgets/approve_customer_view.dart'
@@ -150,7 +150,7 @@ import 'package:wellnesstrackerapp/features/user_navigation/view/user_navigation
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart'
     as _i75;
 import 'package:wellnesstrackerapp/features/users/view/users_view.dart' as _i51;
-import 'package:wellnesstrackerapp/global/models/user_role_enum.dart' as _i71;
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart' as _i74;
 
 /// generated route for
 /// [_i1.AboutUsView]
@@ -757,49 +757,18 @@ class AddsAndOffersRouter extends _i53.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i12.AddsAndOffersView]
-class AddsAndOffersRoute extends _i53.PageRouteInfo<AddsAndOffersRouteArgs> {
-  AddsAndOffersRoute({
-    _i54.Key? key,
-    required _i71.UserRoleEnum role,
-    List<_i53.PageRouteInfo>? children,
-  }) : super(
-         AddsAndOffersRoute.name,
-         args: AddsAndOffersRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+class AddsAndOffersRoute extends _i53.PageRouteInfo<void> {
+  const AddsAndOffersRoute({List<_i53.PageRouteInfo>? children})
+    : super(AddsAndOffersRoute.name, initialChildren: children);
 
   static const String name = 'AddsAndOffersRoute';
 
   static _i53.PageInfo page = _i53.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<AddsAndOffersRouteArgs>();
-      return _i12.AddsAndOffersView(key: args.key, role: args.role);
+      return const _i12.AddsAndOffersView();
     },
   );
-}
-
-class AddsAndOffersRouteArgs {
-  const AddsAndOffersRouteArgs({this.key, required this.role});
-
-  final _i54.Key? key;
-
-  final _i71.UserRoleEnum role;
-
-  @override
-  String toString() {
-    return 'AddsAndOffersRouteArgs{key: $key, role: $role}';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! AddsAndOffersRouteArgs) return false;
-    return key == other.key && role == other.role;
-  }
-
-  @override
-  int get hashCode => key.hashCode ^ role.hashCode;
 }
 
 /// generated route for
@@ -807,7 +776,7 @@ class AddsAndOffersRouteArgs {
 class AppManagerRoute extends _i53.PageRouteInfo<AppManagerRouteArgs> {
   AppManagerRoute({
     _i54.Key? key,
-    required _i72.SignInModel user,
+    required _i71.SignInModel user,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          AppManagerRoute.name,
@@ -831,7 +800,7 @@ class AppManagerRouteArgs {
 
   final _i54.Key? key;
 
-  final _i72.SignInModel user;
+  final _i71.SignInModel user;
 
   @override
   String toString() {
@@ -855,8 +824,8 @@ class ApproveCustomerRoute
     extends _i53.PageRouteInfo<ApproveCustomerRouteArgs> {
   ApproveCustomerRoute({
     _i54.Key? key,
-    required _i73.CustomerModel customer,
-    required _i74.CustomersCubit customersCubit,
+    required _i72.CustomerModel customer,
+    required _i73.CustomersCubit customersCubit,
     _i54.VoidCallback? onSuccess,
     List<_i53.PageRouteInfo>? children,
   }) : super(
@@ -896,9 +865,9 @@ class ApproveCustomerRouteArgs {
 
   final _i54.Key? key;
 
-  final _i73.CustomerModel customer;
+  final _i72.CustomerModel customer;
 
-  final _i74.CustomersCubit customersCubit;
+  final _i73.CustomersCubit customersCubit;
 
   final _i54.VoidCallback? onSuccess;
 
@@ -978,7 +947,7 @@ class CodesRoute extends _i53.PageRouteInfo<void> {
 class CompanyInfoRoute extends _i53.PageRouteInfo<CompanyInfoRouteArgs> {
   CompanyInfoRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          CompanyInfoRoute.name,
@@ -1002,7 +971,7 @@ class CompanyInfoRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1057,7 +1026,7 @@ class CurrentPointsRoute extends _i53.PageRouteInfo<void> {
 class CustomersRoute extends _i53.PageRouteInfo<CustomersRouteArgs> {
   CustomersRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     _i75.UserModel? user,
     List<_i53.PageRouteInfo>? children,
   }) : super(
@@ -1086,7 +1055,7 @@ class CustomersRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   final _i75.UserModel? user;
 
@@ -1143,7 +1112,7 @@ class DashboardRoute extends _i53.PageRouteInfo<void> {
 class EarnPointsWaysRoute extends _i53.PageRouteInfo<EarnPointsWaysRouteArgs> {
   EarnPointsWaysRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          EarnPointsWaysRoute.name,
@@ -1167,7 +1136,7 @@ class EarnPointsWaysRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1190,7 +1159,7 @@ class EarnPointsWaysRouteArgs {
 class ExercisesCoachRoute extends _i53.PageRouteInfo<ExercisesCoachRouteArgs> {
   ExercisesCoachRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          ExercisesCoachRoute.name,
@@ -1214,7 +1183,7 @@ class ExercisesCoachRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1237,7 +1206,7 @@ class ExercisesCoachRouteArgs {
 class ExercisesRoute extends _i53.PageRouteInfo<ExercisesRouteArgs> {
   ExercisesRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          ExercisesRoute.name,
@@ -1261,7 +1230,7 @@ class ExercisesRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1379,7 +1348,7 @@ class IntroRoute extends _i53.PageRouteInfo<void> {
 class ItemsRoute extends _i53.PageRouteInfo<ItemsRouteArgs> {
   ItemsRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     _i63.LevelModel? level,
     List<_i53.PageRouteInfo>? children,
   }) : super(
@@ -1404,7 +1373,7 @@ class ItemsRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   final _i63.LevelModel? level;
 
@@ -1429,7 +1398,7 @@ class ItemsRouteArgs {
 class LevelsRoute extends _i53.PageRouteInfo<LevelsRouteArgs> {
   LevelsRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          LevelsRoute.name,
@@ -1453,7 +1422,7 @@ class LevelsRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1492,7 +1461,7 @@ class MealsDietitianRoute extends _i53.PageRouteInfo<void> {
 class MealsRoute extends _i53.PageRouteInfo<MealsRouteArgs> {
   MealsRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          MealsRoute.name,
@@ -1516,7 +1485,7 @@ class MealsRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1539,7 +1508,7 @@ class MealsRouteArgs {
 class NotificationsRoute extends _i53.PageRouteInfo<NotificationsRouteArgs> {
   NotificationsRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          NotificationsRoute.name,
@@ -1563,7 +1532,7 @@ class NotificationsRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1586,7 +1555,7 @@ class NotificationsRouteArgs {
 class PointsRoute extends _i53.PageRouteInfo<PointsRouteArgs> {
   PointsRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          PointsRoute.name,
@@ -1610,7 +1579,7 @@ class PointsRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1760,7 +1729,7 @@ class SelectPlanRoute extends _i53.PageRouteInfo<void> {
 class SettingsRoute extends _i53.PageRouteInfo<SettingsRouteArgs> {
   SettingsRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          SettingsRoute.name,
@@ -1784,7 +1753,7 @@ class SettingsRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1889,8 +1858,8 @@ class SubscriberEvaluationRoute
     extends _i53.PageRouteInfo<SubscriberEvaluationRouteArgs> {
   SubscriberEvaluationRoute({
     _i54.Key? key,
-    required _i71.UserRoleEnum role,
-    required _i73.CustomerModel customer,
+    required _i74.UserRoleEnum role,
+    required _i72.CustomerModel customer,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          SubscriberEvaluationRoute.name,
@@ -1926,9 +1895,9 @@ class SubscriberEvaluationRouteArgs {
 
   final _i54.Key? key;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
-  final _i73.CustomerModel customer;
+  final _i72.CustomerModel customer;
 
   @override
   String toString() {
@@ -1968,9 +1937,9 @@ class UpdateCustomerInfoRoute
     extends _i53.PageRouteInfo<UpdateCustomerInfoRouteArgs> {
   UpdateCustomerInfoRoute({
     _i54.Key? key,
-    required _i74.CustomersCubit customersCubit,
-    required _i73.CustomerModel customer,
-    required _i71.UserRoleEnum role,
+    required _i73.CustomersCubit customersCubit,
+    required _i72.CustomerModel customer,
+    required _i74.UserRoleEnum role,
     List<_i53.PageRouteInfo>? children,
   }) : super(
          UpdateCustomerInfoRoute.name,
@@ -2009,11 +1978,11 @@ class UpdateCustomerInfoRouteArgs {
 
   final _i54.Key? key;
 
-  final _i74.CustomersCubit customersCubit;
+  final _i73.CustomersCubit customersCubit;
 
-  final _i73.CustomerModel customer;
+  final _i72.CustomerModel customer;
 
-  final _i71.UserRoleEnum role;
+  final _i74.UserRoleEnum role;
 
   @override
   String toString() {

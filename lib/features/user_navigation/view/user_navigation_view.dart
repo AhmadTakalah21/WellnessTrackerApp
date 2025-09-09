@@ -85,10 +85,10 @@ class _UserNavigationPageState extends State<UserNavigationPage>
           ? [
               ProfileRouter(),
               DashboardRouter(),
-              AddsAndOffersRoute(role: UserRoleEnum.user),
+              AddsAndOffersRouter(),
             ]
           : [
-              AddsAndOffersRoute(role: UserRoleEnum.user),
+              AddsAndOffersRouter(),
               DashboardRouter(),
               ProfileRouter(),
             ],

@@ -82,7 +82,7 @@ enum UserRoleEnum implements DropDownItemModel {
           UserViewOnPermissionModel(
             title: "adds_and_offers",
             icon: Icons.campaign,
-            screen: AddsAndOffersRoute(role: this),
+            screen: AddsAndOffersRouter(),
             color: Colors.orange,
           ),
           UserViewOnPermissionModel(
