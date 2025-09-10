@@ -146,10 +146,11 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: MainAppBar(
-          automaticallyImplyLeading: !role.isUser,
-          title: 'adds_and_offers'.tr(),
-          hasLogout: role.isUser,
-          role: role),
+        automaticallyImplyLeading: !role.isUser,
+        title: 'adds_and_offers'.tr(),
+        hasLogout: role.isUser,
+        role: role,
+      ),
       body: Padding(
         padding: AppConstants.padding16,
         child: BlocBuilder<AddsAndOffersCubit, GeneralAddsAndOffersState>(
