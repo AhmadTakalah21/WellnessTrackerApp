@@ -166,7 +166,7 @@ class _StatisticsPageState extends State<StatisticsPage>
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 6,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: AppConstants.padding16,
         child: Column(
           children: [
             Padding(

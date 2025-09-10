@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
 
 import 'package:wellnesstrackerapp/features/company_info/view/widgets/update_company_info_widget.dart';
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:wellnesstrackerapp/features/settings/model/settings_model/settin
 import 'package:wellnesstrackerapp/global/blocs/share_cubit/cubit/share_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
@@ -18,6 +20,7 @@ import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
+// TODO check
 class IconTitleValueFunc {
   final IconData icon;
   final String title;
@@ -63,10 +66,13 @@ class CompanyInfoPage extends StatefulWidget {
 
 class _CompanyInfoPageState extends State<CompanyInfoPage>
     implements CompanyInfoViewCallBacks {
+  late final SignInModel? user = context.read<SignInModel?>();
   late final SettingsCubit settingsCubit = context.read();
   late final ShareCubit shareCubit = context.read();
+  late final UserRepo userRepo = context.read();
 
   SettingsSuccess? localState;
+
   @override
   void onTryAgainTap() => settingsCubit.getSettings();
 
@@ -159,6 +165,8 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
                 settings.name,
                 null,
               ),
+              // if(user.isV1 || !widget.role.isUser)
+              if(userRepo.isV1 || !widget.role.isUser)
               IconTitleValueFunc(
                 Icons.android,
                 'android_url',

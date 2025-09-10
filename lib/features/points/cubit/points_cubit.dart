@@ -3,13 +3,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/points/model/add_points_guideline_model/add_points_guideline_model.dart';
+import 'package:wellnesstrackerapp/features/points/model/points_guideline_model/fake_points_guideline.dart';
 import 'package:wellnesstrackerapp/features/points/model/points_guideline_model/points_guideline_model.dart';
+import 'package:wellnesstrackerapp/features/points/model/points_model/fake_points.dart';
 import 'package:wellnesstrackerapp/features/points/model/points_model/points_model.dart';
 import 'package:wellnesstrackerapp/features/points/service/points_service.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/activity_status_enum.dart';
 import 'package:wellnesstrackerapp/global/models/en_ar_add_model/en_ar_add_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/points_state.dart';
 part 'states/general_points_state.dart';
@@ -75,6 +79,10 @@ class PointsCubit extends Cubit<GeneralPointsState> {
   }
 
   Future<void> getPoints() async {
+    if (!get<UserRepo>().isSignedIn) {
+      emit(PointsSuccess(fakePoints));
+      return;
+    }
     emit(PointsLoading());
     try {
       if (isClosed) return;
@@ -107,6 +115,10 @@ class PointsCubit extends Cubit<GeneralPointsState> {
     required int page,
     int perPage = 10,
   }) async {
+    if (!get<UserRepo>().isSignedIn) {
+      emit(PointsGuidelinesSuccess(fakePointsGuidelines, null));
+      return;
+    }
     emit(PointsGuidelinesLoading());
     try {
       if (isClosed) return;

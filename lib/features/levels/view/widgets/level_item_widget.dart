@@ -45,7 +45,7 @@ class LevelItemWidget extends StatelessWidget {
                   : AppImageWidget(url: image, fit: BoxFit.cover),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: AppConstants.padding16,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -4,11 +4,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/items/model/add_item_model/add_item_model.dart';
+import 'package:wellnesstrackerapp/features/items/model/item_model/fake_items.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
 import 'package:wellnesstrackerapp/features/items/service/items_service.dart';
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/en_ar_add_model/en_ar_add_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/items_state.dart';
 part 'states/general_items_state.dart';
@@ -86,6 +89,10 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
     bool isLoadMore = true,
     int? levelId,
   }) async {
+    if (!get<UserRepo>().isSignedIn) {
+      emit(ItemsSuccess(fakeItems));
+      return;
+    }
     if (!hasMore && isLoadMore) {
       emit(ItemsSuccess(items, hasMore: false));
       return;
@@ -146,6 +153,7 @@ class ItemsCubit extends Cubit<GeneralItemsState> {
   }
 
   Future<void> buyItem(int id) async {
+    if (!get<UserRepo>().isSignedIn) return;
     emit(BuyItemLoading());
     try {
       if (isClosed) return;

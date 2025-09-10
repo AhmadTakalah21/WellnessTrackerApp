@@ -1,9 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -21,7 +25,10 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SettingsPage(role: role);
+    return BlocProvider(
+      create: (context) => get<SettingsCubit>(),
+      child: SettingsPage(role: role),
+    );
   }
 }
 
@@ -35,7 +42,10 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage>
     implements SettingsViewCallBacks {
+  late final SettingsCubit settingsCubit = context.read();
+
   late bool isArabic = context.locale == SupportedLocales.arabic;
+  late final UserRepo userRepo = context.read();
 
   @override
   void onInfoTap() {
@@ -47,11 +57,12 @@ class _SettingsPageState extends State<SettingsPage>
     setState(() {
       isArabic = !isArabic;
     });
-    if (isArabic) {
-      context.setLocale(SupportedLocales.arabic);
-    } else {
-      context.setLocale(SupportedLocales.english);
-    }
+    final locale =
+        isArabic ? SupportedLocales.arabic : SupportedLocales.english;
+    context.setLocale(locale);
+    userRepo.setKey("locale", locale.languageCode);
+
+    settingsCubit.updateLocale(locale);
     RestartAppWidget.restartApp(context);
   }
 

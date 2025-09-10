@@ -6,7 +6,8 @@ class NotificationsServiceImp implements NotificationsService {
 
   @override
   Future<PaginatedModel<NotificationModel>> getNotifications(
-    UserRoleEnum role, {
+    UserRoleEnum role,
+    Locale locale, {
     int? perPage = 10,
     int? page,
   }) async {
@@ -15,7 +16,9 @@ class NotificationsServiceImp implements NotificationsService {
       final pageParam = page != null ? "page=$page" : "";
       final endpoint =
           "/v1/${role.getApiRoute}/notifications?$pageParam&$perPageParam";
-      final response = await dio.get(endpoint);
+      final response = await dio
+          .get(endpoint, headers: {"Accept-Language": locale.languageCode});
+
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
         (json) => NotificationModel.fromJson(json as Map<String, dynamic>),

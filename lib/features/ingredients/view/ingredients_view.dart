@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/ingredients/cubit/ingredients_cubit.dart';
 import 'package:wellnesstrackerapp/features/ingredients/model/ingredient_model/ingredient_model.dart';
 import 'package:wellnesstrackerapp/features/ingredients/view/widgets/add_ingredient_widget.dart';
+import 'package:wellnesstrackerapp/features/ingredients/view/widgets/nutrients_widget.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -176,52 +177,13 @@ class _IngredientsPageState extends State<IngredientsPage>
                 children: [
                   Text(ingredient.name, style: context.tt.headlineSmall),
                   const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildNutrient(
-                        icon: Icons.local_fire_department,
-                        label: "unit",
-                        value: ingredient.unit.displayName,
-                      ),
-                      _buildNutrient(
-                        icon: Icons.local_fire_department,
-                        label: "calories",
-                        value: ingredient.calories,
-                      ),
-                      _buildNutrient(
-                        icon: Icons.fitness_center,
-                        label: "proteins",
-                        value: ingredient.proteins,
-                      ),
-                      _buildNutrient(
-                        icon: Icons.bubble_chart,
-                        label: "carbs",
-                        value: ingredient.carbs,
-                      ),
-                    ],
-                  ),
+                  NutrientsWidget(ingredient: ingredient),
                 ],
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildNutrient({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    return Column(
-      children: [
-        Icon(icon, size: 20, color: Colors.blueAccent),
-        const SizedBox(height: 4),
-        Text(label.tr(), style: const TextStyle(fontSize: 12)),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
-      ],
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +15,7 @@ part 'notifications_service_imp.dart';
 
 abstract class NotificationsService {
   Future<PaginatedModel<NotificationModel>> getNotifications(
-    UserRoleEnum role, {
+    UserRoleEnum role, Locale locale,{
     int? perPage = 10,
     int? page,
   });

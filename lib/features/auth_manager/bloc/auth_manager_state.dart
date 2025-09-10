@@ -16,20 +16,12 @@ class ShowSignInState extends GeneralAuthManagerState {
 
 class ProfileFormState extends GeneralAuthManagerState {}
 
-// class ProfileFormCompletedState extends GeneralAuthManagerState {}
-
 class AuthenticatedState extends GeneralAuthManagerState {
-  final SignInModel user;
+  // TODO check
+   //final SignInModel user;
+  final SignInModel? user;
   AuthenticatedState(this.user);
 }
-
-// class SignedUpState extends GeneralAuthManagerState {
-//   final SignInModel user;
-
-//   SignedUpState(this.user);
-// }
-
-//class AuthenticatedWithoutHealthAssesmentState extends GeneralAuthManagerState {}
 
 class UnauthenticatedState extends GeneralAuthManagerState {}
 

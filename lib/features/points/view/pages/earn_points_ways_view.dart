@@ -8,6 +8,7 @@ import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart';
 import 'package:wellnesstrackerapp/features/points/model/points_guideline_model/points_guideline_model.dart';
 import 'package:wellnesstrackerapp/features/points/view/widgets/add_points_guideline_widget.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
@@ -53,6 +54,8 @@ class EarnPointsWaysPage extends StatefulWidget {
 class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
     implements EarnPointsWaysViewCallBacks {
   late final PointsCubit pointsCubit = context.read();
+  late final locale = context.locale;
+  late final isArabic = locale == SupportedLocales.arabic;
 
   @override
   void initState() {
@@ -95,13 +98,13 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
   @override
   void onAddTap() {
     showMaterialModalBottomSheet(
-        context: context,
-        shape:
-            RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
-        builder: (bottomSheetContext) => AddPointsGuidelineView(
-              pointsCubit: pointsCubit,
-              onSuccess: onTryAgainTap,
-            ));
+      context: context,
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      builder: (bottomSheetContext) => AddPointsGuidelineView(
+        pointsCubit: pointsCubit,
+        onSuccess: onTryAgainTap,
+      ),
+    );
   }
 
   @override
@@ -117,14 +120,14 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
   @override
   void onEditTap(PointsGuidelineModel guideline) {
     showMaterialModalBottomSheet(
-        context: context,
-        shape:
-            RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
-        builder: (bottomSheetContext) => AddPointsGuidelineView(
-              pointsCubit: pointsCubit,
-              guideline: guideline,
-              onSuccess: onTryAgainTap,
-            ));
+      context: context,
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      builder: (bottomSheetContext) => AddPointsGuidelineView(
+        pointsCubit: pointsCubit,
+        guideline: guideline,
+        onSuccess: onTryAgainTap,
+      ),
+    );
   }
 
   @override
@@ -194,6 +197,9 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
   }
 
   Widget _buildTile(PointsGuidelineModel guideline) {
+    final title = isArabic ? guideline.title.ar : guideline.title.en;
+    final description =
+        isArabic ? guideline.description.ar : guideline.description.en;
     return InkWell(
       onTap: () => onTap(guideline),
       child: Card(
@@ -205,12 +211,9 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
             backgroundColor: context.cs.primary.withOpacity(0.1),
             child: Icon(Icons.trending_up, color: context.cs.primary),
           ),
-          title: Text(
-            guideline.title.en ?? "title",
-            style: context.tt.bodyLarge,
-          ),
+          title: Text(title ?? "title", style: context.tt.bodyLarge),
           subtitle: Text(
-            guideline.description.en ?? "description",
+            description ?? "description",
             style: context.tt.bodySmall?.copyWith(color: Colors.grey),
           ),
         ),

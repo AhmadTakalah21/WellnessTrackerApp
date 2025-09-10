@@ -4,9 +4,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/customer_model/fake_customer.dart';
 import 'package:wellnesstrackerapp/features/profile/service/profile_service.dart';
 import 'package:wellnesstrackerapp/features/ratings/model/add_rate_model/add_rate_model.dart';
 import 'package:wellnesstrackerapp/features/ratings/model/rating_model/rating_model.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/profile_state.dart';
 part 'states/general_profile_state.dart';
@@ -41,6 +44,8 @@ class ProfileCubit extends Cubit<GeneralProfileState> {
   }
 
   Future<void> addRating({int? id}) async {
+    // TODO check this
+    if (!get<UserRepo>().isSignedIn) return;
     emit(AddRatingLoading());
     try {
       if (isClosed) return;
@@ -55,6 +60,11 @@ class ProfileCubit extends Cubit<GeneralProfileState> {
   }
 
   Future<void> getProfile() async {
+    // TODO check this
+    if (!get<UserRepo>().isSignedIn) {
+      emit(ProfileSuccess(fakeCustomer));
+      return;
+    }
     emit(ProfileLoading());
     try {
       if (isClosed) return;

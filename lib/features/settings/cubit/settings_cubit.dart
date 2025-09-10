@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
@@ -81,6 +83,15 @@ class SettingsCubit extends Cubit<GeneralSettingsState> {
     } catch (e) {
       if (isClosed) return;
       emit(UpdateSettingsFail(e.toString()));
+    }
+  }
+
+  Future<void> updateLocale(Locale locale) async {
+    try {
+      if (isClosed) return;
+      await settingsService.updateLocale(locale);
+    } catch (e) {
+      if (isClosed) return;
     }
   }
 }

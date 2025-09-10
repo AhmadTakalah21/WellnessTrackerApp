@@ -14,6 +14,11 @@ class UserRepo {
   SignInModel? _user;
   SignInModel? get user => _user;
 
+  bool? _isV1;
+  bool get isV1 => _isV1 ?? false;
+
+  
+
   final Map<String, dynamic> properties;
 
   @PostConstruct(preResolve: true)
@@ -35,6 +40,7 @@ class UserRepo {
     try {
       final json = await flutterSecureStorage.read(key: _userKey);
       if (json != null) _user = SignInModel.fromString(json);
+      _isV1 = _user?.isV1 ?? await getKey(_isV1Key, defaultValue: false);
       return _user;
     } catch (e, s) {
       debugPrint('Error: $e\n$s');
@@ -45,7 +51,10 @@ class UserRepo {
   Future<bool> setUser(SignInModel user) async {
     try {
       await flutterSecureStorage.write(key: _userKey, value: user.toString());
+      await setKey(_isV1Key, user.isV1);
       _user = user;
+      _isV1 = user.isV1;
+
       return true;
     } catch (e, s) {
       debugPrint('Error: $e\n$s');
@@ -57,6 +66,7 @@ class UserRepo {
     try {
       await flutterSecureStorage.delete(key: _userKey);
       _user = null;
+
       return true;
     } catch (e, s) {
       debugPrint('Error: $e\n$s');
@@ -65,8 +75,6 @@ class UserRepo {
   }
 
   bool get isSignedIn => _user != null;
-
-
 
   Future<bool> setKey<T>(String key, T value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -131,6 +139,7 @@ class UserRepo {
   }
 }
 
+const String _isV1Key = 'ISV1_KEY';
 const String _userKey = 'USER_KEY';
 const String firstTimeKey = 'FIRST_TIME_KEY';
 const String profileFormKey = 'PROFILE_FORM_KEY';

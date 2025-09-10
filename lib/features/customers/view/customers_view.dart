@@ -265,7 +265,7 @@ class CustomersPageState extends State<CustomersPage>
         'psychologist'.tr(),
       ],
       if (isAdmin) ...['code'.tr(), 'subscription_end_date'.tr()],
-      if (isAdmin && widget.user != null && (isDoctor || isPsychologist))
+      if (widget.user != null || isDoctor || isPsychologist)
         "medical_consultations_num".tr(),
       'status'.tr(),
       'event'.tr(),

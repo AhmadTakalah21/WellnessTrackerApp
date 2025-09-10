@@ -6,25 +6,33 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
+import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
+// TODO check
 class IconTitleFuncModel {
   final IconData icon;
   final String title;
+  final Color? color;
   final void Function() onTap;
 
-  IconTitleFuncModel(this.icon, this.title, this.onTap);
+  IconTitleFuncModel(this.icon, this.title, this.onTap, {this.color});
 }
 
 abstract class ProfileViewCallbacks {
@@ -35,6 +43,7 @@ abstract class ProfileViewCallbacks {
   void onRateUsTap();
   void onTermsAndConditionsTap();
   void onPrivacyPolicyTap();
+  void onDeleteAccountTap();
 }
 
 @RoutePage()
@@ -56,7 +65,10 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     implements ProfileViewCallbacks {
+  // late final SignInModel user = context.read<SignInModel>();
+  late final SignInModel? user = context.read<SignInModel?>();
   late final ProfileCubit profileCubit = context.read();
+  late final UserRepo userRepo = context.read();
   File? _pickedImage;
 
   @override
@@ -67,13 +79,13 @@ class _ProfilePageState extends State<ProfilePage>
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
+    if (pickedImage != null) {
       setState(() {
-        _pickedImage = File(pickedFile.path);
+        _pickedImage = File(pickedImage.path);
       });
-      profileCubit.setImage(pickedFile);
+      profileCubit.setImage(pickedImage);
     }
   }
 
@@ -87,28 +99,71 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   @override
-  void onAboutUsTap() {
-    context.router.push(AboutUsRoute());
-  }
+  void onAboutUsTap() => context.router.push(AboutUsRoute());
 
   @override
-  void onRateUsTap() {
-    context.router.push(AddRateRoute());
-  }
+  void onRateUsTap() => context.router.push(AddRateRoute());
 
   @override
-  void onPrivacyPolicyTap() {
-    context.router.push(PrivacyPolicyRoute());
-  }
+  void onPrivacyPolicyTap() => context.router.push(PrivacyPolicyRoute());
 
   @override
-  void onSettingsTap() {
-    context.router.push(SettingsRoute(role: UserRoleEnum.user));
-  }
+  void onSettingsTap() =>
+      context.router.push(SettingsRoute(role: UserRoleEnum.user));
 
   @override
-  void onTermsAndConditionsTap() {
-    context.router.push(TermsAndConditionsRoute());
+  void onTermsAndConditionsTap() =>
+      context.router.push(TermsAndConditionsRoute());
+
+  @override
+  void onDeleteAccountTap() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return BlocProvider(
+          create: (context) => get<AuthCubit>(),
+          child: AlertDialog(
+            title: Text('delete_account'.tr()),
+            content: Text('delete_account_confirmation'.tr()),
+            actions: [
+              Row(
+                children: [
+                  Expanded(
+                    child: MainActionButton(
+                      onTap: () => Navigator.of(context).pop(),
+                      text: "cancel".tr(),
+                      textColor: context.cs.surface,
+                      buttonColor: context.cs.primary,
+                      shadow: AppColors.secondShadow,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (state is LogOutSuccess) {
+                          Navigator.of(context).pop();
+                        } else if (state is SignInFail) {
+                          MainSnackBar.showErrorMessage(context, state.error);
+                        }
+                      },
+                      builder: (context, state) {
+                        return MainActionButton(
+                          onTap: () => context.read<AuthCubit>().logout(),
+                          buttonColor: context.cs.error,
+                          text: "delete".tr(),
+                          isLoading: state is SignInLoading,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -121,6 +176,14 @@ class _ProfilePageState extends State<ProfilePage>
           Icons.article, "terms_and_conditions".tr(), onTermsAndConditionsTap),
       IconTitleFuncModel(
           Icons.privacy_tip, "privacy_policy".tr(), onPrivacyPolicyTap),
+      // if (!user.isV1)
+      if (!userRepo.isV1)
+        IconTitleFuncModel(
+          Icons.delete,
+          "delete_account".tr(),
+          onDeleteAccountTap,
+          color: context.cs.error,
+        ),
     ];
     return Scaffold(
       appBar: MainAppBar(title: 'profile'.tr(), role: UserRoleEnum.user),
@@ -146,7 +209,8 @@ class _ProfilePageState extends State<ProfilePage>
                       children: [
                         _buildImagePicker(profile),
                         const SizedBox(height: 12),
-                        _buildNameWithLevelAndPoints(profile),
+                        // _buildNameWithLevelAndPoints(profile, user.isV1),
+                        _buildNameWithLevelAndPoints(profile, userRepo.isV1),
                         const SizedBox(height: 16),
                         if (info != null) _buildCards(profile),
                         SizedBox(height: 10)
@@ -169,11 +233,7 @@ class _ProfilePageState extends State<ProfilePage>
                 final option = entry.value;
                 return TileSlideAnimation(
                   index: index,
-                  child: ProfileOptionWidget(
-                    icon: option.icon,
-                    title: option.title,
-                    onTap: option.onTap,
-                  ),
+                  child: ProfileOptionWidget(option: option),
                 );
               }),
               const SizedBox(height: 115),
@@ -230,7 +290,7 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  Widget _buildNameWithLevelAndPoints(CustomerModel profile) {
+  Widget _buildNameWithLevelAndPoints(CustomerModel profile, bool isV1) {
     return Center(
       child: Column(
         children: [
@@ -239,19 +299,21 @@ class _ProfilePageState extends State<ProfilePage>
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (profile.level != null)
-                Text(profile.level!.name, style: TextStyle(color: Colors.grey)),
-              SizedBox(width: 4),
-              Text(
-                "| ${profile.totalPoints?.toString() ?? 0} ${"point".tr()}",
-                style:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
-              )
-            ],
-          ),
+          if (isV1)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (profile.level != null)
+                  Text(profile.level!.name,
+                      style: TextStyle(color: Colors.grey)),
+                SizedBox(width: 4),
+                Text(
+                  "| ${profile.totalPoints?.toString() ?? 0} ${"point".tr()}",
+                  style: TextStyle(
+                      color: Colors.blue, fontWeight: FontWeight.w500),
+                )
+              ],
+            ),
         ],
       ),
     );
@@ -334,21 +396,15 @@ class _InfoCard extends StatelessWidget {
 }
 
 class ProfileOptionWidget extends StatelessWidget {
-  const ProfileOptionWidget({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.onTap,
-  });
+  const ProfileOptionWidget({super.key, required this.option});
 
-  final IconData icon;
-  final String title;
-  final void Function() onTap;
+  final IconTitleFuncModel option;
 
   @override
   Widget build(BuildContext context) {
+    final color = option.color ?? context.cs.primary;
     return GestureDetector(
-      onTap: onTap,
+      onTap: option.onTap,
       child: Container(
         margin: AppConstants.paddingV8,
         padding: AppConstants.padding20,
@@ -363,14 +419,19 @@ class ProfileOptionWidget extends StatelessWidget {
               height: 30.0,
               width: 30.0,
               decoration: BoxDecoration(
-                color: context.cs.primary.withValues(alpha: 0.2),
+                color: color.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(5.0),
               ),
               alignment: Alignment.center,
-              child: Icon(icon, size: 20.0, color: context.cs.primary),
+              child: Icon(option.icon, size: 20.0, color: color),
             ),
             SizedBox(width: 10),
-            Expanded(child: Text(title, style: context.tt.bodyMedium)),
+            Expanded(
+              child: Text(
+                option.title,
+                style: context.tt.bodyMedium?.copyWith(color: option.color),
+              ),
+            ),
             SizedBox(width: 10),
             Icon(Icons.arrow_forward_ios,
                 color: context.cs.onTertiary, size: 16.0)

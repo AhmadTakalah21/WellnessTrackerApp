@@ -35,8 +35,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
     this.level,
     this.code,
     this.subEndDate,
-    this.isAdmin = false,
     this.isForEmployee = false,
+    this.requestRole = UserRoleEnum.admin,
     this.totalPoints,
     this.medicalConsultationsNum,
     required this.createdAt,
@@ -81,10 +81,10 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
   final String? subEndDate;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final bool isAdmin;
+  final bool isForEmployee;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final bool isForEmployee;
+  final UserRoleEnum requestRole;
 
   @JsonKey(name: "total_points")
   final int? totalPoints;
@@ -103,19 +103,18 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
         name,
         email,
         phone ?? '_',
-        if (isAdmin && !isForEmployee) ...[
+        if (requestRole.isAdmin && !isForEmployee) ...[
           subscription?.dietitian?.name ?? 'not_existed'.tr(),
           subscription?.coach?.name ?? 'not_existed'.tr(),
           subscription?.doctor?.name ?? 'not_existed'.tr(),
           subscription?.psychologist?.name ?? 'not_existed'.tr(),
         ],
-        if (isAdmin) ...[
+        if (requestRole.isAdmin) ...[
           code ?? 'not_existed'.tr(),
           subEndDate ?? 'not_existed'.tr(),
         ],
-        if (isForEmployee)
-          if (medicalConsultationsNum != null &&
-              (role.isDoctor || role.isPsychologist))
+        if (isForEmployee || requestRole.isDoctor || requestRole.isPsychologist)
+          if (medicalConsultationsNum != null)
             medicalConsultationsNum!.toString(),
         status,
       ];
@@ -141,8 +140,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
   String get displayEntityName => name;
 
   CustomerModel copyWith({
-    bool? isAdmin,
     bool? isForEmployee,
+    UserRoleEnum? requestRole,
   }) {
     return CustomerModel(
       id: id,
@@ -156,8 +155,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
       info: info,
       subscription: subscription,
       level: level,
-      isAdmin: isAdmin ?? this.isAdmin,
       isForEmployee: isForEmployee ?? this.isForEmployee,
+      requestRole: requestRole ?? this.requestRole,
       code: code,
       medicalConsultationsNum: medicalConsultationsNum,
       subEndDate: subEndDate,

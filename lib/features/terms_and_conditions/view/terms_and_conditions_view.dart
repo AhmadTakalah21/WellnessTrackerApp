@@ -42,7 +42,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
     return Scaffold(
       appBar: AppBar(title: Text("terms_and_conditions".tr())),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: AppConstants.padding16,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

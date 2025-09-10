@@ -6,6 +6,7 @@ import 'package:wellnesstrackerapp/features/adds_and_offers/cubit/adds_and_offer
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/add_adv_view.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/adv_details_widget.dart';
+import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -31,23 +32,19 @@ abstract class AddsAndOffersViewCallBacks {
 
 @RoutePage()
 class AddsAndOffersView extends StatelessWidget {
-  const AddsAndOffersView({super.key, required this.role});
-
-  final UserRoleEnum role;
+  const AddsAndOffersView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => get<AddsAndOffersCubit>(),
-      child: AddsAndOffersPage(role: role),
+      child: AddsAndOffersPage(),
     );
   }
 }
 
 class AddsAndOffersPage extends StatefulWidget {
-  const AddsAndOffersPage({super.key, required this.role});
-
-  final UserRoleEnum role;
+  const AddsAndOffersPage({super.key});
 
   @override
   State<AddsAndOffersPage> createState() => _AddsAndOffersPageState();
@@ -56,11 +53,13 @@ class AddsAndOffersPage extends StatefulWidget {
 class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     implements AddsAndOffersViewCallBacks {
   late final AddsAndOffersCubit addsAndOffersCubit = context.read();
+  late final SignInModel? user = context.read<SignInModel?>();
+  late final role = user?.role ?? UserRoleEnum.user;
 
   @override
   void initState() {
     super.initState();
-    addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000);
+    addsAndOffersCubit.getAddsAndOffers(role, perPage: 1000000);
   }
 
   @override
@@ -71,7 +70,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
         builder: (context) => AddAdvView(
           advCubit: addsAndOffersCubit,
           onSuccess: () => addsAndOffersCubit.getAddsAndOffers(
-            widget.role,
+            role,
             perPage: 1000000,
           ),
         ),
@@ -81,7 +80,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
 
   @override
   void onAdvLongPress(AdvModel adv) {
-    if (widget.role.isAdmin) {
+    if (role.isAdmin) {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -104,7 +103,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
           item: adv,
           onSuccess: () {
             Navigator.pop(context);
-            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000);
+            addsAndOffersCubit.getAddsAndOffers(role, perPage: 1000000);
           }),
     );
   }
@@ -118,7 +117,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
           advCubit: addsAndOffersCubit,
           adv: adv,
           onSuccess: () {
-            addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000);
+            addsAndOffersCubit.getAddsAndOffers(role, perPage: 1000000);
           },
         ),
       ),
@@ -127,7 +126,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
 
   @override
   void onTryAgainTap() =>
-      addsAndOffersCubit.getAddsAndOffers(widget.role, perPage: 1000000);
+      addsAndOffersCubit.getAddsAndOffers(role, perPage: 1000000);
 
   @override
   Future<void> onRefresh() async => onTryAgainTap();
@@ -137,7 +136,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     showDialog(
       context: context,
       builder: (context) {
-        return AdvDetailsWidget(adv: adv, role: widget.role);
+        return AdvDetailsWidget(adv: adv, role: role);
       },
     );
   }
@@ -147,11 +146,10 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
     final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: MainAppBar(
-        automaticallyImplyLeading: !widget.role.isUser,
-        title: 'adds_and_offers'.tr(),
-        hasLogout: widget.role.isUser,
-        role: widget.role
-      ),
+          automaticallyImplyLeading: !role.isUser,
+          title: 'adds_and_offers'.tr(),
+          hasLogout: role.isUser,
+          role: role),
       body: Padding(
         padding: AppConstants.padding16,
         child: BlocBuilder<AddsAndOffersCubit, GeneralAddsAndOffersState>(
@@ -178,7 +176,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
                       Text("offers".tr(), style: context.tt.headlineLarge),
                       _buildOffersList(offers),
                       const SizedBox(height: 10),
-                      if (widget.role.isUser) const SizedBox(height: 100),
+                      if (role.isUser) const SizedBox(height: 100),
                     ],
                   ),
                 ),
@@ -200,7 +198,7 @@ class _AddsAndOffersPageState extends State<AddsAndOffersPage>
           },
         ),
       ),
-      floatingActionButton: widget.role == UserRoleEnum.admin
+      floatingActionButton: role == UserRoleEnum.admin
           ? Padding(
               padding: AppConstants.padding8,
               child: FloatingActionButton(

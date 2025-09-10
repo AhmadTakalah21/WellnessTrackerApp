@@ -2,6 +2,8 @@ import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
 abstract class PrivacyPolicyViewCallBacks {
@@ -29,8 +31,8 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage>
     implements PrivacyPolicyViewCallBacks {
   static const _docId = '1qGe66yBqlY49q1M_G_IMk-tf-QLKKEbNv_F8W2usPDY';
 
-  Uri get _editUrl => Uri.parse(
-      'https://docs.google.com/document/d/$_docId/edit?usp=sharing');
+  Uri get _editUrl =>
+      Uri.parse('https://docs.google.com/document/d/$_docId/edit?usp=sharing');
   Uri get _viewUrl =>
       Uri.parse('https://docs.google.com/document/d/$_docId/view?usp=sharing');
   Uri get _pdfUrl =>
@@ -72,43 +74,44 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final List<List<String>> keys = [
+      ['privacy_data_collection', "privacy_data_collection_text"],
+      ['privacy_use_of_data', "privacy_use_of_data_text"],
+      ['privacy_security', "privacy_security_text"],
+      ['privacy_user_rights', "privacy_user_rights_text"],
+      ['privacy_policy_changes', "privacy_policy_changes_text"],
+    ];
     return Scaffold(
       appBar: AppBar(title: Text('privacy_policy'.tr())),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: AppConstants.padding16,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('privacy_data_collection'.tr(),
-                style: theme.textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text('privacy_data_collection_text'.tr()),
-            Text('privacy_location_data_text'.tr()),
-            const Divider(height: 30),
-            Text('privacy_use_of_data'.tr(),
-                style: theme.textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text('privacy_use_of_data_text'.tr()),
-            Text('privacy_no_third_party_share'.tr()),
-            const Divider(height: 30),
-            Text('privacy_security'.tr(),
-                style: theme.textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text('privacy_security_text'.tr()),
-            Text('privacy_security_no_guarantee'.tr()),
-            const Divider(height: 30),
-            Text('privacy_user_rights'.tr(),
-                style: theme.textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text('privacy_user_rights_text'.tr()),
-            Text('privacy_unsubscribe_text'.tr()),
-            const Divider(height: 30),
-            Text('privacy_policy_changes'.tr(),
-                style: theme.textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text('privacy_policy_changes_text'.tr()),
-            const Divider(height: 30),
+            AspectRatio(
+              aspectRatio: 5 / 2,
+              child: Image.asset(AppConstants.logo, fit: BoxFit.cover),
+            ),
+            const SizedBox(height: 10),
+            Divider(
+              color: Colors.green,
+              thickness: 12,
+              height: 50,
+              indent: 10,
+              endIndent: 10,
+            ),
+            for (int index = 0; index < keys.length; index++) ...[
+              Text(keys[index][0].tr(), style: context.tt.titleLarge),
+              const SizedBox(height: 4),
+              Text(keys[index][1].tr(), style: context.tt.bodyLarge),
+              Divider(
+                color: index.isOdd ? Colors.green : Colors.grey[350],
+                thickness: 12,
+                height: 50,
+                indent: 10,
+                endIndent: 10,
+              ),
+            ],
             InkWell(
               onTap: onTap,
               child: Text(

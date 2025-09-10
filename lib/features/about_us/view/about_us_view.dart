@@ -1,10 +1,14 @@
 import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 
+// TODO check
 abstract class AboutUsViewCallBacks {}
 
 @RoutePage()
@@ -26,19 +30,20 @@ class AboutUsPage extends StatefulWidget {
 
 class _AboutUsPageState extends State<AboutUsPage>
     implements AboutUsViewCallBacks {
-  // final List<List<String>> items = [
-  //   ['Lose your weight', '10 workouts / Level 1 Newbie'],
-  //   ['Quick full body stretches', '10 workouts / Level 1 Newbie'],
-  //   ['Morning Yoga', '10 workouts / Level 1 Newbie'],
-  // ];
+  //late final SignInModel user = context.read<SignInModel>();
+  late final SignInModel? user = context.read<SignInModel?>();
+  late final UserRepo userRepo = context.read();
 
-  final List<List<String>> items = [
+  late final List<List<String>> items = [
     ['personal_nutrition_title'.tr(), 'personal_nutrition_subtitle'.tr()],
     ['daily_exercises_title'.tr(), 'daily_exercises_subtitle'.tr()],
     ['direct_followup_title'.tr(), 'direct_followup_subtitle'.tr()],
     ['consultations_title'.tr(), 'consultations_subtitle'.tr()],
-    ['rewards_title'.tr(), 'rewards_subtitle'.tr()],
-    ['levels_title'.tr(), 'levels_subtitle'.tr()],
+    // if (user.isV1) ...[
+    if (userRepo.isV1) ...[
+      ['rewards_title'.tr(), 'rewards_subtitle'.tr()],
+      ['levels_title'.tr(), 'levels_subtitle'.tr()],
+    ],
   ];
   @override
   Widget build(BuildContext context) {
@@ -122,59 +127,3 @@ class _WorkoutItem extends StatelessWidget {
     );
   }
 }
-
-// class _WorkoutItem extends StatelessWidget {
-//   final String title;
-//   final String subtitle;
-
-//   const _WorkoutItem({
-//     required this.title,
-//     required this.subtitle,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       margin: AppConstants.paddingV8,
-//       padding: AppConstants.padding16,
-//       decoration: BoxDecoration(
-//         borderRadius: BorderRadius.circular(12),
-//         color: Colors.grey.shade100,
-//       ),
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Text(
-//                   title,
-//                   style: const TextStyle(
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 16,
-//                   ),
-//                 ),
-//                 const SizedBox(height: 4),
-//                 Text(
-//                   subtitle,
-//                   style: const TextStyle(color: Colors.grey, fontSize: 13),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           SizedBox(width: 10),
-//           DecoratedBox(
-//             decoration: BoxDecoration(
-//               color: context.cs.surface,
-//               border: Border.all(width: 0.5),
-//               shape: BoxShape.circle,
-//             ),
-//             child: Image.asset(AppConstants.apkLogo, width: 70, height: 70),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

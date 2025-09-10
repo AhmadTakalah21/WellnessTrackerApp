@@ -4,13 +4,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/levels/model/add_level_model/add_level_model.dart';
+import 'package:wellnesstrackerapp/features/levels/model/level_model/fake_levels.dart';
 
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/features/levels/service/level_service.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/department_enum.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/levels_state.dart';
 part 'states/add_level_state.dart';
@@ -67,6 +70,10 @@ class LevelsCubit extends Cubit<GeneralLevelsState> {
     int? perPage = 10,
     int? page,
   }) async {
+    if (!get<UserRepo>().isSignedIn) {
+      emit(LevelsSuccess(fakeLevels, null));
+      return;
+    }
     emit(LevelsLoading());
     try {
       if (isClosed) return;

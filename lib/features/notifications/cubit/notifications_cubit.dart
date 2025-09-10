@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:image_picker/image_picker.dart';
@@ -5,10 +7,13 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/model/add_notification_model/add_notification_model.dart';
+import 'package:wellnesstrackerapp/features/notifications/model/notification_model/fake_notifications.dart';
 import 'package:wellnesstrackerapp/features/notifications/model/notification_model/notification_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/service/notifications_service.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/general_notifications_state.dart';
 part 'states/notifications_state.dart';
@@ -86,10 +91,15 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   }
 
   Future<void> getNotifications(
-    UserRoleEnum role, {
+    UserRoleEnum role, 
+    Locale locale,{
     int perPage = 10,
     bool isLoadMore = true,
   }) async {
+    if(!get<UserRepo>().isSignedIn){
+      emit(NotificationsSuccess(fakeNotifications));
+      return ;
+    }
     if (!hasMore && isLoadMore) {
       emit(NotificationsSuccess(notifications, message: "no_more".tr()));
       return;
@@ -108,6 +118,7 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
       if (isClosed) return;
       final newItems = await notificationsService.getNotifications(
         role,
+        locale,
         page: page,
         perPage: perPage,
       );

@@ -30,4 +30,14 @@ class SettingsServiceImp implements SettingsService {
       rethrow;
     }
   }
+
+  @override
+  Future<void> updateLocale(Locale locale) async {
+    try {
+      await dio.post("/v1/update_local", data: {"locale": locale.languageCode});
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
 }

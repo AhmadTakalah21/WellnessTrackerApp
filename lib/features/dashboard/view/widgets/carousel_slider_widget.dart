@@ -78,7 +78,7 @@ class CarouselSliderWidget extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(16),
+                          padding: AppConstants.padding16,
                           child: Align(
                             alignment: Alignment.bottomRight,
                             child: Column(

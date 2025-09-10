@@ -54,6 +54,7 @@ class _NotificationsPageState extends State<NotificationsPage>
     with SingleTickerProviderStateMixin
     implements NotificationsViewCallBacks {
   late final NotificationsCubit notificationsCubit = context.read();
+  late final locale = context.locale;
 
   PageController pageController = PageController();
   late TabController tabController;
@@ -64,14 +65,16 @@ class _NotificationsPageState extends State<NotificationsPage>
   @override
   void initState() {
     super.initState();
-    notificationsCubit.getNotifications(widget.role);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notificationsCubit.getNotifications(widget.role, locale);
+    });
     tabController = TabController(length: tabBarTitles.length, vsync: this);
   }
 
   @override
   bool onNotification(ScrollNotification scrollInfo) {
     if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-      notificationsCubit.getNotifications(widget.role);
+      notificationsCubit.getNotifications(widget.role, locale);
     }
     return true;
   }
@@ -100,8 +103,8 @@ class _NotificationsPageState extends State<NotificationsPage>
   Future<void> onRefresh() async => onTryAgainTap(false);
 
   @override
-  void onTryAgainTap(bool isLoadMore) =>
-      notificationsCubit.getNotifications(widget.role, isLoadMore: isLoadMore);
+  void onTryAgainTap(bool isLoadMore) => notificationsCubit
+      .getNotifications(widget.role, locale, isLoadMore: isLoadMore);
 
   @override
   void dispose() {

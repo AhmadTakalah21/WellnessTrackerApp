@@ -5,11 +5,14 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/add_adv_model/add_adv_model.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart';
+import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/fake_advs.dart';
 import 'package:wellnesstrackerapp/features/adds_and_offers/service/adds_and_offers_service.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/adv_type_enum.dart';
 import 'package:wellnesstrackerapp/global/models/en_ar_add_model/en_ar_add_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/adds_and_offers_state.dart';
 part 'states/general_adds_and_offers_state.dart';
@@ -68,6 +71,10 @@ class AddsAndOffersCubit extends Cubit<GeneralAddsAndOffersState> {
     int? perPage = 10,
     int? page,
   }) async {
+    if (!get<UserRepo>().isSignedIn) {
+      emit(AddsAndOffersSuccess(fakeAdvs, null));
+      return;
+    }
     emit(AddsAndOffersLoading());
     try {
       if (isClosed) return;

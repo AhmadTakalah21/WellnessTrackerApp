@@ -104,6 +104,8 @@ import 'package:wellnesstrackerapp/global/blocs/upload_image_cubit/cubit/upload_
     as _i540;
 import 'package:wellnesstrackerapp/global/blocs/user_roles_cubit/cubit/user_roles_cubit.dart'
     as _i633;
+import 'package:wellnesstrackerapp/global/blocs/video_player_cubit/cubit/video_player_cubit.dart'
+    as _i977;
 import 'package:wellnesstrackerapp/global/di/app_module.dart' as _i326;
 import 'package:wellnesstrackerapp/global/dio/dio_client.dart' as _i384;
 import 'package:wellnesstrackerapp/global/services/delete_service/delete_service.dart'
@@ -133,6 +135,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => appModule.prefs,
       preResolve: true,
     );
+    gh.factory<_i977.VideoPlayerCubit>(() => _i977.VideoPlayerCubit());
     gh.singleton<_i533.AppManagerCubit>(() => _i533.AppManagerCubit());
     gh.singleton<_i447.InternetConnectionCubit>(
         () => _i447.InternetConnectionCubit());

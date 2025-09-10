@@ -104,7 +104,7 @@ class _CurrentPointsPageState extends State<CurrentPointsPage>
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 6,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: AppConstants.padding16,
         child: SfCartesianChart(
           title: ChartTitle(
             text: "الرسم البياني لتقدم النقاط",

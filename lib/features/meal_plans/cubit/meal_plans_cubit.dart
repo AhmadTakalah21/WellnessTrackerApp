@@ -3,16 +3,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/meal_plans/model/add_meal_plan_model/add_meal_plan_model.dart';
+import 'package:wellnesstrackerapp/features/meal_plans/model/meal_plan_model/fake_meal_plans.dart';
 import 'package:wellnesstrackerapp/features/meal_plans/model/meal_plan_model/meal_plan_model.dart';
 import 'package:wellnesstrackerapp/features/meal_plans/model/plan_day_item_model/plan_day_item_to_show_model.dart';
 import 'package:wellnesstrackerapp/features/meal_plans/model/plan_day_model/plan_day_model.dart';
 import 'package:wellnesstrackerapp/features/meal_plans/service/meal_plans_service.dart';
 import 'package:wellnesstrackerapp/features/meals/model/meal_model/meal_model.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
+import 'package:wellnesstrackerapp/global/models/day_enum.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
-import '../../../global/models/day_enum.dart';
 import '../model/plan_day_item_model/plan_day_item_model.dart';
 
 part 'states/general_meal_plans_state.dart';
@@ -29,13 +32,9 @@ class MealPlansCubit extends Cubit<GeneralMealPlansState> {
 
   AddMealPlanModel model = const AddMealPlanModel();
   List<MealModel> selectedMeals = [];
-  List<PlanDayItemToShowModel> planDays = List.generate(
-    DayEnum.values.length,
-    (index) {
-      final day = DayEnum.values[index];
-      return PlanDayItemToShowModel(day: day, meals: []);
-    },
-  );
+  List<PlanDayItemToShowModel> planDays = DayEnum.values
+      .map((day) => PlanDayItemToShowModel(day: day, meals: []))
+      .toList();
 
   Future<void> setModel(MealPlanModel? plan) async {
     setName(plan?.name);
@@ -61,9 +60,9 @@ class MealPlansCubit extends Cubit<GeneralMealPlansState> {
 
   void setPlanDays() {
     model = model.copyWith(
-        planDays: () => planDays.map((e) {
-              final meals = e.meals.map((e2) => e2.id).toList();
-              return PlanDayItemModel(day: e.day, meals: meals);
+        planDays: () => planDays.map((plan) {
+              final meals = plan.meals.map((meal) => meal.id).toList();
+              return PlanDayItemModel(day: plan.day, meals: meals);
             }).toList());
   }
 
@@ -84,6 +83,14 @@ class MealPlansCubit extends Cubit<GeneralMealPlansState> {
     int? perPage = 10,
     int? page,
   }) async {
+    // TODO check this
+    if (!get<UserRepo>().isSignedIn) {
+      emit(MealPlansLoading());
+      Future.delayed(Duration(microseconds: 1), () {
+        emit(MealPlansSuccess(fakeMealPlans, null));
+      });
+      return;
+    }
     emit(MealPlansLoading());
     try {
       if (isClosed) return;

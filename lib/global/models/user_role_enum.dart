@@ -45,7 +45,7 @@ enum UserRoleEnum implements DropDownItemModel {
   bool get isDoctor => this == doctor;
   bool get isPsychologist => this == psychologist;
 
-  List<UserViewOnPermissionModel> get getPermissions {
+  List<UserViewOnPermissionModel> getPermissions(bool isV1) {
     switch (this) {
       case admin:
         return [
@@ -82,7 +82,7 @@ enum UserRoleEnum implements DropDownItemModel {
           UserViewOnPermissionModel(
             title: "adds_and_offers",
             icon: Icons.campaign,
-            screen: AddsAndOffersRoute(role: this),
+            screen: AddsAndOffersRouter(),
             color: Colors.orange,
           ),
           UserViewOnPermissionModel(
@@ -118,12 +118,13 @@ enum UserRoleEnum implements DropDownItemModel {
             screen: SelectPlanRoute(),
             color: Colors.blue,
           ),
-          UserViewOnPermissionModel(
-            title: "points",
-            icon: Icons.stacked_bar_chart,
-            screen: PointsRoute(role: this),
-            color: Colors.purple,
-          ),
+          if (isV1)
+            UserViewOnPermissionModel(
+              title: "points",
+              icon: Icons.stacked_bar_chart,
+              screen: PointsRoute(role: this),
+              color: Colors.purple,
+            ),
           UserViewOnPermissionModel(
             title: "meals",
             icon: Icons.restaurant_menu_rounded,
@@ -136,24 +137,20 @@ enum UserRoleEnum implements DropDownItemModel {
             screen: ExercisesRoute(role: this),
             color: Colors.blue.shade400,
           ),
+          if (isV1)
           UserViewOnPermissionModel(
             title: "levels",
             icon: Icons.stacked_line_chart,
             screen: LevelsRoute(role: this),
             color: Colors.orange,
           ),
-          UserViewOnPermissionModel(
-            title: "store",
-            icon: Icons.storefront_outlined,
-            screen: ItemsRoute(role: this),
-            color: Colors.greenAccent,
-          ),
-          // UserViewOnPermissionModel(
-          //   title: "notifications",
-          //   icon: FontAwesomeIcons.bell,
-          //   screen: NotificationsRoute(role: this),
-          //   color: Colors.green,
-          // ),
+          if (isV1)
+            UserViewOnPermissionModel(
+              title: "store",
+              icon: Icons.storefront_outlined,
+              screen: ItemsRoute(role: this),
+              color: Colors.greenAccent,
+            ),
         ];
       case doctor:
         return [

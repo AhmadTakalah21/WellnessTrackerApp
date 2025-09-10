@@ -10,10 +10,12 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/another_way_sign_in_button.dart';
 import 'package:wellnesstrackerapp/features/auth/view/widgets/contact_options_widget.dart';
+import 'package:wellnesstrackerapp/features/auth_manager/bloc/auth_manager_bloc.dart';
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
 import 'package:wellnesstrackerapp/features/settings/model/settings_model/settings_model.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
@@ -33,6 +35,7 @@ abstract class SignInViewCallbacks {
   void onMainAction();
   void onLoginWithFacebookTap();
   void onLoginWithGoogleTap();
+  void onContinueAsGuestTap();
   void onShowSignInOrUp();
 }
 
@@ -67,7 +70,10 @@ class _SignInPageState extends State<SignInPage>
     with SingleTickerProviderStateMixin
     implements SignInViewCallbacks {
   late final AuthCubit authCubit = context.read();
+  late final UserRepo userRepo = context.read<UserRepo>();
+  late final AuthManagerBloc authManagerBloc = context.read();
   late final SettingsCubit settingsCubit = context.read();
+
   bool? _rememberMe = false;
   final _formKey = GlobalKey<FormState>();
 
@@ -85,16 +91,23 @@ class _SignInPageState extends State<SignInPage>
   bool isShowSignIn = true;
   bool isObsecure = true;
 
-  late List<AnotherWaySignInButton> otherWaysButtons = [
+  late final List<AnotherWaySignInButton> otherWaysButtons = [
+    if (userRepo.isV1) ...[
+      AnotherWaySignInButton(
+        image: 'assets/images/icons8-facebook-48.png',
+        text: 'Facebook',
+        onPressed: onLoginWithFacebookTap,
+      ),
+      AnotherWaySignInButton(
+        image: 'assets/images/icons8-google-48.png',
+        text: 'Google',
+        onPressed: onLoginWithGoogleTap,
+      ),
+    ],
     AnotherWaySignInButton(
-      image: 'assets/images/icons8-facebook-48.png',
-      text: 'Facebook',
-      onPressed: onLoginWithFacebookTap,
-    ),
-    AnotherWaySignInButton(
-      image: 'assets/images/icons8-google-48.png',
-      text: 'Google',
-      onPressed: onLoginWithGoogleTap,
+      image: 'assets/images/icons8-guest-48.png',
+      text: 'Guest'.tr(),
+      onPressed: onContinueAsGuestTap,
     ),
   ];
 
@@ -209,6 +222,11 @@ class _SignInPageState extends State<SignInPage>
   @override
   void onLoginWithGoogleTap() {
     // TODO: implement onLoginWithGoogleTap
+  }
+
+  @override
+  void onContinueAsGuestTap() {
+    authManagerBloc.add(GuestRequested());
   }
 
   @override

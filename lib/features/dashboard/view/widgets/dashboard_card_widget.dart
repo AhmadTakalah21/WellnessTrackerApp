@@ -62,7 +62,7 @@ class DashboardCardWidgetState extends State<DashboardCardWidget> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: AppConstants.padding16,
                   child: Icon(m.icon, size: 32, color: m.color),
                 ),
               ),

@@ -13,7 +13,7 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
     on<IsAuthenticatedOrFirstTime>(_findIfAuthenticatedOrFirstTime);
     on<OnBoardingViewedRequested>(_goToLogIn);
     on<SignInRequested>(_signIn);
-    //on<SignUpRequested>(_signUp);
+    on<GuestRequested>(_continueAsGuest);
     on<ProfileFormCompletedRequested>(_completeProfileForm);
     on<SignOutRequested>(_signOut);
   }
@@ -69,7 +69,9 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
     Emitter<GeneralAuthManagerState> emit,
   ) async {
     _userRepo.setKey(profileFormKey, false);
-    emit(AuthenticatedState(_userRepo.user!));
+    // TODO check
+    // emit(AuthenticatedState(_userRepo.user!));
+    emit(AuthenticatedState(_userRepo.user));
   }
 
   Future<void> _signOut(
@@ -78,5 +80,14 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
   ) async {
     await _userRepo.deleteUser();
     emit(UnauthenticatedState());
+  }
+
+  void _continueAsGuest(
+    GuestRequested event,
+    Emitter<GeneralAuthManagerState> emit,
+  ) {
+    // TODO check
+    emit(AuthenticatedState(null));
+    // emit(GuestState());
   }
 }

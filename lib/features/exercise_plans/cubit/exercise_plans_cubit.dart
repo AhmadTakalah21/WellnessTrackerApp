@@ -7,12 +7,15 @@ import 'package:wellnesstrackerapp/features/exercise_plans/model/exercise_plan_d
 import 'package:wellnesstrackerapp/features/exercise_plans/model/exercise_plan_day_item_model/exercise_plan_day_item_to_show_model.dart';
 import 'package:wellnesstrackerapp/features/exercise_plans/model/exercise_plan_day_model/exercise_plan_day_model.dart';
 import 'package:wellnesstrackerapp/features/exercise_plans/model/exercise_plan_model/exercise_plan_model.dart';
+import 'package:wellnesstrackerapp/features/exercise_plans/model/exercise_plan_model/fake_exercise_plans.dart';
 import 'package:wellnesstrackerapp/features/exercise_plans/service/exercise_plans_service.dart';
 import 'package:wellnesstrackerapp/features/exercises/model/exercise_model/exercise_model.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/day_enum.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/general_exercise_plans_state.dart';
 part 'states/exercise_plans_state.dart';
@@ -29,13 +32,9 @@ class ExercisePlansCubit extends Cubit<GeneralExercisePlansState> {
 
   AddExercisePlanModel model = const AddExercisePlanModel();
   List<ExerciseModel> selectedExercises = [];
-  List<ExercisePlanDayItemToShowModel> planDays = List.generate(
-    DayEnum.values.length,
-    (index) {
-      final day = DayEnum.values[index];
-      return ExercisePlanDayItemToShowModel(day: day, exercises: []);
-    },
-  );
+  List<ExercisePlanDayItemToShowModel> planDays = DayEnum.values
+      .map((day) => ExercisePlanDayItemToShowModel(day: day, exercises: []))
+      .toList();
 
   void setModel(ExercisePlanModel? plan) {
     setName(plan?.name);
@@ -61,10 +60,11 @@ class ExercisePlansCubit extends Cubit<GeneralExercisePlansState> {
 
   void setPlanDays() {
     model = model.copyWith(
-        planDays: () => planDays.map((e) {
-              final exercises = e.exercises.map((e2) => e2.id).toList();
-              return ExercisePlanDayItemModel(day: e.day, exercises: exercises);
-            }).toList());
+      planDays: () => planDays.map((e) {
+        final exercises = e.exercises.map((e2) => e2.id).toList();
+        return ExercisePlanDayItemModel(day: e.day, exercises: exercises);
+      }).toList(),
+    );
   }
 
   void getPlanDays() {
@@ -84,6 +84,14 @@ class ExercisePlansCubit extends Cubit<GeneralExercisePlansState> {
     int? perPage = 10,
     int? page,
   }) async {
+    // TODO check this
+    if (!get<UserRepo>().isSignedIn) {
+      emit(ExercisePlansLoading());
+      Future.delayed(Duration(microseconds: 1), () {
+        emit(ExercisePlansSuccess(fakeExercisePlans, null));
+      });
+      return;
+    }
     emit(ExercisePlansLoading());
     try {
       if (isClosed) return;

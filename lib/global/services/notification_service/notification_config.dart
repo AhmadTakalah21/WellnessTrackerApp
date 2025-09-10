@@ -99,12 +99,12 @@ class NotaficationsService {
   }
 
   Future<void> initialize() async {
+    initLocalNotifications();
+
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     await firebaseMessaging.subscribeToTopic("wellness-tracker-app-d8def");
 
-    initLocalNotifications();
-
-    final fcmToken = await FirebaseMessaging.instance.getToken();
+    final fcmToken = await firebaseMessaging.getToken();
     final prefs = await SharedPreferences.getInstance();
     debugPrint("FCM Token: $fcmToken");
     prefs.setString("fcm_token", fcmToken ?? "");

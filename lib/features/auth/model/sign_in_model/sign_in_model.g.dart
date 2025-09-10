@@ -12,6 +12,7 @@ SignInModel _$SignInModelFromJson(Map<String, dynamic> json) => SignInModel(
       token: json['token'] as String?,
       name: json['name'] as String,
       phone: json['phone'] as String?,
+      isV1: json['v1'] as bool? ?? false,
       role: UserRoleEnum.fromJson(json['role'] as String),
     );
 
@@ -22,5 +23,6 @@ Map<String, dynamic> _$SignInModelToJson(SignInModel instance) =>
       'token': instance.token,
       'name': instance.name,
       'phone': instance.phone,
+      'v1': instance.isV1,
       'role': UserRoleEnum.toJson(instance.role),
     };

@@ -18,13 +18,14 @@ class AnotherWaySignInButton extends StatelessWidget {
       child: InkWell(
         onTap: onPressed,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
             children: [
+              Spacer(),
               Image.asset(image, scale: 1.5),
               Spacer(),
               Text(
@@ -33,7 +34,7 @@ class AnotherWaySignInButton extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              Spacer(),
+              Spacer(flex: 2),
             ],
           ),
         ),
