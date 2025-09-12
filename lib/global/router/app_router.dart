@@ -38,7 +38,6 @@ class AppRouter extends RootStackRouter {
                       page: DashboardRouter.page,
                       children: dashboardAutoRoutes,
                     ),
-                    //AutoRoute(page: AddsAndOffersRoute.page),
                     AutoRoute(
                       page: AddsAndOffersRouter.page,
                       children: [
