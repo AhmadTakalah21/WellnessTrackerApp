@@ -125,6 +125,7 @@ class _PointsPageState extends State<PointsPage>
               ),
             ),
           ),
+          SizedBox(height: 40)
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

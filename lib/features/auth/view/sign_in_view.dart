@@ -92,18 +92,17 @@ class _SignInPageState extends State<SignInPage>
   bool isObsecure = true;
 
   late final List<AnotherWaySignInButton> otherWaysButtons = [
-    if (userRepo.isV1) ...[
-      AnotherWaySignInButton(
-        image: 'assets/images/icons8-facebook-48.png',
-        text: 'Facebook',
-        onPressed: onLoginWithFacebookTap,
-      ),
-      AnotherWaySignInButton(
-        image: 'assets/images/icons8-google-48.png',
-        text: 'Google',
-        onPressed: onLoginWithGoogleTap,
-      ),
-    ],
+    // TODO comment facebook and google for ios version
+    AnotherWaySignInButton(
+      image: 'assets/images/icons8-facebook-48.png',
+      text: 'Facebook',
+      onPressed: onLoginWithFacebookTap,
+    ),
+    AnotherWaySignInButton(
+      image: 'assets/images/icons8-google-48.png',
+      text: 'Google',
+      onPressed: onLoginWithGoogleTap,
+    ),
     AnotherWaySignInButton(
       image: 'assets/images/icons8-guest-48.png',
       text: 'Guest'.tr(),

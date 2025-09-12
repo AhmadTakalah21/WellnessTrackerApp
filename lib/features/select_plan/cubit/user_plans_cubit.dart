@@ -17,7 +17,6 @@ class UserPlansCubit extends Cubit<GeneralUserPlansState> {
   final UserPlansService userPlansService;
 
   Future<void> getPlans() async {
-    // TODO check this
     if (!get<UserRepo>().isSignedIn) {
       emit(UserPlansSuccess(fakeUserPlans));
       return;

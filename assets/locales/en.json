@@ -493,5 +493,9 @@
   "delete_account_confirmation" : "Are you sure you want to delete your account? you cant undo this action.",
   "or" : "Or",
   "continue_as_guest" : "Continue as a Guest",
-  "as_guest" : "As Guest"
+  "as_guest" : "As Guest",
+  "profile_updated" : "Profile is updated successfully",
+  "update_profile" : "Update Profile",
+  "buy_item" : "Buy Item",
+  "accept_to_buy_item" : "Do you want to buy {} for"
 }

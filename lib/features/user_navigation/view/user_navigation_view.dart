@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart';
+import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart';
 import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -40,6 +41,8 @@ class UserNavigationPage extends StatefulWidget {
 class _UserNavigationPageState extends State<UserNavigationPage>
     with SingleTickerProviderStateMixin
     implements UserNavigationViewCallbacks {
+  late final ProfileCubit profileCubit = context.read();
+
   int currentIndex = 0;
   late final locale = context.locale;
   bool get isRtl => locale == SupportedLocales.arabic;
@@ -49,6 +52,12 @@ class _UserNavigationPageState extends State<UserNavigationPage>
     _TabInfo('home', Icons.home),
     _TabInfo('profile', Icons.person),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    profileCubit.getProfile();
+  }
 
   @override
   void onBottomTab(int currentIndex, TabsRouter tabsRouter) {
@@ -66,11 +75,6 @@ class _UserNavigationPageState extends State<UserNavigationPage>
     final rtlIcons = icons.reversed.toList();
 
     return AutoTabsScaffold(
-      // routes: [
-      //   AddsAndOffersRouter(role: UserRoleEnum.user),
-      //   DashboardRouter(),
-      //   ProfileRouter(),
-      // ],
       routes: isRtl
           ? [
               ProfileRouter(),
@@ -107,9 +111,6 @@ class _UserNavigationPageState extends State<UserNavigationPage>
               labels: isRtl ? rtlLabels : labels,
               icons: isRtl ? rtlIcons : icons,
               initialSelectedTab: isRtl ? rtlLabels[1] : labels[1],
-              // labels: labels,
-              // icons: icons,
-              // initialSelectedTab: labels[1],
               tabSize: 60,
               tabBarHeight: 65,
               textStyle: TextStyle(

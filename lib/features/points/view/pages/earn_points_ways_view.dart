@@ -169,7 +169,7 @@ class _EarnPointsWaysPageState extends State<EarnPointsWaysPage>
                       }),
                       if (data.length < 10)
                         SizedBox(height: (10 - data.length) * 80.0),
-                      if (widget.role.isUser) SizedBox(height: 120),
+                      if (widget.role.isUser) SizedBox(height: 80),
                     ],
                   ),
                 ),

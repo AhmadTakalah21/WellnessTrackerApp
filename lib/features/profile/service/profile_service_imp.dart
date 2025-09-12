@@ -30,4 +30,26 @@ class ProfileServiceImp implements ProfileService {
       rethrow;
     }
   }
+
+  @override
+  Future<CustomerModel> updateProfile(
+    UpdateProfileModel model, {
+    XFile? image,
+  }) async {
+    try {
+      final map = model.toJson();
+      if (image != null) {
+        map['image'] = await MultipartFile.fromFile(
+          image.path,
+          filename: image.name,
+        );
+      }
+      final response = await dio.put("/v1/users", data: FormData.fromMap(map));
+      final data = response.data["data"] as Map<String, dynamic>;
+      return CustomerModel.fromJson(data);
+    } catch (e, stackTrace) {
+      if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
 }

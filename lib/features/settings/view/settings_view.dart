@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart';
 import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
@@ -43,6 +44,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage>
     implements SettingsViewCallBacks {
   late final SettingsCubit settingsCubit = context.read();
+  late final ProfileCubit profileCubit = context.read();
 
   late bool isArabic = context.locale == SupportedLocales.arabic;
   late final UserRepo userRepo = context.read();
@@ -62,6 +64,7 @@ class _SettingsPageState extends State<SettingsPage>
     context.setLocale(locale);
     userRepo.setKey("locale", locale.languageCode);
 
+    profileCubit.getProfile();
     settingsCubit.updateLocale(locale);
     RestartAppWidget.restartApp(context);
   }

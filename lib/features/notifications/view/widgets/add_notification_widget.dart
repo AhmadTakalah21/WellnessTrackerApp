@@ -233,11 +233,6 @@ class _AddNotificationWidgetState extends State<AddNotificationWidget>
                             if (state is CustomersLoading) {
                               return const LoadingIndicator();
                             } else if (state is CustomersSuccess) {
-                              // TODO: filter حسب القسم إن رغبت
-                              // final data = state.customers.data;
-                              // final items = selectedDepartment == null
-                              //     ? data
-                              //     : data.where((c) => c.department.id == selectedDepartment?.id).toList();
                               return MutliSelectorDropDown(
                                 items: state.customers.data,
                                 prefixIcon: Icons.subscriptions,

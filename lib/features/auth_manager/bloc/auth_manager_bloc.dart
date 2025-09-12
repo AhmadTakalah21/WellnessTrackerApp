@@ -69,8 +69,6 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
     Emitter<GeneralAuthManagerState> emit,
   ) async {
     _userRepo.setKey(profileFormKey, false);
-    // TODO check
-    // emit(AuthenticatedState(_userRepo.user!));
     emit(AuthenticatedState(_userRepo.user));
   }
 
@@ -86,8 +84,6 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, GeneralAuthManagerState> {
     GuestRequested event,
     Emitter<GeneralAuthManagerState> emit,
   ) {
-    // TODO check
     emit(AuthenticatedState(null));
-    // emit(GuestState());
   }
 }

@@ -20,7 +20,6 @@ import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
-// TODO check
 class IconTitleValueFunc {
   final IconData icon;
   final String title;
@@ -165,7 +164,6 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
                 settings.name,
                 null,
               ),
-              // if(user.isV1 || !widget.role.isUser)
               if(userRepo.isV1 || !widget.role.isUser)
               IconTitleValueFunc(
                 Icons.android,

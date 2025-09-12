@@ -3,25 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/app_manager/cubit/app_manager_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
+import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/widgets/restart_app_widget.dart';
 
-  // TODO check
-
 @RoutePage()
 class AppManagerView extends StatelessWidget {
-   const AppManagerView({super.key, this.user});
-  // const AppManagerView({super.key, required this.user});
-  // final SignInModel user;
+  const AppManagerView({super.key, this.user});
   final SignInModel? user;
 
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
       value: user,
-      child: BlocProvider(
-        create: (context) => get<AppManagerCubit>(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => get<AppManagerCubit>()),
+          BlocProvider(create: (context) => get<ProfileCubit>()),
+        ],
         child: AppManagerPage(user: user),
       ),
     );
@@ -30,17 +30,14 @@ class AppManagerView extends StatelessWidget {
 
 class AppManagerPage extends StatefulWidget {
   const AppManagerPage({super.key, this.user});
-  // const AppManagerPage({super.key, required this.user});
 
   final SignInModel? user;
-  // final SignInModel user;
 
   @override
   State<AppManagerPage> createState() => _AppManagerPageState();
 }
 
 class _AppManagerPageState extends State<AppManagerPage> {
-
   @override
   Widget build(BuildContext context) {
     return RestartAppWidget(

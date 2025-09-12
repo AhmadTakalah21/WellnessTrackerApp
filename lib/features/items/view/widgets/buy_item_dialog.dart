@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
+import 'package:wellnesstrackerapp/global/localization/supported_locales.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -23,6 +24,9 @@ class BuyItemDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale == SupportedLocales.arabic;
+    final name = isArabic ? item.name.ar : item.name.en;
+    final description = isArabic ? item.description?.ar : item.description?.en;
     return BlocProvider.value(
       value: itemsCubit,
       child: Dialog(
@@ -47,25 +51,33 @@ class BuyItemDialog extends StatelessWidget {
               Icon(Icons.shopping_cart_checkout, size: 48, color: Colors.white),
               const SizedBox(height: 16),
               Text(
-                "شراء العنصر",
+                "buy_item".tr(),
                 style: context.tt.titleLarge?.copyWith(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
-                "هل ترغب بشراء ${item.name.en} مقابل",
+                "accept_to_buy_item".tr(args: [name ?? "item"]),
                 style: context.tt.bodyLarge?.copyWith(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 6),
               Text(
-                "${item.price.toInt()} نقطة",
+                "${item.price.toInt()} ${"point".tr()}",
                 style: GoogleFonts.poppins(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.amberAccent,
                 ),
               ),
+              if (description != null) ...[
+                const SizedBox(height: 6),
+                Text(
+                  description,
+                  style: context.tt.bodyLarge?.copyWith(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ],
               const SizedBox(height: 24),
               Row(
                 children: [

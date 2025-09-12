@@ -27,11 +27,10 @@ class ItemTile extends StatelessWidget {
     final userPoints = 1000;
     final progress = (userPoints / item.price).clamp(0.0, 1.0);
     final image = item.image;
-    //final description = item.description;
 
     final isArabic = context.locale == SupportedLocales.arabic;
     final name = isArabic ? item.name.ar : item.name.en;
-    final description = isArabic ? item.description?.ar : item.description?.en;
+    //final description = isArabic ? item.description?.ar : item.description?.en;
 
     return GestureDetector(
       onTap: () => onTap(item),
@@ -40,7 +39,7 @@ class ItemTile extends StatelessWidget {
         curve: Curves.easeInOut,
         width: MediaQuery.of(context).size.width / 2 - 24,
         margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        padding: const EdgeInsets.all(12),
+        padding: AppConstants.padding12,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -59,86 +58,82 @@ class ItemTile extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Stack(
           children: [
-            if (role.isUser && item.link == null)
-              Align(
-                alignment: Alignment.topRight,
-                child: Icon(Icons.lock_outline, color: Colors.white, size: 20),
-              ),
-            const SizedBox(height: 6),
-            if (role.isUser)
-              CircularPercentIndicator(
-                radius: 45,
-                lineWidth: 5,
-                percent: progress,
-                animation: true,
-                circularStrokeCap: CircularStrokeCap.round,
-                progressColor: AppColors.white,
-                backgroundColor: Colors.white24,
-                center: AppImageWidget(
-                  width: 70,
-                  height: 70,
-                  url: image ?? "",
-                  borderRadius: AppConstants.borderRadiusCircle,
-                  border: Border.all(color: AppColors.white, width: 1),
-                  backgroundColor: context.cs.surface,
-                ),
-              ),
-            if (role.isAdmin)
-              AspectRatio(
-                aspectRatio: 5 / 3,
-                child: AppImageWidget(
-                  url: image ?? "",
-                  fit: BoxFit.cover,
-                  borderRadius: AppConstants.borderRadius15,
-                  border: Border.all(color: AppColors.white, width: 1),
-                  backgroundColor: context.cs.surface,
-                ),
-              ),
-            const SizedBox(height: 10),
-            Text(
-              name ?? "Item",
-              style: context.tt.titleMedium?.copyWith(
-                color: AppColors.white,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.center,
+            Align(
+              alignment: Alignment.topRight,
+              child: Icon(Icons.lock_outline, color: Colors.white, size: 20),
             ),
-            const SizedBox(height: 4),
-            if (description != null && description.isNotEmpty)
-              Text(
-                description,
-                style: context.tt.bodySmall?.copyWith(
-                  color: Colors.white70,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
-            const SizedBox(height: 6),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.black.withOpacity(0.08),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(),
+                const SizedBox(height: 6),
+                if (role.isUser)
+                  CircularPercentIndicator(
+                    radius: 45,
+                    lineWidth: 5,
+                    percent: progress,
+                    animation: true,
+                    circularStrokeCap: CircularStrokeCap.round,
+                    progressColor: AppColors.white,
+                    backgroundColor: Colors.white24,
+                    center: AppImageWidget(
+                      width: 70,
+                      height: 70,
+                      url: image ?? "",
+                      borderRadius: AppConstants.borderRadiusCircle,
+                      border: Border.all(color: AppColors.white, width: 1),
+                      backgroundColor: context.cs.surface,
+                    ),
                   ),
-                ],
-              ),
-              child: Text(
-                "${item.price.toInt()} ${"point".tr()}",
-                style: GoogleFonts.poppins(
-                  color: context.cs.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                if (role.isAdmin)
+                  AspectRatio(
+                    aspectRatio: 5 / 3,
+                    child: AppImageWidget(
+                      url: image ?? "",
+                      fit: BoxFit.cover,
+                      borderRadius: AppConstants.borderRadius15,
+                      border: Border.all(color: AppColors.white, width: 1),
+                      backgroundColor: context.cs.surface,
+                    ),
+                  ),
+                Spacer(),
+                Text(
+                  name ?? "Item",
+                  style: context.tt.titleMedium?.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 ),
-              ),
+                Spacer(),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.black.withOpacity(0.08),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    "${item.price.toInt()} ${"point".tr()}",
+                    style: GoogleFonts.poppins(
+                      color: context.cs.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

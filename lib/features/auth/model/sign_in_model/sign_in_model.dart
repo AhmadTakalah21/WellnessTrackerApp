@@ -7,8 +7,6 @@ import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 
 part 'sign_in_model.g.dart';
 
-// TODO check this and generate
-
 @JsonSerializable()
 @immutable
 class SignInModel {
@@ -18,7 +16,7 @@ class SignInModel {
     this.token,
     required this.name,
     this.phone,
-    this.isV1 = false,
+     this.isV1 = false,
     required this.role,
   });
 

@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/fake_customer.dart';
+import 'package:wellnesstrackerapp/features/profile/model/update_profile_model/update_profile_model.dart';
 import 'package:wellnesstrackerapp/features/profile/service/profile_service.dart';
 import 'package:wellnesstrackerapp/features/ratings/model/add_rate_model/add_rate_model.dart';
 import 'package:wellnesstrackerapp/features/ratings/model/rating_model/rating_model.dart';
@@ -14,17 +15,19 @@ import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 part 'states/profile_state.dart';
 part 'states/general_profile_state.dart';
 part 'states/add_rating_state.dart';
+part 'states/update_profile_state.dart';
 
 @injectable
 class ProfileCubit extends Cubit<GeneralProfileState> {
   ProfileCubit(this.profileService) : super(GeneralProfileInitial());
   final ProfileService profileService;
   AddRateModel addRateModel = const AddRateModel();
+  UpdateProfileModel updateProfileModel = const UpdateProfileModel();
   XFile? image;
 
-  void setModel(RatingModel? rating) {
-    setRating(rating?.rating);
-    setComment(rating?.comment);
+  setUpdateProfileModel(CustomerModel? customer) {
+    setName(customer?.name);
+    setPhone(customer?.phone);
   }
 
   void setRating(int? rating) {
@@ -33,6 +36,14 @@ class ProfileCubit extends Cubit<GeneralProfileState> {
 
   void setComment(String? comment) {
     addRateModel = addRateModel.copyWith(comment: () => comment);
+  }
+
+  void setName(String? name) {
+    updateProfileModel = updateProfileModel.copyWith(name: () => name);
+  }
+
+  void setPhone(String? phone) {
+    updateProfileModel = updateProfileModel.copyWith(phone: () => phone);
   }
 
   void setImage(XFile? image) {
@@ -44,7 +55,6 @@ class ProfileCubit extends Cubit<GeneralProfileState> {
   }
 
   Future<void> addRating({int? id}) async {
-    // TODO check this
     if (!get<UserRepo>().isSignedIn) return;
     emit(AddRatingLoading());
     try {
@@ -60,7 +70,6 @@ class ProfileCubit extends Cubit<GeneralProfileState> {
   }
 
   Future<void> getProfile() async {
-    // TODO check this
     if (!get<UserRepo>().isSignedIn) {
       emit(ProfileSuccess(fakeCustomer));
       return;
@@ -73,6 +82,23 @@ class ProfileCubit extends Cubit<GeneralProfileState> {
     } catch (e) {
       if (isClosed) return;
       emit(ProfileFail(e.toString()));
+    }
+  }
+
+  Future<void> updateProfile() async {
+    if (!get<UserRepo>().isSignedIn) return;
+    emit(UpdateProfileLoading());
+    try {
+      if (isClosed) return;
+      final response = await profileService.updateProfile(
+        updateProfileModel,
+        image: image,
+      );
+      emit(UpdateProfileSuccess(response,"profile_updated".tr()));
+      await getProfile();
+    } catch (e) {
+      if (isClosed) return;
+      emit(UpdateProfileFail(e.toString()));
     }
   }
 }

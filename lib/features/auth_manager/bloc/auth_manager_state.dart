@@ -17,8 +17,6 @@ class ShowSignInState extends GeneralAuthManagerState {
 class ProfileFormState extends GeneralAuthManagerState {}
 
 class AuthenticatedState extends GeneralAuthManagerState {
-  // TODO check
-   //final SignInModel user;
   final SignInModel? user;
   AuthenticatedState(this.user);
 }

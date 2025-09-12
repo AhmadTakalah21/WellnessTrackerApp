@@ -10,6 +10,7 @@ import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_mod
 import 'package:wellnesstrackerapp/features/dashboard/view/widgets/carousel_slider_widget.dart';
 import 'package:wellnesstrackerapp/features/dashboard/view/widgets/dashboard_card_widget.dart';
 import 'package:wellnesstrackerapp/features/dashboard/view/widgets/wave_painter.dart';
+import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_view_on_permission_model.dart';
@@ -18,11 +19,11 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
+import 'package:wellnesstrackerapp/global/widgets/app_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
-// TODO check
 abstract class DashboardViewCallBacks {
   void onGridItemTap(PageRouteInfo page);
   void onTryAgainTap();
@@ -50,7 +51,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard>
     with TickerProviderStateMixin
     implements DashboardViewCallBacks {
-  // late final SignInModel user = context.read<SignInModel>();
   late final SignInModel? user = context.read<SignInModel?>();
   late final AddsAndOffersCubit addsAndOffersCubit = context.read();
   late final UserRepo userRepo = context.read();
@@ -72,12 +72,9 @@ class _DashboardState extends State<Dashboard>
   @override
   void initState() {
     super.initState();
-    //modules = user.role.getPermissions(user.isV1);
     modules = user?.role.getPermissions(userRepo.isV1) ??
         UserRoleEnum.user.getPermissions(userRepo.isV1);
-    // if (user.role.isUser) {
     if (user?.role.isUser ?? true) {
-      // addsAndOffersCubit.getAddsAndOffers(user.role);
       addsAndOffersCubit.getAddsAndOffers(user?.role ?? UserRoleEnum.user);
       sliderIndex = ValueNotifier<int>(0);
       _waveCtrl = AnimationController(
@@ -109,8 +106,7 @@ class _DashboardState extends State<Dashboard>
   @override
   void dispose() {
     _autoPlay?.cancel();
-    // if (user.role.isUser) {
-     if (user?.role.isUser ?? true) {
+    if (user?.role.isUser ?? true) {
       sliderIndex.dispose();
       _sliderController.dispose();
       _waveCtrl.dispose();
@@ -119,11 +115,9 @@ class _DashboardState extends State<Dashboard>
     super.dispose();
   }
 
-  // @override
-  // void onTryAgainTap() => addsAndOffersCubit.getAddsAndOffers(user.role);
-
   @override
-  void onTryAgainTap() => addsAndOffersCubit.getAddsAndOffers(user?.role ?? UserRoleEnum.user);
+  void onTryAgainTap() =>
+      addsAndOffersCubit.getAddsAndOffers(user?.role ?? UserRoleEnum.user);
 
   @override
   void onGridItemTap(PageRouteInfo page) => context.router.push(page);
@@ -133,12 +127,11 @@ class _DashboardState extends State<Dashboard>
 
   @override
   Widget build(BuildContext context) {
-    // final isUser = user.role.isUser;
     final isUser = user?.role.isUser ?? true;
 
     return Scaffold(
-      // appBar: MainAppBar(title: 'home'.tr(), role: user.role),
-      appBar: MainAppBar(title: 'home'.tr(), role: user?.role ?? UserRoleEnum.user),
+      appBar:
+          MainAppBar(title: 'home'.tr(), role: user?.role ?? UserRoleEnum.user),
       body: RefreshIndicator(
         onRefresh: onRefresh,
         child: CustomScrollView(
@@ -255,7 +248,6 @@ class _DashboardState extends State<Dashboard>
   }
 
   Widget _buildAvatarWithWelcome() {
-    // final n = user.name.trim();
     final n = user?.name.trim() ?? "user";
     final welcome = n.isEmpty ? tr('welcome') : '${tr('welcome')}, $n';
     return AnimatedBuilder(
@@ -273,17 +265,35 @@ class _DashboardState extends State<Dashboard>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: CircleAvatar(
-                      radius: 32 + (stretch * 0.04),
-                      backgroundColor: AppColors.white.withOpacity(0.25),
-                      child: const Icon(
-                        Icons.person,
-                        size: 32,
-                        color: AppColors.white,
-                      ),
-                    ),
+                  BlocBuilder<ProfileCubit, GeneralProfileState>(
+                    buildWhen: (previous, current) => current is ProfileState,
+                    builder: (context, state) {
+                      String? image;
+                      if (state is ProfileSuccess) image = state.customer.image;
+                      if (image != null) {
+                        AppImageWidget(
+                          url: image,
+                          width: 64,
+                          height: 64,
+                          borderRadius: AppConstants.borderRadiusCircle,
+                          backgroundColor: AppColors.white.withOpacity(0.25),
+                          errorWidget: Icon(
+                            Icons.person,
+                            color: AppColors.white,
+                            size: 32,
+                          ),
+                        );
+                      }
+                      return CircleAvatar(
+                        radius: 32 + (stretch * 0.04),
+                        backgroundColor: AppColors.white.withOpacity(0.25),
+                        child: const Icon(
+                          Icons.person,
+                          size: 32,
+                          color: AppColors.white,
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(width: 18),
                   Column(

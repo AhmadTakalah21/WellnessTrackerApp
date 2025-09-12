@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
@@ -24,8 +25,9 @@ import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
+import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
+import 'package:wellnesstrackerapp/global/widgets/phone_text_field.dart';
 
-// TODO check
 class IconTitleFuncModel {
   final IconData icon;
   final String title;
@@ -44,6 +46,8 @@ abstract class ProfileViewCallbacks {
   void onTermsAndConditionsTap();
   void onPrivacyPolicyTap();
   void onDeleteAccountTap();
+  void updateProfile();
+  void onUpdateProfile(CustomerModel? customer);
 }
 
 @RoutePage()
@@ -65,25 +69,21 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     implements ProfileViewCallbacks {
-  // late final SignInModel user = context.read<SignInModel>();
   late final SignInModel? user = context.read<SignInModel?>();
   late final ProfileCubit profileCubit = context.read();
   late final UserRepo userRepo = context.read();
   File? _pickedImage;
 
-  @override
-  void initState() {
-    super.initState();
-    profileCubit.getProfile();
-  }
-
   Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
+    XFile? pickedImage;
+    try {
+      pickedImage = await picker.pickImage(source: ImageSource.gallery);
+      // ignore: empty_catches
+    } catch (e) {}
     if (pickedImage != null) {
       setState(() {
-        _pickedImage = File(pickedImage.path);
+        _pickedImage = File(pickedImage!.path);
       });
       profileCubit.setImage(pickedImage);
     }
@@ -114,6 +114,99 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void onTermsAndConditionsTap() =>
       context.router.push(TermsAndConditionsRoute());
+
+  @override
+  void onUpdateProfile(CustomerModel? customer) {
+    String? customerPhone = customer?.phone;
+    String? initialCountryCode;
+    String? nationalNumber;
+
+    if (customerPhone != null && customerPhone.startsWith('+')) {
+      final digits = customerPhone.substring(1);
+
+      final country = countries.firstWhere(
+        (c) => digits.startsWith(c.dialCode),
+        orElse: () => countries.firstWhere((c) => c.code == 'US'),
+      );
+
+      initialCountryCode = country.code;
+      nationalNumber = digits.substring(country.dialCode.length);
+    }
+    showDialog(
+      context: context,
+      builder: (context) {
+        return BlocProvider.value(
+          value: profileCubit,
+          child: AlertDialog(
+            title: Center(
+              child: Text(
+                'update_profile'.tr(),
+                style: context.tt.headlineMedium,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MainTextField2(
+                  initialText: customer?.name,
+                  label: "name".tr(),
+                  icon: Icons.person_outline,
+                  onChanged: profileCubit.setName,
+                  isWithTitle: false,
+                ),
+                SizedBox(height: 20),
+                PhoneTextField(
+                  initialText: nationalNumber,
+                  initialCountryCode: initialCountryCode,
+                  labelText: "phone".tr(),
+                  prefixIcon: const Icon(Icons.phone),
+                  onChanged: (phone) =>
+                      profileCubit.setPhone(phone?.completeNumber),
+                ),
+              ],
+            ),
+            actions: [
+              Row(
+                children: [
+                  Expanded(
+                    child: MainActionButton(
+                      onTap: () => Navigator.of(context).pop(),
+                      text: "cancel".tr(),
+                      textColor: context.cs.primary,
+                      buttonColor: context.cs.surface,
+                      shadow: AppColors.secondShadow,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: BlocConsumer<ProfileCubit, GeneralProfileState>(
+                      listener: (context, state) {
+                        if (state is UpdateProfileSuccess) {
+                          Navigator.of(context).pop();
+                        } else if (state is UpdateProfileFail) {
+                          MainSnackBar.showErrorMessage(context, state.error);
+                        }
+                      },
+                      builder: (context, state) {
+                        return MainActionButton(
+                          onTap: () => profileCubit.updateProfile(),
+                          text: "save".tr(),
+                          isLoading: state is UpdateProfileLoading,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void updateProfile() => profileCubit.updateProfile();
 
   @override
   void onDeleteAccountTap() {
@@ -176,7 +269,6 @@ class _ProfilePageState extends State<ProfilePage>
           Icons.article, "terms_and_conditions".tr(), onTermsAndConditionsTap),
       IconTitleFuncModel(
           Icons.privacy_tip, "privacy_policy".tr(), onPrivacyPolicyTap),
-      // if (!user.isV1)
       if (!userRepo.isV1)
         IconTitleFuncModel(
           Icons.delete,
@@ -196,8 +288,14 @@ class _ProfilePageState extends State<ProfilePage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 30),
-              BlocBuilder<ProfileCubit, GeneralProfileState>(
+              BlocConsumer<ProfileCubit, GeneralProfileState>(
                 buildWhen: (previous, current) => current is ProfileState,
+                listener: (context, state) {
+                  if (state is ProfileSuccess) {
+                    _pickedImage = null;
+                    profileCubit.setUpdateProfileModel(state.customer);
+                  }
+                },
                 builder: (context, state) {
                   Widget child;
                   if (state is ProfileLoading) {
@@ -209,7 +307,6 @@ class _ProfilePageState extends State<ProfilePage>
                       children: [
                         _buildImagePicker(profile),
                         const SizedBox(height: 12),
-                        // _buildNameWithLevelAndPoints(profile, user.isV1),
                         _buildNameWithLevelAndPoints(profile, userRepo.isV1),
                         const SizedBox(height: 16),
                         if (info != null) _buildCards(profile),
@@ -294,9 +391,19 @@ class _ProfilePageState extends State<ProfilePage>
     return Center(
       child: Column(
         children: [
-          Text(
-            profile.name,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                profile.name,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 6),
+              InkWell(
+                onTap: () => onUpdateProfile(profile),
+                child: Icon(Icons.edit_outlined),
+              )
+            ],
           ),
           const SizedBox(height: 4),
           if (isV1)

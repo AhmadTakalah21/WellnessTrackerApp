@@ -35,8 +35,6 @@ class ExercisesCubit extends Cubit<GeneralExercisesState> {
     setExplain(exercise?.description.explain);
     setRounds(exercise?.description.rounds);
     repeatsForRounds = exercise?.description.repeats ?? [];
-    print("repeats are : ${exercise?.description.repeats}");
-    print("leghtn is : ${repeatsForRounds.length}");
     setRepeats(repeatsForRounds);
   }
 

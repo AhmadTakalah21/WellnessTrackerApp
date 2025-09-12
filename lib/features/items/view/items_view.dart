@@ -200,7 +200,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
                             itemCount: state.items.length,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, childAspectRatio: 0.75),
+                                    crossAxisCount: 2, childAspectRatio: 0.8),
                             itemBuilder: (context, index) {
                               final item = state.items[index];
                               final fromRight = index.isEven;

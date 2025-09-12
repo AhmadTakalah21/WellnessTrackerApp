@@ -83,7 +83,6 @@ class MealPlansCubit extends Cubit<GeneralMealPlansState> {
     int? perPage = 10,
     int? page,
   }) async {
-    // TODO check this
     if (!get<UserRepo>().isSignedIn) {
       emit(MealPlansLoading());
       Future.delayed(Duration(microseconds: 1), () {

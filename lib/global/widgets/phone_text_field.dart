@@ -14,6 +14,7 @@ class PhoneTextField extends StatefulWidget {
     this.onSubmitted,
     this.focusNode,
     this.labelText,
+    this.initialCountryCode,
     this.textInputType,
     this.hintText,
     this.inputFormatters,
@@ -41,6 +42,7 @@ class PhoneTextField extends StatefulWidget {
 
   final String? hintText;
   final String? initialText;
+  final String? initialCountryCode; 
   final String? title;
   final ValueSetter<PhoneNumber?>? onChanged;
   final ValueSetter<String>? onSubmitted;
@@ -116,6 +118,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
           obscureText: widget.obscureText,
           readOnly: widget.readOnly,
           onTap: widget.onTap,
+          initialValue:widget.initialText ,
           onChanged: (value) {
             widget.onChanged?.call(value);
             setState(() {});
@@ -181,8 +184,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
             filled: widget.filled ?? true,
           ),
           invalidNumberMessage: "invalid_phone".tr(),
-          initialCountryCode: "IN",
-          //disableLengthCheck: true,
+          initialCountryCode: widget.initialCountryCode ?? "US",
           showCountryFlag: false,
           flagsButtonMargin: const EdgeInsets.symmetric(horizontal: 12),
           dropdownIcon: Icon(
@@ -190,7 +192,6 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
             color: context.cs.primary,
           ),
           dropdownIconPosition: IconPosition.trailing,
-          //dropdownTextStyle: semibold15Black33,
           pickerDialogStyle:
               PickerDialogStyle(backgroundColor: context.cs.surface),
           cursorColor: context.cs.primary,

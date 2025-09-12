@@ -62,8 +62,6 @@ class _AddExercisePlanPageState extends State<AddExercisePlanPage>
   @override
   void initState() {
     exercisePlansCubit.setModel(widget.exercisePlan);
-    print(widget.exercisePlan?.planDays);
-    print(exercisePlansCubit.planDays);
     exercisePlansCubit.getPlanDays();
     exercisesCubit.getExercises(perPage: 100000);
     super.initState();

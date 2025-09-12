@@ -8,7 +8,6 @@ import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 
-// TODO check
 abstract class AboutUsViewCallBacks {}
 
 @RoutePage()
@@ -30,7 +29,6 @@ class AboutUsPage extends StatefulWidget {
 
 class _AboutUsPageState extends State<AboutUsPage>
     implements AboutUsViewCallBacks {
-  //late final SignInModel user = context.read<SignInModel>();
   late final SignInModel? user = context.read<SignInModel?>();
   late final UserRepo userRepo = context.read();
 
@@ -39,7 +37,6 @@ class _AboutUsPageState extends State<AboutUsPage>
     ['daily_exercises_title'.tr(), 'daily_exercises_subtitle'.tr()],
     ['direct_followup_title'.tr(), 'direct_followup_subtitle'.tr()],
     ['consultations_title'.tr(), 'consultations_subtitle'.tr()],
-    // if (user.isV1) ...[
     if (userRepo.isV1) ...[
       ['rewards_title'.tr(), 'rewards_subtitle'.tr()],
       ['levels_title'.tr(), 'levels_subtitle'.tr()],

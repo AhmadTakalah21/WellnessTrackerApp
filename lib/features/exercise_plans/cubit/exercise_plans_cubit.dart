@@ -84,7 +84,6 @@ class ExercisePlansCubit extends Cubit<GeneralExercisePlansState> {
     int? perPage = 10,
     int? page,
   }) async {
-    // TODO check this
     if (!get<UserRepo>().isSignedIn) {
       emit(ExercisePlansLoading());
       Future.delayed(Duration(microseconds: 1), () {
