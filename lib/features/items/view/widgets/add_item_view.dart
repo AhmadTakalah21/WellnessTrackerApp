@@ -5,10 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart';
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart';
-import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart';
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
-import 'package:wellnesstrackerapp/global/di/di.dart';
-import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/choose_image_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
@@ -37,11 +34,8 @@ class AddItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: itemCubit),
-        BlocProvider(create: (context) => get<LevelsCubit>()),
-      ],
+    return BlocProvider.value(
+      value: itemCubit,
       child: AddItemPage(
         itemCubit: itemCubit,
         level: level,
@@ -72,13 +66,11 @@ class AddItemPage extends StatefulWidget {
 
 class _AddItemPageState extends State<AddItemPage>
     implements AddItemViewCallbacks {
-  late final LevelsCubit levelsCubit = context.read();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    levelsCubit.getLevels(UserRoleEnum.admin);
     widget.itemCubit.setModel(widget.item, widget.level);
   }
 

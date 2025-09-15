@@ -7,6 +7,7 @@ import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.da
 import 'package:wellnesstrackerapp/global/dio/dio_client.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
+import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
 part 'items_service_imp.dart';
 

@@ -62,7 +62,8 @@ class ItemServiceImp implements ItemService {
       }
       final formData = FormData.fromMap(map);
 
-      final response = await dio.post(endpoint, data: formData);
+      final response = await dio.post(endpoint,
+          data: formData, duration: AppConstants.duration30s);
       final item = response.data["data"] as Map<String, dynamic>;
       return ItemModel.fromJson(item);
     } catch (e, stackTrace) {

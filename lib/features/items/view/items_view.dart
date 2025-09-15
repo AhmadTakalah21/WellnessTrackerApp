@@ -110,6 +110,7 @@ class _ItemsPageState extends State<ItemsPage> implements ItemsViewCallBacks {
 
   @override
   void onEditTap(ItemModel item) {
+    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(

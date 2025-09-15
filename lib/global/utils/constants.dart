@@ -4,6 +4,7 @@ abstract class AppConstants {
   static const appName = "MedFit App";
   static const languages = ["EN", "AR"];
 
+  static const duration30s = Duration(seconds: 30);
   static const duration15s = Duration(seconds: 15);
   static const duration10s = Duration(seconds: 10);
   static const duration1s = Duration(seconds: 1);

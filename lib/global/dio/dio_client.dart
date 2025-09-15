@@ -60,7 +60,13 @@ class DioClient {
     Map<String, dynamic>? queries,
     dynamic data,
     Map<String, dynamic>? headers,
+    Duration? duration,
   }) async {
+    _dio.options = _dio.options.copyWith(
+      receiveTimeout: duration,
+      connectTimeout: duration,
+      sendTimeout: duration,
+    );
     return _dio.post(
       endpoint,
       queryParameters: queries,

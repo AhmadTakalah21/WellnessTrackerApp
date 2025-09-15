@@ -30,7 +30,6 @@ class ItemTile extends StatelessWidget {
 
     final isArabic = context.locale == SupportedLocales.arabic;
     final name = isArabic ? item.name.ar : item.name.en;
-    //final description = isArabic ? item.description?.ar : item.description?.en;
 
     return GestureDetector(
       onTap: () => onTap(item),
@@ -60,10 +59,11 @@ class ItemTile extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Icon(Icons.lock_outline, color: Colors.white, size: 20),
-            ),
+            if (role.isUser)
+              Align(
+                alignment: Alignment.topRight,
+                child: Icon(Icons.lock_outline, color: Colors.white, size: 20),
+              ),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
