@@ -131,11 +131,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i476.ShareCubit>(() => _i476.ShareCubit());
     gh.factory<_i188.UploadFileCubit>(() => _i188.UploadFileCubit());
     gh.factory<_i540.UploadImageCubit>(() => _i540.UploadImageCubit());
+    gh.factory<_i977.VideoPlayerCubit>(() => _i977.VideoPlayerCubit());
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => appModule.prefs,
       preResolve: true,
     );
-    gh.factory<_i977.VideoPlayerCubit>(() => _i977.VideoPlayerCubit());
     gh.singleton<_i533.AppManagerCubit>(() => _i533.AppManagerCubit());
     gh.singleton<_i447.InternetConnectionCubit>(
         () => _i447.InternetConnectionCubit());

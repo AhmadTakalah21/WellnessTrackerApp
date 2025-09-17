@@ -497,5 +497,6 @@
   "profile_updated" : "Profile is updated successfully",
   "update_profile" : "Update Profile",
   "buy_item" : "Buy Item",
-  "accept_to_buy_item" : "Do you want to buy {} for"
+  "accept_to_buy_item" : "Do you want to buy {} for",
+  "your_subscription_has_expired" : "Your subscription has expired"
 }

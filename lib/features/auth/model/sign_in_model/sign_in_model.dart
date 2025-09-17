@@ -16,7 +16,8 @@ class SignInModel {
     this.token,
     required this.name,
     this.phone,
-     this.isV1 = false,
+     // this.isV1 = false,
+    this.isV1 = true,
     required this.role,
   });
 
@@ -26,7 +27,7 @@ class SignInModel {
   final String name;
   final String? phone;
 
-  @JsonKey(name: 'v1')
+  @JsonKey(name: 'v1',includeFromJson: false,includeToJson: false)
   final bool isV1;
 
   @JsonKey(fromJson: UserRoleEnum.fromJson, toJson: UserRoleEnum.toJson)
