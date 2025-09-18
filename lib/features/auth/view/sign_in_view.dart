@@ -93,16 +93,16 @@ class _SignInPageState extends State<SignInPage>
 
   late final List<AnotherWaySignInButton> otherWaysButtons = [
     // TODO comment facebook and google for ios version
-    AnotherWaySignInButton(
-      image: 'assets/images/icons8-facebook-48.png',
-      text: 'Facebook',
-      onPressed: onLoginWithFacebookTap,
-    ),
-    AnotherWaySignInButton(
-      image: 'assets/images/icons8-google-48.png',
-      text: 'Google',
-      onPressed: onLoginWithGoogleTap,
-    ),
+    // AnotherWaySignInButton(
+    //   image: 'assets/images/icons8-facebook-48.png',
+    //   text: 'Facebook',
+    //   onPressed: onLoginWithFacebookTap,
+    // ),
+    // AnotherWaySignInButton(
+    //   image: 'assets/images/icons8-google-48.png',
+    //   text: 'Google',
+    //   onPressed: onLoginWithGoogleTap,
+    // ),
     AnotherWaySignInButton(
       image: 'assets/images/icons8-guest-48.png',
       text: 'Guest'.tr(),
