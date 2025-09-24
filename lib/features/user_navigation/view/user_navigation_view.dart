@@ -10,6 +10,8 @@ import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
+import '../../../global/services/user_repo.dart';
+
 abstract class UserNavigationViewCallbacks {
   void onBottomTab(int currentIndex, TabsRouter tabsRouter);
 }
@@ -42,13 +44,14 @@ class _UserNavigationPageState extends State<UserNavigationPage>
     with SingleTickerProviderStateMixin
     implements UserNavigationViewCallbacks {
   late final ProfileCubit profileCubit = context.read();
+  late final UserRepo userRepo = context.read();
 
   int currentIndex = 0;
   late final locale = context.locale;
   bool get isRtl => locale == SupportedLocales.arabic;
 
-  final List<_TabInfo> tabs = const [
-    _TabInfo('adds_and_offers', Icons.local_offer),
+  late final List<_TabInfo> tabs =  [
+    if(userRepo.isV1 ) _TabInfo('adds_and_offers', Icons.local_offer),
     _TabInfo('home', Icons.home),
     _TabInfo('profile', Icons.person),
   ];
@@ -79,10 +82,12 @@ class _UserNavigationPageState extends State<UserNavigationPage>
           ? [
               ProfileRouter(),
               DashboardRouter(),
-              AddsAndOffersRouter(),
+        if(userRepo.isV1 )
+          AddsAndOffersRouter(),
             ]
           : [
-              AddsAndOffersRouter(),
+        if(userRepo.isV1)
+          AddsAndOffersRouter(),
               DashboardRouter(),
               ProfileRouter(),
             ],

@@ -1,8 +1,11 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+
+import '../../../global/services/user_repo.dart';
 
 @RoutePage()
 class TermsAndConditionsView extends StatelessWidget {
@@ -22,10 +25,12 @@ class TermsAndConditionsPage extends StatefulWidget {
 }
 
 class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
-  final List<List<String>> termsKeys = [
+  late final UserRepo userRepo = context.read();
+
+  late final List<List<String>> termsKeys = [
     ['terms_info_title', "terms_info"],
-    ['terms_start_subscription_title', "terms_start_subscription"],
-    ['terms_freeze_subscription_title', "terms_freeze_subscription"],
+    if(userRepo.isV1)['terms_start_subscription_title', "terms_start_subscription"],
+    if(userRepo.isV1)['terms_freeze_subscription_title', "terms_freeze_subscription"],
     ['terms_problem_handling_title', "terms_problem_handling"],
     ['terms_success_sharing_title', "terms_success_sharing"],
     ['terms_daily_contact_title', "terms_daily_contact"],

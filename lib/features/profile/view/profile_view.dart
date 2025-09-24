@@ -73,6 +73,22 @@ class _ProfilePageState extends State<ProfilePage>
   late final ProfileCubit profileCubit = context.read();
   late final UserRepo userRepo = context.read();
   File? _pickedImage;
+  bool _isGuest = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if(userRepo.user == null){
+      setState(() {
+        _isGuest = true;
+      });
+    }else{
+      setState(() {
+        _isGuest = false;
+      });
+    }
+
+  }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -269,7 +285,7 @@ class _ProfilePageState extends State<ProfilePage>
           Icons.article, "terms_and_conditions".tr(), onTermsAndConditionsTap),
       IconTitleFuncModel(
           Icons.privacy_tip, "privacy_policy".tr(), onPrivacyPolicyTap),
-      if (!userRepo.isV1)
+      if (!userRepo.isV1 && !_isGuest)
         IconTitleFuncModel(
           Icons.delete,
           "delete_account".tr(),
@@ -399,10 +415,12 @@ class _ProfilePageState extends State<ProfilePage>
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(width: 6),
-              InkWell(
-                onTap: () => onUpdateProfile(profile),
-                child: Icon(Icons.edit_outlined),
-              )
+
+              if (!_isGuest)
+                InkWell(
+                  onTap: () => onUpdateProfile(profile),
+                  child: Icon(Icons.edit_outlined),
+                ),
             ],
           ),
           const SizedBox(height: 4),

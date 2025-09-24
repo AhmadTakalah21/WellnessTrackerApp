@@ -171,7 +171,8 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
                 settings.appUrlAndroid ?? 'not_provided'.tr(),
                 () => onShareTap(settings.appUrlAndroid, "android_url".tr()),
               ),
-              IconTitleValueFunc(
+              if(userRepo.isV1 || !widget.role.isUser)
+                IconTitleValueFunc(
                 Icons.apple,
                 'ios_url',
                 settings.appUrlIos ?? 'not_provided'.tr(),

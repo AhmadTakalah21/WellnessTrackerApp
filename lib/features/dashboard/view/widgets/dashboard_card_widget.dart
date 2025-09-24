@@ -66,7 +66,7 @@ class DashboardCardWidgetState extends State<DashboardCardWidget> {
                   child: Icon(m.icon, size: 32, color: m.color),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Padding(
                 padding: AppConstants.paddingH4,
                 child: Text(
