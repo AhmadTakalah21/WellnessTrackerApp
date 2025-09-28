@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wellnesstrackerapp/features/splash/cubit/splash_cubit.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/mixins/post_frame_mixin.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
@@ -13,7 +16,10 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SplashPage();
+    return BlocProvider(
+      create: (context) => get<SplashCubit>(),
+      child: const SplashPage(),
+    );
   }
 }
 
@@ -26,6 +32,8 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin, PostFrameMixin {
+  late final SplashCubit splashCubit = context.read();
+
   late AnimationController _controller;
   late Animation<double> _fadeInAnimation;
   late Animation<double> _scaleAnimation;
@@ -54,9 +62,10 @@ class _SplashPageState extends State<SplashPage>
   @override
   Future<void> onPostFrame() async {
     await Future.delayed(AppConstants.duration3s);
-    if (mounted) {
-      context.router.replace(const AuthManagerRoute());
-    }
+    splashCubit.checkVersion();
+    //if (mounted) {
+    //context.router.replace(const AuthManagerRoute());
+    //}
   }
 
   @override
@@ -68,42 +77,49 @@ class _SplashPageState extends State<SplashPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(color: context.cs.surface),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ScaleTransition(
-              scale: _scaleAnimation,
-              child: Image.asset(AppConstants.logo),
-            ),
-            const SizedBox(height: 30),
-            FadeTransition(
-              opacity: _fadeInAnimation,
-              child: Padding(
-                padding: AppConstants.paddingH4,
-                child: Text(
-                  "Welcome to ${AppConstants.appName}",
-                  textAlign: TextAlign.center,
-                  style: context.tt.headlineMedium,
+      body: BlocListener<SplashCubit, GeneralSplashState>(
+        listener: (context, state) {
+          if (state is CheckVersionSuccess) {
+            context.router.replace(const AuthManagerRoute());
+          }
+        },
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(color: context.cs.surface),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ScaleTransition(
+                scale: _scaleAnimation,
+                child: Image.asset(AppConstants.logo),
+              ),
+              const SizedBox(height: 30),
+              FadeTransition(
+                opacity: _fadeInAnimation,
+                child: Padding(
+                  padding: AppConstants.paddingH4,
+                  child: Text(
+                    "Welcome to ${AppConstants.appName}",
+                    textAlign: TextAlign.center,
+                    style: context.tt.headlineMedium,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            FadeTransition(
-              opacity: _fadeInAnimation,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  "Track your health, stay fit, and achieve wellness goals effortlessly.",
-                  textAlign: TextAlign.center,
-                  style: context.tt.titleMedium,
+              const SizedBox(height: 10),
+              FadeTransition(
+                opacity: _fadeInAnimation,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: Text(
+                    "Track your health, stay fit, and achieve wellness goals effortlessly.",
+                    textAlign: TextAlign.center,
+                    style: context.tt.titleMedium,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

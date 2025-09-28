@@ -12,8 +12,10 @@ import 'package:wellnesstrackerapp/features/auth/model/reset_password_post_model
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
 import 'package:wellnesstrackerapp/features/auth/service/auth_service.dart';
 import 'package:wellnesstrackerapp/features/auth_manager/bloc/auth_manager_bloc.dart';
+import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/dio/exceptions.dart';
 import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/auth_state.dart';
 part 'states/text_field_state.dart';
@@ -34,7 +36,6 @@ class AuthCubit extends Cubit<AuthState> {
   AddInfoModel addInfoModel = const AddInfoModel();
   String? code;
   String? resetCode;
-
 
   void setUsername(String username) {
     postSignUpModel = postSignUpModel.copyWith(username: () => username);
@@ -203,10 +204,12 @@ class AuthCubit extends Cubit<AuthState> {
       shouldReturn = true;
     }
 
-    final phoneError = postSignUpModel.validatePhoneNumber();
-    if (phoneError != null) {
-      emit(TextFieldState(TextFieldType.phone, error: phoneError));
-      shouldReturn = true;
+    if (get<UserRepo>().isV1) {
+      final phoneError = postSignUpModel.validatePhoneNumber();
+      if (phoneError != null) {
+        emit(TextFieldState(TextFieldType.phone, error: phoneError));
+        shouldReturn = true;
+      }
     }
 
     final passwordError = postSignUpModel.validatePassword();
@@ -359,9 +362,11 @@ class AuthCubit extends Cubit<AuthState> {
       emit(TextFieldState(TextFieldType.password));
     }
 
-    final confirmPasswordError = resetPasswordPostModel.validateConfirmPassword();
+    final confirmPasswordError =
+        resetPasswordPostModel.validateConfirmPassword();
     if (confirmPasswordError != null) {
-      emit(TextFieldState(TextFieldType.confirmPassword, error: confirmPasswordError));
+      emit(TextFieldState(TextFieldType.confirmPassword,
+          error: confirmPasswordError));
       shouldReturn = true;
     } else {
       emit(TextFieldState(TextFieldType.confirmPassword));
@@ -385,5 +390,4 @@ class AuthCubit extends Cubit<AuthState> {
       emit(ResetPasswordFail(e.toString()));
     }
   }
-
 }

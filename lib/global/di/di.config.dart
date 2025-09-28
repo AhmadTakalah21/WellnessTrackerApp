@@ -84,6 +84,10 @@ import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart'
     as _i264;
 import 'package:wellnesstrackerapp/features/settings/service/settings_service.dart'
     as _i1054;
+import 'package:wellnesstrackerapp/features/splash/cubit/splash_cubit.dart'
+    as _i776;
+import 'package:wellnesstrackerapp/features/splash/service/splash_service.dart'
+    as _i217;
 import 'package:wellnesstrackerapp/features/statistics/cubit/statistics_cubit.dart'
     as _i718;
 import 'package:wellnesstrackerapp/features/statistics/service/statistics_service.dart'
@@ -163,6 +167,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i435.AuthManagerBloc(gh<_i128.UserRepo>()));
     gh.factory<_i85.IngredientsService>(() => _i85.IngredientsServiceImp());
     gh.factory<_i963.DeleteService>(() => _i963.DeleteServiceImp());
+    gh.factory<_i217.SplashSerivce>(() => _i217.SplashSerivceImp());
     gh.factory<_i826.MealsCubit>(
         () => _i826.MealsCubit(gh<_i287.MealsService>()));
     gh.factory<_i1053.NotificationsCubit>(
@@ -195,6 +200,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i935.CustomersCubit(gh<_i299.CustomersService>()));
     gh.factory<_i718.StatisticsCubit>(
         () => _i718.StatisticsCubit(gh<_i911.StatisticsService>()));
+    gh.factory<_i776.SplashCubit>(() => _i776.SplashCubit(
+          gh<_i217.SplashSerivce>(),
+          gh<_i128.UserRepo>(),
+        ));
     gh.factory<_i396.DeleteCubit>(
         () => _i396.DeleteCubit(gh<_i963.DeleteService>()));
     gh.factory<_i883.AuthCubit>(() => _i883.AuthCubit(

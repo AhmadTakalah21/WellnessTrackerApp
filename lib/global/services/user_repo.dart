@@ -17,8 +17,6 @@ class UserRepo {
   bool? _isV1;
   bool get isV1 => _isV1 ?? false;
 
-  
-
   final Map<String, dynamic> properties;
 
   @PostConstruct(preResolve: true)
@@ -40,7 +38,8 @@ class UserRepo {
     try {
       final json = await flutterSecureStorage.read(key: _userKey);
       if (json != null) _user = SignInModel.fromString(json);
-      _isV1 = _user?.isV1 ?? await getKey(_isV1Key, defaultValue: false);
+      // _isV1 = _user?.isV1 ?? await getKey(_isV1Key, defaultValue: false);
+      _isV1 = await getKey(_isV1Key, defaultValue: false);
       return _user;
     } catch (e, s) {
       debugPrint('Error: $e\n$s');
@@ -71,6 +70,17 @@ class UserRepo {
     } catch (e, s) {
       debugPrint('Error: $e\n$s');
       throw Exception("Can't delete the user");
+    }
+  }
+
+  Future<bool> setIsV1(bool isV1) async {
+    try {
+      await setKey(_isV1Key, isV1);
+      _isV1 = isV1;
+      return true;
+    } catch (e, s) {
+      debugPrint('Error: $e\n$s');
+      throw Exception("Can't set the IsV1");
     }
   }
 

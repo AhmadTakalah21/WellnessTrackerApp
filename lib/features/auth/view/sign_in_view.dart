@@ -93,16 +93,18 @@ class _SignInPageState extends State<SignInPage>
 
   late final List<AnotherWaySignInButton> otherWaysButtons = [
     // TODO comment facebook and google for ios version
-    AnotherWaySignInButton(
-      image: 'assets/images/icons8-facebook-48.png',
-      text: 'Facebook',
-      onPressed: onLoginWithFacebookTap,
-    ),
-    AnotherWaySignInButton(
-      image: 'assets/images/icons8-google-48.png',
-      text: 'Google',
-      onPressed: onLoginWithGoogleTap,
-    ),
+    if (userRepo.isV1) ...[
+      AnotherWaySignInButton(
+        image: 'assets/images/icons8-facebook-48.png',
+        text: 'Facebook',
+        onPressed: onLoginWithFacebookTap,
+      ),
+      AnotherWaySignInButton(
+        image: 'assets/images/icons8-google-48.png',
+        text: 'Google',
+        onPressed: onLoginWithGoogleTap,
+      ),
+    ],
     AnotherWaySignInButton(
       image: 'assets/images/icons8-guest-48.png',
       text: 'Guest'.tr(),
@@ -127,6 +129,10 @@ class _SignInPageState extends State<SignInPage>
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     _controller.forward();
+
+    if (!userRepo.isV1) {
+      authCubit.setSubscriptionCode("hhhh");
+    }
   }
 
   @override
@@ -271,8 +277,10 @@ class _SignInPageState extends State<SignInPage>
                           _buildPasswordTextField(),
                           _buildConfirmPasswordTextField(),
                           SizedBox(height: 10),
-                          _buildCodeTextField(),
-                          const SizedBox(height: 10),
+                          if (userRepo.isV1) ...[
+                            _buildCodeTextField(),
+                            const SizedBox(height: 10),
+                          ],
                           _buildTermsAndForgetPassword(),
                           const SizedBox(height: 20),
                           _buildMainActionBtn(),

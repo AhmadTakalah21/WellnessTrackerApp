@@ -1,7 +1,9 @@
 import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -29,6 +31,7 @@ class PrivacyPolicyPage extends StatefulWidget {
 
 class _PrivacyPolicyPageState extends State<PrivacyPolicyPage>
     implements PrivacyPolicyViewCallBacks {
+  late final UserRepo userRepo = context.read();
   static const _docId = '1qGe66yBqlY49q1M_G_IMk-tf-QLKKEbNv_F8W2usPDY';
 
   Uri get _editUrl =>
@@ -78,7 +81,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage>
       ['privacy_data_collection', "privacy_data_collection_text"],
       ['privacy_use_of_data', "privacy_use_of_data_text"],
       ['privacy_security', "privacy_security_text"],
-      ['privacy_user_rights', "privacy_user_rights_text"],
+      if(userRepo.isV1)['privacy_user_rights', "privacy_user_rights_text"],
       ['privacy_policy_changes', "privacy_policy_changes_text"],
     ];
     return Scaffold(

@@ -269,7 +269,7 @@ class _ProfilePageState extends State<ProfilePage>
           Icons.article, "terms_and_conditions".tr(), onTermsAndConditionsTap),
       IconTitleFuncModel(
           Icons.privacy_tip, "privacy_policy".tr(), onPrivacyPolicyTap),
-      if (!userRepo.isV1)
+      if (!userRepo.isV1 && user != null)
         IconTitleFuncModel(
           Icons.delete,
           "delete_account".tr(),
@@ -353,7 +353,7 @@ class _ProfilePageState extends State<ProfilePage>
     );
     return Center(
       child: GestureDetector(
-        onTap: _pickImage,
+        onTap: user != null ? _pickImage : null,
         child: _pickedImage != null
             ? ClipRRect(
                 borderRadius: AppConstants.borderRadiusCircle,
@@ -398,11 +398,13 @@ class _ProfilePageState extends State<ProfilePage>
                 profile.name,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              SizedBox(width: 6),
-              InkWell(
-                onTap: () => onUpdateProfile(profile),
-                child: Icon(Icons.edit_outlined),
-              )
+              if (user != null) ...[
+                SizedBox(width: 6),
+                InkWell(
+                  onTap: () => onUpdateProfile(profile),
+                  child: Icon(Icons.edit_outlined),
+                )
+              ]
             ],
           ),
           const SizedBox(height: 4),

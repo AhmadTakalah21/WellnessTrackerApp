@@ -164,19 +164,20 @@ class _CompanyInfoPageState extends State<CompanyInfoPage>
                 settings.name,
                 null,
               ),
-              if(userRepo.isV1 || !widget.role.isUser)
-              IconTitleValueFunc(
-                Icons.android,
-                'android_url',
-                settings.appUrlAndroid ?? 'not_provided'.tr(),
-                () => onShareTap(settings.appUrlAndroid, "android_url".tr()),
-              ),
-              IconTitleValueFunc(
-                Icons.apple,
-                'ios_url',
-                settings.appUrlIos ?? 'not_provided'.tr(),
-                () => onShareTap(settings.appUrlIos, "ios_url".tr()),
-              ),
+              if (userRepo.isV1 || !widget.role.isUser)
+                IconTitleValueFunc(
+                  Icons.android,
+                  'android_url',
+                  settings.appUrlAndroid ?? 'not_provided'.tr(),
+                  () => onShareTap(settings.appUrlAndroid, "android_url".tr()),
+                ),
+              if (userRepo.isV1 || !widget.role.isUser)
+                IconTitleValueFunc(
+                  Icons.apple,
+                  'ios_url',
+                  settings.appUrlIos ?? 'not_provided'.tr(),
+                  () => onShareTap(settings.appUrlIos, "ios_url".tr()),
+                ),
               IconTitleValueFunc(
                 Icons.email,
                 'support_email',
