@@ -497,5 +497,9 @@
   "profile_updated" : "Profile is updated successfully",
   "update_profile" : "Update Profile",
   "buy_item" : "Buy Item",
-  "accept_to_buy_item" : "Do you want to buy {} for"
+  "accept_to_buy_item" : "Do you want to buy {} for",
+  "your_subscription_has_expired" : "Your subscription has expired",
+  "disclaimer_title": "Disclaimer",
+  "disclaimer_short": "Notice: This app provides general guidance only and is not a substitute for professional medical or nutritional advice. By using the app, you acknowledge that your health decisions are your own responsibility.",
+  "disclaimer_body": "The content, plans, and guidance provided through the app are for educational and general assistance purposes only and do not constitute diagnosis, treatment, or professional medical/nutritional advice. Always consult a qualified professional before starting any diet, exercise program, or changing your medication. The app and its developers disclaim any liability for direct or indirect damages resulting from use of the content. Your continued use of the app constitutes acceptance of this disclaimer."
 }

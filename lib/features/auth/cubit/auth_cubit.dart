@@ -183,7 +183,7 @@ class AuthCubit extends Cubit<AuthState> {
       authManagerBloc?.add(SignInRequested(response, onSuccess: onSuccess));
     } catch (e) {
       emit(SignInFail(e.toString()));
-      if (e.toString().contains("Your subscription has expired")) {
+      if (e.toString().contains("your_subscription_has_expired".tr())) {
         emit(SubscriptionExpiredState());
       }
     }

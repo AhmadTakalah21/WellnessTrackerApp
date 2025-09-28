@@ -17,6 +17,7 @@ class SignInModel {
     required this.name,
     this.phone,
      this.isV1 = false,
+    // this.isV1 = true,
     required this.role,
   });
 
