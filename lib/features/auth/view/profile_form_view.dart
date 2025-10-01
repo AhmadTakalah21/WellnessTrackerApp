@@ -46,7 +46,6 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
   late final AuthCubit authCubit = context.read();
   late final UserRepo userRepo = context.read<UserRepo>();
 
-
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -55,7 +54,8 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
     authCubit.setInitialFormData();
     if (!userRepo.isV1) {
       authCubit.setBirthday(DateTime(2000).formatYYYYMMDD);
-    }  }
+    }
+  }
 
   @override
   void onSubmit() {
@@ -86,7 +86,7 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                     ),
                   ),
                   const SizedBox(height: 10),
-                  if (userRepo.isV1)...[
+                  if (userRepo.isV1) ...[
                     MainDropDownWidget(
                       selectedValue: GenderEnum.male,
                       items: GenderEnum.values,
@@ -102,10 +102,9 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                       label: "birth_date",
                       hintText: "select_birth_date",
                       validator: (date) =>
-                      date == null ? 'required_field'.tr() : null,
+                          date == null ? 'required_field'.tr() : null,
                     ),
                   ],
-
                   MainCounterWidget(
                     maxCount: 200,
                     minCount: 30,
