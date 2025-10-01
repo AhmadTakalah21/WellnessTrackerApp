@@ -15,6 +15,8 @@ import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
 
+import '../../../global/services/user_repo.dart';
+
 abstract class CompleteProfileFormViewCallBacks {
   void onSubmit();
 }
@@ -42,6 +44,8 @@ class CompleteProfileFormPage extends StatefulWidget {
 class _CompleteProfileFormState extends State<CompleteProfileFormPage>
     implements CompleteProfileFormViewCallBacks {
   late final AuthCubit authCubit = context.read();
+  late final UserRepo userRepo = context.read<UserRepo>();
+
 
   final _formKey = GlobalKey<FormState>();
 
@@ -49,7 +53,9 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
   void initState() {
     super.initState();
     authCubit.setInitialFormData();
-  }
+    if (!userRepo.isV1) {
+      authCubit.setBirthday(DateTime(2000).formatYYYYMMDD);
+    }  }
 
   @override
   void onSubmit() {
@@ -80,23 +86,26 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                     ),
                   ),
                   const SizedBox(height: 10),
-                  MainDropDownWidget(
-                    selectedValue: GenderEnum.male,
-                    items: GenderEnum.values,
-                    prefixIcon: Icons.person,
-                    hintText: 'gender'.tr(),
-                    labelText: 'gender'.tr(),
-                    errorMessage: 'required_field'.tr(),
-                    onChanged: authCubit.setGender,
-                  ),
-                  MainDatePicker(
-                    onDateSelected: (date) =>
-                        authCubit.setBirthday(date?.formatYYYYMMDD),
-                    label: "birth_date",
-                    hintText: "select_birth_date",
-                    validator: (date) =>
-                        date == null ? 'required_field'.tr() : null,
-                  ),
+                  if (userRepo.isV1)...[
+                    MainDropDownWidget(
+                      selectedValue: GenderEnum.male,
+                      items: GenderEnum.values,
+                      prefixIcon: Icons.person,
+                      hintText: 'gender'.tr(),
+                      labelText: 'gender'.tr(),
+                      errorMessage: 'required_field'.tr(),
+                      onChanged: authCubit.setGender,
+                    ),
+                    MainDatePicker(
+                      onDateSelected: (date) =>
+                          authCubit.setBirthday(date?.formatYYYYMMDD),
+                      label: "birth_date",
+                      hintText: "select_birth_date",
+                      validator: (date) =>
+                      date == null ? 'required_field'.tr() : null,
+                    ),
+                  ],
+
                   MainCounterWidget(
                     maxCount: 200,
                     minCount: 30,

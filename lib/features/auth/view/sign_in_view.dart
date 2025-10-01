@@ -272,7 +272,9 @@ class _SignInPageState extends State<SignInPage>
                           const SizedBox(height: 20),
                           _buildEmailTextField(),
                           _buildUsernameTextField(),
-                          _buildMobileNumebrField(),
+                          if (userRepo.isV1)...[
+                            _buildMobileNumebrField(),
+                          ],
                           SizedBox(height: 10),
                           _buildPasswordTextField(),
                           _buildConfirmPasswordTextField(),
