@@ -111,8 +111,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
         ],
         if (requestRole.isAdmin) ...[
           code ?? 'not_existed'.tr(),
-          subEndDate ?? 'not_existed'.tr(),
         ],
+        subEndDate ?? 'not_existed'.tr(),
         if (isForEmployee || requestRole.isDoctor || requestRole.isPsychologist)
           if (medicalConsultationsNum != null)
             medicalConsultationsNum!.toString(),

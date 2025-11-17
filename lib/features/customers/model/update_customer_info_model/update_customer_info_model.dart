@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+import 'package:wellnesstrackerapp/global/models/home_or_gym_enum.dart';
 
 part 'update_customer_info_model.g.dart';
 
@@ -10,6 +11,7 @@ part 'update_customer_info_model.g.dart';
 @immutable
 class UpdateCustomerInfoModel {
   const UpdateCustomerInfoModel({
+    this.trainPlace = HouseOrGymEnum.house,
     String? age,
     String? weight,
     String? length,
@@ -17,6 +19,7 @@ class UpdateCustomerInfoModel {
     String? waistCircumference,
     String? chest,
     String? shoulder,
+    String? trainProblems,
     // String? thighCircumference,
     // String? forearmCircumference,
   })  : _weight = weight,
@@ -24,7 +27,8 @@ class UpdateCustomerInfoModel {
         _chronicDiseases = chronicDiseases,
         _waistCircumference = waistCircumference,
         _chest = chest,
-        _shoulder = shoulder;
+        _shoulder = shoulder,
+        _trainProblems = trainProblems;
   // _thighCircumference = thighCircumference,
   // _forearmCircumference = forearmCircumference;
 
@@ -34,6 +38,14 @@ class UpdateCustomerInfoModel {
   final String? _waistCircumference;
   final String? _chest;
   final String? _shoulder;
+  final String? _trainProblems;
+
+  @JsonKey(
+    name: "is_in_gym",
+    fromJson: HouseOrGymEnum.fromJson,
+    toJson: HouseOrGymEnum.toJson,
+  )
+  final HouseOrGymEnum trainPlace;
   // final String? _thighCircumference;
   // final String? _forearmCircumference;
 
@@ -44,6 +56,8 @@ class UpdateCustomerInfoModel {
     String? Function()? waistCircumference,
     String? Function()? chest,
     String? Function()? shoulder,
+    String? Function()? trainProblems,
+    HouseOrGymEnum? trainPlace,
     // String? Function()? thighCircumference,
     // String? Function()? forearmCircumference,
   }) {
@@ -57,6 +71,8 @@ class UpdateCustomerInfoModel {
           : _waistCircumference,
       chest: chest != null ? chest() : _chest,
       shoulder: shoulder != null ? shoulder() : _shoulder,
+      trainProblems: trainProblems != null ? trainProblems() : _trainProblems,
+      trainPlace: trainPlace ?? this.trainPlace,
       // thighCircumference: thighCircumference != null
       //     ? thighCircumference()
       //     : _thighCircumference,
@@ -108,6 +124,14 @@ class UpdateCustomerInfoModel {
     //   throw "shoulder_required".tr();
     // }
     return _shoulder;
+  }
+
+  @JsonKey(name: "train_problems")
+  String? get trainProblems {
+    // if (_trainProblems == null || _trainProblems.isEmpty) {
+    //   throw "train_problems_required".tr();
+    // }
+    return _trainProblems;
   }
 
   // @JsonKey(name: "thigh_circumference")

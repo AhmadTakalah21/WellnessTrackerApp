@@ -91,8 +91,10 @@ class _AddMealPlanPageState extends State<AddMealPlanPage>
   @override
   Widget build(BuildContext context) {
     final mealPlan = widget.mealPlan;
+    final title =
+        mealPlan == null ? "add_meal_plan".tr() : "edit_meal_plan".tr();
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(title),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
         child: Column(
@@ -112,9 +114,9 @@ class _AddMealPlanPageState extends State<AddMealPlanPage>
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(String title) {
     return MainAppBar(
-      title: "add_meal_plan".tr(),
+      title: title,
       automaticallyImplyLeading: true,
       hasLogout: false,
     );

@@ -12,12 +12,14 @@ class NotificationsServiceImp implements NotificationsService {
     int? page,
   }) async {
     try {
-      final perPageParam = perPage != null ? "per_page=$perPage" : "";
-      final pageParam = page != null ? "page=$page" : "";
-      final endpoint =
-          "/v1/${role.getApiRoute}/notifications?$pageParam&$perPageParam";
-      final response = await dio
-          .get(endpoint, headers: {"Accept-Language": locale.languageCode});
+      final headers = {"Accept-Language": locale.languageCode};
+      final queries = {
+        if (perPage != null) "per_page": perPage,
+        if (page != null) "page": page,
+      };
+      final endpoint = "/v1/${role.getApiRoute}/notifications";
+      final response =
+          await dio.get(endpoint, headers: headers, queries: queries);
 
       return PaginatedModel.fromJson(
         response.data as Map<String, dynamic>,
@@ -42,8 +44,7 @@ class NotificationsServiceImp implements NotificationsService {
       final map = model.toJson();
       if (userIds.isNotEmpty) {
         for (var index = 0; index < userIds.length; index++) {
-          final id = userIds[index].id;
-          map.addAll({"userIds[$index]": id});
+          map.addAll({"userIds[$index]": userIds[index].id});
         }
       }
       if (image != null) {
@@ -57,6 +58,35 @@ class NotificationsServiceImp implements NotificationsService {
       await dio.post(endpoint, data: formData);
     } catch (e, stackTrace) {
       if (kDebugMode) print(stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<NotificationModel> getNotification(UserRoleEnum role, int id) async {
+    try {
+      final endpoint = "/v1/${role.getApiRoute}/notifications/$id";
+      final response = await dio.get(endpoint);
+      final data = response.data["data"] as Map<String, dynamic>;
+
+      return NotificationModel.fromJson(data);
+    } catch (e, stackTrace) {
+      if (kDebugMode) print("stackTrace of getNotification $id: $stackTrace");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<int> getUnreadNotificationsCount(UserRoleEnum role) async {
+    try {
+      final endpoint = "/v1/${role.getApiRoute}/notifications/num-of-not-read";
+      final response = await dio.get(endpoint);
+      final data = response.data["data"] as Map<String, dynamic>;
+      return data["num_of_not_read"] as int;
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        print("stackTrace of getUnreadNotificationsCount $stackTrace");
+      }
       rethrow;
     }
   }

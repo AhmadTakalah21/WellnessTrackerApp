@@ -88,10 +88,7 @@ class _ExercisesCoachPageState extends State<ExercisesCoachPage>
       context: context,
       builder: (_) => InsureDeleteWidget(
         item: exercise,
-        onSuccess: () {
-          Navigator.pop(context);
-          exercisesCubit.getExercises();
-        },
+        onSuccess: () => exercisesCubit.getExercises(),
       ),
     );
   }

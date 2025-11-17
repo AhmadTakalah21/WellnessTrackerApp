@@ -82,7 +82,7 @@ enum UserRoleEnum implements DropDownItemModel {
           UserViewOnPermissionModel(
             title: "adds_and_offers",
             icon: Icons.campaign,
-             screen: AddsAndOffersRoute(),
+            screen: AddsAndOffersRoute(),
             color: Colors.orange,
           ),
           UserViewOnPermissionModel(
@@ -102,6 +102,7 @@ enum UserRoleEnum implements DropDownItemModel {
             icon: FontAwesomeIcons.bell,
             screen: NotificationsRoute(role: this),
             color: Colors.green,
+            isNotification: true,
           ),
           UserViewOnPermissionModel(
             title: "settings",
@@ -138,12 +139,12 @@ enum UserRoleEnum implements DropDownItemModel {
             color: Colors.blue.shade400,
           ),
           if (isV1)
-          UserViewOnPermissionModel(
-            title: "levels",
-            icon: Icons.stacked_line_chart,
-            screen: LevelsRoute(role: this),
-            color: Colors.orange,
-          ),
+            UserViewOnPermissionModel(
+              title: "levels",
+              icon: Icons.stacked_line_chart,
+              screen: LevelsRoute(role: this),
+              color: Colors.orange,
+            ),
           if (isV1)
             UserViewOnPermissionModel(
               title: "store",
@@ -165,6 +166,7 @@ enum UserRoleEnum implements DropDownItemModel {
             icon: FontAwesomeIcons.bell,
             screen: NotificationsRoute(role: this),
             color: Colors.green,
+            isNotification: true,
           ),
           UserViewOnPermissionModel(
             title: "settings",
@@ -187,11 +189,19 @@ enum UserRoleEnum implements DropDownItemModel {
             screen: ExercisesCoachRoute(role: this),
             color: Colors.blue.shade400,
           ),
+          // TODO check color
+          UserViewOnPermissionModel(
+            title: "exercise_plans",
+            icon: FontAwesomeIcons.personRunning,
+            screen: ExercisePlansRoute(),
+            color: Colors.purple,
+          ),
           UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
             screen: NotificationsRoute(role: this),
             color: Colors.green,
+            isNotification: true,
           ),
           UserViewOnPermissionModel(
             title: "settings",
@@ -220,11 +230,19 @@ enum UserRoleEnum implements DropDownItemModel {
             screen: IngredientsRoute(),
             color: Colors.blueAccent,
           ),
+          // TODO check color
+          UserViewOnPermissionModel(
+            title: "meal_plans",
+            icon: FontAwesomeIcons.appleWhole,
+            screen: MealPlansRoute(),
+            color: Colors.purple,
+          ),
           UserViewOnPermissionModel(
             title: "notifications",
             icon: FontAwesomeIcons.bell,
             screen: NotificationsRoute(role: this),
             color: Colors.green,
+            isNotification: true,
           ),
           UserViewOnPermissionModel(
             title: "settings",
@@ -246,6 +264,7 @@ enum UserRoleEnum implements DropDownItemModel {
             icon: FontAwesomeIcons.bell,
             screen: NotificationsRoute(role: this),
             color: Colors.green,
+            isNotification: true,
           ),
           UserViewOnPermissionModel(
             title: "settings",

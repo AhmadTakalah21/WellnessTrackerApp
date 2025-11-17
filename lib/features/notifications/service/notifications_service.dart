@@ -15,10 +15,14 @@ part 'notifications_service_imp.dart';
 
 abstract class NotificationsService {
   Future<PaginatedModel<NotificationModel>> getNotifications(
-    UserRoleEnum role, Locale locale,{
+    UserRoleEnum role,
+    Locale locale, {
     int? perPage = 10,
     int? page,
   });
+
+  Future<NotificationModel> getNotification(UserRoleEnum role, int id);
+  Future<int> getUnreadNotificationsCount(UserRoleEnum role,);
 
   Future<void> addNotification(
     UserRoleEnum role,

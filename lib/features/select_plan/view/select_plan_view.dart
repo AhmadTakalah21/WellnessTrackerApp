@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
 import 'package:wellnesstrackerapp/features/select_plan/cubit/user_plans_cubit.dart';
+import 'package:wellnesstrackerapp/features/settings/cubit/settings_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/theme/theme_x.dart';
+import 'package:wellnesstrackerapp/global/utils/app_colors.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 import 'package:wellnesstrackerapp/global/widgets/animations/tile_slide_animation.dart';
 import 'package:wellnesstrackerapp/global/widgets/loading_indicator.dart';
@@ -14,6 +17,7 @@ import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 
 abstract class SelectPlanViewCallBacks {
+  void fetchData();
   void onTryAgainTap();
   Future<void> onRefresh();
   Future<void> onLaunchPhoneTap(String? whatsappPhone);
@@ -25,8 +29,11 @@ class SelectPlanView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => get<UserPlansCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => get<UserPlansCubit>()),
+        BlocProvider(create: (context) => get<SettingsCubit>()),
+      ],
       child: const SelectPlanPage(),
     );
   }
@@ -42,18 +49,29 @@ class SelectPlanPage extends StatefulWidget {
 class _SelectPlanPageState extends State<SelectPlanPage>
     implements SelectPlanViewCallBacks {
   late final UserPlansCubit userPlansCubit = context.read();
+  late final SettingsCubit settingsCubit = context.read();
+  late final SignInModel? user = context.read<SignInModel?>();
 
   @override
   void initState() {
     super.initState();
-    userPlansCubit.getPlans();
+    fetchData();
+  }
+
+  @override
+  void fetchData() {
+    if (user == null) {
+      settingsCubit.getSettings();
+    } else {
+      userPlansCubit.getPlans();
+    }
   }
 
   @override
   Future<void> onRefresh() async => onTryAgainTap();
 
   @override
-  void onTryAgainTap() => userPlansCubit.getPlans();
+  void onTryAgainTap() => fetchData();
 
   @override
   Future<void> onLaunchPhoneTap(String? whatsappPhone) async {
@@ -76,67 +94,108 @@ class _SelectPlanPageState extends State<SelectPlanPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('follow_up'.tr())),
-      body: BlocBuilder<UserPlansCubit, GeneralUserPlansState>(
-        builder: (context, state) {
-          if (state is UserPlansLoading) {
-            return LoadingIndicator();
-          } else if (state is UserPlansSuccess) {
-            return RefreshIndicator(
-              onRefresh: onRefresh,
-              child: SingleChildScrollView(
-                padding: AppConstants.padding20,
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    ...state.plans.plans.asMap().entries.map(
-                      (entry) {
-                        final index = entry.key;
-                        final plan = entry.value;
-                        return TileSlideAnimation(
-                          index: index,
-                          child: _buildGridItem(
-                            context,
-                            plan.department.getTitle,
-                            plan.phone,
-                            plan.department.getIcon,
-                            plan.department.getColor,
+      body: user == null
+          ? BlocBuilder<SettingsCubit, GeneralSettingsState>(
+              builder: (context, state) {
+                if (state is SettingsLoading) {
+                  return LoadingIndicator();
+                } else if (state is SettingsSuccess) {
+                  return RefreshIndicator(
+                    onRefresh: onRefresh,
+                    child: SingleChildScrollView(
+                      padding: AppConstants.padding20,
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          TileSlideAnimation(
+                            index: 0,
+                            child: _buildGridItem(
+                              context,
+                              "support_phone",
+                              state.settings.supportPhoneNumber,
+                              Icons.support_agent_outlined,
+                              AppColors.mainColor,
+                            ),
                           ),
-                        );
-                      },
-                    ),
-                    TileSlideAnimation(
-                      index: state.plans.plans.length,
-                      child: _buildGridItem(
-                        context,
-                        "emergencies_phone",
-                        state.plans.emergenciesPhone ?? "not_available".tr(),
-                        Icons.emergency_rounded,
-                        Colors.blueGrey,
+                          SizedBox(height: 500),
+                          SizedBox(height: 100),
+                        ],
                       ),
                     ),
-                    if (state.plans.plans.length < 2)
-                      SizedBox(height: (2 - state.plans.plans.length) * 250.0),
-                    SizedBox(height: 100),
-                  ],
-                ),
-              ),
-            );
-          } else if (state is UserPlansEmpty) {
-            return MainErrorWidget(
-              error: state.message,
-              isRefresh: true,
-              onTryAgainTap: onTryAgainTap,
-            );
-          } else if (state is UserPlansFail) {
-            return MainErrorWidget(
-              error: state.error,
-              onTryAgainTap: onTryAgainTap,
-            );
-          } else {
-            return SizedBox.shrink();
-          }
-        },
-      ),
+                  );
+                } else if (state is SettingsFail) {
+                  return MainErrorWidget(
+                    error: state.error,
+                    onTryAgainTap: onTryAgainTap,
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            )
+          : BlocBuilder<UserPlansCubit, GeneralUserPlansState>(
+              builder: (context, state) {
+                if (state is UserPlansLoading) {
+                  return LoadingIndicator();
+                } else if (state is UserPlansSuccess) {
+                  return RefreshIndicator(
+                    onRefresh: onRefresh,
+                    child: SingleChildScrollView(
+                      padding: AppConstants.padding20,
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          ...state.plans.plans.asMap().entries.map(
+                            (entry) {
+                              final index = entry.key;
+                              final plan = entry.value;
+                              return TileSlideAnimation(
+                                index: index,
+                                child: _buildGridItem(
+                                  context,
+                                  plan.department.getTitle,
+                                  plan.phone,
+                                  plan.department.getIcon,
+                                  plan.department.getColor,
+                                ),
+                              );
+                            },
+                          ),
+                          TileSlideAnimation(
+                            index: state.plans.plans.length,
+                            child: _buildGridItem(
+                              context,
+                              "emergencies_phone",
+                              state.plans.emergenciesPhone ??
+                                  "not_available".tr(),
+                              Icons.emergency_rounded,
+                              Colors.blueGrey,
+                            ),
+                          ),
+                          if (state.plans.plans.length < 2)
+                            SizedBox(
+                                height: (2 - state.plans.plans.length) * 250.0),
+                          SizedBox(height: 100),
+                        ],
+                      ),
+                    ),
+                  );
+                } else if (state is UserPlansEmpty) {
+                  return MainErrorWidget(
+                    error: state.message,
+                    isRefresh: true,
+                    onTryAgainTap: onTryAgainTap,
+                  );
+                } else if (state is UserPlansFail) {
+                  return MainErrorWidget(
+                    error: state.error,
+                    onTryAgainTap: onTryAgainTap,
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            ),
     );
   }
 

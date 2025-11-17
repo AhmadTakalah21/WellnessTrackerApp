@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/exercises/cubit/exercises_cubit.dart';
 import 'package:wellnesstrackerapp/features/exercises/model/exercise_model/exercise_model.dart';
@@ -110,8 +111,10 @@ class _AddExercisePageState extends State<AddExercisePage>
               MainCounterWidget(
                 label: 'rounds'.tr(),
                 icon: Icons.fitness_center_outlined,
+                maxCount: 9,
                 initialCount: widget.exercise?.description.rounds,
                 onChanged: (value) => exercisesCubit.updateRounds(value),
+                inputFormatters: [LengthLimitingTextInputFormatter(1)],
                 isRequired: true,
               ),
               SizedBox(height: 20),

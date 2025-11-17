@@ -72,9 +72,9 @@ class MealPlansCubit extends Cubit<GeneralMealPlansState> {
 
   void resetModel() {
     model = const AddMealPlanModel();
-    for (var planDay in planDays) {
-      planDay.meals.clear();
-    }
+    planDays = DayEnum.values
+        .map((day) => PlanDayItemToShowModel(day: day, meals: []))
+        .toList();
     selectedMeals.clear();
   }
 

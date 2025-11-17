@@ -9,14 +9,14 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i54;
-import 'package:flutter/material.dart' as _i55;
+import 'package:auto_route/auto_route.dart' as _i57;
+import 'package:flutter/material.dart' as _i58;
 import 'package:wellnesstrackerapp/features/about_us/view/about_us_view.dart'
     as _i1;
 import 'package:wellnesstrackerapp/features/adds_and_offers/cubit/adds_and_offers_cubit.dart'
-    as _i56;
+    as _i59;
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart'
-    as _i57;
+    as _i60;
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/adds_and_offers_router.dart'
     as _i11;
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/adds_and_offers_view.dart'
@@ -25,144 +25,150 @@ import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/add_adv
     as _i2;
 import 'package:wellnesstrackerapp/features/app_manager/view/app_manager_view.dart'
     as _i13;
-import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart' as _i77;
+import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart' as _i80;
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart'
-    as _i72;
-import 'package:wellnesstrackerapp/features/auth/view/auth_router.dart' as _i16;
+    as _i75;
+import 'package:wellnesstrackerapp/features/auth/view/auth_router.dart' as _i17;
 import 'package:wellnesstrackerapp/features/auth/view/forget_password_view.dart'
-    as _i27;
+    as _i29;
 import 'package:wellnesstrackerapp/features/auth/view/profile_form_view.dart'
-    as _i19;
+    as _i20;
 import 'package:wellnesstrackerapp/features/auth/view/reset_password_view.dart'
-    as _i41;
-import 'package:wellnesstrackerapp/features/auth/view/sign_in_view.dart'
     as _i44;
+import 'package:wellnesstrackerapp/features/auth/view/sign_in_view.dart'
+    as _i47;
 import 'package:wellnesstrackerapp/features/auth/view/widgets/verify_code_view.dart'
-    as _i52;
+    as _i55;
 import 'package:wellnesstrackerapp/features/auth_manager/view/auth_manager_view.dart'
-    as _i15;
-import 'package:wellnesstrackerapp/features/codes/view/codes_view.dart' as _i17;
+    as _i16;
+import 'package:wellnesstrackerapp/features/codes/view/codes_view.dart' as _i18;
 import 'package:wellnesstrackerapp/features/company_info/view/company_info_view.dart'
-    as _i18;
+    as _i19;
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart'
-    as _i74;
+    as _i77;
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart'
-    as _i73;
+    as _i76;
 import 'package:wellnesstrackerapp/features/customers/view/customers_view.dart'
-    as _i21;
+    as _i22;
 import 'package:wellnesstrackerapp/features/customers/view/widgets/approve_customer_view.dart'
     as _i14;
+import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_customers_view.dart'
+    as _i15;
 import 'package:wellnesstrackerapp/features/customers/view/widgets/subscriber_evaluation_view.dart'
-    as _i47;
+    as _i50;
 import 'package:wellnesstrackerapp/features/customers/view/widgets/update_customer_info_view.dart'
-    as _i49;
+    as _i52;
 import 'package:wellnesstrackerapp/features/dashboard/view/dashboard_router.dart'
-    as _i22;
-import 'package:wellnesstrackerapp/features/dashboard/view/dashboard_view.dart'
     as _i23;
+import 'package:wellnesstrackerapp/features/dashboard/view/dashboard_view.dart'
+    as _i24;
 import 'package:wellnesstrackerapp/features/exercise_plans/cubit/exercise_plans_cubit.dart'
-    as _i58;
+    as _i61;
 import 'package:wellnesstrackerapp/features/exercise_plans/model/exercise_plan_model/exercise_plan_model.dart'
-    as _i59;
+    as _i62;
 import 'package:wellnesstrackerapp/features/exercise_plans/view/add_exercise_plan_view.dart'
     as _i3;
+import 'package:wellnesstrackerapp/features/exercise_plans/view/exercise_plans_view.dart'
+    as _i26;
 import 'package:wellnesstrackerapp/features/exercises/cubit/exercises_cubit.dart'
-    as _i60;
+    as _i63;
 import 'package:wellnesstrackerapp/features/exercises/model/exercise_model/exercise_model.dart'
-    as _i61;
+    as _i64;
 import 'package:wellnesstrackerapp/features/exercises/view/add_exercise_view.dart'
     as _i4;
 import 'package:wellnesstrackerapp/features/exercises/view/exercises_coach_view.dart'
-    as _i25;
+    as _i27;
 import 'package:wellnesstrackerapp/features/exercises/view/exercises_view.dart'
-    as _i26;
-import 'package:wellnesstrackerapp/features/health_assesment/view/health_assesment_view.dart'
     as _i28;
+import 'package:wellnesstrackerapp/features/health_assesment/view/health_assesment_view.dart'
+    as _i30;
 import 'package:wellnesstrackerapp/features/ingredients/view/ingredients_view.dart'
-    as _i29;
-import 'package:wellnesstrackerapp/features/intro/view/into_view.dart' as _i30;
+    as _i31;
+import 'package:wellnesstrackerapp/features/intro/view/into_view.dart' as _i32;
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart'
-    as _i62;
+    as _i65;
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart'
-    as _i63;
-import 'package:wellnesstrackerapp/features/items/view/items_view.dart' as _i31;
+    as _i66;
+import 'package:wellnesstrackerapp/features/items/view/items_view.dart' as _i33;
 import 'package:wellnesstrackerapp/features/items/view/widgets/add_item_view.dart'
     as _i5;
 import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart'
-    as _i65;
+    as _i68;
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart'
-    as _i64;
+    as _i67;
 import 'package:wellnesstrackerapp/features/levels/view/levels_view.dart'
-    as _i32;
+    as _i34;
 import 'package:wellnesstrackerapp/features/levels/view/widgets/add_level_widget.dart'
     as _i6;
 import 'package:wellnesstrackerapp/features/meal_plans/cubit/meal_plans_cubit.dart'
-    as _i66;
+    as _i69;
 import 'package:wellnesstrackerapp/features/meal_plans/model/meal_plan_model/meal_plan_model.dart'
-    as _i67;
+    as _i70;
 import 'package:wellnesstrackerapp/features/meal_plans/view/add_meal_plans.dart'
     as _i7;
+import 'package:wellnesstrackerapp/features/meal_plans/view/meal_plans_view.dart'
+    as _i35;
 import 'package:wellnesstrackerapp/features/meal_plans/view/widget/add_meal_dialog.dart'
     as _i8;
 import 'package:wellnesstrackerapp/features/meals/cubit/meals_cubit.dart'
-    as _i68;
-import 'package:wellnesstrackerapp/features/meals/model/meal_model/meal_model.dart'
-    as _i69;
-import 'package:wellnesstrackerapp/features/meals/view/meals_dietitian_view.dart'
-    as _i33;
-import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart' as _i34;
-import 'package:wellnesstrackerapp/features/notifications/view/notifications_view.dart'
-    as _i35;
-import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart'
-    as _i70;
-import 'package:wellnesstrackerapp/features/points/model/points_guideline_model/points_guideline_model.dart'
     as _i71;
-import 'package:wellnesstrackerapp/features/points/view/pages/current_points_view.dart'
-    as _i20;
-import 'package:wellnesstrackerapp/features/points/view/pages/earn_points_ways_view.dart'
-    as _i24;
-import 'package:wellnesstrackerapp/features/points/view/points_view.dart'
+import 'package:wellnesstrackerapp/features/meals/model/meal_model/meal_model.dart'
+    as _i72;
+import 'package:wellnesstrackerapp/features/meals/view/meals_dietitian_view.dart'
     as _i36;
+import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart' as _i37;
+import 'package:wellnesstrackerapp/features/notifications/view/notifications_view.dart'
+    as _i38;
+import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart'
+    as _i73;
+import 'package:wellnesstrackerapp/features/points/model/points_guideline_model/points_guideline_model.dart'
+    as _i74;
+import 'package:wellnesstrackerapp/features/points/view/pages/current_points_view.dart'
+    as _i21;
+import 'package:wellnesstrackerapp/features/points/view/pages/earn_points_ways_view.dart'
+    as _i25;
+import 'package:wellnesstrackerapp/features/points/view/points_view.dart'
+    as _i39;
 import 'package:wellnesstrackerapp/features/points/view/widgets/add_points_guideline_widget.dart'
     as _i9;
 import 'package:wellnesstrackerapp/features/privacy_policy/view/privacy_policy_view.dart'
-    as _i37;
+    as _i40;
 import 'package:wellnesstrackerapp/features/profile/view/add_rate_view.dart'
     as _i10;
 import 'package:wellnesstrackerapp/features/profile/view/profile_router.dart'
-    as _i38;
+    as _i41;
 import 'package:wellnesstrackerapp/features/profile/view/profile_view.dart'
-    as _i39;
-import 'package:wellnesstrackerapp/features/ratings/view/ratings_view.dart'
-    as _i40;
-import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart'
     as _i42;
-import 'package:wellnesstrackerapp/features/settings/view/settings_view.dart'
+import 'package:wellnesstrackerapp/features/ratings/view/ratings_view.dart'
     as _i43;
-import 'package:wellnesstrackerapp/features/splash/view/splash_view.dart'
+import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart'
     as _i45;
-import 'package:wellnesstrackerapp/features/statistics/view/statistics_view.dart'
+import 'package:wellnesstrackerapp/features/settings/view/settings_view.dart'
     as _i46;
-import 'package:wellnesstrackerapp/features/terms_and_conditions/view/terms_and_conditions_view.dart'
+import 'package:wellnesstrackerapp/features/splash/view/splash_view.dart'
     as _i48;
+import 'package:wellnesstrackerapp/features/statistics/view/statistics_view.dart'
+    as _i49;
+import 'package:wellnesstrackerapp/features/terms_and_conditions/view/terms_and_conditions_view.dart'
+    as _i51;
 import 'package:wellnesstrackerapp/features/user_navigation/view/user_navigation_view.dart'
-    as _i50;
-import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart'
-    as _i76;
-import 'package:wellnesstrackerapp/features/users/view/users_view.dart' as _i51;
-import 'package:wellnesstrackerapp/global/models/user_role_enum.dart' as _i75;
-import 'package:wellnesstrackerapp/global/widgets/video_player_widget.dart'
     as _i53;
+import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart'
+    as _i79;
+import 'package:wellnesstrackerapp/features/users/view/users_view.dart' as _i54;
+import 'package:wellnesstrackerapp/global/models/user_role_enum.dart' as _i78;
+import 'package:wellnesstrackerapp/global/widgets/video_player_widget.dart'
+    as _i56;
 
 /// generated route for
 /// [_i1.AboutUsView]
-class AboutUsRoute extends _i54.PageRouteInfo<void> {
-  const AboutUsRoute({List<_i54.PageRouteInfo>? children})
+class AboutUsRoute extends _i57.PageRouteInfo<void> {
+  const AboutUsRoute({List<_i57.PageRouteInfo>? children})
     : super(AboutUsRoute.name, initialChildren: children);
 
   static const String name = 'AboutUsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       return const _i1.AboutUsView();
@@ -172,13 +178,13 @@ class AboutUsRoute extends _i54.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.AddAdvView]
-class AddAdvRoute extends _i54.PageRouteInfo<AddAdvRouteArgs> {
+class AddAdvRoute extends _i57.PageRouteInfo<AddAdvRouteArgs> {
   AddAdvRoute({
-    _i55.Key? key,
-    required _i56.AddsAndOffersCubit advCubit,
-    _i57.AdvModel? adv,
-    _i55.VoidCallback? onSuccess,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i59.AddsAndOffersCubit advCubit,
+    _i60.AdvModel? adv,
+    _i58.VoidCallback? onSuccess,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          AddAdvRoute.name,
          args: AddAdvRouteArgs(
@@ -192,7 +198,7 @@ class AddAdvRoute extends _i54.PageRouteInfo<AddAdvRouteArgs> {
 
   static const String name = 'AddAdvRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddAdvRouteArgs>();
@@ -214,13 +220,13 @@ class AddAdvRouteArgs {
     this.onSuccess,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i56.AddsAndOffersCubit advCubit;
+  final _i59.AddsAndOffersCubit advCubit;
 
-  final _i57.AdvModel? adv;
+  final _i60.AdvModel? adv;
 
-  final _i55.VoidCallback? onSuccess;
+  final _i58.VoidCallback? onSuccess;
 
   @override
   String toString() {
@@ -245,12 +251,12 @@ class AddAdvRouteArgs {
 /// generated route for
 /// [_i3.AddExercisePlanView]
 class AddExercisePlanRoute
-    extends _i54.PageRouteInfo<AddExercisePlanRouteArgs> {
+    extends _i57.PageRouteInfo<AddExercisePlanRouteArgs> {
   AddExercisePlanRoute({
-    _i55.Key? key,
-    required _i58.ExercisePlansCubit exercisePlansCubit,
-    _i59.ExercisePlanModel? exercisePlan,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i61.ExercisePlansCubit exercisePlansCubit,
+    _i62.ExercisePlanModel? exercisePlan,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          AddExercisePlanRoute.name,
          args: AddExercisePlanRouteArgs(
@@ -263,7 +269,7 @@ class AddExercisePlanRoute
 
   static const String name = 'AddExercisePlanRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddExercisePlanRouteArgs>();
@@ -283,11 +289,11 @@ class AddExercisePlanRouteArgs {
     this.exercisePlan,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i58.ExercisePlansCubit exercisePlansCubit;
+  final _i61.ExercisePlansCubit exercisePlansCubit;
 
-  final _i59.ExercisePlanModel? exercisePlan;
+  final _i62.ExercisePlanModel? exercisePlan;
 
   @override
   String toString() {
@@ -310,12 +316,12 @@ class AddExercisePlanRouteArgs {
 
 /// generated route for
 /// [_i4.AddExerciseView]
-class AddExerciseRoute extends _i54.PageRouteInfo<AddExerciseRouteArgs> {
+class AddExerciseRoute extends _i57.PageRouteInfo<AddExerciseRouteArgs> {
   AddExerciseRoute({
-    _i55.Key? key,
-    required _i60.ExercisesCubit exercisesCubit,
-    _i61.ExerciseModel? exercise,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i63.ExercisesCubit exercisesCubit,
+    _i64.ExerciseModel? exercise,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          AddExerciseRoute.name,
          args: AddExerciseRouteArgs(
@@ -328,7 +334,7 @@ class AddExerciseRoute extends _i54.PageRouteInfo<AddExerciseRouteArgs> {
 
   static const String name = 'AddExerciseRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddExerciseRouteArgs>();
@@ -348,11 +354,11 @@ class AddExerciseRouteArgs {
     this.exercise,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i60.ExercisesCubit exercisesCubit;
+  final _i63.ExercisesCubit exercisesCubit;
 
-  final _i61.ExerciseModel? exercise;
+  final _i64.ExerciseModel? exercise;
 
   @override
   String toString() {
@@ -375,14 +381,14 @@ class AddExerciseRouteArgs {
 
 /// generated route for
 /// [_i5.AddItemView]
-class AddItemRoute extends _i54.PageRouteInfo<AddItemRouteArgs> {
+class AddItemRoute extends _i57.PageRouteInfo<AddItemRouteArgs> {
   AddItemRoute({
-    _i55.Key? key,
-    required _i62.ItemsCubit itemCubit,
-    _i63.ItemModel? item,
-    _i55.VoidCallback? onSuccess,
-    _i64.LevelModel? level,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i65.ItemsCubit itemCubit,
+    _i66.ItemModel? item,
+    _i58.VoidCallback? onSuccess,
+    _i67.LevelModel? level,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          AddItemRoute.name,
          args: AddItemRouteArgs(
@@ -397,7 +403,7 @@ class AddItemRoute extends _i54.PageRouteInfo<AddItemRouteArgs> {
 
   static const String name = 'AddItemRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddItemRouteArgs>();
@@ -421,15 +427,15 @@ class AddItemRouteArgs {
     this.level,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i62.ItemsCubit itemCubit;
+  final _i65.ItemsCubit itemCubit;
 
-  final _i63.ItemModel? item;
+  final _i66.ItemModel? item;
 
-  final _i55.VoidCallback? onSuccess;
+  final _i58.VoidCallback? onSuccess;
 
-  final _i64.LevelModel? level;
+  final _i67.LevelModel? level;
 
   @override
   String toString() {
@@ -458,13 +464,13 @@ class AddItemRouteArgs {
 
 /// generated route for
 /// [_i6.AddLevelView]
-class AddLevelRoute extends _i54.PageRouteInfo<AddLevelRouteArgs> {
+class AddLevelRoute extends _i57.PageRouteInfo<AddLevelRouteArgs> {
   AddLevelRoute({
-    _i55.Key? key,
-    required _i65.LevelsCubit levelsCubit,
-    _i55.VoidCallback? onSuccess,
-    _i64.LevelModel? level,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i68.LevelsCubit levelsCubit,
+    _i58.VoidCallback? onSuccess,
+    _i67.LevelModel? level,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          AddLevelRoute.name,
          args: AddLevelRouteArgs(
@@ -478,7 +484,7 @@ class AddLevelRoute extends _i54.PageRouteInfo<AddLevelRouteArgs> {
 
   static const String name = 'AddLevelRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddLevelRouteArgs>();
@@ -500,13 +506,13 @@ class AddLevelRouteArgs {
     this.level,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i65.LevelsCubit levelsCubit;
+  final _i68.LevelsCubit levelsCubit;
 
-  final _i55.VoidCallback? onSuccess;
+  final _i58.VoidCallback? onSuccess;
 
-  final _i64.LevelModel? level;
+  final _i67.LevelModel? level;
 
   @override
   String toString() {
@@ -530,12 +536,12 @@ class AddLevelRouteArgs {
 
 /// generated route for
 /// [_i7.AddMealPlanView]
-class AddMealPlanRoute extends _i54.PageRouteInfo<AddMealPlanRouteArgs> {
+class AddMealPlanRoute extends _i57.PageRouteInfo<AddMealPlanRouteArgs> {
   AddMealPlanRoute({
-    _i55.Key? key,
-    required _i66.MealPlansCubit mealPlansCubit,
-    _i67.MealPlanModel? mealPlan,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i69.MealPlansCubit mealPlansCubit,
+    _i70.MealPlanModel? mealPlan,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          AddMealPlanRoute.name,
          args: AddMealPlanRouteArgs(
@@ -548,7 +554,7 @@ class AddMealPlanRoute extends _i54.PageRouteInfo<AddMealPlanRouteArgs> {
 
   static const String name = 'AddMealPlanRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddMealPlanRouteArgs>();
@@ -568,11 +574,11 @@ class AddMealPlanRouteArgs {
     this.mealPlan,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i66.MealPlansCubit mealPlansCubit;
+  final _i69.MealPlansCubit mealPlansCubit;
 
-  final _i67.MealPlanModel? mealPlan;
+  final _i70.MealPlanModel? mealPlan;
 
   @override
   String toString() {
@@ -595,12 +601,12 @@ class AddMealPlanRouteArgs {
 
 /// generated route for
 /// [_i8.AddMealView]
-class AddMealRoute extends _i54.PageRouteInfo<AddMealRouteArgs> {
+class AddMealRoute extends _i57.PageRouteInfo<AddMealRouteArgs> {
   AddMealRoute({
-    _i55.Key? key,
-    required _i68.MealsCubit mealsCubit,
-    _i69.MealModel? meal,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i71.MealsCubit mealsCubit,
+    _i72.MealModel? meal,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          AddMealRoute.name,
          args: AddMealRouteArgs(key: key, mealsCubit: mealsCubit, meal: meal),
@@ -609,7 +615,7 @@ class AddMealRoute extends _i54.PageRouteInfo<AddMealRouteArgs> {
 
   static const String name = 'AddMealRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddMealRouteArgs>();
@@ -625,11 +631,11 @@ class AddMealRoute extends _i54.PageRouteInfo<AddMealRouteArgs> {
 class AddMealRouteArgs {
   const AddMealRouteArgs({this.key, required this.mealsCubit, this.meal});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i68.MealsCubit mealsCubit;
+  final _i71.MealsCubit mealsCubit;
 
-  final _i69.MealModel? meal;
+  final _i72.MealModel? meal;
 
   @override
   String toString() {
@@ -652,13 +658,13 @@ class AddMealRouteArgs {
 /// generated route for
 /// [_i9.AddPointsGuidelineView]
 class AddPointsGuidelineRoute
-    extends _i54.PageRouteInfo<AddPointsGuidelineRouteArgs> {
+    extends _i57.PageRouteInfo<AddPointsGuidelineRouteArgs> {
   AddPointsGuidelineRoute({
-    _i55.Key? key,
-    required _i70.PointsCubit pointsCubit,
-    _i71.PointsGuidelineModel? guideline,
-    _i55.VoidCallback? onSuccess,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i73.PointsCubit pointsCubit,
+    _i74.PointsGuidelineModel? guideline,
+    _i58.VoidCallback? onSuccess,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          AddPointsGuidelineRoute.name,
          args: AddPointsGuidelineRouteArgs(
@@ -672,7 +678,7 @@ class AddPointsGuidelineRoute
 
   static const String name = 'AddPointsGuidelineRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddPointsGuidelineRouteArgs>();
@@ -694,13 +700,13 @@ class AddPointsGuidelineRouteArgs {
     this.onSuccess,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i70.PointsCubit pointsCubit;
+  final _i73.PointsCubit pointsCubit;
 
-  final _i71.PointsGuidelineModel? guideline;
+  final _i74.PointsGuidelineModel? guideline;
 
-  final _i55.VoidCallback? onSuccess;
+  final _i58.VoidCallback? onSuccess;
 
   @override
   String toString() {
@@ -727,13 +733,13 @@ class AddPointsGuidelineRouteArgs {
 
 /// generated route for
 /// [_i10.AddRateView]
-class AddRateRoute extends _i54.PageRouteInfo<void> {
-  const AddRateRoute({List<_i54.PageRouteInfo>? children})
+class AddRateRoute extends _i57.PageRouteInfo<void> {
+  const AddRateRoute({List<_i57.PageRouteInfo>? children})
     : super(AddRateRoute.name, initialChildren: children);
 
   static const String name = 'AddRateRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       return const _i10.AddRateView();
@@ -743,13 +749,13 @@ class AddRateRoute extends _i54.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i11.AddsAndOffersRouter]
-class AddsAndOffersRouter extends _i54.PageRouteInfo<void> {
-  const AddsAndOffersRouter({List<_i54.PageRouteInfo>? children})
+class AddsAndOffersRouter extends _i57.PageRouteInfo<void> {
+  const AddsAndOffersRouter({List<_i57.PageRouteInfo>? children})
     : super(AddsAndOffersRouter.name, initialChildren: children);
 
   static const String name = 'AddsAndOffersRouter';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       return const _i11.AddsAndOffersRouter();
@@ -759,13 +765,13 @@ class AddsAndOffersRouter extends _i54.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i12.AddsAndOffersView]
-class AddsAndOffersRoute extends _i54.PageRouteInfo<void> {
-  const AddsAndOffersRoute({List<_i54.PageRouteInfo>? children})
+class AddsAndOffersRoute extends _i57.PageRouteInfo<void> {
+  const AddsAndOffersRoute({List<_i57.PageRouteInfo>? children})
     : super(AddsAndOffersRoute.name, initialChildren: children);
 
   static const String name = 'AddsAndOffersRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       return const _i12.AddsAndOffersView();
@@ -775,11 +781,11 @@ class AddsAndOffersRoute extends _i54.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i13.AppManagerView]
-class AppManagerRoute extends _i54.PageRouteInfo<AppManagerRouteArgs> {
+class AppManagerRoute extends _i57.PageRouteInfo<AppManagerRouteArgs> {
   AppManagerRoute({
-    _i55.Key? key,
-    _i72.SignInModel? user,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    _i75.SignInModel? user,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          AppManagerRoute.name,
          args: AppManagerRouteArgs(key: key, user: user),
@@ -788,7 +794,7 @@ class AppManagerRoute extends _i54.PageRouteInfo<AppManagerRouteArgs> {
 
   static const String name = 'AppManagerRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AppManagerRouteArgs>(
@@ -802,9 +808,9 @@ class AppManagerRoute extends _i54.PageRouteInfo<AppManagerRouteArgs> {
 class AppManagerRouteArgs {
   const AppManagerRouteArgs({this.key, this.user});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i72.SignInModel? user;
+  final _i75.SignInModel? user;
 
   @override
   String toString() {
@@ -825,13 +831,13 @@ class AppManagerRouteArgs {
 /// generated route for
 /// [_i14.ApproveCustomerView]
 class ApproveCustomerRoute
-    extends _i54.PageRouteInfo<ApproveCustomerRouteArgs> {
+    extends _i57.PageRouteInfo<ApproveCustomerRouteArgs> {
   ApproveCustomerRoute({
-    _i55.Key? key,
-    required _i73.CustomerModel customer,
-    required _i74.CustomersCubit customersCubit,
-    _i55.VoidCallback? onSuccess,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i76.CustomerModel customer,
+    required _i77.CustomersCubit customersCubit,
+    _i58.VoidCallback? onSuccess,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          ApproveCustomerRoute.name,
          args: ApproveCustomerRouteArgs(
@@ -845,7 +851,7 @@ class ApproveCustomerRoute
 
   static const String name = 'ApproveCustomerRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ApproveCustomerRouteArgs>();
@@ -867,13 +873,13 @@ class ApproveCustomerRouteArgs {
     this.onSuccess,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i73.CustomerModel customer;
+  final _i76.CustomerModel customer;
 
-  final _i74.CustomersCubit customersCubit;
+  final _i77.CustomersCubit customersCubit;
 
-  final _i55.VoidCallback? onSuccess;
+  final _i58.VoidCallback? onSuccess;
 
   @override
   String toString() {
@@ -899,60 +905,126 @@ class ApproveCustomerRouteArgs {
 }
 
 /// generated route for
-/// [_i15.AuthManagerView]
-class AuthManagerRoute extends _i54.PageRouteInfo<void> {
-  const AuthManagerRoute({List<_i54.PageRouteInfo>? children})
+/// [_i15.AssignCustomersView]
+class AssignCustomersRoute
+    extends _i57.PageRouteInfo<AssignCustomersRouteArgs> {
+  AssignCustomersRoute({
+    _i58.Key? key,
+    required _i77.CustomersCubit customersCubit,
+    _i58.VoidCallback? onSuccess,
+    List<_i57.PageRouteInfo>? children,
+  }) : super(
+         AssignCustomersRoute.name,
+         args: AssignCustomersRouteArgs(
+           key: key,
+           customersCubit: customersCubit,
+           onSuccess: onSuccess,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'AssignCustomersRoute';
+
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AssignCustomersRouteArgs>();
+      return _i15.AssignCustomersView(
+        key: args.key,
+        customersCubit: args.customersCubit,
+        onSuccess: args.onSuccess,
+      );
+    },
+  );
+}
+
+class AssignCustomersRouteArgs {
+  const AssignCustomersRouteArgs({
+    this.key,
+    required this.customersCubit,
+    this.onSuccess,
+  });
+
+  final _i58.Key? key;
+
+  final _i77.CustomersCubit customersCubit;
+
+  final _i58.VoidCallback? onSuccess;
+
+  @override
+  String toString() {
+    return 'AssignCustomersRouteArgs{key: $key, customersCubit: $customersCubit, onSuccess: $onSuccess}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AssignCustomersRouteArgs) return false;
+    return key == other.key &&
+        customersCubit == other.customersCubit &&
+        onSuccess == other.onSuccess;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^ customersCubit.hashCode ^ onSuccess.hashCode;
+}
+
+/// generated route for
+/// [_i16.AuthManagerView]
+class AuthManagerRoute extends _i57.PageRouteInfo<void> {
+  const AuthManagerRoute({List<_i57.PageRouteInfo>? children})
     : super(AuthManagerRoute.name, initialChildren: children);
 
   static const String name = 'AuthManagerRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i15.AuthManagerView();
+      return const _i16.AuthManagerView();
     },
   );
 }
 
 /// generated route for
-/// [_i16.AuthRouterPage]
-class AuthRouter extends _i54.PageRouteInfo<void> {
-  const AuthRouter({List<_i54.PageRouteInfo>? children})
+/// [_i17.AuthRouterPage]
+class AuthRouter extends _i57.PageRouteInfo<void> {
+  const AuthRouter({List<_i57.PageRouteInfo>? children})
     : super(AuthRouter.name, initialChildren: children);
 
   static const String name = 'AuthRouter';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i16.AuthRouterPage();
+      return const _i17.AuthRouterPage();
     },
   );
 }
 
 /// generated route for
-/// [_i17.CodesView]
-class CodesRoute extends _i54.PageRouteInfo<void> {
-  const CodesRoute({List<_i54.PageRouteInfo>? children})
+/// [_i18.CodesView]
+class CodesRoute extends _i57.PageRouteInfo<void> {
+  const CodesRoute({List<_i57.PageRouteInfo>? children})
     : super(CodesRoute.name, initialChildren: children);
 
   static const String name = 'CodesRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i17.CodesView();
+      return const _i18.CodesView();
     },
   );
 }
 
 /// generated route for
-/// [_i18.CompanyInfoView]
-class CompanyInfoRoute extends _i54.PageRouteInfo<CompanyInfoRouteArgs> {
+/// [_i19.CompanyInfoView]
+class CompanyInfoRoute extends _i57.PageRouteInfo<CompanyInfoRouteArgs> {
   CompanyInfoRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          CompanyInfoRoute.name,
          args: CompanyInfoRouteArgs(key: key, role: role),
@@ -961,11 +1033,11 @@ class CompanyInfoRoute extends _i54.PageRouteInfo<CompanyInfoRouteArgs> {
 
   static const String name = 'CompanyInfoRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<CompanyInfoRouteArgs>();
-      return _i18.CompanyInfoView(key: args.key, role: args.role);
+      return _i19.CompanyInfoView(key: args.key, role: args.role);
     },
   );
 }
@@ -973,9 +1045,9 @@ class CompanyInfoRoute extends _i54.PageRouteInfo<CompanyInfoRouteArgs> {
 class CompanyInfoRouteArgs {
   const CompanyInfoRouteArgs({this.key, required this.role});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -994,45 +1066,45 @@ class CompanyInfoRouteArgs {
 }
 
 /// generated route for
-/// [_i19.CompleteProfileFormView]
-class CompleteProfileFormRoute extends _i54.PageRouteInfo<void> {
-  const CompleteProfileFormRoute({List<_i54.PageRouteInfo>? children})
+/// [_i20.CompleteProfileFormView]
+class CompleteProfileFormRoute extends _i57.PageRouteInfo<void> {
+  const CompleteProfileFormRoute({List<_i57.PageRouteInfo>? children})
     : super(CompleteProfileFormRoute.name, initialChildren: children);
 
   static const String name = 'CompleteProfileFormRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i19.CompleteProfileFormView();
+      return const _i20.CompleteProfileFormView();
     },
   );
 }
 
 /// generated route for
-/// [_i20.CurrentPointsView]
-class CurrentPointsRoute extends _i54.PageRouteInfo<void> {
-  const CurrentPointsRoute({List<_i54.PageRouteInfo>? children})
+/// [_i21.CurrentPointsView]
+class CurrentPointsRoute extends _i57.PageRouteInfo<void> {
+  const CurrentPointsRoute({List<_i57.PageRouteInfo>? children})
     : super(CurrentPointsRoute.name, initialChildren: children);
 
   static const String name = 'CurrentPointsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i20.CurrentPointsView();
+      return const _i21.CurrentPointsView();
     },
   );
 }
 
 /// generated route for
-/// [_i21.CustomersView]
-class CustomersRoute extends _i54.PageRouteInfo<CustomersRouteArgs> {
+/// [_i22.CustomersView]
+class CustomersRoute extends _i57.PageRouteInfo<CustomersRouteArgs> {
   CustomersRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    _i76.UserModel? user,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    _i79.UserModel? user,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          CustomersRoute.name,
          args: CustomersRouteArgs(key: key, role: role, user: user),
@@ -1041,11 +1113,11 @@ class CustomersRoute extends _i54.PageRouteInfo<CustomersRouteArgs> {
 
   static const String name = 'CustomersRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<CustomersRouteArgs>();
-      return _i21.CustomersView(
+      return _i22.CustomersView(
         key: args.key,
         role: args.role,
         user: args.user,
@@ -1057,11 +1129,11 @@ class CustomersRoute extends _i54.PageRouteInfo<CustomersRouteArgs> {
 class CustomersRouteArgs {
   const CustomersRouteArgs({this.key, required this.role, this.user});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
-  final _i76.UserModel? user;
+  final _i79.UserModel? user;
 
   @override
   String toString() {
@@ -1080,44 +1152,44 @@ class CustomersRouteArgs {
 }
 
 /// generated route for
-/// [_i22.DashboardRouter]
-class DashboardRouter extends _i54.PageRouteInfo<void> {
-  const DashboardRouter({List<_i54.PageRouteInfo>? children})
+/// [_i23.DashboardRouter]
+class DashboardRouter extends _i57.PageRouteInfo<void> {
+  const DashboardRouter({List<_i57.PageRouteInfo>? children})
     : super(DashboardRouter.name, initialChildren: children);
 
   static const String name = 'DashboardRouter';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i22.DashboardRouter();
+      return const _i23.DashboardRouter();
     },
   );
 }
 
 /// generated route for
-/// [_i23.DashboardView]
-class DashboardRoute extends _i54.PageRouteInfo<void> {
-  const DashboardRoute({List<_i54.PageRouteInfo>? children})
+/// [_i24.DashboardView]
+class DashboardRoute extends _i57.PageRouteInfo<void> {
+  const DashboardRoute({List<_i57.PageRouteInfo>? children})
     : super(DashboardRoute.name, initialChildren: children);
 
   static const String name = 'DashboardRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i23.DashboardView();
+      return const _i24.DashboardView();
     },
   );
 }
 
 /// generated route for
-/// [_i24.EarnPointsWaysView]
-class EarnPointsWaysRoute extends _i54.PageRouteInfo<EarnPointsWaysRouteArgs> {
+/// [_i25.EarnPointsWaysView]
+class EarnPointsWaysRoute extends _i57.PageRouteInfo<EarnPointsWaysRouteArgs> {
   EarnPointsWaysRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          EarnPointsWaysRoute.name,
          args: EarnPointsWaysRouteArgs(key: key, role: role),
@@ -1126,11 +1198,11 @@ class EarnPointsWaysRoute extends _i54.PageRouteInfo<EarnPointsWaysRouteArgs> {
 
   static const String name = 'EarnPointsWaysRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<EarnPointsWaysRouteArgs>();
-      return _i24.EarnPointsWaysView(key: args.key, role: args.role);
+      return _i25.EarnPointsWaysView(key: args.key, role: args.role);
     },
   );
 }
@@ -1138,9 +1210,9 @@ class EarnPointsWaysRoute extends _i54.PageRouteInfo<EarnPointsWaysRouteArgs> {
 class EarnPointsWaysRouteArgs {
   const EarnPointsWaysRouteArgs({this.key, required this.role});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1159,12 +1231,28 @@ class EarnPointsWaysRouteArgs {
 }
 
 /// generated route for
-/// [_i25.ExercisesCoachView]
-class ExercisesCoachRoute extends _i54.PageRouteInfo<ExercisesCoachRouteArgs> {
+/// [_i26.ExercisePlansView]
+class ExercisePlansRoute extends _i57.PageRouteInfo<void> {
+  const ExercisePlansRoute({List<_i57.PageRouteInfo>? children})
+    : super(ExercisePlansRoute.name, initialChildren: children);
+
+  static const String name = 'ExercisePlansRoute';
+
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i26.ExercisePlansView();
+    },
+  );
+}
+
+/// generated route for
+/// [_i27.ExercisesCoachView]
+class ExercisesCoachRoute extends _i57.PageRouteInfo<ExercisesCoachRouteArgs> {
   ExercisesCoachRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          ExercisesCoachRoute.name,
          args: ExercisesCoachRouteArgs(key: key, role: role),
@@ -1173,11 +1261,11 @@ class ExercisesCoachRoute extends _i54.PageRouteInfo<ExercisesCoachRouteArgs> {
 
   static const String name = 'ExercisesCoachRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ExercisesCoachRouteArgs>();
-      return _i25.ExercisesCoachView(key: args.key, role: args.role);
+      return _i27.ExercisesCoachView(key: args.key, role: args.role);
     },
   );
 }
@@ -1185,9 +1273,9 @@ class ExercisesCoachRoute extends _i54.PageRouteInfo<ExercisesCoachRouteArgs> {
 class ExercisesCoachRouteArgs {
   const ExercisesCoachRouteArgs({this.key, required this.role});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1206,12 +1294,12 @@ class ExercisesCoachRouteArgs {
 }
 
 /// generated route for
-/// [_i26.ExercisesView]
-class ExercisesRoute extends _i54.PageRouteInfo<ExercisesRouteArgs> {
+/// [_i28.ExercisesView]
+class ExercisesRoute extends _i57.PageRouteInfo<ExercisesRouteArgs> {
   ExercisesRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          ExercisesRoute.name,
          args: ExercisesRouteArgs(key: key, role: role),
@@ -1220,11 +1308,11 @@ class ExercisesRoute extends _i54.PageRouteInfo<ExercisesRouteArgs> {
 
   static const String name = 'ExercisesRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ExercisesRouteArgs>();
-      return _i26.ExercisesView(key: args.key, role: args.role);
+      return _i28.ExercisesView(key: args.key, role: args.role);
     },
   );
 }
@@ -1232,9 +1320,9 @@ class ExercisesRoute extends _i54.PageRouteInfo<ExercisesRouteArgs> {
 class ExercisesRouteArgs {
   const ExercisesRouteArgs({this.key, required this.role});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1253,12 +1341,12 @@ class ExercisesRouteArgs {
 }
 
 /// generated route for
-/// [_i27.ForgotPasswordView]
-class ForgotPasswordRoute extends _i54.PageRouteInfo<ForgotPasswordRouteArgs> {
+/// [_i29.ForgotPasswordView]
+class ForgotPasswordRoute extends _i57.PageRouteInfo<ForgotPasswordRouteArgs> {
   ForgotPasswordRoute({
-    _i55.Key? key,
-    required _i77.AuthCubit authCubit,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i80.AuthCubit authCubit,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          ForgotPasswordRoute.name,
          args: ForgotPasswordRouteArgs(key: key, authCubit: authCubit),
@@ -1267,11 +1355,11 @@ class ForgotPasswordRoute extends _i54.PageRouteInfo<ForgotPasswordRouteArgs> {
 
   static const String name = 'ForgotPasswordRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ForgotPasswordRouteArgs>();
-      return _i27.ForgotPasswordView(key: args.key, authCubit: args.authCubit);
+      return _i29.ForgotPasswordView(key: args.key, authCubit: args.authCubit);
     },
   );
 }
@@ -1279,9 +1367,9 @@ class ForgotPasswordRoute extends _i54.PageRouteInfo<ForgotPasswordRouteArgs> {
 class ForgotPasswordRouteArgs {
   const ForgotPasswordRouteArgs({this.key, required this.authCubit});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i77.AuthCubit authCubit;
+  final _i80.AuthCubit authCubit;
 
   @override
   String toString() {
@@ -1300,61 +1388,61 @@ class ForgotPasswordRouteArgs {
 }
 
 /// generated route for
-/// [_i28.HealthAssesmentView]
-class HealthAssesmentRoute extends _i54.PageRouteInfo<void> {
-  const HealthAssesmentRoute({List<_i54.PageRouteInfo>? children})
+/// [_i30.HealthAssesmentView]
+class HealthAssesmentRoute extends _i57.PageRouteInfo<void> {
+  const HealthAssesmentRoute({List<_i57.PageRouteInfo>? children})
     : super(HealthAssesmentRoute.name, initialChildren: children);
 
   static const String name = 'HealthAssesmentRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i28.HealthAssesmentView();
+      return const _i30.HealthAssesmentView();
     },
   );
 }
 
 /// generated route for
-/// [_i29.IngredientsView]
-class IngredientsRoute extends _i54.PageRouteInfo<void> {
-  const IngredientsRoute({List<_i54.PageRouteInfo>? children})
+/// [_i31.IngredientsView]
+class IngredientsRoute extends _i57.PageRouteInfo<void> {
+  const IngredientsRoute({List<_i57.PageRouteInfo>? children})
     : super(IngredientsRoute.name, initialChildren: children);
 
   static const String name = 'IngredientsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i29.IngredientsView();
+      return const _i31.IngredientsView();
     },
   );
 }
 
 /// generated route for
-/// [_i30.IntroView]
-class IntroRoute extends _i54.PageRouteInfo<void> {
-  const IntroRoute({List<_i54.PageRouteInfo>? children})
+/// [_i32.IntroView]
+class IntroRoute extends _i57.PageRouteInfo<void> {
+  const IntroRoute({List<_i57.PageRouteInfo>? children})
     : super(IntroRoute.name, initialChildren: children);
 
   static const String name = 'IntroRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i30.IntroView();
+      return const _i32.IntroView();
     },
   );
 }
 
 /// generated route for
-/// [_i31.ItemsView]
-class ItemsRoute extends _i54.PageRouteInfo<ItemsRouteArgs> {
+/// [_i33.ItemsView]
+class ItemsRoute extends _i57.PageRouteInfo<ItemsRouteArgs> {
   ItemsRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    _i64.LevelModel? level,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    _i67.LevelModel? level,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          ItemsRoute.name,
          args: ItemsRouteArgs(key: key, role: role, level: level),
@@ -1363,11 +1451,11 @@ class ItemsRoute extends _i54.PageRouteInfo<ItemsRouteArgs> {
 
   static const String name = 'ItemsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ItemsRouteArgs>();
-      return _i31.ItemsView(key: args.key, role: args.role, level: args.level);
+      return _i33.ItemsView(key: args.key, role: args.role, level: args.level);
     },
   );
 }
@@ -1375,11 +1463,11 @@ class ItemsRoute extends _i54.PageRouteInfo<ItemsRouteArgs> {
 class ItemsRouteArgs {
   const ItemsRouteArgs({this.key, required this.role, this.level});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
-  final _i64.LevelModel? level;
+  final _i67.LevelModel? level;
 
   @override
   String toString() {
@@ -1398,12 +1486,12 @@ class ItemsRouteArgs {
 }
 
 /// generated route for
-/// [_i32.LevelsView]
-class LevelsRoute extends _i54.PageRouteInfo<LevelsRouteArgs> {
+/// [_i34.LevelsView]
+class LevelsRoute extends _i57.PageRouteInfo<LevelsRouteArgs> {
   LevelsRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          LevelsRoute.name,
          args: LevelsRouteArgs(key: key, role: role),
@@ -1412,11 +1500,11 @@ class LevelsRoute extends _i54.PageRouteInfo<LevelsRouteArgs> {
 
   static const String name = 'LevelsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<LevelsRouteArgs>();
-      return _i32.LevelsView(key: args.key, role: args.role);
+      return _i34.LevelsView(key: args.key, role: args.role);
     },
   );
 }
@@ -1424,9 +1512,9 @@ class LevelsRoute extends _i54.PageRouteInfo<LevelsRouteArgs> {
 class LevelsRouteArgs {
   const LevelsRouteArgs({this.key, required this.role});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1445,28 +1533,44 @@ class LevelsRouteArgs {
 }
 
 /// generated route for
-/// [_i33.MealsDietitianView]
-class MealsDietitianRoute extends _i54.PageRouteInfo<void> {
-  const MealsDietitianRoute({List<_i54.PageRouteInfo>? children})
-    : super(MealsDietitianRoute.name, initialChildren: children);
+/// [_i35.MealPlansView]
+class MealPlansRoute extends _i57.PageRouteInfo<void> {
+  const MealPlansRoute({List<_i57.PageRouteInfo>? children})
+    : super(MealPlansRoute.name, initialChildren: children);
 
-  static const String name = 'MealsDietitianRoute';
+  static const String name = 'MealPlansRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i33.MealsDietitianView();
+      return const _i35.MealPlansView();
     },
   );
 }
 
 /// generated route for
-/// [_i34.MealsView]
-class MealsRoute extends _i54.PageRouteInfo<MealsRouteArgs> {
+/// [_i36.MealsDietitianView]
+class MealsDietitianRoute extends _i57.PageRouteInfo<void> {
+  const MealsDietitianRoute({List<_i57.PageRouteInfo>? children})
+    : super(MealsDietitianRoute.name, initialChildren: children);
+
+  static const String name = 'MealsDietitianRoute';
+
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i36.MealsDietitianView();
+    },
+  );
+}
+
+/// generated route for
+/// [_i37.MealsView]
+class MealsRoute extends _i57.PageRouteInfo<MealsRouteArgs> {
   MealsRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          MealsRoute.name,
          args: MealsRouteArgs(key: key, role: role),
@@ -1475,11 +1579,11 @@ class MealsRoute extends _i54.PageRouteInfo<MealsRouteArgs> {
 
   static const String name = 'MealsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<MealsRouteArgs>();
-      return _i34.MealsView(key: args.key, role: args.role);
+      return _i37.MealsView(key: args.key, role: args.role);
     },
   );
 }
@@ -1487,9 +1591,9 @@ class MealsRoute extends _i54.PageRouteInfo<MealsRouteArgs> {
 class MealsRouteArgs {
   const MealsRouteArgs({this.key, required this.role});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1508,12 +1612,12 @@ class MealsRouteArgs {
 }
 
 /// generated route for
-/// [_i35.NotificationsView]
-class NotificationsRoute extends _i54.PageRouteInfo<NotificationsRouteArgs> {
+/// [_i38.NotificationsView]
+class NotificationsRoute extends _i57.PageRouteInfo<NotificationsRouteArgs> {
   NotificationsRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          NotificationsRoute.name,
          args: NotificationsRouteArgs(key: key, role: role),
@@ -1522,11 +1626,11 @@ class NotificationsRoute extends _i54.PageRouteInfo<NotificationsRouteArgs> {
 
   static const String name = 'NotificationsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<NotificationsRouteArgs>();
-      return _i35.NotificationsView(key: args.key, role: args.role);
+      return _i38.NotificationsView(key: args.key, role: args.role);
     },
   );
 }
@@ -1534,9 +1638,9 @@ class NotificationsRoute extends _i54.PageRouteInfo<NotificationsRouteArgs> {
 class NotificationsRouteArgs {
   const NotificationsRouteArgs({this.key, required this.role});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1555,12 +1659,12 @@ class NotificationsRouteArgs {
 }
 
 /// generated route for
-/// [_i36.PointsView]
-class PointsRoute extends _i54.PageRouteInfo<PointsRouteArgs> {
+/// [_i39.PointsView]
+class PointsRoute extends _i57.PageRouteInfo<PointsRouteArgs> {
   PointsRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          PointsRoute.name,
          args: PointsRouteArgs(key: key, role: role),
@@ -1569,11 +1673,11 @@ class PointsRoute extends _i54.PageRouteInfo<PointsRouteArgs> {
 
   static const String name = 'PointsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<PointsRouteArgs>();
-      return _i36.PointsView(key: args.key, role: args.role);
+      return _i39.PointsView(key: args.key, role: args.role);
     },
   );
 }
@@ -1581,9 +1685,9 @@ class PointsRoute extends _i54.PageRouteInfo<PointsRouteArgs> {
 class PointsRouteArgs {
   const PointsRouteArgs({this.key, required this.role});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1602,76 +1706,76 @@ class PointsRouteArgs {
 }
 
 /// generated route for
-/// [_i37.PrivacyPolicyView]
-class PrivacyPolicyRoute extends _i54.PageRouteInfo<void> {
-  const PrivacyPolicyRoute({List<_i54.PageRouteInfo>? children})
+/// [_i40.PrivacyPolicyView]
+class PrivacyPolicyRoute extends _i57.PageRouteInfo<void> {
+  const PrivacyPolicyRoute({List<_i57.PageRouteInfo>? children})
     : super(PrivacyPolicyRoute.name, initialChildren: children);
 
   static const String name = 'PrivacyPolicyRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i37.PrivacyPolicyView();
+      return const _i40.PrivacyPolicyView();
     },
   );
 }
 
 /// generated route for
-/// [_i38.ProfileRouter]
-class ProfileRouter extends _i54.PageRouteInfo<void> {
-  const ProfileRouter({List<_i54.PageRouteInfo>? children})
+/// [_i41.ProfileRouter]
+class ProfileRouter extends _i57.PageRouteInfo<void> {
+  const ProfileRouter({List<_i57.PageRouteInfo>? children})
     : super(ProfileRouter.name, initialChildren: children);
 
   static const String name = 'ProfileRouter';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i38.ProfileRouter();
+      return const _i41.ProfileRouter();
     },
   );
 }
 
 /// generated route for
-/// [_i39.ProfileView]
-class ProfileRoute extends _i54.PageRouteInfo<void> {
-  const ProfileRoute({List<_i54.PageRouteInfo>? children})
+/// [_i42.ProfileView]
+class ProfileRoute extends _i57.PageRouteInfo<void> {
+  const ProfileRoute({List<_i57.PageRouteInfo>? children})
     : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i39.ProfileView();
+      return const _i42.ProfileView();
     },
   );
 }
 
 /// generated route for
-/// [_i40.RatingsView]
-class RatingsRoute extends _i54.PageRouteInfo<void> {
-  const RatingsRoute({List<_i54.PageRouteInfo>? children})
+/// [_i43.RatingsView]
+class RatingsRoute extends _i57.PageRouteInfo<void> {
+  const RatingsRoute({List<_i57.PageRouteInfo>? children})
     : super(RatingsRoute.name, initialChildren: children);
 
   static const String name = 'RatingsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i40.RatingsView();
+      return const _i43.RatingsView();
     },
   );
 }
 
 /// generated route for
-/// [_i41.ResetPasswordView]
-class ResetPasswordRoute extends _i54.PageRouteInfo<ResetPasswordRouteArgs> {
+/// [_i44.ResetPasswordView]
+class ResetPasswordRoute extends _i57.PageRouteInfo<ResetPasswordRouteArgs> {
   ResetPasswordRoute({
-    _i55.Key? key,
-    required _i77.AuthCubit authCubit,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i80.AuthCubit authCubit,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          ResetPasswordRoute.name,
          args: ResetPasswordRouteArgs(key: key, authCubit: authCubit),
@@ -1680,11 +1784,11 @@ class ResetPasswordRoute extends _i54.PageRouteInfo<ResetPasswordRouteArgs> {
 
   static const String name = 'ResetPasswordRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ResetPasswordRouteArgs>();
-      return _i41.ResetPasswordView(key: args.key, authCubit: args.authCubit);
+      return _i44.ResetPasswordView(key: args.key, authCubit: args.authCubit);
     },
   );
 }
@@ -1692,9 +1796,9 @@ class ResetPasswordRoute extends _i54.PageRouteInfo<ResetPasswordRouteArgs> {
 class ResetPasswordRouteArgs {
   const ResetPasswordRouteArgs({this.key, required this.authCubit});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i77.AuthCubit authCubit;
+  final _i80.AuthCubit authCubit;
 
   @override
   String toString() {
@@ -1713,28 +1817,28 @@ class ResetPasswordRouteArgs {
 }
 
 /// generated route for
-/// [_i42.SelectPlanView]
-class SelectPlanRoute extends _i54.PageRouteInfo<void> {
-  const SelectPlanRoute({List<_i54.PageRouteInfo>? children})
+/// [_i45.SelectPlanView]
+class SelectPlanRoute extends _i57.PageRouteInfo<void> {
+  const SelectPlanRoute({List<_i57.PageRouteInfo>? children})
     : super(SelectPlanRoute.name, initialChildren: children);
 
   static const String name = 'SelectPlanRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i42.SelectPlanView();
+      return const _i45.SelectPlanView();
     },
   );
 }
 
 /// generated route for
-/// [_i43.SettingsView]
-class SettingsRoute extends _i54.PageRouteInfo<SettingsRouteArgs> {
+/// [_i46.SettingsView]
+class SettingsRoute extends _i57.PageRouteInfo<SettingsRouteArgs> {
   SettingsRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          SettingsRoute.name,
          args: SettingsRouteArgs(key: key, role: role),
@@ -1743,11 +1847,11 @@ class SettingsRoute extends _i54.PageRouteInfo<SettingsRouteArgs> {
 
   static const String name = 'SettingsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<SettingsRouteArgs>();
-      return _i43.SettingsView(key: args.key, role: args.role);
+      return _i46.SettingsView(key: args.key, role: args.role);
     },
   );
 }
@@ -1755,9 +1859,9 @@ class SettingsRoute extends _i54.PageRouteInfo<SettingsRouteArgs> {
 class SettingsRouteArgs {
   const SettingsRouteArgs({this.key, required this.role});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -1776,12 +1880,12 @@ class SettingsRouteArgs {
 }
 
 /// generated route for
-/// [_i44.SignInView]
-class SignInRoute extends _i54.PageRouteInfo<SignInRouteArgs> {
+/// [_i47.SignInView]
+class SignInRoute extends _i57.PageRouteInfo<SignInRouteArgs> {
   SignInRoute({
-    _i55.Key? key,
-    _i55.VoidCallback? onSignedIn,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    _i58.VoidCallback? onSignedIn,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          SignInRoute.name,
          args: SignInRouteArgs(key: key, onSignedIn: onSignedIn),
@@ -1790,13 +1894,13 @@ class SignInRoute extends _i54.PageRouteInfo<SignInRouteArgs> {
 
   static const String name = 'SignInRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<SignInRouteArgs>(
         orElse: () => const SignInRouteArgs(),
       );
-      return _i44.SignInView(key: args.key, onSignedIn: args.onSignedIn);
+      return _i47.SignInView(key: args.key, onSignedIn: args.onSignedIn);
     },
   );
 }
@@ -1804,9 +1908,9 @@ class SignInRoute extends _i54.PageRouteInfo<SignInRouteArgs> {
 class SignInRouteArgs {
   const SignInRouteArgs({this.key, this.onSignedIn});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i55.VoidCallback? onSignedIn;
+  final _i58.VoidCallback? onSignedIn;
 
   @override
   String toString() {
@@ -1825,46 +1929,46 @@ class SignInRouteArgs {
 }
 
 /// generated route for
-/// [_i45.SplashView]
-class SplashRoute extends _i54.PageRouteInfo<void> {
-  const SplashRoute({List<_i54.PageRouteInfo>? children})
+/// [_i48.SplashView]
+class SplashRoute extends _i57.PageRouteInfo<void> {
+  const SplashRoute({List<_i57.PageRouteInfo>? children})
     : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i45.SplashView();
+      return const _i48.SplashView();
     },
   );
 }
 
 /// generated route for
-/// [_i46.StatisticsView]
-class StatisticsRoute extends _i54.PageRouteInfo<void> {
-  const StatisticsRoute({List<_i54.PageRouteInfo>? children})
+/// [_i49.StatisticsView]
+class StatisticsRoute extends _i57.PageRouteInfo<void> {
+  const StatisticsRoute({List<_i57.PageRouteInfo>? children})
     : super(StatisticsRoute.name, initialChildren: children);
 
   static const String name = 'StatisticsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i46.StatisticsView();
+      return const _i49.StatisticsView();
     },
   );
 }
 
 /// generated route for
-/// [_i47.SubscriberEvaluationView]
+/// [_i50.SubscriberEvaluationView]
 class SubscriberEvaluationRoute
-    extends _i54.PageRouteInfo<SubscriberEvaluationRouteArgs> {
+    extends _i57.PageRouteInfo<SubscriberEvaluationRouteArgs> {
   SubscriberEvaluationRoute({
-    _i55.Key? key,
-    required _i75.UserRoleEnum role,
-    required _i73.CustomerModel customer,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i78.UserRoleEnum role,
+    required _i76.CustomerModel customer,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          SubscriberEvaluationRoute.name,
          args: SubscriberEvaluationRouteArgs(
@@ -1877,11 +1981,11 @@ class SubscriberEvaluationRoute
 
   static const String name = 'SubscriberEvaluationRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<SubscriberEvaluationRouteArgs>();
-      return _i47.SubscriberEvaluationView(
+      return _i50.SubscriberEvaluationView(
         key: args.key,
         role: args.role,
         customer: args.customer,
@@ -1897,11 +2001,11 @@ class SubscriberEvaluationRouteArgs {
     required this.customer,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
-  final _i73.CustomerModel customer;
+  final _i76.CustomerModel customer;
 
   @override
   String toString() {
@@ -1920,31 +2024,31 @@ class SubscriberEvaluationRouteArgs {
 }
 
 /// generated route for
-/// [_i48.TermsAndConditionsView]
-class TermsAndConditionsRoute extends _i54.PageRouteInfo<void> {
-  const TermsAndConditionsRoute({List<_i54.PageRouteInfo>? children})
+/// [_i51.TermsAndConditionsView]
+class TermsAndConditionsRoute extends _i57.PageRouteInfo<void> {
+  const TermsAndConditionsRoute({List<_i57.PageRouteInfo>? children})
     : super(TermsAndConditionsRoute.name, initialChildren: children);
 
   static const String name = 'TermsAndConditionsRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i48.TermsAndConditionsView();
+      return const _i51.TermsAndConditionsView();
     },
   );
 }
 
 /// generated route for
-/// [_i49.UpdateCustomerInfoView]
+/// [_i52.UpdateCustomerInfoView]
 class UpdateCustomerInfoRoute
-    extends _i54.PageRouteInfo<UpdateCustomerInfoRouteArgs> {
+    extends _i57.PageRouteInfo<UpdateCustomerInfoRouteArgs> {
   UpdateCustomerInfoRoute({
-    _i55.Key? key,
-    required _i74.CustomersCubit customersCubit,
-    required _i73.CustomerModel customer,
-    required _i75.UserRoleEnum role,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i77.CustomersCubit customersCubit,
+    required _i76.CustomerModel customer,
+    required _i78.UserRoleEnum role,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          UpdateCustomerInfoRoute.name,
          args: UpdateCustomerInfoRouteArgs(
@@ -1958,11 +2062,11 @@ class UpdateCustomerInfoRoute
 
   static const String name = 'UpdateCustomerInfoRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<UpdateCustomerInfoRouteArgs>();
-      return _i49.UpdateCustomerInfoView(
+      return _i52.UpdateCustomerInfoView(
         key: args.key,
         customersCubit: args.customersCubit,
         customer: args.customer,
@@ -1980,13 +2084,13 @@ class UpdateCustomerInfoRouteArgs {
     required this.role,
   });
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i74.CustomersCubit customersCubit;
+  final _i77.CustomersCubit customersCubit;
 
-  final _i73.CustomerModel customer;
+  final _i76.CustomerModel customer;
 
-  final _i75.UserRoleEnum role;
+  final _i78.UserRoleEnum role;
 
   @override
   String toString() {
@@ -2012,45 +2116,45 @@ class UpdateCustomerInfoRouteArgs {
 }
 
 /// generated route for
-/// [_i50.UserNavigationView]
-class UserNavigationRoute extends _i54.PageRouteInfo<void> {
-  const UserNavigationRoute({List<_i54.PageRouteInfo>? children})
+/// [_i53.UserNavigationView]
+class UserNavigationRoute extends _i57.PageRouteInfo<void> {
+  const UserNavigationRoute({List<_i57.PageRouteInfo>? children})
     : super(UserNavigationRoute.name, initialChildren: children);
 
   static const String name = 'UserNavigationRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i50.UserNavigationView();
+      return const _i53.UserNavigationView();
     },
   );
 }
 
 /// generated route for
-/// [_i51.UsersView]
-class UsersRoute extends _i54.PageRouteInfo<void> {
-  const UsersRoute({List<_i54.PageRouteInfo>? children})
+/// [_i54.UsersView]
+class UsersRoute extends _i57.PageRouteInfo<void> {
+  const UsersRoute({List<_i57.PageRouteInfo>? children})
     : super(UsersRoute.name, initialChildren: children);
 
   static const String name = 'UsersRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
-      return const _i51.UsersView();
+      return const _i54.UsersView();
     },
   );
 }
 
 /// generated route for
-/// [_i52.VerifyResetCodeView]
+/// [_i55.VerifyResetCodeView]
 class VerifyResetCodeRoute
-    extends _i54.PageRouteInfo<VerifyResetCodeRouteArgs> {
+    extends _i57.PageRouteInfo<VerifyResetCodeRouteArgs> {
   VerifyResetCodeRoute({
-    _i55.Key? key,
-    required _i77.AuthCubit authCubit,
-    List<_i54.PageRouteInfo>? children,
+    _i58.Key? key,
+    required _i80.AuthCubit authCubit,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          VerifyResetCodeRoute.name,
          args: VerifyResetCodeRouteArgs(key: key, authCubit: authCubit),
@@ -2059,11 +2163,11 @@ class VerifyResetCodeRoute
 
   static const String name = 'VerifyResetCodeRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<VerifyResetCodeRouteArgs>();
-      return _i52.VerifyResetCodeView(key: args.key, authCubit: args.authCubit);
+      return _i55.VerifyResetCodeView(key: args.key, authCubit: args.authCubit);
     },
   );
 }
@@ -2071,9 +2175,9 @@ class VerifyResetCodeRoute
 class VerifyResetCodeRouteArgs {
   const VerifyResetCodeRouteArgs({this.key, required this.authCubit});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
-  final _i77.AuthCubit authCubit;
+  final _i80.AuthCubit authCubit;
 
   @override
   String toString() {
@@ -2092,12 +2196,12 @@ class VerifyResetCodeRouteArgs {
 }
 
 /// generated route for
-/// [_i53.VideoPlayerView]
-class VideoPlayerRoute extends _i54.PageRouteInfo<VideoPlayerRouteArgs> {
+/// [_i56.VideoPlayerView]
+class VideoPlayerRoute extends _i57.PageRouteInfo<VideoPlayerRouteArgs> {
   VideoPlayerRoute({
-    _i55.Key? key,
+    _i58.Key? key,
     required String url,
-    List<_i54.PageRouteInfo>? children,
+    List<_i57.PageRouteInfo>? children,
   }) : super(
          VideoPlayerRoute.name,
          args: VideoPlayerRouteArgs(key: key, url: url),
@@ -2106,11 +2210,11 @@ class VideoPlayerRoute extends _i54.PageRouteInfo<VideoPlayerRouteArgs> {
 
   static const String name = 'VideoPlayerRoute';
 
-  static _i54.PageInfo page = _i54.PageInfo(
+  static _i57.PageInfo page = _i57.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<VideoPlayerRouteArgs>();
-      return _i53.VideoPlayerView(key: args.key, url: args.url);
+      return _i56.VideoPlayerView(key: args.key, url: args.url);
     },
   );
 }
@@ -2118,7 +2222,7 @@ class VideoPlayerRoute extends _i54.PageRouteInfo<VideoPlayerRouteArgs> {
 class VideoPlayerRouteArgs {
   const VideoPlayerRouteArgs({this.key, required this.url});
 
-  final _i55.Key? key;
+  final _i58.Key? key;
 
   final String url;
 

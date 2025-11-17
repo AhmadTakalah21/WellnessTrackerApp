@@ -38,12 +38,17 @@ class PhoneTextField extends StatefulWidget {
     this.title,
     this.prefixIcon,
     this.hintColor,
+    this.titleSize,
+    this.titleStyle,
+    this.validator,
   });
 
   final String? hintText;
   final String? initialText;
-  final String? initialCountryCode; 
+  final String? initialCountryCode;
   final String? title;
+  final TextStyle? titleStyle;
+  final double? titleSize;
   final ValueSetter<PhoneNumber?>? onChanged;
   final ValueSetter<String>? onSubmitted;
   final VoidCallback? onTap;
@@ -68,6 +73,7 @@ class PhoneTextField extends StatefulWidget {
   final bool? filled;
   final VoidCallback? onClearTap;
   final bool? showCloseIcon;
+  final String? Function(String?)? validator;
 
   @override
   State<PhoneTextField> createState() => _PhoneTextFieldState();
@@ -91,7 +97,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
     final showCloseIcon = widget.showCloseIcon ?? true;
     final title = widget.title;
 
-    final primaryColor = Theme.of(context).colorScheme.primary;
+    final primaryColor = context.cs.primary;
     final baseBorder = OutlineInputBorder(
       borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
       borderSide: BorderSide(color: primaryColor, width: 1.5),
@@ -104,11 +110,12 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
         if (title != null) ...[
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
+            style: widget.titleStyle ??
+                TextStyle(
+                  fontSize: widget.titleSize ?? 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
           ),
           const SizedBox(height: 8),
         ],
@@ -118,7 +125,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
           obscureText: widget.obscureText,
           readOnly: widget.readOnly,
           onTap: widget.onTap,
-          initialValue:widget.initialText ,
+          initialValue: widget.initialText,
           onChanged: (value) {
             widget.onChanged?.call(value);
             setState(() {});
@@ -196,6 +203,32 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
               PickerDialogStyle(backgroundColor: context.cs.surface),
           cursorColor: context.cs.primary,
         ),
+        // FormField(
+        //   validator: widget.validator,
+        //   builder: (field) {
+        //     final hasError = field.hasError;
+        //     final color = hasError ? context.cs.error : primaryColor;
+        //     final width = hasError ? 1.0 : 2.0;
+        //     final baseBorder = OutlineInputBorder(
+        //       borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
+        //       borderSide: BorderSide(color: color, width: width),
+        //     );
+        //     return Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       children: [
+        //         if (hasError)
+        //           Padding(
+        //             padding: const EdgeInsets.only(top: 8.0, left: 4.0),
+        //             child: Text(
+        //               field.errorText ?? '',
+        //               style: TextStyle(color: Colors.red, fontSize: 12),
+        //             ),
+        //           ),
+        //       ],
+        //     );
+        //   },
+        // ),
       ],
     );
   }

@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,6 +14,7 @@ import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_drop_down_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_text_field_2.dart';
+import 'package:wellnesstrackerapp/global/widgets/phone_text_field.dart';
 
 class AddUserView extends StatelessWidget {
   const AddUserView({
@@ -88,16 +91,21 @@ class _AddUserWidgetState extends State<AddUserWidget> {
             children: [
               SingleChildScrollView(
                 child: Column(
-                  spacing: 8,
+                  //spacing: 8,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildTitle(),
-                    const SizedBox.shrink(),
+                    SizedBox(height: 16),
+                    //const SizedBox.shrink(),
                     _buildNameTextField(user),
+                    SizedBox(height: 10),
                     _buildEmailTextField(user),
+                    SizedBox(height: 10),
                     _buildPasswordTextField(),
+                    SizedBox(height: 10),
                     _buildPhoneTextField(user),
                     _buildRoleDropDown(user),
+                    SizedBox(height: 10),
                     const SizedBox(height: 70),
                   ],
                 ),
@@ -152,13 +160,44 @@ class _AddUserWidgetState extends State<AddUserWidget> {
         validator: (val) => Utils.validateInput(val, InputTextType.password),
       );
 
-  Widget _buildPhoneTextField(UserModel? user) => MainTextField2(
-        initialText: user?.phone,
-        label: 'phone'.tr(),
-        icon: LucideIcons.phone,
-        onChanged: usersCubit.setPhone,
-        validator: (val) => Utils.validateInput(val, InputTextType.phone),
+  // Widget _buildPhoneTextField(UserModel? user) => MainTextField2(
+  //       initialText: user?.phone,
+  //       label: 'phone'.tr(),
+  //       icon: LucideIcons.phone,
+  //       onChanged: usersCubit.setPhone,
+  //       validator: (val) => Utils.validateInput(val, InputTextType.phone),
+  //     );
+
+  Widget _buildPhoneTextField(UserModel? user) {
+    String? customerPhone = user?.phone;
+    String? initialCountryCode;
+    String? nationalNumber;
+
+    if (customerPhone != null && customerPhone.startsWith('+')) {
+      final digits = customerPhone.substring(1);
+
+      final country = countries.firstWhere(
+        (c) => digits.startsWith(c.dialCode),
+        orElse: () => countries.firstWhere((c) => c.code == 'US'),
       );
+
+      initialCountryCode = country.code;
+      nationalNumber = digits.substring(country.dialCode.length);
+    }
+    return PhoneTextField(
+      initialText: nationalNumber,
+      initialCountryCode: initialCountryCode,
+      title: 'phone'.tr(),
+      titleStyle: context.tt.titleLarge,
+      onChanged: (phone) => usersCubit.setPhone(phone?.completeNumber),
+      //errorText: isBuild ? state.error : null,
+      prefixIcon: Icon(Icons.phone, color: context.cs.onSecondary),
+      labelText: "phone_number".tr(),
+      textInputType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      validator: (val) => Utils.validateInput(val, InputTextType.phone),
+    );
+  }
 
   Widget _buildRoleDropDown(UserModel? user) {
     final selectedRole = DepartmentEnum.values

@@ -71,9 +71,17 @@ class ExercisesCubit extends Cubit<GeneralExercisesState> {
   void updateRounds(int? rounds) {
     if (rounds != null) {
       if (rounds > repeatsForRounds.length) {
-        repeatsForRounds.add(0);
+        repeatsForRounds.addAll(List.generate(
+          rounds - repeatsForRounds.length,
+          (index) => 0,
+        ));
+        //repeatsForRounds.add(0);
       } else {
-        repeatsForRounds.removeLast();
+        repeatsForRounds.removeRange(
+          rounds,
+          repeatsForRounds.length,
+        );
+        //repeatsForRounds.removeLast();
       }
       emit(RoundsUpdatedState(repeatsForRounds));
     }

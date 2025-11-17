@@ -37,6 +37,7 @@ class _AddCodeWidgetState extends State<AddCodeWidget> {
   }
 
   void onCancelTap() => Navigator.pop(context);
+  
   void onSave() {
     if (_formKey.currentState!.validate()) {
       widget.codesCubit.addCode(id: widget.code?.id);

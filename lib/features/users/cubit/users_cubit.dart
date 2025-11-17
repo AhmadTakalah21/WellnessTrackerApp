@@ -32,25 +32,24 @@ class UsersCubit extends Cubit<GeneralUsersState> {
     setRole(user?.role);
   }
 
-  void setName(String? name) {
-    addUserModel = addUserModel.copyWith(name: () => name);
-  }
+  void setName(String? name) =>
+      addUserModel = addUserModel.copyWith(name: () => name);
 
-  void setEmail(String? email) {
-    addUserModel = addUserModel.copyWith(email: () => email);
-  }
+  void setEmail(String? email) =>
+      addUserModel = addUserModel.copyWith(email: () => email);
 
-  void setPassword(String? password) {
-    addUserModel = addUserModel.copyWith(password: () => password);
-  }
+  void setPassword(String? password) =>
+      addUserModel = addUserModel.copyWith(password: () => password);
 
-  void setPhone(String? phone) {
-    addUserModel = addUserModel.copyWith(phone: () => phone);
-  }
+  // void setPhone(String? phone) {
+  //   addUserModel = addUserModel.copyWith(phone: () => phone);
+  // }
 
-  void setRole(DepartmentEnum? role) {
-    addUserModel = addUserModel.copyWith(role: () => role);
-  }
+  void setPhone(String? phone) =>
+      addUserModel = addUserModel.copyWith(phone: () => phone);
+
+  void setRole(DepartmentEnum? role) =>
+      addUserModel = addUserModel.copyWith(role: () => role);
 
   void setRoleFilter(DepartmentEnum? role) {
     roleFilter = role;

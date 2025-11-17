@@ -61,6 +61,7 @@ class _AddExercisePlanPageState extends State<AddExercisePlanPage>
 
   @override
   void initState() {
+    print("planDays are : ${widget.exercisePlan?.planDays}");
     exercisePlansCubit.setModel(widget.exercisePlan);
     exercisePlansCubit.getPlanDays();
     exercisesCubit.getExercises(perPage: 100000);
@@ -92,8 +93,11 @@ class _AddExercisePlanPageState extends State<AddExercisePlanPage>
   @override
   Widget build(BuildContext context) {
     final exercisePlan = widget.exercisePlan;
+    final title = exercisePlan == null
+        ? "add_exercise_plan".tr()
+        : "edit_exercise_plan".tr();
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(title),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
         child: Column(
@@ -113,9 +117,9 @@ class _AddExercisePlanPageState extends State<AddExercisePlanPage>
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(String title) {
     return MainAppBar(
-      title: "add_exercise_plan".tr(),
+      title: title,
       automaticallyImplyLeading: true,
       hasLogout: false,
     );

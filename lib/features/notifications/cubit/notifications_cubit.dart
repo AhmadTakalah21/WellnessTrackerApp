@@ -17,6 +17,8 @@ import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/general_notifications_state.dart';
 part 'states/notifications_state.dart';
+part 'states/notification_state.dart';
+part 'states/unread_notifications_count_state.dart';
 part 'states/add_notification_state.dart';
 
 @injectable
@@ -30,6 +32,9 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   int page = 1;
   bool hasMore = true;
 
+  bool isReceivedFilter = true;
+  bool isReadFilter = false;
+
   int lastBatchLength = 0;
 
   MetaModel? meta;
@@ -38,6 +43,9 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   XFile? image;
 
   bool scheduleByTime = false;
+
+  void setIsReceivedFilter(bool value) => isReceivedFilter = value;
+  void setIsReadFilter(bool value) => isReadFilter = value;
 
   void setScheduleByTime(bool value) {
     scheduleByTime = value;
@@ -91,17 +99,18 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   }
 
   Future<void> getNotifications(
-    UserRoleEnum role, 
-    Locale locale,{
+    UserRoleEnum role,
+    Locale locale, {
     int perPage = 10,
     bool isLoadMore = true,
   }) async {
-    if(!get<UserRepo>().isSignedIn){
-      emit(NotificationsSuccess(fakeNotifications));
-      return ;
+    if (!get<UserRepo>().isSignedIn) {
+      emit(NotificationsSuccess(filterNotifications(fakeNotifications)));
+      return;
     }
     if (!hasMore && isLoadMore) {
-      emit(NotificationsSuccess(notifications, message: "no_more".tr()));
+      emit(NotificationsSuccess(filterNotifications(notifications),
+          message: "no_more".tr()));
       return;
     }
     if (!isLoadMore) {
@@ -109,10 +118,11 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
       hasMore = true;
       notifications.clear();
     }
-    if (notifications.isEmpty) {
+    if (filterNotifications(notifications).isEmpty) {
       emit(NotificationsLoading());
     } else {
-      emit(NotificationsSuccess(notifications, isLoadingMore: true));
+      emit(NotificationsSuccess(filterNotifications(notifications),
+          isLoadingMore: true));
     }
     try {
       if (isClosed) return;
@@ -137,18 +147,18 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
         page++;
       }
 
-      if (notifications.isEmpty) {
+      if (filterNotifications(notifications).isEmpty) {
         emit(NotificationsEmpty("no_notifications".tr()));
       } else {
-        emit(NotificationsSuccess(notifications));
+        emit(NotificationsSuccess(filterNotifications(notifications)));
       }
     } catch (e) {
       if (isClosed) return;
-      if (notifications.isEmpty) {
+      if (filterNotifications(notifications).isEmpty) {
         emit(NotificationsFail(e.toString()));
       } else {
         emit(NotificationsSuccess(
-          notifications,
+          filterNotifications(notifications),
           message: e.toString(),
           isError: true,
         ));
@@ -156,9 +166,23 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
     }
   }
 
+  List<NotificationModel> filterNotifications(
+      List<NotificationModel> allNotifications) {
+    return allNotifications
+        .where((notification) {
+          return isReceivedFilter
+              ? notification.received
+              : !notification.received;
+        })
+        .toList()
+        .where((noti) => isReadFilter ? noti.isRead : !noti.isRead)
+        .toList();
+  }
+
   Future<void> addNotification(UserRoleEnum role) async {
     emit(AddNotificationLoading());
     try {
+      if (isClosed) return;
       if (scheduleByTime) {
         final t = (addNotificationModel.toJson()['time'] as String?);
         final valid =
@@ -182,7 +206,33 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
 
       emit(AddNotificationSuccess("notification_sent".tr()));
     } catch (e) {
+      if (isClosed) return;
       emit(AddNotificationFail(e.toString()));
+    }
+  }
+
+  Future<void> getNotification(UserRoleEnum role, int id) async {
+    emit(NotificationLoading());
+    try {
+      if (isClosed) return;
+      final notification = await notificationsService.getNotification(role, id);
+      emit(NotificationSuccess(notification));
+    } catch (e) {
+      if (isClosed) return;
+      emit(NotificationFail(e.toString()));
+    }
+  }
+
+  Future<void> getUnreadNotificationsCount(UserRoleEnum role) async {
+    emit(UnreadNotificationsCountLoading());
+    try {
+      if (isClosed) return;
+      final count =
+          await notificationsService.getUnreadNotificationsCount(role);
+      emit(UnreadNotificationsCountSuccess(count));
+    } catch (e) {
+      if (isClosed) return;
+      emit(UnreadNotificationsCountFail(e.toString()));
     }
   }
 }

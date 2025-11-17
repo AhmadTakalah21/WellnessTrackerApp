@@ -102,12 +102,17 @@ class NotaficationsService {
     initLocalNotifications();
 
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-    await firebaseMessaging.subscribeToTopic("wellness-tracker-app-d8def");
-
-    final fcmToken = await firebaseMessaging.getToken();
     final prefs = await SharedPreferences.getInstance();
+
+    final String? fcmToken = prefs.getString("fcm_token");
+
+    if (fcmToken == null || fcmToken.isEmpty) {
+      await firebaseMessaging.subscribeToTopic("wellness-tracker-app-d8def");
+      final fcmToken = await firebaseMessaging.getToken();
+      prefs.setString("fcm_token", fcmToken ?? "");
+    }
+    
     debugPrint("FCM Token: $fcmToken");
-    prefs.setString("fcm_token", fcmToken ?? "");
 
     await firebaseMessaging.requestPermission(
       alert: true,

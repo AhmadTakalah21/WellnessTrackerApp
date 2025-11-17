@@ -10,6 +10,7 @@ import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_mod
 import 'package:wellnesstrackerapp/features/dashboard/view/widgets/carousel_slider_widget.dart';
 import 'package:wellnesstrackerapp/features/dashboard/view/widgets/dashboard_card_widget.dart';
 import 'package:wellnesstrackerapp/features/dashboard/view/widgets/wave_painter.dart';
+import 'package:wellnesstrackerapp/features/notifications/cubit/notifications_cubit.dart';
 import 'package:wellnesstrackerapp/features/profile/cubit/profile_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
@@ -25,7 +26,7 @@ import 'package:wellnesstrackerapp/global/widgets/main_app_bar.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_error_widget.dart';
 
 abstract class DashboardViewCallBacks {
-  void onGridItemTap(PageRouteInfo page);
+  void onGridItemTap(UserViewOnPermissionModel module);
   void onTryAgainTap();
   Future<void> onRefresh();
 }
@@ -35,8 +36,11 @@ class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => get<AddsAndOffersCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => get<AddsAndOffersCubit>()),
+        BlocProvider(create: (context) => get<NotificationsCubit>()),
+      ],
       child: const Dashboard(),
     );
   }
@@ -53,6 +57,7 @@ class _DashboardState extends State<Dashboard>
     implements DashboardViewCallBacks {
   late final SignInModel? user = context.read<SignInModel?>();
   late final AddsAndOffersCubit addsAndOffersCubit = context.read();
+  late final NotificationsCubit notificationsCubit = context.read();
   late final UserRepo userRepo = context.read();
 
   late AnimationController _waveCtrl;
@@ -69,6 +74,8 @@ class _DashboardState extends State<Dashboard>
     Shadow(color: Colors.black26, offset: Offset(1, 4), blurRadius: 4)
   ];
 
+  bool isNotificationsViewed = false;
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +89,10 @@ class _DashboardState extends State<Dashboard>
         duration: AppConstants.duration4s,
       )..repeat();
       _sliderController = PageController(viewportFraction: .9);
+    } else {
+      if (user != null) {
+        notificationsCubit.getUnreadNotificationsCount(user!.role);
+      }
     }
   }
 
@@ -120,7 +131,10 @@ class _DashboardState extends State<Dashboard>
       addsAndOffersCubit.getAddsAndOffers(user?.role ?? UserRoleEnum.user);
 
   @override
-  void onGridItemTap(PageRouteInfo page) => context.router.push(page);
+  void onGridItemTap(UserViewOnPermissionModel module) {
+    if (module.isNotification) setState(() => isNotificationsViewed = true);
+    context.router.push(module.screen);
+  }
 
   @override
   Future<void> onRefresh() async => onTryAgainTap();
@@ -364,6 +378,7 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
+  // TODO check this :added badge for notifications
   Widget _buildGridCards() {
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 16),
@@ -378,10 +393,24 @@ class _DashboardState extends State<Dashboard>
                 beginOffset: Offset(fromRight ? 0.25 : -0.25, 0),
                 animationDuration: const Duration(seconds: 2),
                 deley: 70,
-                child: DashboardCardWidget(
-                  module: module,
-                  onTap: () => onGridItemTap(module.screen),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: DashboardCardWidget(
+                        module: module,
+                        onTap: () => onGridItemTap(module),
+                      ),
+                    ),
+                    if (module.isNotification && !isNotificationsViewed)
+                      _buildNotificationBadge(),
+                  ],
                 ),
+                // Positioned.fill(
+                //       child: DashboardCardWidget(
+                //         module: module,
+                //         onTap: () => onGridItemTap(module),
+                //       ),
+                //     ),
               ),
             );
           },
@@ -392,6 +421,52 @@ class _DashboardState extends State<Dashboard>
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationBadge() {
+    return Padding(
+      padding: AppConstants.padding8,
+      child: BlocBuilder<NotificationsCubit, GeneralNotificationsState>(
+        buildWhen: (previous, current) =>
+            current is UnreadNotificationsCountState,
+        builder: (context, state) {
+          if (state is UnreadNotificationsCountSuccess) {
+            if (state.count == 0) return SizedBox.shrink();
+            return Container(
+              decoration: BoxDecoration(
+                color: AppColors.red,
+                shape: BoxShape.circle,
+              ),
+              child: Padding(
+                padding: AppConstants.padding6,
+                child: Text(
+                  state.count.toString(),
+                  style: TextStyle(color: AppColors.white),
+                ),
+              ),
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+          // return Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //       color: AppColors.red,
+          //       shape: BoxShape.circle,
+          //     ),
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(3),
+          //       child: Text(
+          //         "10",
+          //         style: TextStyle(color: AppColors.white),
+          //       ),
+          //     ),
+          //   ),
+          // );
+        },
       ),
     );
   }

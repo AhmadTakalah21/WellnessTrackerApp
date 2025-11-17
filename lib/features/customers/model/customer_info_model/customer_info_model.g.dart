@@ -13,6 +13,10 @@ CustomerInfoModel _$CustomerInfoModelFromJson(Map<String, dynamic> json) =>
       weight: (json['weight'] as num).toInt(),
       length: (json['length'] as num).toInt(),
       chronicDiseases: json['chronic_diseases'] as String?,
+      trainProblems: json['trainProblems'] as String?,
+      trainPlace: json['is_in_gym'] == null
+          ? HouseOrGymEnum.house
+          : HouseOrGymEnum.fromJson((json['is_in_gym'] as num).toInt()),
       waistCircumference: (json['waist_circumference'] as num?)?.toInt(),
       chest: (json['chest'] as num?)?.toInt(),
       shoulder: (json['shoulder'] as num?)?.toInt(),
@@ -28,6 +32,8 @@ Map<String, dynamic> _$CustomerInfoModelToJson(CustomerInfoModel instance) =>
       'weight': instance.weight,
       'length': instance.length,
       'chronic_diseases': instance.chronicDiseases,
+      'trainProblems': instance.trainProblems,
+      'is_in_gym': HouseOrGymEnum.toJson(instance.trainPlace),
       'waist_circumference': instance.waistCircumference,
       'chest': instance.chest,
       'shoulder': instance.shoulder,

@@ -6,6 +6,7 @@ import 'package:wellnesstrackerapp/features/customers/model/add_medical_consulta
 import 'package:wellnesstrackerapp/features/customers/model/add_points_model/add_points_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_meal_plan_model/assign_meal_plan_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_subscriber_model/assign_subscriber_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/assign_subscribers_model/assign_subscribers_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_evaluation_model/customer_evaluation_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_info_model/customer_info_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
@@ -14,6 +15,7 @@ import 'package:wellnesstrackerapp/features/customers/model/update_customer_info
 import 'package:wellnesstrackerapp/features/customers/service/customers_service.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
 import 'package:wellnesstrackerapp/global/models/activity_status_enum.dart';
+import 'package:wellnesstrackerapp/global/models/home_or_gym_enum.dart';
 import 'package:wellnesstrackerapp/global/models/meta_model/meta_model.dart';
 import 'package:wellnesstrackerapp/global/models/paginated_model/paginated_model.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
@@ -39,6 +41,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   UpdateCustomerInfoModel updateCustomerInfoModel =
       const UpdateCustomerInfoModel();
   AssignSubscriberModel model = const AssignSubscriberModel();
+  AssignSubscribersModel model2 = const AssignSubscribersModel();
   AddPointsModel addPointsModel = const AddPointsModel();
   AssignPlanModel assignPlanModel = const AssignPlanModel();
   EvaluateCustomerModel evaluateCustomerModel = const EvaluateCustomerModel();
@@ -58,9 +61,9 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
   String? lastStatus;
   String? lastDepartment;
 
-  void setUserId(int? id) {
-    model = model.copyWith(userId: () => id);
-  }
+  // void setUserId(int? id) {
+  //   model = model.copyWith(userId: () => id);
+  // }
 
   void setInitailCustomerInfo(CustomerInfoModel info) {
     setWeight(info.weight);
@@ -69,6 +72,8 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     setWaistCircumference(info.waistCircumference);
     setChest(info.chest);
     setShoulder(info.shoulder);
+    setTrainProblems(info.trainProblems);
+    setTrainPlace(info.trainPlace);
   }
 
   void setWeight(int weight) {
@@ -101,20 +106,34 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
         updateCustomerInfoModel.copyWith(shoulder: () => value.toString());
   }
 
+  void setTrainProblems(String? value) {
+    updateCustomerInfoModel =
+        updateCustomerInfoModel.copyWith(trainProblems: () => value);
+  }
+
+  void setTrainPlace(HouseOrGymEnum value) {
+    updateCustomerInfoModel =
+        updateCustomerInfoModel.copyWith(trainPlace: value);
+  }
+
   void setEmployeeId(UserModel? user) {
     if (user != null) {
       if (user.role.isCoach) {
         selectedCoach = selectedCoach != user ? user : null;
         model = model.copyWith(coachId: () => selectedCoach?.id);
+        model2 = model2.copyWith(coachId: () => selectedCoach?.id);
       } else if (user.role.isDietitian) {
         selectedDietitian = selectedDietitian != user ? user : null;
         model = model.copyWith(dietitianId: () => selectedDietitian?.id);
+        model2 = model2.copyWith(dietitianId: () => selectedDietitian?.id);
       } else if (user.role.isDoctor) {
         selectedDoctor = selectedDoctor != user ? user : null;
         model = model.copyWith(doctorId: () => selectedDoctor?.id);
+        model2 = model2.copyWith(doctorId: () => selectedDoctor?.id);
       } else if (user.role.isPsychologist) {
         selectedPsychologist = selectedPsychologist != user ? user : null;
         model = model.copyWith(psychologistId: () => selectedPsychologist?.id);
+        model2 = model2.copyWith(psychologistId: () => selectedPsychologist?.id);
       } else {
         return;
       }
@@ -133,6 +152,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
 
   void setLevelId(int? id) {
     model = model.copyWith(levelId: () => id);
+    model2 = model2.copyWith(levelId: () => id);
   }
 
   void setPoints(String? points) {
@@ -208,6 +228,7 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
       selectedDoctor,
       selectedPsychologist,
     ));
+    model2 = const AssignSubscribersModel();
     model = const AssignSubscriberModel();
   }
 
@@ -295,11 +316,16 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     }
   }
 
-  Future<void> assignSubscriber() async {
+  Future<void> assignSubscriber({int? id}) async {
+    // TODO added
+    model2 = model2.copyWith(users: () => userIds);
+    if(id != null) model2 = model2.copyWith(users: () => [id]);
+
     emit(AssignSubscriberLoading());
     try {
       if (isClosed) return;
-      await customerService.assignSubscriber(model);
+      //await customerService.assignSubscriber(model);
+      await customerService.assignSubscriber(model2);
       emit(AssignSubscriberSuccess("subscriber_assigned_successfully".tr()));
     } catch (e) {
       if (isClosed) return;

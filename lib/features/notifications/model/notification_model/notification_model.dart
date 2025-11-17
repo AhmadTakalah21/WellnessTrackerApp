@@ -19,6 +19,8 @@ class NotificationModel implements DeleteModel {
     this.senderId,
     this.receiverId,
     this.sendAt,
+    this.isRead = false,
+    this.readAt,
     required this.isSent,
     this.image,
     required this.received,
@@ -29,7 +31,7 @@ class NotificationModel implements DeleteModel {
   final int id;
   final String title;
 
-  final dynamic data; 
+  final dynamic data;
 
   @JsonKey(name: 'sender_id')
   final int? senderId;
@@ -39,6 +41,17 @@ class NotificationModel implements DeleteModel {
 
   @JsonKey(name: 'send_at')
   final String? sendAt;
+
+  @JsonKey(
+    fromJson: JsonUtils.setIsNotificationRead,
+    readValue: JsonUtils.readValue,
+    includeToJson: false,
+    includeFromJson: false,
+  )
+  final bool isRead;
+
+  @JsonKey(name: 'read_at')
+  final String? readAt;
 
   @BoolConverter()
   @JsonKey(name: 'is_sent')

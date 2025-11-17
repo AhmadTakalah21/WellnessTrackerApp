@@ -6,10 +6,12 @@ class UserViewOnPermissionModel {
   final IconData icon;
   final PageRouteInfo screen;
   final Color color;
+  final bool isNotification;
   UserViewOnPermissionModel({
     required this.title,
     required this.icon,
     required this.screen,
     required this.color,
+    this.isNotification = false,
   });
 }

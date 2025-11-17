@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:wellnesstrackerapp/features/customers/model/add_medical_consultation_model/add_medical_consultation_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/add_points_model/add_points_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/assign_meal_plan_model/assign_meal_plan_model.dart';
-import 'package:wellnesstrackerapp/features/customers/model/assign_subscriber_model/assign_subscriber_model.dart';
+import 'package:wellnesstrackerapp/features/customers/model/assign_subscribers_model/assign_subscribers_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_evaluation_model/customer_evaluation_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/customers/model/evaluate_customer_model/evaluate_customer_model.dart';
@@ -21,7 +21,9 @@ abstract class CustomersService {
     int? perPage = 10,
     int? employeeId,
   });
-  Future<void> assignSubscriber(AssignSubscriberModel model);
+  // Future<void> assignSubscriber(AssignSubscriberModel model);
+  Future<void> assignSubscriber(AssignSubscribersModel model);
+
   Future<void> changeStatus(int id, String status);
   Future<void> updateCustomerInfo(
     UserRoleEnum role,

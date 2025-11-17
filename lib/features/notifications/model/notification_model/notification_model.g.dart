@@ -14,6 +14,7 @@ NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) =>
       senderId: (json['sender_id'] as num?)?.toInt(),
       receiverId: (json['receiver_id'] as num?)?.toInt(),
       sendAt: json['send_at'] as String?,
+      readAt: json['read_at'] as String?,
       isSent: const BoolConverter().fromJson(json['is_sent']),
       image: JsonUtils.setImageUrlNullableFromJson(
           JsonUtils.readValue(json, 'image') as Map<String, dynamic>),
@@ -30,6 +31,7 @@ Map<String, dynamic> _$NotificationModelToJson(NotificationModel instance) =>
       'sender_id': instance.senderId,
       'receiver_id': instance.receiverId,
       'send_at': instance.sendAt,
+      'read_at': instance.readAt,
       'is_sent': const BoolConverter().toJson(instance.isSent),
       'image': instance.image,
       'received': const BoolConverter().toJson(instance.received),

@@ -38,6 +38,10 @@ abstract class JsonUtils {
     return path == null ? null : '$baseUrl/$path';
   }
 
+  static bool setIsNotificationRead(Map<String, dynamic> json) {
+    return json['read_at'] != null;
+  }
+
   static Object? readValue(Map<dynamic, dynamic> json, String key) {
     return json;
   }

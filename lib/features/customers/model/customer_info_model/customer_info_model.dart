@@ -1,6 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'package:json_annotation/json_annotation.dart';
+
 import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+import 'package:wellnesstrackerapp/global/models/home_or_gym_enum.dart';
 
 part 'customer_info_model.g.dart';
 
@@ -9,10 +13,12 @@ part 'customer_info_model.g.dart';
 class CustomerInfoModel {
   const CustomerInfoModel({
     required this.id,
-     this.age,
+    this.age,
     required this.weight,
     required this.length,
     this.chronicDiseases,
+    this.trainProblems,
+    this.trainPlace = HouseOrGymEnum.house,
     this.waistCircumference,
     this.chest,
     this.shoulder,
@@ -28,6 +34,15 @@ class CustomerInfoModel {
 
   @JsonKey(name: 'chronic_diseases')
   final String? chronicDiseases;
+
+  final String? trainProblems;
+
+  @JsonKey(
+    name: "is_in_gym",
+    fromJson: HouseOrGymEnum.fromJson,
+    toJson: HouseOrGymEnum.toJson,
+  )
+  final HouseOrGymEnum trainPlace;
 
   @JsonKey(name: 'waist_circumference')
   final int? waistCircumference;

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
+import 'package:wellnesstrackerapp/features/notifications/cubit/notifications_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/router/app_router.gr.dart';
@@ -29,8 +30,11 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => get<AuthCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => get<AuthCubit>()),
+        BlocProvider(create: (context) => get<NotificationsCubit>()),
+      ],
       child: MainAppBarImp(
         title: title,
         automaticallyImplyLeading: automaticallyImplyLeading,
@@ -61,12 +65,28 @@ class MainAppBarImp extends StatefulWidget {
 
 class _MainAppBarImpState extends State<MainAppBarImp> {
   late final AuthCubit authCubit = context.read();
+  late final NotificationsCubit notificationsCubit = context.read();
+
+  bool isNotificationsViewed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.role.isUser) {
+      notificationsCubit.getUnreadNotificationsCount(widget.role);
+    }
+  }
 
   void onLogoutTap() => authCubit.logout();
 
-  void onNotificationTap() => context.router.push(
-        NotificationsRoute(role: widget.role),
-      );
+  // void onNotificationTap() => context.router.push(
+  //       NotificationsRoute(role: widget.role),
+  //     );
+
+  void onNotificationTap() {
+    setState(() => isNotificationsViewed = true);
+    context.router.push(NotificationsRoute(role: widget.role));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,14 +94,20 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
       elevation: 4,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
       leading: widget.role.isUser
-          ? IconButton(
-              iconSize: 35,
-              onPressed: onNotificationTap,
-              icon: Icon(
-                Icons.notifications_outlined,
-                color: context.cs.secondary,
-              ),
-            )
+          ? _buildNotificationIcon()
+          // ? Badge(
+          //     offset: Offset(12, 6),
+          //     isLabelVisible: !isNotificationsViewed,
+          //     label: Text("10"),
+          //     child: IconButton(
+          //       iconSize: 35,
+          //       onPressed: onNotificationTap,
+          //       icon: Icon(
+          //         Icons.notifications_outlined,
+          //         color: context.cs.secondary,
+          //       ),
+          //     ),
+          //   )
           : null,
       title: Text(widget.title),
       actions: [
@@ -107,6 +133,30 @@ class _MainAppBarImpState extends State<MainAppBarImp> {
           ),
         SizedBox(width: 8),
       ],
+    );
+  }
+
+  Widget _buildNotificationIcon() {
+    return BlocBuilder<NotificationsCubit, GeneralNotificationsState>(
+      builder: (context, state) {
+        int count = 0;
+        bool isVisible =
+            state is UnreadNotificationsCountSuccess && state.count != 0;
+        if (isVisible) count = state.count;
+        return Badge(
+          offset: Offset(12, 6),
+          isLabelVisible: isVisible && !isNotificationsViewed,
+          label: Text(count.toString()),
+          child: IconButton(
+            iconSize: 35,
+            onPressed: onNotificationTap,
+            icon: Icon(
+              Icons.notifications_outlined,
+              color: context.cs.secondary,
+            ),
+          ),
+        );
+      },
     );
   }
 }

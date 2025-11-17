@@ -83,9 +83,7 @@ class _MealsDietitianPageState extends State<MealsDietitianPage>
       context: context,
       builder: (_) => InsureDeleteWidget(
         item: meal,
-        onSuccess: () {
-          mealsCubit.getMeals();
-        },
+        onSuccess: () => mealsCubit.getMeals(),
       ),
     );
   }

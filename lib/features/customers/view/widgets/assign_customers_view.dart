@@ -1,11 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
-import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
 import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart';
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart';
 import 'package:wellnesstrackerapp/features/users/cubit/users_cubit.dart';
@@ -28,7 +25,7 @@ class TitleValueModel {
   TitleValueModel(this.title, this.value);
 }
 
-abstract class ApproveCustomerViewCallBacks {
+abstract class AssignCustomersViewCallBacks {
   void onDepartmentSelected(DepartmentEnum? department);
   void onEmployeeSelected(UserModel? employee);
   void onActivityStatusSelected(ActivityStatusEnum? status);
@@ -39,15 +36,13 @@ abstract class ApproveCustomerViewCallBacks {
 }
 
 @RoutePage()
-class ApproveCustomerView extends StatelessWidget {
-  const ApproveCustomerView({
+class AssignCustomersView extends StatelessWidget {
+  const AssignCustomersView({
     super.key,
-    required this.customer,
     required this.customersCubit,
     this.onSuccess,
   });
 
-  final CustomerModel customer;
   final CustomersCubit customersCubit;
   final VoidCallback? onSuccess;
 
@@ -59,32 +54,29 @@ class ApproveCustomerView extends StatelessWidget {
         BlocProvider(create: (context) => get<UsersCubit>()),
         BlocProvider(create: (context) => get<LevelsCubit>()),
       ],
-      child: ApproveCustomerPage(
+      child: AssignCustomersPage(
         customersCubit: customersCubit,
-        customer: customer,
         onSuccess: onSuccess,
       ),
     );
   }
 }
 
-class ApproveCustomerPage extends StatefulWidget {
-  const ApproveCustomerPage({
+class AssignCustomersPage extends StatefulWidget {
+  const AssignCustomersPage({
     super.key,
     required this.customersCubit,
-    required this.customer,
     this.onSuccess,
   });
-  final CustomerModel customer;
   final CustomersCubit customersCubit;
   final VoidCallback? onSuccess;
 
   @override
-  State<ApproveCustomerPage> createState() => _ApproveCustomerPageState();
+  State<AssignCustomersPage> createState() => _AssignCustomersPageState();
 }
 
-class _ApproveCustomerPageState extends State<ApproveCustomerPage>
-    implements ApproveCustomerViewCallBacks {
+class _AssignCustomersPageState extends State<AssignCustomersPage>
+    implements AssignCustomersViewCallBacks {
   late final UsersCubit usersCubit = context.read();
   late final LevelsCubit levelsCubit = context.read();
 
@@ -93,25 +85,8 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   @override
   void initState() {
     super.initState();
-    //if (widget.customer.subscription == null) {
     usersCubit.getUsers(perPage: 1000000);
     levelsCubit.getLevels(UserRoleEnum.admin, perPage: 1000000);
-    //widget.customersCubit.setUserId(widget.customer.id);
-    //}
-    //else {
-    final status = widget.customer.status == "active"
-        ? ActivityStatusEnum.active
-        : ActivityStatusEnum.inactive;
-    widget.customersCubit.setActivityStatus(status);
-    //}
-
-    widget.customersCubit.setLevelId(widget.customer.level?.id);
-    widget.customersCubit.setEmployeeId(widget.customer.subscription?.coach);
-    widget.customersCubit
-        .setEmployeeId(widget.customer.subscription?.dietitian);
-    widget.customersCubit.setEmployeeId(widget.customer.subscription?.doctor);
-    widget.customersCubit
-        .setEmployeeId(widget.customer.subscription?.psychologist);
   }
 
   @override
@@ -139,17 +114,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
   void onCancelTap() => context.router.pop();
 
   @override
-  void onSave() {
-    // if (widget.customer.subscription == null) {
-    //   widget.customersCubit.assignSubscriber();
-    // } else {
-    //   widget.customersCubit.changeStatus(widget.customer.id);
-    // }
-    widget.customersCubit.assignSubscriber(id: widget.customer.id);
-    if (widget.customer.subscription != null) {
-      widget.customersCubit.changeStatus(widget.customer.id);
-    }
-  }
+  void onSave() => widget.customersCubit.assignSubscriber();
 
   @override
   void onTryAgainTap() {
@@ -165,25 +130,21 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("customer_info".tr())),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
+      padding: MediaQuery.of(context).viewInsets,
+      child: Padding(
         padding: AppConstants.padding20,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 10,
+          mainAxisSize: MainAxisSize.min,
+          spacing: 12,
           children: [
-            const SizedBox(height: 5),
-            _buildSubscriberInfoTable(),
-            const SizedBox(height: 10),
-            if (widget.customer.subscription != null)
-              _buildActivityStatusDropDown(),
-            //if (widget.customer.subscription == null) ...[
+            _buildTitle(),
+            const SizedBox(height: 4),
             _buildDepartmentsDropDown(),
             _buildUsersDropDown(),
             _buildSelectedEmployees(),
             _buildLevelsDropDown(),
-            //],
             const SizedBox(height: 10),
             _buildSubmitButton(),
             const SizedBox(height: 20),
@@ -193,75 +154,8 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
     );
   }
 
-  Widget _buildSubscriberInfoTable() {
-    final customer = widget.customer;
-    final info = customer.info;
-    final data = [
-      TitleValueModel("gender", customer.gender?.displayName ?? "-"),
-      TitleValueModel("birthday", customer.birthday ?? "-"),
-      TitleValueModel("weight", info?.weight.toString() ?? "-"),
-      TitleValueModel("length", info?.length.toString() ?? "-"),
-      TitleValueModel(
-          "waist_circumference", info?.waistCircumference?.toString() ?? "-"),
-      TitleValueModel("chest", info?.chest?.toString() ?? "-"),
-      TitleValueModel("shoulder", info?.shoulder?.toString() ?? "-"),
-      TitleValueModel(
-          "thigh_circumference", info?.thighCircumference?.toString() ?? "-"),
-      TitleValueModel("forearm_circumference",
-          info?.forearmCircumference?.toString() ?? "-"),
-      TitleValueModel("chronic_diseases", info?.chronicDiseases ?? "-"),
-    ];
-    return Table(
-      border: TableBorder.all(
-        color: context.cs.primary,
-        width: 2,
-        borderRadius: AppConstants.borderRadius10,
-      ),
-      columnWidths: const {
-        0: FlexColumnWidth(1),
-        1: FlexColumnWidth(1),
-      },
-      children: data.map((entry) {
-        return TableRow(
-          children: [
-            TableCell(
-              verticalAlignment: TableCellVerticalAlignment.middle,
-              child: Padding(
-                padding: AppConstants.padding12,
-                child: Text(
-                  entry.title.tr(),
-                  style: context.tt.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            TableCell(
-              verticalAlignment: TableCellVerticalAlignment.middle,
-              child: Padding(
-                padding: AppConstants.padding12,
-                child: Text(
-                  entry.value,
-                  style: context.tt.titleSmall,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ],
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildActivityStatusDropDown() => MainDropDownWidget(
-        items: ActivityStatusEnum.values,
-        prefixIcon: Icons.bar_chart,
-        hintText: 'status'.tr(),
-        labelText: 'status'.tr(),
-        onChanged: onActivityStatusSelected,
-        selectedValue: widget.customer.status == "active"
-            ? ActivityStatusEnum.active
-            : ActivityStatusEnum.inactive,
-      );
+  Widget _buildTitle() => Center(
+      child: Text('assign_to_specialists'.tr(), style: context.tt.titleLarge));
 
   Widget _buildDepartmentsDropDown() => MainDropDownWidget(
         items: DepartmentEnum.values,
@@ -277,17 +171,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
           if (state is UsersLoading) {
             return LoadingIndicator();
           } else if (state is UsersSuccess) {
-            final subs = widget.customer.subscription;
-            final selectedValue = state.users.data.firstWhereOrNull(
-              (element) {
-                return element.id == subs?.coach?.id ||
-                    element.id == subs?.dietitian?.id ||
-                    element.id == subs?.doctor?.id ||
-                    element.id == subs?.psychologist?.id;
-              },
-            );
             return MainDropDownWidget<UserModel>(
-              selectedValue: selectedValue,
               items: state.users.data,
               prefixIcon: Icons.person,
               hintText: "employee".tr(),
@@ -336,11 +220,7 @@ class _ApproveCustomerPageState extends State<ApproveCustomerPage>
           if (state is LevelsLoading) {
             return LoadingIndicator();
           } else if (state is LevelsSuccess) {
-            final selectedValue = state.levels.data.firstWhereOrNull(
-              (element) => element.id == widget.customer.level?.id,
-            );
             return MainDropDownWidget(
-              selectedValue: selectedValue,
               items: state.levels.data,
               prefixIcon: Icons.bar_chart,
               hintText: 'level'.tr(),

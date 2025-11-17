@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
+import 'package:wellnesstrackerapp/global/models/home_or_gym_enum.dart';
 
 part 'add_info_model.g.dart';
 
@@ -11,6 +12,7 @@ part 'add_info_model.g.dart';
 @immutable
 class AddInfoModel {
   const AddInfoModel({
+    this.trainPlace = HouseOrGymEnum.house,
     GenderEnum? gender,
     String? birthday,
     String? weight,
@@ -21,6 +23,7 @@ class AddInfoModel {
     String? shoulder,
     String? thighCircumference,
     String? forearmCircumference,
+    String? trainProblems,
   })  : _gender = gender,
         _birthday = birthday,
         _weight = weight,
@@ -30,7 +33,8 @@ class AddInfoModel {
         _chest = chest,
         _shoulder = shoulder,
         _thighCircumference = thighCircumference,
-        _forearmCircumference = forearmCircumference;
+        _forearmCircumference = forearmCircumference,
+        _trainProblems = trainProblems;
 
   final GenderEnum? _gender;
   final String? _birthday;
@@ -42,6 +46,14 @@ class AddInfoModel {
   final String? _shoulder;
   final String? _thighCircumference;
   final String? _forearmCircumference;
+  final String? _trainProblems;
+
+  @JsonKey(
+    name: "is_in_gym",
+    fromJson: HouseOrGymEnum.fromJson,
+    toJson: HouseOrGymEnum.toJson,
+  )
+  final HouseOrGymEnum trainPlace;
 
   AddInfoModel copyWith({
     GenderEnum? Function()? gender,
@@ -54,6 +66,8 @@ class AddInfoModel {
     String? Function()? shoulder,
     String? Function()? thighCircumference,
     String? Function()? forearmCircumference,
+    String? Function()? trainProblems,
+    HouseOrGymEnum? trainPlace,
   }) {
     return AddInfoModel(
       gender: gender != null ? gender() : _gender,
@@ -73,6 +87,8 @@ class AddInfoModel {
       forearmCircumference: forearmCircumference != null
           ? forearmCircumference()
           : _forearmCircumference,
+      trainProblems: trainProblems != null ? trainProblems() : _trainProblems,
+      trainPlace: trainPlace ?? this.trainPlace,
     );
   }
 
@@ -149,6 +165,14 @@ class AddInfoModel {
     //   throw "forearm_required".tr();
     // }
     return _forearmCircumference;
+  }
+
+  @JsonKey(name: "train_problems")
+  String? get trainProblems {
+    // if (_trainProblems == null || _trainProblems.isEmpty) {
+    //   throw "train_problems_required".tr();
+    // }
+    return _trainProblems;
   }
 
   factory AddInfoModel.fromJson(Map<String, dynamic> json) =>

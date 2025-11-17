@@ -40,7 +40,8 @@ class CustomersServiceImp implements CustomersService {
   }
 
   @override
-  Future<void> assignSubscriber(AssignSubscriberModel model) async {
+  // Future<void> assignSubscriber(AssignSubscriberModel model) async {
+  Future<void> assignSubscriber(AssignSubscribersModel model) async {
     try {
       await dio.post("/v1/admin/subscriptions/assign", data: model.toJson());
     } catch (e, stackTrace) {

@@ -7,7 +7,9 @@ import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/extensions/date_x.dart';
 import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
+import 'package:wellnesstrackerapp/global/models/home_or_gym_enum.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/check_box_selector_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_date_picker.dart';
@@ -126,6 +128,11 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                     icon: Icons.healing,
                     label: 'chronic_diseases'.tr(),
                   ),
+                  MainTextField2(
+                    onChanged: authCubit.setTrainProblems,
+                    icon: Icons.healing,
+                    label: 'problems_prevent_train'.tr(),
+                  ),
                   MainCounterWidget(
                     maxCount: 100,
                     //minCount: 10,
@@ -165,6 +172,12 @@ class _CompleteProfileFormState extends State<CompleteProfileFormPage>
                     label: 'forearm_circumference'.tr(),
                     icon: Icons.pan_tool,
                     isRequired: false,
+                  ),
+                  CheckBoxSelectorWidget(
+                    items: HouseOrGymEnum.values,
+                    selected: HouseOrGymEnum.house,
+                    onSelected: authCubit.setTrainPlace,
+                    title: 'preferred_training_place'.tr(),
                   ),
                   const SizedBox(height: 60),
                 ],

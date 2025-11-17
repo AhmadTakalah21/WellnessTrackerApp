@@ -1,11 +1,14 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart';
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart';
+import 'package:wellnesstrackerapp/global/models/home_or_gym_enum.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
+import 'package:wellnesstrackerapp/global/widgets/check_box_selector_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_action_button.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_counter_widget.dart';
 import 'package:wellnesstrackerapp/global/widgets/main_snack_bar.dart';
@@ -71,6 +74,8 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
   @override
   Widget build(BuildContext context) {
     final info = widget.customer.info;
+    final selectedHomeOrGym = HouseOrGymEnum.values
+        .firstWhereOrNull((e) => e.index == info?.trainPlace.index);
     return Scaffold(
       appBar: AppBar(title: Text("update_information".tr())),
       body: Stack(
@@ -109,6 +114,12 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
                     //     ? 'required_field'.tr()
                     //     : null,
                   ),
+                  MainTextField2(
+                    initialText: info?.trainProblems,
+                    onChanged: customersCubit.setTrainProblems,
+                    icon: Icons.healing,
+                    label: 'problems_prevent_train'.tr(),
+                  ),
                   MainCounterWidget(
                     initialCount: info?.waistCircumference,
                     maxCount: 100,
@@ -135,6 +146,12 @@ class _CompleteProfileFormState extends State<UpdateCustomerInfoPage>
                     label: 'shoulder'.tr(),
                     icon: Icons.accessibility,
                     isRequired: false,
+                  ),
+                  CheckBoxSelectorWidget(
+                    items: HouseOrGymEnum.values,
+                    selected: selectedHomeOrGym,
+                    onSelected: customersCubit.setTrainPlace,
+                    title: 'preferred_training_place'.tr(),
                   ),
                   const SizedBox(height: 60),
                 ],

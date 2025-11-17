@@ -9,6 +9,7 @@ import 'package:wellnesstrackerapp/features/customers/view/widgets/add_customer_
 import 'package:wellnesstrackerapp/features/customers/view/widgets/add_medical_consultation_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/add_points_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/additional_customer_options_widget.dart';
+import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_customers_view.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_exercise_plan_widget.dart';
 import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_meal_plan_widget.dart';
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart';
@@ -35,6 +36,7 @@ abstract class CustomersViewCallbacks {
   void onAddPoints();
   void onAssignPlan();
   void onTryAgainTap();
+  void onAssignCustomers();
   Future<void> onRefresh();
   void onSelected(CustomerModel customer);
   List<Widget> customButtons(CustomerModel customer);
@@ -119,6 +121,18 @@ class CustomersPageState extends State<CustomersPage>
   }
 
   @override
+  void onAssignCustomers() {
+    showMaterialModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      builder: (bottomSheetContext) => AssignCustomersView(
+        customersCubit: customersCubit,
+        onSuccess: () => fetchCustomers(),
+      ),
+    );
+  }
+
+  @override
   void onReportTap(CustomerModel customer) {
     if (!widget.role.isAdmin) {
       showMaterialModalBottomSheet(
@@ -159,7 +173,9 @@ class CustomersPageState extends State<CustomersPage>
       void Function()? onAssign = onAssignPlan;
       String text = "assign_diet_plan";
       if (widget.role.isAdmin) {
-        onAssign = null;
+        //onAssign = null;
+        text = "assign_to_specialists";
+        onAssign = onAssignCustomers;
       } else if (widget.role.isDietitian) {
       } else if (widget.role.isCoach) {
         text = "assign_exercise_plan";
@@ -264,7 +280,8 @@ class CustomersPageState extends State<CustomersPage>
         'doctor'.tr(),
         'psychologist'.tr(),
       ],
-      if (isAdmin) ...['code'.tr(), 'subscription_end_date'.tr()],
+      if (isAdmin) 'code'.tr(),
+      'subscription_end_date'.tr(),
       if (widget.user != null || isDoctor || isPsychologist)
         "medical_consultations_num".tr(),
       'status'.tr(),

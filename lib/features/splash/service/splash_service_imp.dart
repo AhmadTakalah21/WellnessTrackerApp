@@ -10,7 +10,8 @@ class SplashSerivceImp implements SplashSerivce {
       final response = await dio.get("/v1/check-version");
       final isV1Int = response.data["is_v1"] as int;
       return isV1Int == 1;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      if (kDebugMode) print("stackTrace of checkVersion : $stackTrace");
       rethrow;
     }
   }

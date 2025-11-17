@@ -160,7 +160,7 @@ class _SelectExercisesForDayWidgetState
   Widget _buildTitle() {
     return Center(
       child: Text(
-        "select_exercises_for".tr(args: [widget.day.displayName]),
+        "select_meals_for".tr(args: [widget.day.displayName]),
         style: context.tt.headlineSmall?.copyWith(
           fontWeight: FontWeight.bold,
           color: context.t.primaryColorDark,

@@ -14,6 +14,7 @@ class MainCounterWidget extends StatefulWidget {
     this.maxCount,
     this.initialCount,
     this.isRequired = true,
+    this.inputFormatters,
   });
   final void Function(int value) onChanged;
   final int? initialCount;
@@ -22,6 +23,7 @@ class MainCounterWidget extends StatefulWidget {
   final String label;
   final IconData icon;
   final bool isRequired;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   State<MainCounterWidget> createState() => _MainCounterWidgetState();
@@ -46,6 +48,7 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
 
     final value = int.tryParse(text);
     if (value != null) {
+      print(value);
       var newValue = value;
 
       if (newValue < widget.minCount) {
@@ -54,9 +57,11 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
       if (widget.maxCount != null && newValue > widget.maxCount!) {
         newValue = widget.maxCount!;
       }
+      print("newValue is : $newValue");
 
       if (newValue != counter) {
         setState(() => counter = newValue);
+        controller.text = counter.toString();
         widget.onChanged(counter);
       }
     }
@@ -130,7 +135,10 @@ class _MainCounterWidgetState extends State<MainCounterWidget> {
         ],
       ),
       keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      inputFormatters: [
+        ...?widget.inputFormatters,
+        FilteringTextInputFormatter.digitsOnly
+      ],
       validator:
           widget.isRequired ? requiredValueValidator : optionalValueValidator,
       // validator: (val) {

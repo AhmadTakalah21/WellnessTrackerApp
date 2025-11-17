@@ -73,9 +73,9 @@ class ExercisePlansCubit extends Cubit<GeneralExercisePlansState> {
 
   void resetModel() {
     model = const AddExercisePlanModel();
-    for (var planDay in planDays) {
-      planDay.exercises.clear();
-    }
+    planDays = DayEnum.values
+        .map((day) => ExercisePlanDayItemToShowModel(day: day, exercises: []))
+        .toList();
     selectedExercises.clear();
   }
 

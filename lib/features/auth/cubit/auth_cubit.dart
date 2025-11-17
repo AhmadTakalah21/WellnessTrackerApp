@@ -15,6 +15,7 @@ import 'package:wellnesstrackerapp/features/auth_manager/bloc/auth_manager_bloc.
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/dio/exceptions.dart';
 import 'package:wellnesstrackerapp/global/models/gender_enum.dart';
+import 'package:wellnesstrackerapp/global/models/home_or_gym_enum.dart';
 import 'package:wellnesstrackerapp/global/services/user_repo.dart';
 
 part 'states/auth_state.dart';
@@ -137,6 +138,14 @@ class AuthCubit extends Cubit<AuthState> {
   void setForearmCircumference(int value) {
     addInfoModel =
         addInfoModel.copyWith(forearmCircumference: () => value.toString());
+  }
+
+  void setTrainProblems(String? value) {
+    addInfoModel = addInfoModel.copyWith(trainProblems: () => value);
+  }
+
+  void setTrainPlace(HouseOrGymEnum value) {
+    addInfoModel = addInfoModel.copyWith(trainPlace: value);
   }
 
   void resetAddInfoModel() {
