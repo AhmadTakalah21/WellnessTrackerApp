@@ -36,7 +36,7 @@ class MainTextField2 extends StatefulWidget {
   final String? hint;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
-  final VoidCallback? onTap; // ⬅️ جديد
+  final VoidCallback? onTap;
   final FloatingLabelBehavior floatingLabelBehavior;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;

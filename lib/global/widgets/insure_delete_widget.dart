@@ -94,7 +94,7 @@ class _InsureDeleteWidgetState<T extends DeleteModel>
                       padding: AppConstants.padding6,
                       buttonColor: context.cs.error,
                       onTap: () => onTap(widget.item),
-                      text: "save".tr(),
+                      text: "delete".tr(),
                       shadow: [
                         BoxShadow(
                           color: Colors.black.withAlpha(77),

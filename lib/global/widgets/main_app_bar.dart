@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart';
+import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart';
 import 'package:wellnesstrackerapp/features/notifications/cubit/notifications_cubit.dart';
 import 'package:wellnesstrackerapp/global/di/di.dart';
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart';
@@ -66,13 +67,14 @@ class MainAppBarImp extends StatefulWidget {
 class _MainAppBarImpState extends State<MainAppBarImp> {
   late final AuthCubit authCubit = context.read();
   late final NotificationsCubit notificationsCubit = context.read();
+  late final SignInModel? user = context.read<SignInModel?>();
 
   bool isNotificationsViewed = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.role.isUser) {
+    if (user != null && widget.role.isUser) {
       notificationsCubit.getUnreadNotificationsCount(widget.role);
     }
   }
