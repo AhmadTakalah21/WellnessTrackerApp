@@ -41,6 +41,16 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
     this.onLongPress,
     this.checkSelected,
     this.showCheckboxColumn = false,
+
+    /// ✅ يبني Widget مخصص لخلية معينة (شكل فقط)
+    /// columnIndex ضمن item.values (بدون عمود event/actions).
+    this.cellBuilder,
+
+    /// ✅ NEW: يحدد إن كانت خلية معينة قابلة للضغط (بدون كسر ضغط الصف)
+    this.isCellTappable,
+
+    /// ✅ NEW: ينفذ الإجراء عند ضغط الخلية
+    this.onCellTap,
   });
 
   final String? header;
@@ -61,14 +71,40 @@ class MainDataTable<T extends DataTableModel> extends StatefulWidget {
   final void Function(T item)? onEditTap;
   final void Function(T item)? onDeleteTap;
 
+  /// rowIndex: index ضمن items.data
+  /// columnIndex: index ضمن item.values
+  /// value: نص الخلية الافتراضي
+  final Widget? Function(
+      BuildContext context,
+      T item,
+      int rowIndex,
+      int columnIndex,
+      String value,
+      )? cellBuilder;
+
+  /// ✅ NEW
+  /// إذا true: نضيف onTap على DataCell نفسها (بدون InkWell داخل الخلية)
+  final bool Function(
+      T item,
+      int rowIndex,
+      int columnIndex,
+      )? isCellTappable;
+
+  /// ✅ NEW
+  final void Function(
+      T item,
+      int rowIndex,
+      int columnIndex,
+      )? onCellTap;
+
   static List<Widget> _emptyButtons(DataTableModel item) => const [];
 
   @override
   State<MainDataTable<T>> createState() => _MainDataTableState<T>();
 }
 
-class _MainDataTableState<T extends DataTableModel>
-    extends State<MainDataTable<T>> implements MainDataTableCallbacks {
+class _MainDataTableState<T extends DataTableModel> extends State<MainDataTable<T>>
+    implements MainDataTableCallbacks {
   late int page = widget.items.meta.currentPage;
   late int perPage = widget.items.meta.perPage;
 
@@ -129,7 +165,7 @@ class _MainDataTableState<T extends DataTableModel>
 
   Widget _buildSearch() {
     if (widget.onSearchChanged == null) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
     return Row(
       children: [
@@ -150,6 +186,7 @@ class _MainDataTableState<T extends DataTableModel>
 
   Widget _buildTable() {
     final titles = widget.titles;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
@@ -169,12 +206,35 @@ class _MainDataTableState<T extends DataTableModel>
             ),
           );
         }),
-        rows: List.generate(widget.items.data.length, (index) {
-          final item = widget.items.data[index];
-          final cells = item.values
-              .map((value) => DataCell(Center(child: Text(value))))
-              .toList();
-          if (widget.onEditTap != null || widget.onDeleteTap != null) {}
+        rows: List.generate(widget.items.data.length, (rowIndex) {
+          final item = widget.items.data[rowIndex];
+
+          // ✅ خلايا القيم (بدون event/actions)
+          final values = item.values;
+          final cells = List<DataCell>.generate(values.length, (colIndex) {
+            final value = values[colIndex];
+
+            final custom = widget.cellBuilder?.call(
+              context,
+              item,
+              rowIndex,
+              colIndex,
+              value,
+            );
+
+            final tappable =
+                widget.isCellTappable?.call(item, rowIndex, colIndex) ?? false;
+
+            return DataCell(
+              Center(child: custom ?? Text(value)),
+              // ✅ هنا الحل: onTap للخلية نفسها بدون InkWell
+              onTap: tappable
+                  ? () => widget.onCellTap?.call(item, rowIndex, colIndex)
+                  : null,
+            );
+          });
+
+          // ✅ عمود event/actions كما هو
           cells.add(
             DataCell(
               Center(
@@ -205,6 +265,7 @@ class _MainDataTableState<T extends DataTableModel>
               ),
             ),
           );
+
           return DataRow2(
             color: WidgetStatePropertyAll(
               widget.checkSelected?.call(item) ?? false
@@ -226,7 +287,7 @@ class _MainDataTableState<T extends DataTableModel>
     if (emptyMessage != null) {
       return MainErrorWidget(error: emptyMessage, isRefresh: true);
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   Widget _buildPaginator() {
@@ -237,10 +298,10 @@ class _MainDataTableState<T extends DataTableModel>
       textDirection: TextDirection.rtl,
       children: [
         PopupMenuButton<PerPageEnum>(
-          offset: Offset(0, 30),
+          offset: const Offset(0, 30),
           initialValue: PerPageEnum.ten,
           padding: AppConstants.padding0,
-          constraints: BoxConstraints(maxWidth: 60),
+          constraints: const BoxConstraints(maxWidth: 60),
           itemBuilder: (context) {
             return PerPageEnum.values.map((perPageItem) {
               return PopupMenuItem<PerPageEnum>(
@@ -256,14 +317,14 @@ class _MainDataTableState<T extends DataTableModel>
           child: Row(
             children: [
               Text(perPage),
-              SizedBox(width: 5),
-              Icon(Icons.keyboard_arrow_down),
+              const SizedBox(width: 5),
+              const Icon(Icons.keyboard_arrow_down),
             ],
           ),
         ),
         IconButton(
           onPressed: onLastPageTap,
-          icon: Icon(Icons.keyboard_double_arrow_right),
+          icon: const Icon(Icons.keyboard_double_arrow_right),
         ),
         IconButton(
           onPressed: onNextPageTap,
@@ -275,21 +336,21 @@ class _MainDataTableState<T extends DataTableModel>
                 : context.cs.onSecondaryFixed,
           ),
         ),
-        Spacer(),
+        const Spacer(),
         Text("${meta.currentPage} ${"of".tr()} ${meta.totalPages}"),
-        Spacer(),
+        const Spacer(),
         IconButton(
           onPressed: onPreviousPageTap,
           icon: Icon(
             Icons.keyboard_arrow_left,
             size: 30,
             color:
-                page != 1 ? context.cs.secondary : context.cs.onSecondaryFixed,
+            page != 1 ? context.cs.secondary : context.cs.onSecondaryFixed,
           ),
         ),
         IconButton(
           onPressed: onFirstPageTap,
-          icon: Icon(Icons.keyboard_double_arrow_left),
+          icon: const Icon(Icons.keyboard_double_arrow_left),
         ),
       ],
     );

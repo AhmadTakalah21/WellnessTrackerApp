@@ -35,6 +35,10 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       totalPoints: (json['total_points'] as num?)?.toInt(),
       medicalConsultationsNum:
           (json['medical_consultations_num'] as num?)?.toInt(),
+      medicalConsultations: (json['medical_consultations'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
       createdAt: json['created_at'] as String,
     );
 
@@ -57,5 +61,6 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
       'subscription_end_date': instance.subEndDate,
       'total_points': instance.totalPoints,
       'medical_consultations_num': instance.medicalConsultationsNum,
+      'medical_consultations': instance.medicalConsultations,
       'created_at': instance.createdAt,
     };

@@ -6,6 +6,8 @@ import 'package:wellnesstrackerapp/global/dio/app_interceptor.dart';
 import 'package:wellnesstrackerapp/global/utils/constants.dart';
 
 const baseUrl = "https://dev-mi.serv00.net";
+// const baseUrl = "http://192.168.1.222:3030";
+
 const apiUrl = '$baseUrl/api';
 
 @singleton

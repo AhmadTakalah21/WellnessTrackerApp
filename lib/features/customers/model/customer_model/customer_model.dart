@@ -39,6 +39,7 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
     this.requestRole = UserRoleEnum.admin,
     this.totalPoints,
     this.medicalConsultationsNum,
+    this.medicalConsultations = const [],
     required this.createdAt,
   });
 
@@ -92,32 +93,48 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
   @JsonKey(name: "medical_consultations_num")
   final int? medicalConsultationsNum;
 
+  @JsonKey(
+    name: "medical_consultations",
+    defaultValue: <String>[],
+  )
+  final List<String> medicalConsultations;
+
   @JsonKey(name: 'created_at')
   final String createdAt;
 
   static String get header => 'customers_administration'.tr();
 
   @override
-  List<String> get values => [
-        '#$id',
-        name,
-        email,
-        phone ?? '_',
-        if (requestRole.isAdmin && !isForEmployee) ...[
-          subscription?.dietitian?.name ?? 'not_existed'.tr(),
-          subscription?.coach?.name ?? 'not_existed'.tr(),
-          subscription?.doctor?.name ?? 'not_existed'.tr(),
-          subscription?.psychologist?.name ?? 'not_existed'.tr(),
-        ],
-        if (requestRole.isAdmin) ...[
-          code ?? 'not_existed'.tr(),
-        ],
-        subEndDate ?? 'not_existed'.tr(),
-        if (isForEmployee || requestRole.isDoctor || requestRole.isPsychologist)
-          if (medicalConsultationsNum != null)
-            medicalConsultationsNum!.toString(),
-        status,
-      ];
+  List<String> get values {
+    final bool showConsultationsCol =
+        isForEmployee ||
+            requestRole.isAdmin ||
+            requestRole.isDoctor ||
+            requestRole.isPsychologist;
+
+    return [
+      '#$id',
+      name,
+      email,
+      phone ?? '_',
+      if (requestRole.isAdmin && !isForEmployee) ...[
+        subscription?.dietitian?.name ?? 'not_existed'.tr(),
+        subscription?.coach?.name ?? 'not_existed'.tr(),
+        subscription?.doctor?.name ?? 'not_existed'.tr(),
+        subscription?.psychologist?.name ?? 'not_existed'.tr(),
+      ],
+      if (requestRole.isAdmin) ...[
+        code ?? 'not_existed'.tr(),
+      ],
+      subEndDate ?? 'not_existed'.tr(),
+
+      // ✅ عمود الاستشارات: دائمًا يرجّع رقم (حتى لو 0) إذا كان العمود ظاهر
+      if (showConsultationsCol) (medicalConsultationsNum ?? 0).toString(),
+
+      status,
+    ];
+  }
+
 
   factory CustomerModel.fromString(String str) =>
       CustomerModel.fromJson(jsonDecode(str) as Map<String, dynamic>);
@@ -142,6 +159,8 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
   CustomerModel copyWith({
     bool? isForEmployee,
     UserRoleEnum? requestRole,
+    List<String>? medicalConsultations,
+
   }) {
     return CustomerModel(
       id: id,
@@ -159,6 +178,7 @@ class CustomerModel implements DeleteModel, DataTableModel, DropDownItemModel {
       requestRole: requestRole ?? this.requestRole,
       code: code,
       medicalConsultationsNum: medicalConsultationsNum,
+      medicalConsultations: medicalConsultations ?? this.medicalConsultations,
       subEndDate: subEndDate,
       totalPoints: totalPoints,
       createdAt: createdAt,

@@ -76,6 +76,13 @@ class CustomersPageState extends State<CustomersPage>
   int perPage = 10;
   int currentPage = 1;
 
+  bool get _isAdmin => widget.role.isAdmin;
+  bool get _isDoctor => widget.role.isDoctor;
+  bool get _isPsychologist => widget.role.isPsychologist;
+
+  bool get _canSeeConsultations =>
+      _isAdmin || _isDoctor || _isPsychologist || widget.user != null;
+
   @override
   void fetchCustomers() {
     customersCubit.getCustomers(
@@ -97,7 +104,8 @@ class CustomersPageState extends State<CustomersPage>
 
   @override
   void onEditTap(CustomerModel customer) {
-    if (widget.role.isAdmin) {
+    // ✅ لا نلمس سيناريو ضغط الصف / edit أبداً
+    if (_isAdmin) {
       if (customer.info == null) {
         MainSnackBar.showMessage(context, "customer_not_fill_info".tr());
         return;
@@ -134,11 +142,11 @@ class CustomersPageState extends State<CustomersPage>
 
   @override
   void onReportTap(CustomerModel customer) {
-    if (!widget.role.isAdmin) {
+    if (!_isAdmin) {
       showMaterialModalBottomSheet(
         context: context,
         shape:
-            RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+        RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
         builder: (context) => AddCustomerReportView(
           customersCubit: customersCubit,
           role: widget.role,
@@ -172,23 +180,23 @@ class CustomersPageState extends State<CustomersPage>
     if (customersCubit.isSelected(customer)) {
       void Function()? onAssign = onAssignPlan;
       String text = "assign_diet_plan";
-      if (widget.role.isAdmin) {
-        //onAssign = null;
+
+      if (_isAdmin) {
         text = "assign_to_specialists";
         onAssign = onAssignCustomers;
-      } else if (widget.role.isDietitian) {
       } else if (widget.role.isCoach) {
         text = "assign_exercise_plan";
-      } else if (widget.role.isDoctor) {
+      } else if (_isDoctor) {
         onAssign = null;
-      } else if (widget.role.isPsychologist) {
+      } else if (_isPsychologist) {
         onAssign = null;
       }
+
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         shape:
-            RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+        RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
         builder: (context) => AdditionalCustomerOptionsWidget(
           onAddPoints: onAddPoints,
           assignPlanText: text,
@@ -223,6 +231,78 @@ class CustomersPageState extends State<CustomersPage>
     );
   }
 
+  void onViewMedicalConsultations(CustomerModel customer) {
+    showMaterialModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(borderRadius: AppConstants.borderRadiusT20),
+      builder: (_) {
+        final items = customer.medicalConsultations;
+        final canShow = items.isNotEmpty;
+
+        return SafeArea(
+          child: Padding(
+            padding: AppConstants.padding16,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'medical_consultations'.tr(),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    if (canShow)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: context.cs.primaryContainer,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          '${items.length}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(color: context.cs.onPrimaryContainer),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                const Divider(height: 1),
+                const SizedBox(height: 12),
+                if (!canShow)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Text('not_existed'.tr()),
+                  )
+                else
+                  Flexible(
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: items.length,
+                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: const Icon(Icons.medical_information),
+                          title: Text(items[index]),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void onDeleteTap(CustomerModel customer) {
     showDialog(
@@ -239,21 +319,18 @@ class CustomersPageState extends State<CustomersPage>
 
   @override
   List<Widget> customButtons(CustomerModel customer) {
-    bool isAdmin = widget.role.isAdmin;
-    bool isDoctor = widget.role.isDoctor;
-    bool isPsychologist = widget.role.isPsychologist;
     return [
       IconButton(
         onPressed: () => onReportTap(customer),
         icon: Icon(
-          isAdmin ? Icons.description : Icons.edit_document,
+          _isAdmin ? Icons.description : Icons.edit_document,
           color: context.cs.onPrimaryFixed,
         ),
       ),
-      if (isDoctor || isPsychologist)
+      if (_isDoctor || _isPsychologist)
         IconButton(
           onPressed: () => onAddMedicalConsultation(customer),
-          icon: Icon(Icons.medical_services, color: Colors.red),
+          icon: const Icon(Icons.medical_services, color: Colors.red),
         ),
     ];
   }
@@ -266,27 +343,26 @@ class CustomersPageState extends State<CustomersPage>
 
   @override
   Widget build(BuildContext context) {
-    final bool isAdmin = widget.role.isAdmin;
-    final bool isDoctor = widget.role.isDoctor;
-    final bool isPsychologist = widget.role.isPsychologist;
     final titles = [
       '#',
       'name'.tr(),
       'email'.tr(),
       'phone'.tr(),
-      if (isAdmin && widget.user == null) ...[
+      if (_isAdmin && widget.user == null) ...[
         'dietitian'.tr(),
         'coach'.tr(),
         'doctor'.tr(),
         'psychologist'.tr(),
       ],
-      if (isAdmin) 'code'.tr(),
+      if (_isAdmin) 'code'.tr(),
       'subscription_end_date'.tr(),
-      if (widget.user != null || isDoctor || isPsychologist)
-        "medical_consultations_num".tr(),
+      if (_canSeeConsultations) "medical_consultations_num".tr(),
       'status'.tr(),
       'event'.tr(),
     ];
+
+    final medicalColIndex = titles.indexOf("medical_consultations_num".tr());
+
     return Scaffold(
       appBar: AppBar(title: Text('customers_administration'.tr())),
       body: Padding(
@@ -311,14 +387,60 @@ class CustomersPageState extends State<CustomersPage>
                               onPageChanged: onSelectPageTap,
                               emptyMessage: state.emptyMessage,
                               onEditTap: onEditTap,
-                              onDeleteTap: isAdmin ? onDeleteTap : null,
+                              onDeleteTap: _isAdmin ? onDeleteTap : null,
                               onSearchChanged: onSearchChanged,
                               onSelected: onSelected,
                               checkSelected: customersCubit.isSelected,
                               onLongPress: onLongPress,
                               searchHint: 'search_customer',
                               customButtons: customButtons,
-                              //showCheckboxColumn: true,
+
+                              // ✅ 1) خلّي الخلية تبدو كبادج (بدون InkWell!)
+                              cellBuilder:
+                                  (context, customer, rowIndex, colIndex, value) {
+                                if (colIndex == medicalColIndex) {
+                                  final count = customer.medicalConsultationsNum ?? 0;
+                                  if (count <= 0) return Text(value);
+
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: context.cs.primaryContainer,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      value,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: context.cs.onPrimaryContainer,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return null;
+                              },
+
+                              // ✅ 2) فقط خلية رقم الاستشارات تكون قابلة للضغط عبر DataCell.onTap
+                              isCellTappable: (customer, rowIndex, colIndex) {
+                                if (colIndex != medicalColIndex) return false;
+                                if (!(_isAdmin || _isDoctor || _isPsychologist)) {
+                                  // إذا بدك فقط للأدوار المحددة
+                                  // وإذا user != null عندك سيناريو آخر، عدّلي حسب رغبتك
+                                  return false;
+                                }
+                                return customer.medicalConsultations.isNotEmpty;
+                              },
+                              onCellTap: (customer, rowIndex, colIndex) {
+                                if (colIndex == medicalColIndex) {
+                                  onViewMedicalConsultations(customer);
+                                }
+                              },
                             ),
                           ],
                         ),
@@ -336,7 +458,7 @@ class CustomersPageState extends State<CustomersPage>
                       onTryAgainTap: onTryAgainTap,
                     );
                   } else {
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   }
                 },
               ),

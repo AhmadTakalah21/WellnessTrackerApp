@@ -47,4 +47,5 @@ abstract class CustomersService {
     int id,
     AddMedicalConsultationModel model,
   );
+
 }

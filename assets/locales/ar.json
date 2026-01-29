@@ -515,5 +515,6 @@
   "gym" : "النادي الرياضي",
   "read" : "مقروء",
   "unread" : "غير مقروء",
-  "filters" : "فلاتر"
+  "filters" : "فلاتر",
+  "medical_consultations": "الاستشارات الطبية"
 }

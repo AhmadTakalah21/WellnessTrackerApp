@@ -514,5 +514,6 @@
   "gym" : "Gym",
   "read" : "Read",
   "unread" : "Unread",
-  "filters" : "Filters"
+  "filters" : "Filters",
+  "medical_consultations": "medical consultations"
 }
