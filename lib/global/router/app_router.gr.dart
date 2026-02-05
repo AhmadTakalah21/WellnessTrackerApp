@@ -12,159 +12,159 @@
 import 'package:auto_route/auto_route.dart' as _i57;
 import 'package:flutter/material.dart' as _i58;
 import 'package:wellnesstrackerapp/features/about_us/view/about_us_view.dart'
-    as _i1;
+as _i1;
 import 'package:wellnesstrackerapp/features/adds_and_offers/cubit/adds_and_offers_cubit.dart'
-    as _i59;
+as _i59;
 import 'package:wellnesstrackerapp/features/adds_and_offers/model/adv_model/adv_model.dart'
-    as _i60;
+as _i60;
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/adds_and_offers_router.dart'
-    as _i11;
+as _i11;
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/adds_and_offers_view.dart'
-    as _i12;
+as _i12;
 import 'package:wellnesstrackerapp/features/adds_and_offers/view/widgets/add_adv_view.dart'
-    as _i2;
+as _i2;
 import 'package:wellnesstrackerapp/features/app_manager/view/app_manager_view.dart'
-    as _i13;
+as _i13;
 import 'package:wellnesstrackerapp/features/auth/cubit/auth_cubit.dart' as _i80;
 import 'package:wellnesstrackerapp/features/auth/model/sign_in_model/sign_in_model.dart'
-    as _i75;
+as _i75;
 import 'package:wellnesstrackerapp/features/auth/view/auth_router.dart' as _i17;
 import 'package:wellnesstrackerapp/features/auth/view/forget_password_view.dart'
-    as _i29;
+as _i29;
 import 'package:wellnesstrackerapp/features/auth/view/profile_form_view.dart'
-    as _i20;
+as _i20;
 import 'package:wellnesstrackerapp/features/auth/view/reset_password_view.dart'
-    as _i44;
+as _i44;
 import 'package:wellnesstrackerapp/features/auth/view/sign_in_view.dart'
-    as _i47;
+as _i47;
 import 'package:wellnesstrackerapp/features/auth/view/widgets/verify_code_view.dart'
-    as _i55;
+as _i55;
 import 'package:wellnesstrackerapp/features/auth_manager/view/auth_manager_view.dart'
-    as _i16;
+as _i16;
 import 'package:wellnesstrackerapp/features/codes/view/codes_view.dart' as _i18;
 import 'package:wellnesstrackerapp/features/company_info/view/company_info_view.dart'
-    as _i19;
+as _i19;
 import 'package:wellnesstrackerapp/features/customers/cubit/customers_cubit.dart'
-    as _i77;
+as _i77;
 import 'package:wellnesstrackerapp/features/customers/model/customer_model/customer_model.dart'
-    as _i76;
+as _i76;
 import 'package:wellnesstrackerapp/features/customers/view/customers_view.dart'
-    as _i22;
+as _i22;
 import 'package:wellnesstrackerapp/features/customers/view/widgets/approve_customer_view.dart'
-    as _i14;
+as _i14;
 import 'package:wellnesstrackerapp/features/customers/view/widgets/assign_customers_view.dart'
-    as _i15;
+as _i15;
 import 'package:wellnesstrackerapp/features/customers/view/widgets/subscriber_evaluation_view.dart'
-    as _i50;
+as _i50;
 import 'package:wellnesstrackerapp/features/customers/view/widgets/update_customer_info_view.dart'
-    as _i52;
+as _i52;
 import 'package:wellnesstrackerapp/features/dashboard/view/dashboard_router.dart'
-    as _i23;
+as _i23;
 import 'package:wellnesstrackerapp/features/dashboard/view/dashboard_view.dart'
-    as _i24;
+as _i24;
 import 'package:wellnesstrackerapp/features/exercise_plans/cubit/exercise_plans_cubit.dart'
-    as _i61;
+as _i61;
 import 'package:wellnesstrackerapp/features/exercise_plans/model/exercise_plan_model/exercise_plan_model.dart'
-    as _i62;
+as _i62;
 import 'package:wellnesstrackerapp/features/exercise_plans/view/add_exercise_plan_view.dart'
-    as _i3;
+as _i3;
 import 'package:wellnesstrackerapp/features/exercise_plans/view/exercise_plans_view.dart'
-    as _i26;
+as _i26;
 import 'package:wellnesstrackerapp/features/exercises/cubit/exercises_cubit.dart'
-    as _i63;
+as _i63;
 import 'package:wellnesstrackerapp/features/exercises/model/exercise_model/exercise_model.dart'
-    as _i64;
+as _i64;
 import 'package:wellnesstrackerapp/features/exercises/view/add_exercise_view.dart'
-    as _i4;
+as _i4;
 import 'package:wellnesstrackerapp/features/exercises/view/exercises_coach_view.dart'
-    as _i27;
+as _i27;
 import 'package:wellnesstrackerapp/features/exercises/view/exercises_view.dart'
-    as _i28;
+as _i28;
 import 'package:wellnesstrackerapp/features/health_assesment/view/health_assesment_view.dart'
-    as _i30;
+as _i30;
 import 'package:wellnesstrackerapp/features/ingredients/view/ingredients_view.dart'
-    as _i31;
+as _i31;
 import 'package:wellnesstrackerapp/features/intro/view/into_view.dart' as _i32;
 import 'package:wellnesstrackerapp/features/items/cubit/items_cubit.dart'
-    as _i65;
+as _i65;
 import 'package:wellnesstrackerapp/features/items/model/item_model/item_model.dart'
-    as _i66;
+as _i66;
 import 'package:wellnesstrackerapp/features/items/view/items_view.dart' as _i33;
 import 'package:wellnesstrackerapp/features/items/view/widgets/add_item_view.dart'
-    as _i5;
+as _i5;
 import 'package:wellnesstrackerapp/features/levels/cubit/levels_cubit.dart'
-    as _i68;
+as _i68;
 import 'package:wellnesstrackerapp/features/levels/model/level_model/level_model.dart'
-    as _i67;
+as _i67;
 import 'package:wellnesstrackerapp/features/levels/view/levels_view.dart'
-    as _i34;
+as _i34;
 import 'package:wellnesstrackerapp/features/levels/view/widgets/add_level_widget.dart'
-    as _i6;
+as _i6;
 import 'package:wellnesstrackerapp/features/meal_plans/cubit/meal_plans_cubit.dart'
-    as _i69;
+as _i69;
 import 'package:wellnesstrackerapp/features/meal_plans/model/meal_plan_model/meal_plan_model.dart'
-    as _i70;
+as _i70;
 import 'package:wellnesstrackerapp/features/meal_plans/view/add_meal_plans.dart'
-    as _i7;
+as _i7;
 import 'package:wellnesstrackerapp/features/meal_plans/view/meal_plans_view.dart'
-    as _i35;
+as _i35;
 import 'package:wellnesstrackerapp/features/meal_plans/view/widget/add_meal_dialog.dart'
-    as _i8;
+as _i8;
 import 'package:wellnesstrackerapp/features/meals/cubit/meals_cubit.dart'
-    as _i71;
+as _i71;
 import 'package:wellnesstrackerapp/features/meals/model/meal_model/meal_model.dart'
-    as _i72;
+as _i72;
 import 'package:wellnesstrackerapp/features/meals/view/meals_dietitian_view.dart'
-    as _i36;
+as _i36;
 import 'package:wellnesstrackerapp/features/meals/view/meals_view.dart' as _i37;
 import 'package:wellnesstrackerapp/features/notifications/view/notifications_view.dart'
-    as _i38;
+as _i38;
 import 'package:wellnesstrackerapp/features/points/cubit/points_cubit.dart'
-    as _i73;
+as _i73;
 import 'package:wellnesstrackerapp/features/points/model/points_guideline_model/points_guideline_model.dart'
-    as _i74;
+as _i74;
 import 'package:wellnesstrackerapp/features/points/view/pages/current_points_view.dart'
-    as _i21;
+as _i21;
 import 'package:wellnesstrackerapp/features/points/view/pages/earn_points_ways_view.dart'
-    as _i25;
+as _i25;
 import 'package:wellnesstrackerapp/features/points/view/points_view.dart'
-    as _i39;
+as _i39;
 import 'package:wellnesstrackerapp/features/points/view/widgets/add_points_guideline_widget.dart'
-    as _i9;
+as _i9;
 import 'package:wellnesstrackerapp/features/privacy_policy/view/privacy_policy_view.dart'
-    as _i40;
+as _i40;
 import 'package:wellnesstrackerapp/features/profile/view/add_rate_view.dart'
-    as _i10;
+as _i10;
 import 'package:wellnesstrackerapp/features/profile/view/profile_router.dart'
-    as _i41;
+as _i41;
 import 'package:wellnesstrackerapp/features/profile/view/profile_view.dart'
-    as _i42;
+as _i42;
 import 'package:wellnesstrackerapp/features/ratings/view/ratings_view.dart'
-    as _i43;
+as _i43;
 import 'package:wellnesstrackerapp/features/select_plan/view/select_plan_view.dart'
-    as _i45;
+as _i45;
 import 'package:wellnesstrackerapp/features/settings/view/settings_view.dart'
-    as _i46;
+as _i46;
 import 'package:wellnesstrackerapp/features/splash/view/splash_view.dart'
-    as _i48;
+as _i48;
 import 'package:wellnesstrackerapp/features/statistics/view/statistics_view.dart'
-    as _i49;
+as _i49;
 import 'package:wellnesstrackerapp/features/terms_and_conditions/view/terms_and_conditions_view.dart'
-    as _i51;
+as _i51;
 import 'package:wellnesstrackerapp/features/user_navigation/view/user_navigation_view.dart'
-    as _i53;
+as _i53;
 import 'package:wellnesstrackerapp/features/users/model/user_model/user_model.dart'
-    as _i79;
+as _i79;
 import 'package:wellnesstrackerapp/features/users/view/users_view.dart' as _i54;
 import 'package:wellnesstrackerapp/global/models/user_role_enum.dart' as _i78;
 import 'package:wellnesstrackerapp/global/widgets/video_player_widget.dart'
-    as _i56;
+as _i56;
 
 /// generated route for
 /// [_i1.AboutUsView]
 class AboutUsRoute extends _i57.PageRouteInfo<void> {
   const AboutUsRoute({List<_i57.PageRouteInfo>? children})
-    : super(AboutUsRoute.name, initialChildren: children);
+      : super(AboutUsRoute.name, initialChildren: children);
 
   static const String name = 'AboutUsRoute';
 
@@ -186,15 +186,15 @@ class AddAdvRoute extends _i57.PageRouteInfo<AddAdvRouteArgs> {
     _i58.VoidCallback? onSuccess,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AddAdvRoute.name,
-         args: AddAdvRouteArgs(
-           key: key,
-           advCubit: advCubit,
-           adv: adv,
-           onSuccess: onSuccess,
-         ),
-         initialChildren: children,
-       );
+    AddAdvRoute.name,
+    args: AddAdvRouteArgs(
+      key: key,
+      advCubit: advCubit,
+      adv: adv,
+      onSuccess: onSuccess,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'AddAdvRoute';
 
@@ -258,14 +258,14 @@ class AddExercisePlanRoute
     _i62.ExercisePlanModel? exercisePlan,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AddExercisePlanRoute.name,
-         args: AddExercisePlanRouteArgs(
-           key: key,
-           exercisePlansCubit: exercisePlansCubit,
-           exercisePlan: exercisePlan,
-         ),
-         initialChildren: children,
-       );
+    AddExercisePlanRoute.name,
+    args: AddExercisePlanRouteArgs(
+      key: key,
+      exercisePlansCubit: exercisePlansCubit,
+      exercisePlan: exercisePlan,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'AddExercisePlanRoute';
 
@@ -323,14 +323,14 @@ class AddExerciseRoute extends _i57.PageRouteInfo<AddExerciseRouteArgs> {
     _i64.ExerciseModel? exercise,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AddExerciseRoute.name,
-         args: AddExerciseRouteArgs(
-           key: key,
-           exercisesCubit: exercisesCubit,
-           exercise: exercise,
-         ),
-         initialChildren: children,
-       );
+    AddExerciseRoute.name,
+    args: AddExerciseRouteArgs(
+      key: key,
+      exercisesCubit: exercisesCubit,
+      exercise: exercise,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'AddExerciseRoute';
 
@@ -390,16 +390,16 @@ class AddItemRoute extends _i57.PageRouteInfo<AddItemRouteArgs> {
     _i67.LevelModel? level,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AddItemRoute.name,
-         args: AddItemRouteArgs(
-           key: key,
-           itemCubit: itemCubit,
-           item: item,
-           onSuccess: onSuccess,
-           level: level,
-         ),
-         initialChildren: children,
-       );
+    AddItemRoute.name,
+    args: AddItemRouteArgs(
+      key: key,
+      itemCubit: itemCubit,
+      item: item,
+      onSuccess: onSuccess,
+      level: level,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'AddItemRoute';
 
@@ -472,15 +472,15 @@ class AddLevelRoute extends _i57.PageRouteInfo<AddLevelRouteArgs> {
     _i67.LevelModel? level,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AddLevelRoute.name,
-         args: AddLevelRouteArgs(
-           key: key,
-           levelsCubit: levelsCubit,
-           onSuccess: onSuccess,
-           level: level,
-         ),
-         initialChildren: children,
-       );
+    AddLevelRoute.name,
+    args: AddLevelRouteArgs(
+      key: key,
+      levelsCubit: levelsCubit,
+      onSuccess: onSuccess,
+      level: level,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'AddLevelRoute';
 
@@ -543,14 +543,14 @@ class AddMealPlanRoute extends _i57.PageRouteInfo<AddMealPlanRouteArgs> {
     _i70.MealPlanModel? mealPlan,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AddMealPlanRoute.name,
-         args: AddMealPlanRouteArgs(
-           key: key,
-           mealPlansCubit: mealPlansCubit,
-           mealPlan: mealPlan,
-         ),
-         initialChildren: children,
-       );
+    AddMealPlanRoute.name,
+    args: AddMealPlanRouteArgs(
+      key: key,
+      mealPlansCubit: mealPlansCubit,
+      mealPlan: mealPlan,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'AddMealPlanRoute';
 
@@ -608,10 +608,10 @@ class AddMealRoute extends _i57.PageRouteInfo<AddMealRouteArgs> {
     _i72.MealModel? meal,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AddMealRoute.name,
-         args: AddMealRouteArgs(key: key, mealsCubit: mealsCubit, meal: meal),
-         initialChildren: children,
-       );
+    AddMealRoute.name,
+    args: AddMealRouteArgs(key: key, mealsCubit: mealsCubit, meal: meal),
+    initialChildren: children,
+  );
 
   static const String name = 'AddMealRoute';
 
@@ -666,15 +666,15 @@ class AddPointsGuidelineRoute
     _i58.VoidCallback? onSuccess,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AddPointsGuidelineRoute.name,
-         args: AddPointsGuidelineRouteArgs(
-           key: key,
-           pointsCubit: pointsCubit,
-           guideline: guideline,
-           onSuccess: onSuccess,
-         ),
-         initialChildren: children,
-       );
+    AddPointsGuidelineRoute.name,
+    args: AddPointsGuidelineRouteArgs(
+      key: key,
+      pointsCubit: pointsCubit,
+      guideline: guideline,
+      onSuccess: onSuccess,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'AddPointsGuidelineRoute';
 
@@ -735,7 +735,7 @@ class AddPointsGuidelineRouteArgs {
 /// [_i10.AddRateView]
 class AddRateRoute extends _i57.PageRouteInfo<void> {
   const AddRateRoute({List<_i57.PageRouteInfo>? children})
-    : super(AddRateRoute.name, initialChildren: children);
+      : super(AddRateRoute.name, initialChildren: children);
 
   static const String name = 'AddRateRoute';
 
@@ -751,7 +751,7 @@ class AddRateRoute extends _i57.PageRouteInfo<void> {
 /// [_i11.AddsAndOffersRouter]
 class AddsAndOffersRouter extends _i57.PageRouteInfo<void> {
   const AddsAndOffersRouter({List<_i57.PageRouteInfo>? children})
-    : super(AddsAndOffersRouter.name, initialChildren: children);
+      : super(AddsAndOffersRouter.name, initialChildren: children);
 
   static const String name = 'AddsAndOffersRouter';
 
@@ -767,7 +767,7 @@ class AddsAndOffersRouter extends _i57.PageRouteInfo<void> {
 /// [_i12.AddsAndOffersView]
 class AddsAndOffersRoute extends _i57.PageRouteInfo<void> {
   const AddsAndOffersRoute({List<_i57.PageRouteInfo>? children})
-    : super(AddsAndOffersRoute.name, initialChildren: children);
+      : super(AddsAndOffersRoute.name, initialChildren: children);
 
   static const String name = 'AddsAndOffersRoute';
 
@@ -787,10 +787,10 @@ class AppManagerRoute extends _i57.PageRouteInfo<AppManagerRouteArgs> {
     _i75.SignInModel? user,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AppManagerRoute.name,
-         args: AppManagerRouteArgs(key: key, user: user),
-         initialChildren: children,
-       );
+    AppManagerRoute.name,
+    args: AppManagerRouteArgs(key: key, user: user),
+    initialChildren: children,
+  );
 
   static const String name = 'AppManagerRoute';
 
@@ -839,15 +839,15 @@ class ApproveCustomerRoute
     _i58.VoidCallback? onSuccess,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         ApproveCustomerRoute.name,
-         args: ApproveCustomerRouteArgs(
-           key: key,
-           customer: customer,
-           customersCubit: customersCubit,
-           onSuccess: onSuccess,
-         ),
-         initialChildren: children,
-       );
+    ApproveCustomerRoute.name,
+    args: ApproveCustomerRouteArgs(
+      key: key,
+      customer: customer,
+      customersCubit: customersCubit,
+      onSuccess: onSuccess,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'ApproveCustomerRoute';
 
@@ -914,14 +914,14 @@ class AssignCustomersRoute
     _i58.VoidCallback? onSuccess,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         AssignCustomersRoute.name,
-         args: AssignCustomersRouteArgs(
-           key: key,
-           customersCubit: customersCubit,
-           onSuccess: onSuccess,
-         ),
-         initialChildren: children,
-       );
+    AssignCustomersRoute.name,
+    args: AssignCustomersRouteArgs(
+      key: key,
+      customersCubit: customersCubit,
+      onSuccess: onSuccess,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'AssignCustomersRoute';
 
@@ -974,7 +974,7 @@ class AssignCustomersRouteArgs {
 /// [_i16.AuthManagerView]
 class AuthManagerRoute extends _i57.PageRouteInfo<void> {
   const AuthManagerRoute({List<_i57.PageRouteInfo>? children})
-    : super(AuthManagerRoute.name, initialChildren: children);
+      : super(AuthManagerRoute.name, initialChildren: children);
 
   static const String name = 'AuthManagerRoute';
 
@@ -990,7 +990,7 @@ class AuthManagerRoute extends _i57.PageRouteInfo<void> {
 /// [_i17.AuthRouterPage]
 class AuthRouter extends _i57.PageRouteInfo<void> {
   const AuthRouter({List<_i57.PageRouteInfo>? children})
-    : super(AuthRouter.name, initialChildren: children);
+      : super(AuthRouter.name, initialChildren: children);
 
   static const String name = 'AuthRouter';
 
@@ -1006,7 +1006,7 @@ class AuthRouter extends _i57.PageRouteInfo<void> {
 /// [_i18.CodesView]
 class CodesRoute extends _i57.PageRouteInfo<void> {
   const CodesRoute({List<_i57.PageRouteInfo>? children})
-    : super(CodesRoute.name, initialChildren: children);
+      : super(CodesRoute.name, initialChildren: children);
 
   static const String name = 'CodesRoute';
 
@@ -1026,10 +1026,10 @@ class CompanyInfoRoute extends _i57.PageRouteInfo<CompanyInfoRouteArgs> {
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         CompanyInfoRoute.name,
-         args: CompanyInfoRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+    CompanyInfoRoute.name,
+    args: CompanyInfoRouteArgs(key: key, role: role),
+    initialChildren: children,
+  );
 
   static const String name = 'CompanyInfoRoute';
 
@@ -1069,7 +1069,7 @@ class CompanyInfoRouteArgs {
 /// [_i20.CompleteProfileFormView]
 class CompleteProfileFormRoute extends _i57.PageRouteInfo<void> {
   const CompleteProfileFormRoute({List<_i57.PageRouteInfo>? children})
-    : super(CompleteProfileFormRoute.name, initialChildren: children);
+      : super(CompleteProfileFormRoute.name, initialChildren: children);
 
   static const String name = 'CompleteProfileFormRoute';
 
@@ -1085,7 +1085,7 @@ class CompleteProfileFormRoute extends _i57.PageRouteInfo<void> {
 /// [_i21.CurrentPointsView]
 class CurrentPointsRoute extends _i57.PageRouteInfo<void> {
   const CurrentPointsRoute({List<_i57.PageRouteInfo>? children})
-    : super(CurrentPointsRoute.name, initialChildren: children);
+      : super(CurrentPointsRoute.name, initialChildren: children);
 
   static const String name = 'CurrentPointsRoute';
 
@@ -1106,10 +1106,10 @@ class CustomersRoute extends _i57.PageRouteInfo<CustomersRouteArgs> {
     _i79.UserModel? user,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         CustomersRoute.name,
-         args: CustomersRouteArgs(key: key, role: role, user: user),
-         initialChildren: children,
-       );
+    CustomersRoute.name,
+    args: CustomersRouteArgs(key: key, role: role, user: user),
+    initialChildren: children,
+  );
 
   static const String name = 'CustomersRoute';
 
@@ -1155,7 +1155,7 @@ class CustomersRouteArgs {
 /// [_i23.DashboardRouter]
 class DashboardRouter extends _i57.PageRouteInfo<void> {
   const DashboardRouter({List<_i57.PageRouteInfo>? children})
-    : super(DashboardRouter.name, initialChildren: children);
+      : super(DashboardRouter.name, initialChildren: children);
 
   static const String name = 'DashboardRouter';
 
@@ -1171,7 +1171,7 @@ class DashboardRouter extends _i57.PageRouteInfo<void> {
 /// [_i24.DashboardView]
 class DashboardRoute extends _i57.PageRouteInfo<void> {
   const DashboardRoute({List<_i57.PageRouteInfo>? children})
-    : super(DashboardRoute.name, initialChildren: children);
+      : super(DashboardRoute.name, initialChildren: children);
 
   static const String name = 'DashboardRoute';
 
@@ -1191,10 +1191,10 @@ class EarnPointsWaysRoute extends _i57.PageRouteInfo<EarnPointsWaysRouteArgs> {
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         EarnPointsWaysRoute.name,
-         args: EarnPointsWaysRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+    EarnPointsWaysRoute.name,
+    args: EarnPointsWaysRouteArgs(key: key, role: role),
+    initialChildren: children,
+  );
 
   static const String name = 'EarnPointsWaysRoute';
 
@@ -1234,7 +1234,7 @@ class EarnPointsWaysRouteArgs {
 /// [_i26.ExercisePlansView]
 class ExercisePlansRoute extends _i57.PageRouteInfo<void> {
   const ExercisePlansRoute({List<_i57.PageRouteInfo>? children})
-    : super(ExercisePlansRoute.name, initialChildren: children);
+      : super(ExercisePlansRoute.name, initialChildren: children);
 
   static const String name = 'ExercisePlansRoute';
 
@@ -1254,10 +1254,10 @@ class ExercisesCoachRoute extends _i57.PageRouteInfo<ExercisesCoachRouteArgs> {
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         ExercisesCoachRoute.name,
-         args: ExercisesCoachRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+    ExercisesCoachRoute.name,
+    args: ExercisesCoachRouteArgs(key: key, role: role),
+    initialChildren: children,
+  );
 
   static const String name = 'ExercisesCoachRoute';
 
@@ -1301,10 +1301,10 @@ class ExercisesRoute extends _i57.PageRouteInfo<ExercisesRouteArgs> {
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         ExercisesRoute.name,
-         args: ExercisesRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+    ExercisesRoute.name,
+    args: ExercisesRouteArgs(key: key, role: role),
+    initialChildren: children,
+  );
 
   static const String name = 'ExercisesRoute';
 
@@ -1348,10 +1348,10 @@ class ForgotPasswordRoute extends _i57.PageRouteInfo<ForgotPasswordRouteArgs> {
     required _i80.AuthCubit authCubit,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         ForgotPasswordRoute.name,
-         args: ForgotPasswordRouteArgs(key: key, authCubit: authCubit),
-         initialChildren: children,
-       );
+    ForgotPasswordRoute.name,
+    args: ForgotPasswordRouteArgs(key: key, authCubit: authCubit),
+    initialChildren: children,
+  );
 
   static const String name = 'ForgotPasswordRoute';
 
@@ -1391,7 +1391,7 @@ class ForgotPasswordRouteArgs {
 /// [_i30.HealthAssesmentView]
 class HealthAssesmentRoute extends _i57.PageRouteInfo<void> {
   const HealthAssesmentRoute({List<_i57.PageRouteInfo>? children})
-    : super(HealthAssesmentRoute.name, initialChildren: children);
+      : super(HealthAssesmentRoute.name, initialChildren: children);
 
   static const String name = 'HealthAssesmentRoute';
 
@@ -1407,7 +1407,7 @@ class HealthAssesmentRoute extends _i57.PageRouteInfo<void> {
 /// [_i31.IngredientsView]
 class IngredientsRoute extends _i57.PageRouteInfo<void> {
   const IngredientsRoute({List<_i57.PageRouteInfo>? children})
-    : super(IngredientsRoute.name, initialChildren: children);
+      : super(IngredientsRoute.name, initialChildren: children);
 
   static const String name = 'IngredientsRoute';
 
@@ -1423,7 +1423,7 @@ class IngredientsRoute extends _i57.PageRouteInfo<void> {
 /// [_i32.IntroView]
 class IntroRoute extends _i57.PageRouteInfo<void> {
   const IntroRoute({List<_i57.PageRouteInfo>? children})
-    : super(IntroRoute.name, initialChildren: children);
+      : super(IntroRoute.name, initialChildren: children);
 
   static const String name = 'IntroRoute';
 
@@ -1444,10 +1444,10 @@ class ItemsRoute extends _i57.PageRouteInfo<ItemsRouteArgs> {
     _i67.LevelModel? level,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         ItemsRoute.name,
-         args: ItemsRouteArgs(key: key, role: role, level: level),
-         initialChildren: children,
-       );
+    ItemsRoute.name,
+    args: ItemsRouteArgs(key: key, role: role, level: level),
+    initialChildren: children,
+  );
 
   static const String name = 'ItemsRoute';
 
@@ -1493,10 +1493,10 @@ class LevelsRoute extends _i57.PageRouteInfo<LevelsRouteArgs> {
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         LevelsRoute.name,
-         args: LevelsRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+    LevelsRoute.name,
+    args: LevelsRouteArgs(key: key, role: role),
+    initialChildren: children,
+  );
 
   static const String name = 'LevelsRoute';
 
@@ -1536,7 +1536,7 @@ class LevelsRouteArgs {
 /// [_i35.MealPlansView]
 class MealPlansRoute extends _i57.PageRouteInfo<void> {
   const MealPlansRoute({List<_i57.PageRouteInfo>? children})
-    : super(MealPlansRoute.name, initialChildren: children);
+      : super(MealPlansRoute.name, initialChildren: children);
 
   static const String name = 'MealPlansRoute';
 
@@ -1552,7 +1552,7 @@ class MealPlansRoute extends _i57.PageRouteInfo<void> {
 /// [_i36.MealsDietitianView]
 class MealsDietitianRoute extends _i57.PageRouteInfo<void> {
   const MealsDietitianRoute({List<_i57.PageRouteInfo>? children})
-    : super(MealsDietitianRoute.name, initialChildren: children);
+      : super(MealsDietitianRoute.name, initialChildren: children);
 
   static const String name = 'MealsDietitianRoute';
 
@@ -1572,10 +1572,10 @@ class MealsRoute extends _i57.PageRouteInfo<MealsRouteArgs> {
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         MealsRoute.name,
-         args: MealsRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+    MealsRoute.name,
+    args: MealsRouteArgs(key: key, role: role),
+    initialChildren: children,
+  );
 
   static const String name = 'MealsRoute';
 
@@ -1619,10 +1619,10 @@ class NotificationsRoute extends _i57.PageRouteInfo<NotificationsRouteArgs> {
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         NotificationsRoute.name,
-         args: NotificationsRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+    NotificationsRoute.name,
+    args: NotificationsRouteArgs(key: key, role: role),
+    initialChildren: children,
+  );
 
   static const String name = 'NotificationsRoute';
 
@@ -1666,10 +1666,10 @@ class PointsRoute extends _i57.PageRouteInfo<PointsRouteArgs> {
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         PointsRoute.name,
-         args: PointsRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+    PointsRoute.name,
+    args: PointsRouteArgs(key: key, role: role),
+    initialChildren: children,
+  );
 
   static const String name = 'PointsRoute';
 
@@ -1709,7 +1709,7 @@ class PointsRouteArgs {
 /// [_i40.PrivacyPolicyView]
 class PrivacyPolicyRoute extends _i57.PageRouteInfo<void> {
   const PrivacyPolicyRoute({List<_i57.PageRouteInfo>? children})
-    : super(PrivacyPolicyRoute.name, initialChildren: children);
+      : super(PrivacyPolicyRoute.name, initialChildren: children);
 
   static const String name = 'PrivacyPolicyRoute';
 
@@ -1725,7 +1725,7 @@ class PrivacyPolicyRoute extends _i57.PageRouteInfo<void> {
 /// [_i41.ProfileRouter]
 class ProfileRouter extends _i57.PageRouteInfo<void> {
   const ProfileRouter({List<_i57.PageRouteInfo>? children})
-    : super(ProfileRouter.name, initialChildren: children);
+      : super(ProfileRouter.name, initialChildren: children);
 
   static const String name = 'ProfileRouter';
 
@@ -1741,7 +1741,7 @@ class ProfileRouter extends _i57.PageRouteInfo<void> {
 /// [_i42.ProfileView]
 class ProfileRoute extends _i57.PageRouteInfo<void> {
   const ProfileRoute({List<_i57.PageRouteInfo>? children})
-    : super(ProfileRoute.name, initialChildren: children);
+      : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
@@ -1757,7 +1757,7 @@ class ProfileRoute extends _i57.PageRouteInfo<void> {
 /// [_i43.RatingsView]
 class RatingsRoute extends _i57.PageRouteInfo<void> {
   const RatingsRoute({List<_i57.PageRouteInfo>? children})
-    : super(RatingsRoute.name, initialChildren: children);
+      : super(RatingsRoute.name, initialChildren: children);
 
   static const String name = 'RatingsRoute';
 
@@ -1777,10 +1777,10 @@ class ResetPasswordRoute extends _i57.PageRouteInfo<ResetPasswordRouteArgs> {
     required _i80.AuthCubit authCubit,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         ResetPasswordRoute.name,
-         args: ResetPasswordRouteArgs(key: key, authCubit: authCubit),
-         initialChildren: children,
-       );
+    ResetPasswordRoute.name,
+    args: ResetPasswordRouteArgs(key: key, authCubit: authCubit),
+    initialChildren: children,
+  );
 
   static const String name = 'ResetPasswordRoute';
 
@@ -1820,7 +1820,7 @@ class ResetPasswordRouteArgs {
 /// [_i45.SelectPlanView]
 class SelectPlanRoute extends _i57.PageRouteInfo<void> {
   const SelectPlanRoute({List<_i57.PageRouteInfo>? children})
-    : super(SelectPlanRoute.name, initialChildren: children);
+      : super(SelectPlanRoute.name, initialChildren: children);
 
   static const String name = 'SelectPlanRoute';
 
@@ -1840,10 +1840,10 @@ class SettingsRoute extends _i57.PageRouteInfo<SettingsRouteArgs> {
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         SettingsRoute.name,
-         args: SettingsRouteArgs(key: key, role: role),
-         initialChildren: children,
-       );
+    SettingsRoute.name,
+    args: SettingsRouteArgs(key: key, role: role),
+    initialChildren: children,
+  );
 
   static const String name = 'SettingsRoute';
 
@@ -1887,10 +1887,10 @@ class SignInRoute extends _i57.PageRouteInfo<SignInRouteArgs> {
     _i58.VoidCallback? onSignedIn,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         SignInRoute.name,
-         args: SignInRouteArgs(key: key, onSignedIn: onSignedIn),
-         initialChildren: children,
-       );
+    SignInRoute.name,
+    args: SignInRouteArgs(key: key, onSignedIn: onSignedIn),
+    initialChildren: children,
+  );
 
   static const String name = 'SignInRoute';
 
@@ -1932,7 +1932,7 @@ class SignInRouteArgs {
 /// [_i48.SplashView]
 class SplashRoute extends _i57.PageRouteInfo<void> {
   const SplashRoute({List<_i57.PageRouteInfo>? children})
-    : super(SplashRoute.name, initialChildren: children);
+      : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
@@ -1948,7 +1948,7 @@ class SplashRoute extends _i57.PageRouteInfo<void> {
 /// [_i49.StatisticsView]
 class StatisticsRoute extends _i57.PageRouteInfo<void> {
   const StatisticsRoute({List<_i57.PageRouteInfo>? children})
-    : super(StatisticsRoute.name, initialChildren: children);
+      : super(StatisticsRoute.name, initialChildren: children);
 
   static const String name = 'StatisticsRoute';
 
@@ -1970,14 +1970,14 @@ class SubscriberEvaluationRoute
     required _i76.CustomerModel customer,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         SubscriberEvaluationRoute.name,
-         args: SubscriberEvaluationRouteArgs(
-           key: key,
-           role: role,
-           customer: customer,
-         ),
-         initialChildren: children,
-       );
+    SubscriberEvaluationRoute.name,
+    args: SubscriberEvaluationRouteArgs(
+      key: key,
+      role: role,
+      customer: customer,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'SubscriberEvaluationRoute';
 
@@ -2027,7 +2027,7 @@ class SubscriberEvaluationRouteArgs {
 /// [_i51.TermsAndConditionsView]
 class TermsAndConditionsRoute extends _i57.PageRouteInfo<void> {
   const TermsAndConditionsRoute({List<_i57.PageRouteInfo>? children})
-    : super(TermsAndConditionsRoute.name, initialChildren: children);
+      : super(TermsAndConditionsRoute.name, initialChildren: children);
 
   static const String name = 'TermsAndConditionsRoute';
 
@@ -2050,15 +2050,15 @@ class UpdateCustomerInfoRoute
     required _i78.UserRoleEnum role,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         UpdateCustomerInfoRoute.name,
-         args: UpdateCustomerInfoRouteArgs(
-           key: key,
-           customersCubit: customersCubit,
-           customer: customer,
-           role: role,
-         ),
-         initialChildren: children,
-       );
+    UpdateCustomerInfoRoute.name,
+    args: UpdateCustomerInfoRouteArgs(
+      key: key,
+      customersCubit: customersCubit,
+      customer: customer,
+      role: role,
+    ),
+    initialChildren: children,
+  );
 
   static const String name = 'UpdateCustomerInfoRoute';
 
@@ -2119,7 +2119,7 @@ class UpdateCustomerInfoRouteArgs {
 /// [_i53.UserNavigationView]
 class UserNavigationRoute extends _i57.PageRouteInfo<void> {
   const UserNavigationRoute({List<_i57.PageRouteInfo>? children})
-    : super(UserNavigationRoute.name, initialChildren: children);
+      : super(UserNavigationRoute.name, initialChildren: children);
 
   static const String name = 'UserNavigationRoute';
 
@@ -2135,7 +2135,7 @@ class UserNavigationRoute extends _i57.PageRouteInfo<void> {
 /// [_i54.UsersView]
 class UsersRoute extends _i57.PageRouteInfo<void> {
   const UsersRoute({List<_i57.PageRouteInfo>? children})
-    : super(UsersRoute.name, initialChildren: children);
+      : super(UsersRoute.name, initialChildren: children);
 
   static const String name = 'UsersRoute';
 
@@ -2156,10 +2156,10 @@ class VerifyResetCodeRoute
     required _i80.AuthCubit authCubit,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         VerifyResetCodeRoute.name,
-         args: VerifyResetCodeRouteArgs(key: key, authCubit: authCubit),
-         initialChildren: children,
-       );
+    VerifyResetCodeRoute.name,
+    args: VerifyResetCodeRouteArgs(key: key, authCubit: authCubit),
+    initialChildren: children,
+  );
 
   static const String name = 'VerifyResetCodeRoute';
 
@@ -2203,10 +2203,10 @@ class VideoPlayerRoute extends _i57.PageRouteInfo<VideoPlayerRouteArgs> {
     required String url,
     List<_i57.PageRouteInfo>? children,
   }) : super(
-         VideoPlayerRoute.name,
-         args: VideoPlayerRouteArgs(key: key, url: url),
-         initialChildren: children,
-       );
+    VideoPlayerRoute.name,
+    args: VideoPlayerRouteArgs(key: key, url: url),
+    initialChildren: children,
+  );
 
   static const String name = 'VideoPlayerRoute';
 

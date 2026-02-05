@@ -12,14 +12,22 @@ EvaluateCustomerModel _$EvaluateCustomerModelFromJson(
       health: json['health'] as String?,
       psychology: json['psychology'] as String?,
       behavior: json['behavior'] as String?,
-      plansCount: (json['plans_count'] as num?)?.toInt(),
+      plansCount: (json['plansCount'] as num?)?.toInt(),
+      coachId: (json['coachId'] as num?)?.toInt(),
+      doctorId: (json['doctorId'] as num?)?.toInt(),
+      dietitianId: (json['dietitianId'] as num?)?.toInt(),
+      psychologistId: (json['psychologistId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$EvaluateCustomerModelToJson(
         EvaluateCustomerModel instance) =>
     <String, dynamic>{
-      'health': instance.health,
-      'psychology': instance.psychology,
-      'behavior': instance.behavior,
-      'plans_count': instance.plansCount,
+      if (instance.health case final value?) 'health': value,
+      if (instance.psychology case final value?) 'psychology': value,
+      if (instance.behavior case final value?) 'behavior': value,
+      'plansCount': instance.plansCount,
+      'coachId': instance.coachId,
+      'doctorId': instance.doctorId,
+      'dietitianId': instance.dietitianId,
+      'psychologistId': instance.psychologistId,
     };

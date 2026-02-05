@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 part 'customer_evaluation_model.g.dart';
 
-@immutable
 @JsonSerializable()
+@immutable
 class CustomerEvaluationModel {
   const CustomerEvaluationModel({
     required this.name,
@@ -17,38 +17,54 @@ class CustomerEvaluationModel {
     required this.behaviorEvaluation,
     required this.currentWeight,
     required this.receivedPlansCount,
+    this.coachId,
+    this.doctorId,
+    this.dietitianId,
+    this.psychologistId,
   });
 
   final String name;
   final int age;
-  final double length;
+  final num length;
 
   @JsonKey(name: 'weight_before_subscription')
-  final double weightBeforeSubscription;
+  final num weightBeforeSubscription;
 
   @JsonKey(name: 'health_evaluation')
-  final String healthEvaluation;
+  final String? healthEvaluation;
 
   @JsonKey(name: 'psycology_evaluation')
-  final String psycologyEvaluation;
+  final String? psycologyEvaluation;
 
   @JsonKey(name: 'behavior_evaluation')
-  final String behaviorEvaluation;
+  final String? behaviorEvaluation;
 
   @JsonKey(name: 'current_weight')
-  final double currentWeight;
+  final num currentWeight;
 
   @JsonKey(name: 'received_plans_count')
   final int receivedPlansCount;
+
+  // ✅ NEW: لمعرفة من قيّم
+  @JsonKey(name: 'coach_id')
+  final int? coachId;
+
+  @JsonKey(name: 'doctor_id')
+  final int? doctorId;
+
+  @JsonKey(name: 'dietitian_id')
+  final int? dietitianId;
+
+  @JsonKey(name: 'psychologist_id')
+  final int? psychologistId;
 
   factory CustomerEvaluationModel.fromJson(Map<String, dynamic> json) =>
       _$CustomerEvaluationModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$CustomerEvaluationModelToJson(this);
 
-  factory CustomerEvaluationModel.fromString(String source) =>
-      CustomerEvaluationModel.fromJson(
-          jsonDecode(source) as Map<String, dynamic>);
+  factory CustomerEvaluationModel.fromString(String str) =>
+      CustomerEvaluationModel.fromJson(jsonDecode(str) as Map<String, dynamic>);
 
   @override
   String toString() => jsonEncode(toJson());

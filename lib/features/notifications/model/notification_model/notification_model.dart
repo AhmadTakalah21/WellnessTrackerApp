@@ -19,7 +19,6 @@ class NotificationModel implements DeleteModel {
     this.senderId,
     this.receiverId,
     this.sendAt,
-    this.isRead = false,
     this.readAt,
     required this.isSent,
     this.image,
@@ -42,16 +41,12 @@ class NotificationModel implements DeleteModel {
   @JsonKey(name: 'send_at')
   final String? sendAt;
 
-  @JsonKey(
-    fromJson: JsonUtils.setIsNotificationRead,
-    readValue: JsonUtils.readValue,
-    includeToJson: false,
-    includeFromJson: false,
-  )
-  final bool isRead;
-
+  /// ✅ مصدر الحقيقة للمقروء هو read_at القادم من الـ API
   @JsonKey(name: 'read_at')
   final String? readAt;
+
+  /// ✅ لا نقرأ/نكتب isRead من/إلى JSON، فقط نحسبه من readAt
+  bool get isRead => readAt != null && readAt!.isNotEmpty;
 
   @BoolConverter()
   @JsonKey(name: 'is_sent')

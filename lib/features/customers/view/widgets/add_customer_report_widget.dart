@@ -43,6 +43,7 @@ class _AddCustomerReportWidget extends StatefulWidget {
     required this.customersCubit,
     required this.customer,
   });
+
   final UserRoleEnum role;
   final CustomersCubit customersCubit;
   final CustomerModel customer;
@@ -54,6 +55,24 @@ class _AddCustomerReportWidget extends StatefulWidget {
 
 class __AddCustomerReportWidgetState extends State<_AddCustomerReportWidget> {
   final _formKey = GlobalKey<FormState>();
+
+  bool get _showPlansCount {
+    // ✅ عدّل أسماء الأدوار حسب enum عندك
+    final r = widget.role;
+    final isDoctor = r.name == 'doctor';
+    final isPsych = r.name == 'psychologist' || r.name == 'psychiatrist';
+    return !(isDoctor || isPsych);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // ✅ مهم: إذا ما رح نعرض الحقل، نظّفه حتى ما ينرسل
+    if (!_showPlansCount) {
+      widget.customersCubit.setPlansCount(null);
+    }
+  }
 
   @override
   void dispose() {
@@ -109,12 +128,16 @@ class __AddCustomerReportWidgetState extends State<_AddCustomerReportWidget> {
                 validator: (val) =>
                     Utils.validateInput(val, InputTextType.none),
               ),
-              MainCounterWidget(
-                onChanged: widget.customersCubit.setPlansCount,
-                label: 'plans_count'.tr(),
-                icon: Icons.list_alt,
-                isRequired: true,
-              ),
+
+              // ✅ إظهار/إخفاء حسب الدور
+              if (_showPlansCount)
+                MainCounterWidget(
+                  onChanged: widget.customersCubit.setPlansCount,
+                  label: 'plans_count'.tr(),
+                  icon: Icons.list_alt,
+                  isRequired: true,
+                ),
+
               BlocConsumer<CustomersCubit, GeneralCustomersState>(
                 listener: (context, state) {
                   if (state is EvaluateSubscriberSuccess) {
@@ -128,7 +151,7 @@ class __AddCustomerReportWidgetState extends State<_AddCustomerReportWidget> {
                   return MainActionButton(
                     onTap: onSave,
                     text: "save".tr(),
-                    isLoading:  state is EvaluateSubscriberLoading,
+                    isLoading: state is EvaluateSubscriberLoading,
                   );
                 },
               ),

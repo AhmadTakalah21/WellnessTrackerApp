@@ -11,14 +11,17 @@ CustomerEvaluationModel _$CustomerEvaluationModelFromJson(
     CustomerEvaluationModel(
       name: json['name'] as String,
       age: (json['age'] as num).toInt(),
-      length: (json['length'] as num).toDouble(),
-      weightBeforeSubscription:
-          (json['weight_before_subscription'] as num).toDouble(),
-      healthEvaluation: json['health_evaluation'] as String,
-      psycologyEvaluation: json['psycology_evaluation'] as String,
-      behaviorEvaluation: json['behavior_evaluation'] as String,
-      currentWeight: (json['current_weight'] as num).toDouble(),
+      length: json['length'] as num,
+      weightBeforeSubscription: json['weight_before_subscription'] as num,
+      healthEvaluation: json['health_evaluation'] as String?,
+      psycologyEvaluation: json['psycology_evaluation'] as String?,
+      behaviorEvaluation: json['behavior_evaluation'] as String?,
+      currentWeight: json['current_weight'] as num,
       receivedPlansCount: (json['received_plans_count'] as num).toInt(),
+      coachId: (json['coach_id'] as num?)?.toInt(),
+      doctorId: (json['doctor_id'] as num?)?.toInt(),
+      dietitianId: (json['dietitian_id'] as num?)?.toInt(),
+      psychologistId: (json['psychologist_id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$CustomerEvaluationModelToJson(
@@ -33,4 +36,8 @@ Map<String, dynamic> _$CustomerEvaluationModelToJson(
       'behavior_evaluation': instance.behaviorEvaluation,
       'current_weight': instance.currentWeight,
       'received_plans_count': instance.receivedPlansCount,
+      'coach_id': instance.coachId,
+      'doctor_id': instance.doctorId,
+      'dietitian_id': instance.dietitianId,
+      'psychologist_id': instance.psychologistId,
     };

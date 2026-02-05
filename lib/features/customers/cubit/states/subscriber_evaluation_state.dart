@@ -8,9 +8,9 @@ final class SubscriberEvaluationInitial extends SubscriberEvaluationState {}
 final class SubscriberEvaluationLoading extends SubscriberEvaluationState {}
 
 final class SubscriberEvaluationSuccess extends SubscriberEvaluationState {
-  final CustomerEvaluationModel evaluation;
+  final List<CustomerEvaluationModel> evaluations;
 
-  SubscriberEvaluationSuccess(this.evaluation);
+  SubscriberEvaluationSuccess(this.evaluations);
 }
 
 final class SubscriberEvaluationFail extends SubscriberEvaluationState {

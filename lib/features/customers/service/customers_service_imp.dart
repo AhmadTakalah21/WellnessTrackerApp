@@ -127,20 +127,20 @@ class CustomersServiceImp implements CustomersService {
   }
 
   @override
-  Future<CustomerEvaluationModel> getSubscriberEvaluation(
-    UserRoleEnum role,
-    int id,
-  ) async {
-    try {
-      final endpoint = "/v1/${role.getApiRoute}/subscriptions/evaluate/$id";
-      final response = await dio.get(endpoint);
-      final data = response.data["data"] as Map<String, dynamic>;
-      return CustomerEvaluationModel.fromJson(data);
-    } catch (e, stackTrace) {
-      if (kDebugMode) print(stackTrace);
-      rethrow;
-    }
+  Future<List<CustomerEvaluationModel>> getSubscriberEvaluation(
+      UserRoleEnum role,
+      int id,
+      ) async {
+    final endpoint = "/v1/${role.getApiRoute}/subscriptions/evaluate/$id"; // عدّل المسار حسب API عندك
+    final response = await dio.get(endpoint);
+
+    final list = (response.data["data"] as List)
+        .map((e) => CustomerEvaluationModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    return list;
   }
+
 
   @override
   Future<void> addMedicalConsultation(

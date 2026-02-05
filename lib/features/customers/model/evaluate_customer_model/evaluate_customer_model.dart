@@ -10,61 +10,83 @@ part 'evaluate_customer_model.g.dart';
 @immutable
 class EvaluateCustomerModel {
   const EvaluateCustomerModel({
-    String? health,
-    String? psychology,
-    String? behavior,
-    int? plansCount,
-  })  : _health = health,
-        _psychology = psychology,
-        _behavior = behavior,
-        _plansCount = plansCount;
+    this.health,
+    this.psychology,
+    this.behavior,
+    @JsonKey(name: "plans_count", includeIfNull: false) this.plansCount,
 
-  final String? _health;
-  final String? _psychology;
-  final String? _behavior;
-  final int? _plansCount;
+    // ✅ لمعرفة التقييم من أي موظف (اختياري)
+    @JsonKey(name: "coach_id", includeIfNull: false) this.coachId,
+    @JsonKey(name: "doctor_id", includeIfNull: false) this.doctorId,
+    @JsonKey(name: "dietitian_id", includeIfNull: false) this.dietitianId,
+    @JsonKey(name: "psychologist_id", includeIfNull: false) this.psychologistId,
+  });
+
+  // ✅ صارت nullable واختيارية
+  @JsonKey(includeIfNull: false)
+  final String? health;
+
+  @JsonKey(includeIfNull: false)
+  final String? psychology;
+
+  @JsonKey(includeIfNull: false)
+  final String? behavior;
+
+  // موجودة فوق مع name plans_count
+  final int? plansCount;
+
+  // ✅ حقول الموظف (اختيارية)
+  final int? coachId;
+  final int? doctorId;
+  final int? dietitianId;
+  final int? psychologistId;
 
   EvaluateCustomerModel copyWith({
     String? Function()? health,
     String? Function()? psychology,
     String? Function()? behavior,
     int? Function()? plansCount,
+    int? Function()? coachId,
+    int? Function()? doctorId,
+    int? Function()? dietitianId,
+    int? Function()? psychologistId,
   }) {
     return EvaluateCustomerModel(
-      health: health != null ? health() : _health,
-      psychology: psychology != null ? psychology() : _psychology,
-      behavior: behavior != null ? behavior() : _behavior,
-      plansCount: plansCount != null ? plansCount() : _plansCount,
+      health: health != null ? health() : this.health,
+      psychology: psychology != null ? psychology() : this.psychology,
+      behavior: behavior != null ? behavior() : this.behavior,
+      plansCount: plansCount != null ? plansCount() : this.plansCount,
+      coachId: coachId != null ? coachId() : this.coachId,
+      doctorId: doctorId != null ? doctorId() : this.doctorId,
+      dietitianId: dietitianId != null ? dietitianId() : this.dietitianId,
+      psychologistId:
+      psychologistId != null ? psychologistId() : this.psychologistId,
     );
   }
 
-  String get health {
-    if (_health == null || _health.isEmpty) {
-      throw "health_required".tr();
-    }
-    return _health;
+  // ✅ دوال تحقق تستخدمها فقط إذا بدك تجعل الحقل مطلوب حسب الدور
+  String requireHealth() {
+    if (health == null || health!.trim().isEmpty) throw "health_required".tr();
+    return health!;
   }
 
-  String get psychology {
-    if (_psychology == null || _psychology.isEmpty) {
+  String requirePsychology() {
+    if (psychology == null || psychology!.trim().isEmpty) {
       throw "psychology_required".tr();
     }
-    return _psychology;
+    return psychology!;
   }
 
-  String get behavior {
-    if (_behavior == null || _behavior.isEmpty) {
+  String requireBehavior() {
+    if (behavior == null || behavior!.trim().isEmpty) {
       throw "behavior_required".tr();
     }
-    return _behavior;
+    return behavior!;
   }
 
-  @JsonKey(name: "plans_count")
-  int get plansCount {
-    if (_plansCount == null) {
-      throw "plans_count_required".tr();
-    }
-    return _plansCount;
+  int requirePlansCount() {
+    if (plansCount == null) throw "plans_count_required".tr();
+    return plansCount!;
   }
 
   factory EvaluateCustomerModel.fromJson(Map<String, dynamic> json) =>

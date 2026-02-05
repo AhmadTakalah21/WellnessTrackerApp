@@ -11,13 +11,20 @@ enum HouseOrGymEnum implements DropDownItemModel {
   @override
   String get displayName => "${"in".tr()} ${name.tr()}";
 
+  // ✅ خلي id يطابق السيرفر (0/1)
   @override
-  int get id => index + 1;
+  int get id => index; // بدل index + 1
 
   bool get isHouse => this == house;
   bool get isGym => this == gym;
 
+  // ✅ السيرفر يرسل 0/1
   static int toJson(HouseOrGymEnum value) => value.index;
 
-  static HouseOrGymEnum fromJson(int id) => values[id - 1];
+  static HouseOrGymEnum fromJson(int id) {
+    // حماية من أي قيمة غلط
+    if (id == 0) return HouseOrGymEnum.house;
+    if (id == 1) return HouseOrGymEnum.gym;
+    return HouseOrGymEnum.house; // default
+  }
 }

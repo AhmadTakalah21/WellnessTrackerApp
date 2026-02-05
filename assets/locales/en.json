@@ -515,5 +515,20 @@
   "read" : "Read",
   "unread" : "Unread",
   "filters" : "Filters",
-  "medical_consultations": "medical consultations"
+  "medical_consultations": "medical consultations",
+  "no_evaluations": "No evaluations found",
+  "evaluations": "Evaluations",
+  "subscriber_info": "Subscriber info",
+
+  "doctor_evaluation": "Doctor evaluation",
+  "psychologist_evaluation": "Psychologist evaluation",
+  "dietitian_evaluation": "Dietitian evaluation",
+  "coach_evaluation": "Coach evaluation",
+  "evaluation": "Evaluation",
+
+  "role_doctor": "Doctor",
+  "role_psychologist": "Psychologist",
+  "role_dietitian": "Dietitian",
+  "role_coach": "Coach",
+  "role_unknown": "Unknown"
 }

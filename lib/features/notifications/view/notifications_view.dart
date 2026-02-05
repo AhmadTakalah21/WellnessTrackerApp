@@ -28,7 +28,7 @@ abstract class NotificationsViewCallBacks {
   void onTabSelected(int index);
   void onFilterTap();
   void onIsReveivedFilterSelected(SentOrReceivedEnum value);
-  void onShowDetails(NotificationModel notification);
+  Future<void> onShowDetails(NotificationModel notification);
   Future<void> onRefresh();
 }
 
@@ -100,8 +100,20 @@ class _NotificationsPageState extends State<NotificationsPage>
     notificationsCubit.getNotifications(widget.role, locale);
   }
 
+  // ✅✅ التعديل الأساسي هنا
   @override
-  void onShowDetails(NotificationModel notification) {
+  Future<void> onShowDetails(NotificationModel notification) async {
+    // 1) إذا غير مقروء: استدعِ السيرفر أولاً لتحديث read_at
+    if (!notification.isRead) {
+      await notificationsCubit.getNotification(widget.role, notification.id);
+    }
+
+    // 2) استخدم النسخة المحدّثة من الليست
+    final updated = notificationsCubit.notifications
+        .firstWhere((n) => n.id == notification.id, orElse: () => notification);
+
+    // 3) اعرض التفاصيل
+    if (!mounted) return;
     showDialog(
       context: context,
       builder: (context) {
@@ -117,7 +129,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                 children: [
                   Expanded(
                     child: Text(
-                      notification.title,
+                      updated.title,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: AppColors.black,
@@ -133,16 +145,12 @@ class _NotificationsPageState extends State<NotificationsPage>
                 ],
               ),
               const SizedBox(height: 20),
-              Text(notification.message, style: context.tt.bodyLarge),
+              Text(updated.message, style: context.tt.bodyLarge),
             ],
           ),
         );
       },
-    ).whenComplete(() {
-      if (!notification.isRead) {
-        notificationsCubit.getNotification(widget.role, notification.id);
-      }
-    });
+    );
   }
 
   @override
@@ -223,46 +231,42 @@ class _NotificationsPageState extends State<NotificationsPage>
       appBar: AppBar(title: Text('notifications'.tr())),
       body: SafeArea(
         top: false,
-        child: BlocListener<NotificationsCubit, GeneralNotificationsState>(
-          listener: (context, state) {
-            if (state is NotificationSuccess) onTryAgainTap(false);
-          },
-          child: Column(
-            children: [
-              MainTabBar(
-                titles: tabBarTitles,
-                tabController: tabController,
-                onTapSelected: onTabSelected,
-                selectedTab: selectedTab,
-                isScrollable: false,
-              ),
-              Expanded(
-                child: PageView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  controller: pageController,
-                  onPageChanged: onTabSelected,
-                  itemCount: tabBarTitles.length,
-                  itemBuilder: (context, index) => KeepAliveWidget(
-                    child: _buildNotifications(),
-                  ),
+        // ✅ حذفنا BlocListener اللي كان يعمل reload بعد NotificationSuccess
+        child: Column(
+          children: [
+            MainTabBar(
+              titles: tabBarTitles,
+              tabController: tabController,
+              onTapSelected: onTabSelected,
+              selectedTab: selectedTab,
+              isScrollable: false,
+            ),
+            Expanded(
+              child: PageView.builder(
+                physics: const BouncingScrollPhysics(),
+                controller: pageController,
+                onPageChanged: onTabSelected,
+                itemCount: tabBarTitles.length,
+                itemBuilder: (context, index) => KeepAliveWidget(
+                  child: _buildNotifications(),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: !widget.role.isUser
           ? Row(
-              children: [
-                SizedBox(width: 30),
-                MainFloatingButton(onTap: onAddTap),
-                Spacer(),
-                MainFloatingButton(
-                  onTap: onFilterTap,
-                  icon: Icons.filter_alt_outlined,
-                ),
-              ],
-            )
+        children: [
+          SizedBox(width: 30),
+          MainFloatingButton(onTap: onAddTap),
+          Spacer(),
+          MainFloatingButton(
+            onTap: onFilterTap,
+            icon: Icons.filter_alt_outlined,
+          ),
+        ],
+      )
           : null,
     );
   }
@@ -329,9 +333,9 @@ class _NotificationsPageState extends State<NotificationsPage>
   }
 
   List<Widget> _buildNotificationsList(
-    List<NotificationModel> notifications, {
-    bool isLoadMore = false,
-  }) {
+      List<NotificationModel> notifications, {
+        bool isLoadMore = false,
+      }) {
     Widget initialImage = Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.symmetric(
@@ -372,9 +376,9 @@ class _NotificationsPageState extends State<NotificationsPage>
   }
 
   Widget _buildNotificationTile(
-    NotificationModel notification,
-    Widget initialImage,
-  ) {
+      NotificationModel notification,
+      Widget initialImage,
+      ) {
     Widget image;
     if (notification.image != null) {
       image = Container(
@@ -402,8 +406,9 @@ class _NotificationsPageState extends State<NotificationsPage>
     } else {
       image = initialImage;
     }
+
     return InkWell(
-      onTap: () => onShowDetails(notification),
+      onTap: () => onShowDetails(notification), // ✅ سيستدعي التحديث ثم يعرض
       child: Card(
         color: Colors.white,
         margin: const EdgeInsets.symmetric(vertical: 10),

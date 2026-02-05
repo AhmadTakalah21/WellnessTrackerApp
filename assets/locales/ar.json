@@ -516,5 +516,20 @@
   "read" : "مقروء",
   "unread" : "غير مقروء",
   "filters" : "فلاتر",
-  "medical_consultations": "الاستشارات الطبية"
+  "medical_consultations": "الاستشارات الطبية",
+  "no_evaluations": "لا توجد تقييمات",
+  "evaluations": "التقييمات",
+  "subscriber_info": "معلومات المشترك",
+
+  "doctor_evaluation": "تقييم الطبيب",
+  "psychologist_evaluation": "تقييم الأخصائي النفسي",
+  "dietitian_evaluation": "تقييم أخصائي التغذية",
+  "coach_evaluation": "تقييم المدرب",
+  "evaluation": "تقييم",
+
+  "role_doctor": "طبيب",
+  "role_psychologist": "أخصائي نفسي",
+  "role_dietitian": "أخصائي تغذية",
+  "role_coach": "مدرب",
+  "role_unknown": "غير معروف"
 }

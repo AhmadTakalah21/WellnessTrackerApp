@@ -214,14 +214,20 @@ class NotificationsCubit extends Cubit<GeneralNotificationsState> {
   Future<void> getNotification(UserRoleEnum role, int id) async {
     emit(NotificationLoading());
     try {
-      if (isClosed) return;
       final notification = await notificationsService.getNotification(role, id);
+
+      final i = notifications.indexWhere((n) => n.id == id);
+      if (i != -1) notifications[i] = notification;
+
       emit(NotificationSuccess(notification));
+      emit(NotificationsSuccess(filterNotifications(notifications)));
+
+      await getUnreadNotificationsCount(role);
     } catch (e) {
-      if (isClosed) return;
       emit(NotificationFail(e.toString()));
     }
   }
+
 
   Future<void> getUnreadNotificationsCount(UserRoleEnum role) async {
     emit(UnreadNotificationsCountLoading());

@@ -404,14 +404,19 @@ class CustomersCubit extends Cubit<GeneralCustomersState> {
     emit(SubscriberEvaluationLoading());
     try {
       if (isClosed) return;
-      final evaluation =
-          await customerService.getSubscriberEvaluation(role, id);
-      emit(SubscriberEvaluationSuccess(evaluation));
+
+      final evaluations =
+      await customerService.getSubscriberEvaluation(role, id);
+
+      // evaluations لازم تكون List<CustomerEvaluationModel>
+      if (isClosed) return;
+      emit(SubscriberEvaluationSuccess(evaluations));
     } catch (e) {
       if (isClosed) return;
       emit(SubscriberEvaluationFail(e.toString()));
     }
   }
+
 
   Future<void> addMedicalConsultation(UserRoleEnum role, int id) async {
     emit(AddMedicalConsultationLoading());

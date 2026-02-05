@@ -38,7 +38,7 @@ abstract class CustomersService {
     int id,
     EvaluateCustomerModel model,
   );
-  Future<CustomerEvaluationModel> getSubscriberEvaluation(
+  Future<List<CustomerEvaluationModel>> getSubscriberEvaluation(
     UserRoleEnum role,
     int id,
   );

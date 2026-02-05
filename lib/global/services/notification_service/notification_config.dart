@@ -111,7 +111,7 @@ class NotaficationsService {
       final fcmToken = await firebaseMessaging.getToken();
       prefs.setString("fcm_token", fcmToken ?? "");
     }
-    
+
     debugPrint("FCM Token: $fcmToken");
 
     await firebaseMessaging.requestPermission(
