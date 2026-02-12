@@ -17,7 +17,7 @@ CustomerEvaluationModel _$CustomerEvaluationModelFromJson(
       psycologyEvaluation: json['psycology_evaluation'] as String?,
       behaviorEvaluation: json['behavior_evaluation'] as String?,
       currentWeight: json['current_weight'] as num,
-      receivedPlansCount: (json['received_plans_count'] as num).toInt(),
+      receivedPlansCount: (json['received_plans_count'] as num?)?.toInt(),
       coachId: (json['coach_id'] as num?)?.toInt(),
       doctorId: (json['doctor_id'] as num?)?.toInt(),
       dietitianId: (json['dietitian_id'] as num?)?.toInt(),

@@ -43,7 +43,7 @@ class CustomerEvaluationModel {
   final num currentWeight;
 
   @JsonKey(name: 'received_plans_count')
-  final int receivedPlansCount;
+  final int? receivedPlansCount;
 
   // ✅ NEW: لمعرفة من قيّم
   @JsonKey(name: 'coach_id')

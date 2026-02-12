@@ -13,16 +13,14 @@ class EvaluateCustomerModel {
     this.health,
     this.psychology,
     this.behavior,
-    @JsonKey(name: "plans_count", includeIfNull: false) this.plansCount,
-
-    // ✅ لمعرفة التقييم من أي موظف (اختياري)
-    @JsonKey(name: "coach_id", includeIfNull: false) this.coachId,
-    @JsonKey(name: "doctor_id", includeIfNull: false) this.doctorId,
-    @JsonKey(name: "dietitian_id", includeIfNull: false) this.dietitianId,
-    @JsonKey(name: "psychologist_id", includeIfNull: false) this.psychologistId,
+    this.plansCount,
+    this.coachId,
+    this.doctorId,
+    this.dietitianId,
+    this.psychologistId,
   });
 
-  // ✅ صارت nullable واختيارية
+  // ✅ اختيارية + لا تُرسل إذا null
   @JsonKey(includeIfNull: false)
   final String? health;
 
@@ -32,13 +30,21 @@ class EvaluateCustomerModel {
   @JsonKey(includeIfNull: false)
   final String? behavior;
 
-  // موجودة فوق مع name plans_count
+  // ✅ المفتاح الصحيح + لا يُرسل إذا null
+  @JsonKey(name: "plans_count", includeIfNull: false)
   final int? plansCount;
 
-  // ✅ حقول الموظف (اختيارية)
+  // ✅ لمعرفة التقييم من أي موظف + لا تُرسل إذا null
+  @JsonKey(name: "coach_id", includeIfNull: false)
   final int? coachId;
+
+  @JsonKey(name: "doctor_id", includeIfNull: false)
   final int? doctorId;
+
+  @JsonKey(name: "dietitian_id", includeIfNull: false)
   final int? dietitianId;
+
+  @JsonKey(name: "psychologist_id", includeIfNull: false)
   final int? psychologistId;
 
   EvaluateCustomerModel copyWith({
@@ -64,7 +70,7 @@ class EvaluateCustomerModel {
     );
   }
 
-  // ✅ دوال تحقق تستخدمها فقط إذا بدك تجعل الحقل مطلوب حسب الدور
+  // ✅ تحقق اختياري حسب الدور
   String requireHealth() {
     if (health == null || health!.trim().isEmpty) throw "health_required".tr();
     return health!;
